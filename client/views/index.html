@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <title>Bridging</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- STYLESHEETS -->
+        <!--<link rel="stylesheet" href="/vendors/bootstrap/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="/styles/style.css">
+        <!-- MOMENT.js -->
+        <script type="text/javascript" src="/vendors/moment/moment.js" charset="utf-8"></script>
+        <!-- ANGULAR -->
+        <script type="text/javascript" src="/vendors/angular/angular.min.js"></script>
+        <script type="text/javascript" src="/vendors/angular-route/angular-route.min.js"></script>
+        <!-- APP CONFIG -->
+        <script type="text/javascript" src="/scripts/client.js"></script>
+        <!-- FACTORIES -->
+        <script type="text/javascript" src="/scripts/factories/UserService.js"></script>
+        <!-- CONTROLLERS -->
+        <script type="text/javascript" src="/scripts/controllers/LoginController.js"></script>
+        <script type="text/javascript" src="/scripts/controllers/RegisterController.js"></script>
+        <script type="text/javascript" src="/scripts/controllers/UserController.js"></script>
+    </head>
+    <body>
+
+      <header ng-include="'/views/partials/header.html'"></header>
+
+      <main ng-view></main>
+
+      <!--REMOVE BEFORE PUSHING TO HEROKU-->
+      <script src="//localhost:35729/livereload.js"></script>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+{
+  "name": "bridging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon server/app.js",
+    "postinstall": "grunt uglify copy",
+    "start": "node server/app.js"
+  },
+  "author": "",
+  "contributors": [
+    {
+      "name": "Betsy Rowley",
+      "email": "browley8@gmail.com",
+      "url": "https://github.com/BetsyRowley"
+    },
+    {
+      "name": "Anna Springfield",
+      "email": "annaespringfield@gmail.com",
+      "url": "https://github.com/aespringfield"
+    },
+    {
+      "name": "Nic Wilson",
+      "email": "nic.wilson@gmail.com",
+      "url": "https://github.com/nicolaslwilson"
+    },
+    {
+      "name": "Dan Zera",
+      "email": "dczera@gmail.com",
+      "url": "https://github.com/danzera"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-aria": "^1.6.4",
+    "angular-material": "^1.1.4",
+    "angular-route": "^1.6.4",
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.1",
+    "express-session": "^1.13.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.3.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "moment": "^2.18.1",
+    "nodemailer": "^4.0.1",
+    "pag": "^1.0.1",
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0",
+    "path": "^0.11.14",
+    "pg": "^6.1.0"
+  }
+}
