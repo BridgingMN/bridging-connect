@@ -60,12 +60,12 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
   //------END SUPPORT FUNCTIONS-----
 
   return {
-    userObject,
-    loginUser,
-    registerUser,
-    getUser,
-    logout,
-    redirectToLogin,
-    redirectToUser
+    userObject: userObject,
+    loginUser: loginUser,
+    registerUser: registerUser,
+    getUser: getUser,
+    logout: logout,
+    redirectToLogin: redirectToLogin,
+    redirectToUser: redirectToUser
   };
 }]);
