@@ -104,6 +104,10 @@ CREATE TABLE "Zip_codes" (
   id SERIAL PRIMARY KEY,
   location_id INTEGER NOT NULL,
   zip_code VARCHAR(10) NOT NULL
-)
+);
 
---
+-- create "Race_ethnicity" table
+CREATE TABLE "Race_ethnicity" (
+  id SERIAL PRIMARY KEY,
+  race_ethnicity VARCHAR(50) NOT NULL UNIQUE
+);
