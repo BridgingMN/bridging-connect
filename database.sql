@@ -68,6 +68,13 @@ CREATE TABLE IF NOT EXISTS "Delivery_methods" (
   delivery_method VARCHAR(20) NOT NULL UNIQUE
 );
 
+-- create "Locations" table
+-- currently options will be Bloomington and Roseville
+CREATE TABLE IF NOT EXISTS "Locations" (
+  id SERIAL PRIMARY KEY,
+  location VARCHAR(50) NOT NULL UNIQUE
+);
+
 -- create "Appt_slots" table
 -- refers to a default timeslot (with a certain number of appointments available)
 -- within that timeslot) in Bridging's repeating schedule
@@ -76,6 +83,20 @@ CREATE TABLE IF NOT EXISTS "Appt_slots" (
   appt_type_id INTEGER NOT NULL REFERENCES "Appt_types",
   day_id INTEGER NOT NULL REFERENCES "Days",
   delivery_method_id INTEGER NOT NULL REFERENCES "Delivery_methods",
+  location_id INTEGER NOT NULL REFERENCES "Locations",
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  num_avail INTEGER
+);
+
+-- create "Overrides" table
+-- stores one-off changes to default schedule
+CREATE TABLE IF NOT EXISTS "Overrides" (
+  id SERIAL PRIMARY KEY,
+  appt_type_id INTEGER NOT NULL REFERENCES "Appt_types",
+  delivery_method_id INTEGER NOT NULL REFERENCES "Delivery_methods",
+  location_id INTEGER NOT NULL REFERENCES "Locations",
+  override_date DATE NOT NULL,
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
   num_avail INTEGER
@@ -91,13 +112,6 @@ CREATE TABLE IF NOT EXISTS "Appts" (
   appt_slot_id INTEGER NOT NULL REFERENCES "Appt_slots",
   appt_date DATE NOT NULL,
   delivery_date DATE
-);
-
--- create "Locations" table
--- currently options will be Bloomington and Roseville
-CREATE TABLE IF NOT EXISTS "Locations" (
-  id SERIAL PRIMARY KEY,
-  location VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- create "Zip_codes" table
