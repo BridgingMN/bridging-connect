@@ -8,9 +8,11 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
   function loginUser(tempUser) {
     return $http.post('/', tempUser).then(function(response) {
       if (response.data.username) { // login successful
-        return true; // logged in
-      } else { // login NOT successful
-        return false; // failed login
+        return response.data.type;
+ // ^^^ return response.data.____; ^^^
+ // ^^^ WHATEVER WE'RE CALLING USER "type" in the DB ^^^
+      } else { // failed login
+        return false;
       }
     });
   } // end login()
@@ -43,8 +45,12 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
     $location.path('/login');
   }
 
-  function redirectToUser() {
-    $location.path('/user');
+  function redirectToAdminAppointmentsPending() {
+    $location.path('/admin-appointments-pending');
+  }
+
+  function redirectToCaseworkerAppointmentsAll() {
+    $location.path('/caseworker-appointments-all');
   }
 
   //---------END REDIRECTS-----------
@@ -66,6 +72,7 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
     getUser: getUser,
     logout: logout,
     redirectToLogin: redirectToLogin,
-    redirectToUser: redirectToUser
+    redirectToAdminAppointmentsPending: redirectToAdminAppointmentsPending,
+    redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
   };
 }]);
