@@ -1,42 +1,16 @@
-<div class="container">
-  <div class="row"><!--HEADER-->
-    <div class="col-md-12">
-      <h1>Create a Bridging Login</h1>
-      <h2 ng-if="register.message !== ''" role="alert">{{register.message}}</h2>
-    </div>
+<h1>Create a Bridging Login</h1>
+<h2 ng-if="register.message !== ''" role="alert">{{register.message}}</h2>
+<form ng-submit="register.registerUser(register.tempUser)">
+  <div class="form-group">
+    <label for="in-user-username">Username:</label>
+    <input type="text" ng-model="register.tempUser.username" class="form-control" id="in-user-username"/>
   </div>
-  <div class="row"><!--REGISTRATION FORM-->
-    <div class="col-md-12">
-      <form ng-submit="register.registerUser(register.tempUser)">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="in-user-username">Username:</label>
-              <input type="text" ng-model="register.tempUser.username" class="form-control" id="in-user-username"/>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="in-user-password">Password:</label>
-              <input type="password" ng-model="register.tempUser.password" class="form-control" id="in-user-password" />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <input type="submit" name="submit" value="Create Login" />
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div><!--end REGISTRATION FORM row-->
-  <div class="row">
-    <div class="col-md-12">
-      <a href="#login"><button type="button">Already have a Login?</button></a>
-    </div>
+  <div class="form-group">
+    <label for="in-user-password">Password:</label>
+    <input type="password" ng-model="register.tempUser.password" class="form-control" id="in-user-password" />
   </div>
-</div>
+  <div class="form-group">
+    <input type="submit" name="submit" value="Create Login" />
+  </div>
+</form>
+<a href="#login"><button type="button">Already have a Login?</button></a>
