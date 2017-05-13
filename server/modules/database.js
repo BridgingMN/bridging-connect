@@ -1,4 +1,5 @@
 var pg = require('pg');
+var config = require('./config.js');
 var pool;
 var config = {
   user: config.PG_USERNAME, // env var: PGUSER
