@@ -111,3 +111,39 @@ CREATE TABLE "Race_ethnicity" (
   id SERIAL PRIMARY KEY,
   race_ethnicity VARCHAR(50) NOT NULL UNIQUE
 );
+
+--------INSERT STATIC DATA INTO TABLES-------------
+
+-- add data to "User_types" table
+INSERT INTO "User_types" ("user_type") VALUES ("admin"), ("caseworker");
+
+-- add data to "Beds_ok_statuses" table
+INSERT INTO "Beds_ok_statuses" ("beds_ok_status") VALUES ("yes"), ("no"), ("check");
+
+-- add data to "Appt_types" table
+INSERT INTO "Appt_types" ("appt_type") VALUES ("shopping"), ("new bed");
+
+-- add data to "Delivery_methods" table
+INSERT INTO "Delivery_methods" ("delivery_method") VALUES ("pickup"), ("delivery");
+
+-- add data to "Day" table
+INSERT INTO "Day" ("name") VALUES ("Sunday"), ("Monday"), ("Tuesday"), ("Wednesday"),
+("Thursday"), ("Friday"), ("Saturday");
+
+-- add data to "Status" table
+INSERT INTO "Status" ("status") VALUES ("confirmed"), ("pending"), ("canceled");
+
+-- add data to "Location" table
+INSERT INTO "Location" ("location") VALUES ("Bloomington"), ("Roseville");
+
+-- add data to "Race_ethnicity" table
+INSERT INTO "Race_ethnicity" ("race_ethnicity") VALUES ("African"),
+("American Indian or Alaska Native"), ("Asian or Pacific Islander"),
+("Black or African American"), ("Hispanic"), ("Mixed Racial Background"),
+("White"), ("Other");
+
+-- TODO: add data to "Zip_codes" table
+-- INSERT INTO "Zip_codes" ("zip_code", "zone_id", "location_id") VALUES ("<zip code>", "<zone_id>", "<location_id>");
+
+-- TODO: add data to "Zones" table
+-- INSERT INTO "Zones" ("zone") VALUES ("<zone>");
