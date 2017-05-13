@@ -1,42 +1,16 @@
-<div class="container"><!--Bridging LOGIN SCREEN-->
-  <div class="row"><!--HEADER-->
-    <div class="col-md-12">
-      <h1>Login</h1>
-      <h2 role="alert" ng-if="login.message !== ''">{{login.message}}</h2>
-    </div>
+<h1>Login</h1>
+<h2 role="alert" ng-if="login.message !== ''">{{login.message}}</h2>
+<form ng-submit="login.loginUser(login.tempUser)">
+  <div class="form-group">
+    <label for="in-user-username">Username</label>
+    <input type="text" ng-model="login.tempUser.username" class="form-control" id="in-user-username"/>
   </div>
-  <div class="row"><!--LOGIN FORM-->
-    <div class="col-md-12">
-      <form ng-submit="login.loginUser(login.tempUser)">
-        <div class="row"><!--EMAIL-->
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="in-user-username">Username</label>
-              <input type="text" ng-model="login.tempUser.username" class="form-control" id="in-user-username"/>
-            </div>
-          </div>
-        </div>
-        <div class="row"><!--PASSWORD-->
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="in-user-password">Password</label>
-              <input type="password" ng-model="login.tempUser.password" class="form-control" id="in-user-password" />
-            </div>
-          </div>
-        </div>
-        <div class="row"><!--FORM SUMBITTAL & LINK TO '/register' -->
-          <div class="col-md-12">
-            <div class="form-group">
-              <input type="submit" name="submit" value="Log In" />
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div><!--end LOGIN FORM row-->
-  <div class="row">
-    <div class="col-md-12">
-      <a href="#register"><button type="button">Register</button></a>
-    </div>
+  <div class="form-group">
+    <label for="in-user-password">Password</label>
+    <input type="password" ng-model="login.tempUser.password" class="form-control" id="in-user-password" />
   </div>
-</div>
+  <div class="form-group">
+    <input type="submit" name="submit" value="Log In" />
+  </div>
+</form>
+<a href="#register"><button type="button">Register</button></a>
