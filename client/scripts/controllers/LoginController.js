@@ -13,9 +13,11 @@ myApp.controller('LoginController', ['$http', 'UserService', function($http, Use
       login.message = 'Please enter your username and password!';
     } else { // username & password not blank - attempt to login with the provided credentials
       login.message = '';
-      UserService.loginUser(tempUser).then(function(loginSuccess) {
-        if (loginSuccess) {
-          UserService.redirectToUser();
+      UserService.loginUser(tempUser).then(function(loginValue) {
+        if (loginValue === 'admin') {
+          UserService.redirectToAdminAppointmentsPending();
+        } else if (loginValue === 'caseworker') {
+          UserService.redirectToCaseworkerAppointmentsAll();
         } else {
           displayErrorMessage();
         }
