@@ -1,6 +1,9 @@
-var myApp = angular.module('myApp', ['ngRoute', 'ngMaterial']);
+angular
+  .module('myApp', ['ngRoute', 'ngMaterial'])
+  .config(config);
 // -----ROUTES-----
-myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+function config($locationProvider, $routeProvider) {
+//myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $locationProvider.hashPrefix('');
   $routeProvider
     .when('/login', {
@@ -206,4 +209,4 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
     .otherwise({
       redirectTo: 'login'
     });
-}]);
+};
