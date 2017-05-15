@@ -79,12 +79,24 @@ module.exports = function(grunt) {
                     livereload: true
                 }
             }
+        },
+        apidoc: {
+          myapp: {
+            src: "server/",
+            dest: "apidoc/",
+            options: {
+              debug: false,
+              includeFilters: [ ".*\.js$" ],
+              excludeFilters: [ "node_modules/" ]
+            }
+          }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-apidoc');
 
-    grunt.registerTask('default', ['uglify', 'copy', 'watch']);
+    grunt.registerTask('default', ['uglify', 'copy', 'apidoc', 'watch']);
 };
