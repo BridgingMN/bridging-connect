@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS "agencies" (
 CREATE TABLE IF NOT EXISTS "users" (
   id SERIAL PRIMARY KEY,
   user_type_id INTEGER NOT NULL REFERENCES "user_types",
-  bridging_agency_id INTEGER NOT NULL,
+  agency_id INTEGER NOT NULL,
   email VARCHAR(120) NOT NULL UNIQUE,
   first VARCHAR(40) NOT NULL,
   last VARCHAR(40) NOT NULL,
