@@ -1,19 +1,19 @@
 <div class="login-container" layout="column" layout-align="center center" flex>
   <h1>Login</h1>
-  <h2 role="alert" ng-if="login.message !== ''">{{login.message}}</h2>
-  <form ng-submit="login.loginUser(login.tempUser)" layout="column">
+  <h2 role="alert" ng-if="vm.message !== ''">{{vm.message}}</h2>
+  <form ng-submit="vm.loginUser(vm.tempUser)" layout="column">
     <md-input-container>
       <label>Username</label>
       <input
         type="text"
-        ng-model="login.tempUser.username"
+        ng-model="vm.tempUser.username"
         id="in-user-username"/>
     </md-input-container>
     <md-input-container>
       <label>Username</label>
       <input
         type="password"
-        ng-model="login.tempUser.password"
+        ng-model="vm.tempUser.password"
         id="in-user-password" />
     </md-input-container>
     <md-button type="submit" name="submit">Log In</md-button>

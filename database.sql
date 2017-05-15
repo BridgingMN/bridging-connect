@@ -95,6 +95,10 @@ CREATE TABLE IF NOT EXISTS "delivery_methods" (
 CREATE TABLE IF NOT EXISTS "locations" (
   id SERIAL PRIMARY KEY,
   location VARCHAR(50) NOT NULL UNIQUE
+  street VARCHAR(200),
+  city VARCHAR(30),
+  state VARCHAR(2),
+  zip_code VARCHAR(10)
 );
 
 -- create "Appt_slots" table
@@ -161,7 +165,11 @@ CREATE TABLE IF NOT EXISTS "clients" (
   first VARCHAR(20),
   last VARCHAR(20),
   dob DATE,
-  race_ethnicity INTEGER REFERENCES "race_ethnicity"
+  race_ethnicity INTEGER REFERENCES "race_ethnicity",
+  street VARCHAR(200),
+  city VARCHAR(30),
+  state VARCHAR(2),
+  zip_code VARCHAR(10)
 );
 
 
@@ -187,7 +195,9 @@ INSERT INTO "days" ("name") VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednes
 INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled');
 
 -- add data to "Locations" table
-INSERT INTO "locations" ("location") VALUES ('Bloomington'), ('Roseville');
+INSERT INTO "locations" ("location") VALUES ('Bloomington', '201 W 87th St.',
+  'Bloomington', 'MN', '55420'), ('Roseville', '1730 Terrace Dr.', 'Roseville',
+  'MN', '55113');
 
 -- add data to "Race_ethnicity" table
 INSERT INTO "race_ethnicity" ("race_ethnicity") VALUES ('African'),
