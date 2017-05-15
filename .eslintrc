@@ -1,3 +1,6 @@
 {
-  "extends": "plugin:angular/johnpapa"
+  "extends": "plugin:angular/johnpapa",
+  "rules": {
+    "semi": ["warn", "always"]
+  }
 }

@@ -3,6 +3,6 @@ angular
   .controller('AdminAppointmentsCustomizeController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.hello = "Hello in Appointments-Customize!"
+  vm.hello = "Hello in Appointments-Customize!";
 
 }]);

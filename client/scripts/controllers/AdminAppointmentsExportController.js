@@ -3,6 +3,6 @@ angular
   .controller('AdminAppointmentsExportController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.hello = "Hello in Appointments-Export!"
+  vm.hello = "Hello in Appointments-Export!";
 
 }]);

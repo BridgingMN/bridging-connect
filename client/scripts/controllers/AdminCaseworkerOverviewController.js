@@ -3,6 +3,6 @@ angular
   .controller('AdminCaseworkerOverviewController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.hello = "Hello in Caseworker-Overview!"
+  vm.hello = "Hello in Caseworker-Overview!";
 
 }]);
