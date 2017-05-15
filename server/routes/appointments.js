@@ -34,5 +34,39 @@ var path = require('path');
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
 */
+router.get('/existing/:user_id', {
+  // TODO: add code
+})
+
+/**
+  * @api {get} /appointments/available
+  * @apiDescription Get appointment objects that match the parameters and still
+    have available spots left
+  * @apiGroup Appointments
+  * @apiParam {Date} min_date   Earliest date in range to be checked
+  * @apiParam {Date} max_date   Latest date in range to be checked
+  * @apiParam {String} appointment_type   Type of appointment ("shopping" or "new bed")
+  * @apiParam {String} delivery_method  Method of delivery ("delivery" or "pickup")
+  * @apiParam {Number} location_id  Unique ID of location (database ID for
+                                    Bloomington or for Roseville)
+  * @apiSuccess {Object[]} appointments   Array of appointment objects
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      [{
+        "appointment_slot_id": 3,
+        "appointment_date": "June 9, 2017",
+        "start_time": "9:15 am",
+        "end_time": "10:15 am",
+        "appointment_type": "shopping",
+        "delivery_method": "pickup",
+        "location_name": "Bloomington",
+        "location_address": "201 W 87th St, Bloomington, MN",
+      }]
+  * @apiErrorExample {json} List error
+  *    HTTP/1.1 500 Internal Server Error
+*/
+router.get('/available', {
+  // TODO: add code
+})
 
 module.exports = router;
