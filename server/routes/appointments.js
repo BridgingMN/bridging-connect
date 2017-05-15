@@ -19,6 +19,7 @@ var path = require('path');
           "address": "1400 Lizard Ln, St. Paul, MN"
         },
         "appointment_info": {
+          "appointment_number" : 4590,
           "start_time": "9:15 am",
           "end_time": "10:15 am",
           "appointment_type": "shopping",
