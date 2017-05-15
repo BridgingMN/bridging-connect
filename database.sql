@@ -1,29 +1,27 @@
 
 --------CREATE DB & TABLES-------------
 -- create "bridging" database
-CREATE DATABASE "Bridging";
-
--- TODO: create "Clients" table
+CREATE DATABASE "bridging";
 
 -- create "User_types" table
-CREATE TABLE IF NOT EXISTS "User_types" (
+CREATE TABLE IF NOT EXISTS "user_types" (
   id SERIAL PRIMARY KEY,
   user_type VARCHAR(40) NOT NULL UNIQUE
 );
 
 -- create "Beds_allowed_options" table
 -- refers to whether or not the agency is allowed to purchase new beds
-CREATE TABLE IF NOT EXISTS "Beds_allowed_options" (
+CREATE TABLE IF NOT EXISTS "beds_allowed_options" (
   id SERIAL PRIMARY KEY,
   beds_allowed_option VARCHAR(40) NOT NULL UNIQUE
 );
 
 -- create "Agencies" table
 -- bridging_agency_id is the ID assigned to the agency in Bridging's Access database
-CREATE TABLE IF NOT EXISTS "Agencies" (
+CREATE TABLE IF NOT EXISTS "agencies" (
   id SERIAL PRIMARY KEY,
   name VARCHAR(120) NOT NULL UNIQUE,
-  beds_allowed_option_id INTEGER REFERENCES "Beds_allowed_options" DEFAULT 1,
+  beds_allowed_option_id INTEGER REFERENCES "beds_allowed_options" DEFAULT 1,
   bridging_agency_id INTEGER,
   street VARCHAR(200),
   city VARCHAR(30),
@@ -43,10 +41,10 @@ CREATE TABLE IF NOT EXISTS "Agencies" (
 );
 
 -- create "Users" table
-CREATE TABLE IF NOT EXISTS "Users" (
+CREATE TABLE IF NOT EXISTS "users" (
   id SERIAL PRIMARY KEY,
-  user_type_id INTEGER NOT NULL REFERENCES "User_types",
-  agency_id INTEGER NOT NULL REFERENCES "Agencies",
+  user_type_id INTEGER NOT NULL REFERENCES "user_types",
+  agency_id INTEGER NOT NULL REFERENCES "agencies",
   email VARCHAR(120) NOT NULL UNIQUE,
   first VARCHAR(40) NOT NULL,
   last VARCHAR(40) NOT NULL,
@@ -58,40 +56,43 @@ CREATE TABLE IF NOT EXISTS "Users" (
   state VARCHAR(2),
   zip_code VARCHAR(10),
   access_disabled BOOLEAN DEFAULT FALSE,
-  department VARCHAR(50)
+  department VARCHAR(50),
+  token VARCHAR(120),
+  token_expiration DATE,
+  last_login_date DATE
 );
 
 -- create "Statuses" table
 -- refers to status of appt (confirmed, pending, canceled)
-CREATE TABLE IF NOT EXISTS "Statuses" (
+CREATE TABLE IF NOT EXISTS "statuses" (
   id SERIAL PRIMARY KEY,
   status VARCHAR(20) NOT NULL UNIQUE
 );
 
 -- create "Appt_types" table
 -- refers to type of appointment--currently shopping or new bed
-CREATE TABLE IF NOT EXISTS "Appt_types" (
+CREATE TABLE IF NOT EXISTS "appointment_types" (
   id SERIAL PRIMARY KEY,
-  appt_type VARCHAR(40) NOT NULL UNIQUE
+  appointment_type VARCHAR(40) NOT NULL UNIQUE
 );
 
 -- create "Days" table
 -- contains names of days of week
-CREATE TABLE IF NOT EXISTS "Days" (
+CREATE TABLE IF NOT EXISTS "days" (
   id SERIAL PRIMARY KEY,
   name VARCHAR(10) NOT NULL UNIQUE
 );
 
 -- create "Delivery_methods" table
 -- currently options are pickup or delivery
-CREATE TABLE IF NOT EXISTS "Delivery_methods" (
+CREATE TABLE IF NOT EXISTS "delivery_methods" (
   id SERIAL PRIMARY KEY,
   delivery_method VARCHAR(20) NOT NULL UNIQUE
 );
 
 -- create "Locations" table
 -- currently options will be Bloomington and Roseville
-CREATE TABLE IF NOT EXISTS "Locations" (
+CREATE TABLE IF NOT EXISTS "locations" (
   id SERIAL PRIMARY KEY,
   location VARCHAR(50) NOT NULL UNIQUE
 );
@@ -99,94 +100,108 @@ CREATE TABLE IF NOT EXISTS "Locations" (
 -- create "Appt_slots" table
 -- refers to a default timeslot (with a certain number of appointments available)
 -- within that timeslot) in Bridging's repeating schedule
-CREATE TABLE IF NOT EXISTS "Appt_slots" (
+CREATE TABLE IF NOT EXISTS "appointment_slots" (
   id SERIAL PRIMARY KEY,
-  appt_type_id INTEGER NOT NULL REFERENCES "Appt_types",
-  day_id INTEGER NOT NULL REFERENCES "Days",
-  delivery_method_id INTEGER NOT NULL REFERENCES "Delivery_methods",
-  location_id INTEGER NOT NULL REFERENCES "Locations",
+  appointment_type_id INTEGER NOT NULL REFERENCES "appointment_types",
+  day_id INTEGER NOT NULL REFERENCES "days",
+  delivery_method_id INTEGER NOT NULL REFERENCES "delivery_methods",
+  location_id INTEGER NOT NULL REFERENCES "locations",
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
-  num_avail INTEGER
+  num_allowed INTEGER
 );
 
 -- create "Overrides" table
 -- stores one-off changes to default schedule
-CREATE TABLE IF NOT EXISTS "Overrides" (
+CREATE TABLE IF NOT EXISTS "overrides" (
   id SERIAL PRIMARY KEY,
-  appt_type_id INTEGER NOT NULL REFERENCES "Appt_types",
-  delivery_method_id INTEGER NOT NULL REFERENCES "Delivery_methods",
-  location_id INTEGER NOT NULL REFERENCES "Locations",
+  appointment_type_id INTEGER NOT NULL REFERENCES "appointment_types",
+  delivery_method_id INTEGER NOT NULL REFERENCES "delivery_methods",
+  location_id INTEGER NOT NULL REFERENCES "locations",
   override_date DATE NOT NULL,
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
-  num_avail INTEGER
+  num_allowed INTEGER
 );
 
 -- create "Appts" table
 -- refers to a single appointment that has been made by a caseworker
--- TODO: start Confirmation# or ID at 45001
-CREATE TABLE IF NOT EXISTS "Appts" (
+-- TODO: start confirmation_id at 45001 (will be used as Confirmation#)
+CREATE TABLE IF NOT EXISTS "appointments" (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES "Users",
+  user_id INTEGER NOT NULL REFERENCES "users",
+  created_date DATE NOT NULL,
   client_id INTEGER NOT NULL,
-  status_id INTEGER NOT NULL REFERENCES "Statuses",
-  appt_slot_id INTEGER NOT NULL REFERENCES "Appt_slots",
-  appt_date DATE NOT NULL,
-  delivery_date DATE
+  status_id INTEGER NOT NULL REFERENCES "statuses",
+  appointment_slot_id INTEGER NOT NULL REFERENCES "appointment_slots",
+  appointment_date DATE NOT NULL,
+  delivery_date DATE,
+  confirmation_id INTEGER SERIAL
 );
 
 -- create "Zip_codes" table
-CREATE TABLE IF NOT EXISTS "Zip_codes" (
+CREATE TABLE IF NOT EXISTS "zip_codes" (
   id SERIAL PRIMARY KEY,
-  location_id INTEGER NOT NULL REFERENCES "Locations",
+  location_id INTEGER NOT NULL REFERENCES "locations",
   zip_code VARCHAR(10) NOT NULL,
-  zone_id INTEGER NOT NULL REFERENCES "Zones"
+  zone INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "Zones" (
-  id SERIAL PRIMARY KEY,
-  zone INTEGER NOT NULL
-)
 
 -- create "Race_ethnicity" table
-CREATE TABLE IF NOT EXISTS "Race_ethnicity" (
+CREATE TABLE IF NOT EXISTS "race_ethnicity" (
   id SERIAL PRIMARY KEY,
   race_ethnicity VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- create "clients" table
+-- TODO: finish "clients" table
+CREATE TABLE IF NOT EXISTS "clients" (
+  id SERIAL PRIMARY KEY,
+  first VARCHAR(20),
+  last VARCHAR(20),
+  dob DATE,
+  race_ethnicity INTEGER REFERENCES "race_ethnicity"
+);
+
+--create "days" table
+CREATE TABLE IF NOT EXISTS "days" (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(10)
 );
 
 --------INSERT STATIC DATA INTO TABLES-------------
 
 -- add data to "User_types" table
-INSERT INTO "User_types" ("user_type") VALUES ('admin'), ('caseworker');
+INSERT INTO "user_types" ("user_type") VALUES ('admin'), ('caseworker');
 
 -- add data to "Beds_allowed_options" table
-INSERT INTO "Beds_allowed_options" ("beds_allowed_option") VALUES ('yes'), ('no'), ('check');
+INSERT INTO "beds_allowed_options" ("beds_allowed_option") VALUES ('yes'), ('no'), ('check');
 
 -- add data to "Appt_types" table
-INSERT INTO "Appt_types" ("appt_type") VALUES ('shopping'), ('new bed');
+INSERT INTO "appointment_types" ("appointment_type") VALUES ('shopping'), ('new bed');
 
 -- add data to "Delivery_methods" table
-INSERT INTO "Delivery_methods" ("delivery_method") VALUES ('pickup'), ('delivery');
+INSERT INTO "delivery_methods" ("delivery_method") VALUES ('pickup'), ('delivery');
 
 -- add data to "Days" table
-INSERT INTO "Days" ("name") VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednesday'),
+INSERT INTO "days" ("name") VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednesday'),
 ('Thursday'), ('Friday'), ('Saturday');
 
 -- add data to "Statuses" table
-INSERT INTO "Statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled');
+INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled');
 
 -- add data to "Locations" table
-INSERT INTO "Locations" ("location") VALUES ('Bloomington'), ('Roseville');
+INSERT INTO "locations" ("location") VALUES ('Bloomington'), ('Roseville');
 
 -- add data to "Race_ethnicity" table
-INSERT INTO "Race_ethnicity" ("race_ethnicity") VALUES ('African'),
+INSERT INTO "race_ethnicity" ("race_ethnicity") VALUES ('African'),
   ('American Indian or Alaska Native'), ('Asian or Pacific Islander'),
   ('Black or African American'), ('Hispanic'), ('Mixed Racial Background'),
   ('White'), ('Other');
 
 -- add data to "Zip_codes" table
-INSERT INTO "Zip_codes" ("zip_code", "zone_id", "location_id") VALUES ('55001', 1, 1),
+INSERT INTO "zip_codes" ("zip_code", "zone_id", "location_id") VALUES ('55001', 1, 1),
   ('55016', 1, 1), ('55024', 1, 1), ('55033', 1, 1), ('55043', 1, 1),
   ('55044', 1, 1), ('55055', 1, 1), ('55068', 1, 1), ('55071', 1, 1),
   ('55076', 1, 1), ('55077', 1, 1), ('55120', 1, 1), ('55121', 1, 1),
@@ -222,11 +237,9 @@ INSERT INTO "Zip_codes" ("zip_code", "zone_id", "location_id") VALUES ('55001', 
   ('55421', 7, 2), ('55429', 7, 2), ('55430', 7, 2), ('55432', 7, 2),
   ('55455', 7, 2);
 
--- add data to "Zones" table
-INSERT INTO "Zones" ("zone") VALUES (1), (2), (3), (4), (5), (6), (7);
 
 --add data to "Agencies" table
-INSERT INTO "Agencies" ("bridging_agency_id", "name", "street", "city", "state",
+INSERT INTO "agencies" ("bridging_agency_id", "name", "street", "city", "state",
   "zip_code", "county", "website", "primary_job_title", "primary_first",
   "primary_last", "primary_department", "primary_business_phone",
   "primary_business_phone_ext", "primary_mobile_phone", "primary_email")
@@ -830,7 +843,7 @@ INSERT INTO "Agencies" ("bridging_agency_id", "name", "street", "city", "state",
     'Relocation Coordinator', 'Umarou', 'Yaya', '', '(651) 645-5332', '', '',
     'umarou@promisetransition.com');
 
-INSERT INTO "Users" ("user_type_id", "bridging_agency_id", "email", "first", "last",
+INSERT INTO "users" ("user_type_id", "bridging_agency_id", "email", "first", "last",
     "day_phone", "ext", "street", "city", "state", "zip_code", "access_disabled",
     "department") VALUES (2, 1509, 'kay.aanestad@co.anoka.mn.us', 'Kay', 'Aanestad', '(763) 422-7185', '', '', '', '', '', FALSE, ''),
 (2, 1577, 'haase@mhresources.com', 'Hannah', 'Aase', '(654) 999-4565', '', '', '', '', '', FALSE, ''),
