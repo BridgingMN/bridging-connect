@@ -155,6 +155,16 @@ function config($locationProvider, $routeProvider) {
       //   }]
       // }
     })
+    .when('/caseworker-appointment-location', {
+      templateUrl: '/views/templates/caseworker-appointment-location.html',
+      controller: 'CaseworkerAppointmentLocationController',
+      controllerAs: 'vm',
+      // resolve: { // get user from factory
+      //   getuser : ['UserService', function(UserService){
+      //     return UserService.getUser();
+      //   }]
+      // }
+    })
     .when('/caseworker-appointment-zipcode', {
       templateUrl: '/views/templates/caseworker-appointment-zipcode.html',
       controller: 'CaseworkerAppointmentZipcodeController',
