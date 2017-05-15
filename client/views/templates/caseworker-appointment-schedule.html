@@ -9,25 +9,25 @@
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
-      <span>{{ctrl.myDate |date: 'shortDate'}},
-      {{ctrl.selectedAppointment}}</span>
+      <span>{{vm.myDate |date: 'shortDate'}},
+      {{vm.selectedAppointment}}</span>
 
     </div>
   </div>
   <div class="caseworker-appointment-schedule-inputs" layout="row">
     <div class="appoint-schedule-calendar">
       <md-calendar
-          ng-model="ctrl.myDate"
-          md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"
-          md-date-filter="ctrl.onlyMonToThursPredicate">
+          ng-model="vm.myDate"
+          md-min-date="vm.minDate" md-max-date="vm.maxDate"
+          md-date-filter="vm.onlyMonToThursPredicate">
       </md-calendar>
     </div>
     <form class="md-padding appoint-schedule-slot" layout="column" layout-align="center center">
         <p>Select an appointment:</p>
-          <md-radio-group ng-model="ctrl.selectedAppointment">
+          <md-radio-group ng-model="vm.selectedAppointment">
             <md-radio-button
               ng-value="appointment"
-              ng-repeat="appointment in ctrl.appointmentSlots">
+              ng-repeat="appointment in vm.appointmentSlots">
                 {{appointment}}
             </md-radio-button>
           </md-radio-group>

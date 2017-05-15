@@ -1,25 +1,24 @@
 angular
   .module('myApp', ['ngRoute', 'ngMaterial'])
-  .config(config);
+  .config(['$locationProvider', '$routeProvider', config]);
 // -----ROUTES-----
 function config($locationProvider, $routeProvider) {
-//myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $locationProvider.hashPrefix('');
   $routeProvider
     .when('/login', {
       templateUrl: '/views/templates/login.html',
       controller: 'LoginController',
-      controllerAs: 'login'
+      controllerAs: 'vm'
     })
     .when('/register', {
       templateUrl: '/views/templates/register.html',
       controller: 'RegisterController',
-      controllerAs: 'register'
+      controllerAs: 'vm'
     })
     .when('/user', {
       templateUrl: '/views/templates/user.html',
       controller: 'UserController',
-      controllerAs: 'user',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -28,8 +27,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-appointments-pending', {
       templateUrl: '/views/templates/admin-appointments-pending.html',
-      controller: 'AdminAppointmentsPending',
-      controllerAs: 'ctrl',
+      controller: 'AdminAppointmentsPendingController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -38,8 +37,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-appointments-all', {
       templateUrl: '/views/templates/admin-appointments-all.html',
-      controller: 'AdminAppointmentsAll',
-      controllerAs: 'ctrl',
+      controller: 'AdminAppointmentsAllController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -48,8 +47,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-appointments-default', {
       templateUrl: '/views/templates/admin-appointments-default.html',
-      controller: 'AdminAppointmentsDefault',
-      controllerAs: 'ctrl',
+      controller: 'AdminAppointmentsDefaultController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -58,8 +57,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-appointments-customize', {
       templateUrl: '/views/templates/admin-appointments-customize.html',
-      controller: 'AdminAppointmentsCustomize',
-      controllerAs: 'ctrl',
+      controller: 'AdminAppointmentsCustomizeController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -68,8 +67,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-appointments-export', {
       templateUrl: '/views/templates/admin-appointments-export.html',
-      controller: 'AdminAppointmentsExport',
-      controllerAs: 'ctrl',
+      controller: 'AdminAppointmentsExportController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -78,8 +77,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-caseworker-overview', {
       templateUrl: '/views/templates/admin-caseworker-overview.html',
-      controller: 'AdminCaseworkerOverview',
-      controllerAs: 'ctrl',
+      controller: 'AdminCaseworkerOverviewController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -88,8 +87,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-caseworker-new', {
       templateUrl: '/views/templates/admin-caseworker-new.html',
-      controller: 'AdminCaseworkerNew',
-      controllerAs: 'ctrl',
+      controller: 'AdminCaseworkerNewController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -98,8 +97,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-caseworker-edit', {
       templateUrl: '/views/templates/admin-caseworker-edit.html',
-      controller: 'AdminCaseworkerEdit',
-      controllerAs: 'ctrl',
+      controller: 'AdminCaseworkerEditController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -108,8 +107,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-caseworker-import', {
       templateUrl: '/views/templates/admin-caseworker-import.html',
-      controller: 'AdminCaseworkerImport',
-      controllerAs: 'ctrl',
+      controller: 'AdminCaseworkerImportController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -118,8 +117,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-agency-overview', {
       templateUrl: '/views/templates/admin-agency-overview.html',
-      controller: 'AdminAgencyOverview',
-      controllerAs: 'ctrl',
+      controller: 'AdminAgencyOverviewController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -128,8 +127,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-agency-new', {
       templateUrl: '/views/templates/admin-agency-new.html',
-      controller: 'AdminAgencyNew',
-      controllerAs: 'ctrl',
+      controller: 'AdminAgencyNewController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -138,8 +137,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/admin-agency-edit', {
       templateUrl: '/views/templates/admin-agency-edit.html',
-      controller: 'AdminAgencyEdit',
-      controllerAs: 'ctrl',
+      controller: 'AdminAgencyEditController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -148,18 +147,18 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/caseworker-appointment-new', {
       templateUrl: '/views/templates/caseworker-appointment-new.html',
-      controller: 'CaseworkerAppointmentNew',
-      controllerAs: 'ctrl',
-      resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
-          return UserService.getUser();
-        }]
-      }
+      controller: 'CaseworkerAppointmentNewController',
+      controllerAs: 'vm',
+      // resolve: { // get user from factory
+      //   getuser : ['UserService', function(UserService){
+      //     return UserService.getUser();
+      //   }]
+      // }
     })
     .when('/caseworker-appointment-zipcode', {
       templateUrl: '/views/templates/caseworker-appointment-zipcode.html',
-      controller: 'CaseworkerAppointmentZipcode',
-      controllerAs: 'ctrl',
+      controller: 'CaseworkerAppointmentZipcodeController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -168,8 +167,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/caseworker-appointment-schedule', {
       templateUrl: '/views/templates/caseworker-appointment-schedule.html',
-      controller: 'CaseworkerAppointmentSchedule',
-      controllerAs: 'ctrl',
+      controller: 'CaseworkerAppointmentScheduleController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -178,8 +177,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/caseworker-appointment-form', {
       templateUrl: '/views/templates/caseworker-appointment-form.html',
-      controller: 'CaseworkerAppointmentForm',
-      controllerAs: 'ctrl',
+      controller: 'CaseworkerAppointmentFormController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -188,8 +187,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/caseworker-appointment-edit', {
       templateUrl: '/views/templates/caseworker-appointment-edit.html',
-      controller: 'CaseworkerAppointmentEdit',
-      controllerAs: 'ctrl',
+      controller: 'CaseworkerAppointmentEditController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
@@ -198,8 +197,8 @@ function config($locationProvider, $routeProvider) {
     })
     .when('/caseworker-appointments-all', {
       templateUrl: '/views/templates/caseworker-appointments-all.html',
-      controller: 'CaseworkerAppointmentsAll',
-      controllerAs: 'ctrl',
+      controller: 'CaseworkerAppointmentsAllController',
+      controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
           return UserService.getUser();
