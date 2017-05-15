@@ -1,6 +1,7 @@
 myApp.controller('CaseworkerAppointmentForm', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
-  var caseworkerAppointmentForm = this; // controller reference
-  caseworkerAppointmentForm.hello = "Hello in Caseworker-Appointment-Form!"
+  this.clientDateOfBirth = new Date();
+  this.clientEthnicity = '';
+  this.ethnicities = ['African', 'American Indian or Alaska Native', 'Asian or Pacific Islander', 'Black or African American', 'Hispanic', 'Mixed Racial Background', 'White', 'Other'].map(function (ethnicity) { return { description: ethnicity }; });
 
 }]);
