@@ -19,11 +19,11 @@
         <!-- APP CONFIG -->
         <script type="text/javascript" src="/scripts/client.min.js"></script>
     </head>
-    <body>
+    <body layout="column" flex>
 
       <header ng-include="'/views/partials/header.html'"></header>
 
-      <main ng-view></main>
+      <main ng-view layout="column"  flex></main>
 
       <!--REMOVE BEFORE PUSHING TO HEROKU-->
       <script src="//localhost:35729/livereload.js"></script>
