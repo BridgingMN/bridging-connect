@@ -3,18 +3,16 @@
   <h2 role="alert" ng-if="vm.message !== ''">{{vm.message}}</h2>
   <form ng-submit="vm.loginUser(vm.tempUser)" layout="column">
     <md-input-container>
-      <label>Username</label>
+      <label>Email</label>
       <input
         type="text"
-        ng-model="vm.tempUser.username"
-        id="in-user-username"/>
+        ng-model="vm.tempUser.email" />
     </md-input-container>
     <md-input-container>
-      <label>Username</label>
+      <label>Password</label>
       <input
         type="password"
-        ng-model="vm.tempUser.password"
-        id="in-user-password" />
+        ng-model="vm.tempUser.password" />
     </md-input-container>
     <md-button type="submit" name="submit">Log In</md-button>
   </form>

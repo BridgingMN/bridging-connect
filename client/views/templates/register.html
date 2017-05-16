@@ -2,12 +2,12 @@
 <h2 ng-if="vm.message !== ''" role="alert">{{vm.message}}</h2>
 <form ng-submit="vm.registerUser(vm.tempUser)">
   <div class="form-group">
-    <label for="in-user-username">Username:</label>
-    <input type="text" ng-model="vm.tempUser.username" class="form-control" id="in-user-username"/>
+    <label for="in-user-email">Email:</label>
+    <input type="text" ng-model="vm.tempUser.email" class="form-control" />
   </div>
   <div class="form-group">
     <label for="in-user-password">Password:</label>
-    <input type="password" ng-model="vm.tempUser.password" class="form-control" id="in-user-password" />
+    <input type="password" ng-model="vm.tempUser.password" class="form-control" />
   </div>
   <div class="form-group">
     <input type="submit" name="submit" value="Create Login" />
