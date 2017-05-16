@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS "users" (
   email VARCHAR(120) NOT NULL UNIQUE,
   first VARCHAR(40) NOT NULL,
   last VARCHAR(40) NOT NULL,
-  password VARCHAR(120) NOT NULL,
+  password VARCHAR(120),
   day_phone VARCHAR(30),
   ext VARCHAR(10),
   street VARCHAR(200),
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS "delivery_methods" (
 -- currently options will be Bloomington and Roseville
 CREATE TABLE IF NOT EXISTS "locations" (
   id SERIAL PRIMARY KEY,
-  location VARCHAR(50) NOT NULL UNIQUE
+  location VARCHAR(50) NOT NULL UNIQUE,
   street VARCHAR(200),
   city VARCHAR(30),
   state VARCHAR(2),
@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
   first VARCHAR(20),
   last VARCHAR(20),
   dob DATE,
-  race_ethnicity INTEGER REFERENCES "race_ethnicity",
+  race_ethnicity_id INTEGER REFERENCES "race_ethnicity",
   street VARCHAR(200),
   city VARCHAR(30),
   state VARCHAR(2),
@@ -194,7 +194,7 @@ INSERT INTO "days" ("name") VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednes
 INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled');
 
 -- add data to "Locations" table
-INSERT INTO "locations" ("location") VALUES ('Bloomington', '201 W 87th St.',
+INSERT INTO "locations" ("location", "street", "city", "state", "zip_code") VALUES ('Bloomington', '201 W 87th St.',
   'Bloomington', 'MN', '55420'), ('Roseville', '1730 Terrace Dr.', 'Roseville',
   'MN', '55113');
 
