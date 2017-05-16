@@ -149,11 +149,11 @@ function config($locationProvider, $routeProvider) {
       templateUrl: '/views/templates/caseworker-appointment-new.html',
       controller: 'CaseworkerAppointmentNewController',
       controllerAs: 'vm',
-      // resolve: { // get user from factory
-      //   getuser : ['UserService', function(UserService){
-      //     return UserService.getUser();
-      //   }]
-      // }
+      resolve: { // get user from factory
+        getuser : ['UserService', function(UserService){
+          return UserService.getUser();
+        }]
+      }
     })
     .when('/caseworker-appointment-location', {
       templateUrl: '/views/templates/caseworker-appointment-location.html',
@@ -218,4 +218,4 @@ function config($locationProvider, $routeProvider) {
     .otherwise({
       redirectTo: 'login'
     });
-};
+}

@@ -21,13 +21,13 @@ angular
   };
 
   // CONTROLLER VARIABLES/FUNCTIONS
-  function alertSuccess(response) { // alert for successful registration
+  function alertSuccess() { // alert for successful registration
     alert('Success! You may now login.');
     UserService.redirectToLogin();
   }
 
-  function displayErrorMessage(httpError) { // message to display on registration error
-    vm.message = "Oops! Something went wrong. Please try again.";
+  function displayErrorMessage() { // message to display on registration error
+    vm.message = 'Oops! Something went wrong. Please try again.';
   }
   
 }]); // END CONTROLLER
