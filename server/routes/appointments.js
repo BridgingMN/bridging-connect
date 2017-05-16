@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var path = require('path');
+var pool = require('../modules/database.js');
 
 /**
   * @api {get} /appointments/existing/:user_id Get User Appointments
@@ -59,6 +60,8 @@ var path = require('path');
 */
 router.get('/existing/:user_id', function(req, res) {
   // TODO: add code
+  }
+});
 });
 
 /**

@@ -29,7 +29,7 @@ var path = require('path');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/zip/:zip_code', function(req, res) {
-
+  // TODO: add code
 });
 
 module.exports = router;
