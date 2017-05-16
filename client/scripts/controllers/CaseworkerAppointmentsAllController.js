@@ -3,6 +3,7 @@ angular
   .controller('CaseworkerAppointmentsAllController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
+
   vm.caseworkerAppointments = [
     {
       appointment_date: new Date(),
