@@ -3,8 +3,9 @@ angular
   .controller('CaseworkerAppointmentScheduleController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
+
   vm.myDate = new Date();
-  console.log(vm.currentDate);
+
 
   vm.minDate = new Date(
     vm.myDate.getFullYear(),
