@@ -1,3 +1,68 @@
-<div class="caseworker-home">
-<p>{{vm.hello}}</p>
+<div class="caseworker-home" layout="column" flex="100">
+  <h3>My Appointments</h3>
+  <div class="caseworker-appointment-view-controls" layout="row">
+    <md-button class="md-raised md-primary">Show All</md-button>
+    <md-button class="md-raised">Show Shopping Appointments Only</md-button>
+    <md-button class="md-raised">Show Bed Orders Only</md-button>
+  </div>
+  <md-content class="md-padding caseworker-appointment-cards" layout="row" layout-align="space-around" layout-wrap flex>
+    <div
+    class="appointment-card"
+    ng-repeat="appointment in vm.caseworkerAppointments"
+    layout="column"
+    flex="20">
+      <div class="appointment-card-header" layout="row" layout-align="space-around center" >
+        <div class="appointment-date">
+          <p layout="column" layout-align="center center">
+            <span>{{appointment.appointment_date | date: 'MMM'}}</span>
+            <span>{{appointment.appointment_date | date: 'dd'}}</span>
+          </p>
+        </div>
+        <div class="md-padding appointment-type-info">
+          <p layout="column" layout-align="center center">
+            <span>{{appointment.appointment_type}}</span>
+            <span>with {{appointment.delivery_type}}</span>
+          </p>
+        </div>
+      </div>
+      <div class="appointment-card-body" layout="column" layout-align="center center">
+        <p>
+          <i class="material-icons">access_time</i>
+          {{appointment.start_time}}
+        </p>
+        <p>
+          <i class="material-icons">person</i>
+          {{appointment.client_first}}
+          {{appointment.client_last}}
+        </p>
+        <p>
+          <i class="material-icons">place</i>
+          {{appointment.location}}
+        </p>
+      </div>
+      <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
+          <p>Delivered {{appointment.delivery_date | date: 'shortDate'}}.</p>
+      </div>
+      <div class="appointment-card-buttons" layout="column">
+          <md-button
+            class="md-raised"
+            href="#caseworker-appointment-schedule">
+              <i class="material-icons">today</i>
+              Reschedule
+          </md-button>
+          <md-button
+            class="md-raised"
+            href="#caseworker-appointment-form">
+              <i class="material-icons">mode_edit</i>
+              Edit Client Info
+          </md-button>
+          <md-button
+            class="md-raised"
+            href="#caseworker-appointments-all">
+              <i class="material-icons">clear</i>
+              Delete Appointment
+          </md-button>
+      </div>
+    </md-content>
+  </div>
 </div>
