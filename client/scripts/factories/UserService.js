@@ -9,8 +9,10 @@ angular
   // login an existing user
   function loginUser(tempUser) {
     return $http.post('/', tempUser).then(function(response) {
-      if (response.data.username) { // login successful
-        return response.data.type;
+      console.log(response);
+      if (response.data.email) { // login successful
+        console.log(response.data.user_type_id);
+        return response.data.user_type_id;
  // ^^^ return response.data.____; ^^^
  // ^^^ WHATEVER WE'RE CALLING USER "type" in the DB ^^^
       } else { // failed login
@@ -27,7 +29,7 @@ angular
   // verify user authentication
   function getUser() {
     $http.get('/user').then(function(response) {
-      if (!response.data.username) {
+      if (!response.data.email) {
         // redirectToLogin();
       }
     });

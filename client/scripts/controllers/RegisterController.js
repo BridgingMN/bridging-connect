@@ -5,13 +5,13 @@ angular
   var vm = this; // controller reference
   vm.message = ''; // used for error handling
   vm.tempUser = { // temp object sent to back-end
-    username: '',
+    email: '',
     password: ''
   };
 
   // DATA-BINDING FUNCTIONS
   vm.registerUser = function(tempUser) {
-    if(tempUser.username === '' || tempUser.password === '') {
+    if(tempUser.email === '' || tempUser.password === '') {
       vm.message = 'Please enter an e-mail address and password.';
     } else {
       vm.message = '';
@@ -29,5 +29,5 @@ angular
   function displayErrorMessage() { // message to display on registration error
     vm.message = 'Oops! Something went wrong. Please try again.';
   }
-  
+
 }]); // END CONTROLLER

@@ -60,21 +60,21 @@ passport.deserializeUser(function(id, done) {
 // Does actual work of logging in
 passport.use('local', new localStrategy({
     passReqToCallback: true,
-    usernameField: 'username'
-    }, function(req, username, password, done) {
+    usernameField: 'email'
+  }, function(req, email, password, done) {
 	    pool.connect(function (err, client, release) {
-	    	//---console.log('called local - pg');
+	    	// console.log('called local - pg');
 
-        // assumes the username will be unique, thus returning 1 or 0 results
-        client.query("SELECT * FROM users WHERE username = $1", [username],
+        // assumes the email will be unique, thus returning 1 or 0 results
+        client.query("SELECT * FROM users WHERE email = $1", [email],
           function(err, result) {
             var user = {};
 
-            //---console.log('here');
+            console.log('here');
 
             // Handle Errors
             if (err) {
-              //---console.log('connection err ', err);
+              console.log('connection err ', err);
               done(null, user);
             }
 
@@ -83,18 +83,19 @@ passport.use('local', new localStrategy({
 
             if(result.rows[0] !== undefined) {
               user = result.rows[0];
-              //---console.log('User obj', user);
+              console.log('User obj', user);
+              console.log(user.password);
               // Hash and compare
               if(encryptLib.comparePassword(password, user.password)) {
                 // all good!
-                //---console.log('passwords match');
+                console.log('passwords match');
                 done(null, user);
               } else {
-                //---console.log('password does not match');
+                console.log('password does not match');
                 done(null, false, {message: 'Incorrect credentials.'});
               }
             } else {
-              //---console.log('no user');
+              console.log('no user');
               done(null, false);
             }
 
