@@ -1,4 +1,3 @@
-
 --------CREATE DB & TABLES-------------
 -- create "bridging" database
 CREATE DATABASE "bridging";
