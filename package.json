@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemn server/app.js",
+    "test": "nodemon server/app.js",
     "postinstall": "grunt uglify copy",
     "start": "node server/app.js"
   },
