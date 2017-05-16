@@ -1,7 +1,26 @@
 <div ng-controller="UserController as vm">
   <md-toolbar>
+    <div class="md-toolbar-tools">
       <h1>Bridging Scheduling Application</h1>
-  <!-- <span>Bridging</span> -->
+      <md-button
+        ng-if="vm.user.type === 'caseworker'"
+        class="md-raised"
+        href="#caseworker-appointments-all">
+          My Appointments
+      </md-button>
+      <span flex></span>
+      <section
+        class="caseworker-toolbar-buttons"
+        layout="row"
+        ng-if="vm.user.type === 'caseworker'"
+        flex>
+          <md-button class="md-raised" href="#caseworker-appointment-new">Create Appointment</md-button>
+          <md-button class="md-raised" href="#caseworker-appointment-new" >Order Bed</md-button>
+          <md-button class="md-raised">Account Settings</md-button>
+          <span flex></span>
+          <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
+      </section>
+    </div>
   </md-toolbar>
-  <button class="btn btn-default" ng-click="vm.logout()">Log Out</button>
+
 </div>
