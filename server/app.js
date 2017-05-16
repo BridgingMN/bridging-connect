@@ -4,6 +4,9 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
+//CONFIGURATION
+var config = require('./modules/config.js');
+
 // DATABASE MODULE
 var database = require('./modules/database.js');
 
@@ -43,6 +46,6 @@ app.use('/user', user);
 app.use('/*', index);
 
 // LISTEN
-app.listen(app.get("port"), function(){
-   console.log("listening on port:", app.get("port"));
+app.listen(app.get('port'), function(){
+   console.log('listening on port:', app.get('port'));
 });

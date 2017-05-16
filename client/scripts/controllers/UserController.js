@@ -1,7 +1,9 @@
-myApp.controller('UserController', ['$http', '$location', 'UserService', function($http, $location, UserService) {
+angular
+  .module('myApp')
+  .controller('UserController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
-  var user = this; // controller reference
+  var vm = this; // controller reference
 
   // DATA-BINDING FUNCTIONS
-  user.logout = UserService.logout;
+  vm.logout = UserService.logout;
 }]);

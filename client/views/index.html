@@ -4,21 +4,26 @@
         <title>Bridging</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- STYLESHEETS -->
-        <!--<link rel="stylesheet" href="/vendors/bootstrap/css/bootstrap.min.css">-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="vendors/angular-material/angular-material.css">
         <link rel="stylesheet" href="/styles/style.css">
         <!-- MOMENT.js -->
         <script type="text/javascript" src="/vendors/moment/moment.js" charset="utf-8"></script>
-        <!-- ANGULAR -->
+        <!-- ANGULARJS -->
         <script type="text/javascript" src="/vendors/angular/angular.min.js"></script>
         <script type="text/javascript" src="/vendors/angular-route/angular-route.min.js"></script>
+        <!-- ANGULARJS MATERIAL -->
+        <script src="vendors/angular-aria/angular-aria.js" charset="utf-8"></script>
+        <script src="vendors/angular-animate/angular-animate.js" charset="utf-8"></script>
+        <script src="vendors/angular-material/angular-material.js" charset="utf-8"></script>
         <!-- APP CONFIG -->
         <script type="text/javascript" src="/scripts/client.min.js"></script>
     </head>
-    <body>
+    <body layout="column" flex>
 
       <header ng-include="'/views/partials/header.html'"></header>
 
-      <main ng-view></main>
+      <main ng-view layout="column"  flex></main>
 
       <!--REMOVE BEFORE PUSHING TO HEROKU-->
       <script src="//localhost:35729/livereload.js"></script>

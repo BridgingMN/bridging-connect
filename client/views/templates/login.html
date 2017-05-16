@@ -1,16 +1,22 @@
-<h1>Login</h1>
-<h2 role="alert" ng-if="login.message !== ''">{{login.message}}</h2>
-<form ng-submit="login.loginUser(login.tempUser)">
-  <div class="form-group">
-    <label for="in-user-username">Username</label>
-    <input type="text" ng-model="login.tempUser.username" class="form-control" id="in-user-username"/>
-  </div>
-  <div class="form-group">
-    <label for="in-user-password">Password</label>
-    <input type="password" ng-model="login.tempUser.password" class="form-control" id="in-user-password" />
-  </div>
-  <div class="form-group">
-    <input type="submit" name="submit" value="Log In" />
-  </div>
-</form>
-<a href="#register"><button type="button">Register</button></a>
+<div class="login-container" layout="column" layout-align="center center" flex>
+  <h1>Login</h1>
+  <h2 role="alert" ng-if="vm.message !== ''">{{vm.message}}</h2>
+  <form ng-submit="vm.loginUser(vm.tempUser)" layout="column">
+    <md-input-container>
+      <label>Username</label>
+      <input
+        type="text"
+        ng-model="vm.tempUser.username"
+        id="in-user-username"/>
+    </md-input-container>
+    <md-input-container>
+      <label>Username</label>
+      <input
+        type="password"
+        ng-model="vm.tempUser.password"
+        id="in-user-password" />
+    </md-input-container>
+    <md-button type="submit" name="submit">Log In</md-button>
+  </form>
+  <a href="#register"><md-button type="button">Register</md-button></a>
+</div>

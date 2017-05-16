@@ -1,4 +1,6 @@
-myApp.factory('UserService', ['$http', '$location', function($http, $location){
+angular
+  .module('myApp')
+  .factory('UserService', ['$http', '$location', function($http, $location){
   var userObject = {
 
   };
@@ -26,7 +28,7 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
   function getUser() {
     $http.get('/user').then(function(response) {
       if (!response.data.username) {
-        redirectToLogin();
+        // redirectToLogin();
       }
     });
   } // end getUser()

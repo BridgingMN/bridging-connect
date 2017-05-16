@@ -1,0 +1,15 @@
+{
+  "extends": ["plugin:angular/johnpapa", "eslint:recommended"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "angular": true
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "quotes": [2, "single"],
+    "semi": ["warn", "always"]
+  }
+}

@@ -1,1 +1,37 @@
-<p>{{caseworkerAppointmentSchedule.hello}}</p>
+<div class="caseworker-appointment-new" layout="column" layout-align="center center" flex>
+  <div class="caseworker-appointment-info" layout="row" layout-align="center center">
+    <div class="md-padding appointment-type">
+      <span>Shopping w/ Delivery</span>
+    </div>
+    <div class="md-padding appointment-location">
+      <i class="material-icons">place</i>
+      <span>Bloomington</span>
+    </div>
+    <div class="md-padding appointment-date-time">
+      <i class="material-icons">today</i>
+      <span>{{vm.myDate |date: 'shortDate'}},
+      {{vm.selectedAppointment}}</span>
+
+    </div>
+  </div>
+  <div class="caseworker-appointment-schedule-inputs" layout="row">
+    <div class="appoint-schedule-calendar">
+      <md-calendar
+          ng-model="vm.myDate"
+          md-min-date="vm.minDate" md-max-date="vm.maxDate"
+          md-date-filter="vm.onlyMonToThursPredicate">
+      </md-calendar>
+    </div>
+    <form class="md-padding appoint-schedule-slot" layout="column" layout-align="center center">
+        <p>Select an appointment:</p>
+          <md-radio-group ng-model="vm.selectedAppointment">
+            <md-radio-button
+              ng-value="appointment"
+              ng-repeat="appointment in vm.appointmentSlots">
+                {{appointment}}
+            </md-radio-button>
+          </md-radio-group>
+        <md-button class="md-raised md-primary" href="#caseworker-appointment-form">Next</md-button>
+    </form>
+  </div>
+</div>

@@ -1,32 +1,33 @@
-myApp.controller('RegisterController', ['UserService', function(UserService) {
-  console.log('register controller loaded');
+angular
+  .module('myApp')
+  .controller('RegisterController', ['UserService', function(UserService) {
   // DATA-BINDING VARIABLES
-  var register = this; // controller reference
-  register.message = ''; // used for error handling
-  register.tempUser = { // temp object sent to back-end
+  var vm = this; // controller reference
+  vm.message = ''; // used for error handling
+  vm.tempUser = { // temp object sent to back-end
     username: '',
     password: ''
   };
 
   // DATA-BINDING FUNCTIONS
-  register.registerUser = function(tempUser) {
+  vm.registerUser = function(tempUser) {
     if(tempUser.username === '' || tempUser.password === '') {
-      register.message = 'Please enter an e-mail address and password.';
+      vm.message = 'Please enter an e-mail address and password.';
     } else {
-      register.message = '';
+      vm.message = '';
       UserService.registerUser(tempUser)
         .then(alertSuccess, displayErrorMessage);
     }
   };
 
   // CONTROLLER VARIABLES/FUNCTIONS
-  function alertSuccess(response) { // alert for successful registration
+  function alertSuccess() { // alert for successful registration
     alert('Success! You may now login.');
     UserService.redirectToLogin();
   }
 
-  function displayErrorMessage(httpError) { // message to display on registration error
-    register.message = "Oops! Something went wrong. Please try again.";
+  function displayErrorMessage() { // message to display on registration error
+    vm.message = 'Oops! Something went wrong. Please try again.';
   }
   
 }]); // END CONTROLLER
