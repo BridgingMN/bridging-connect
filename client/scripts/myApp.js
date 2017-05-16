@@ -208,4 +208,4 @@ function config($locationProvider, $routeProvider) {
     .otherwise({
       redirectTo: 'login'
     });
-};
+}
