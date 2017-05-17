@@ -49,7 +49,7 @@ angular
     $location.path('/login');
   }
 
-  function redirectToAdminAppointmentsPending() {
+  function redirectToAdminAppointmentsAll() {
     $location.path('/admin-appointments-all');
   }
 
@@ -76,7 +76,7 @@ angular
     getUser: getUser,
     logout: logout,
     redirectToLogin: redirectToLogin,
-    redirectToAdminAppointmentsPending: redirectToAdminAppointmentsPending,
+    redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
     redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
   };
 }]);
