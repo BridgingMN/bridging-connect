@@ -6,19 +6,23 @@ var pool = require('../modules/database.js');
 
 /**
   * @api {get} /appointments/existing/:user_id Get User Appointments
-  * @apiVersion 0.1.0
+  * @apiVersion 0.1.1
   * @apiName GetUserAppointments
   * @apiGroup Appointments
   * @apiDescription Get a user's existing appointments
 
   * @apiParam {Number} user_id User's unique ID
+
   * @apiSuccess {Object[]} appointments   Array of appointment objects
   * @apiSuccess {Number} appointments.id   Unique ID of appointment
   * @apiSuccess {Object} appointments.client   Object with information about
       the client for whom the appointment was made
   * @apiSuccess {String} appointments.client.first   First name of client
   * @apiSuccess {String} appointments.client.last   Last name of client
-  * @apiSuccess {String} appointments.client.address   Address of client
+  * @apiSuccess {Object} appointments.client.address   Object containing address info for client
+  * @apiSuccess {String} appointments.client.address.street   Client street address
+  * @apiSuccess {String} appointments.client.address.city   City for address of client
+  * @apiSuccess {String} appointments.client.address.state   State for address of client (2-letter abbreviation)
   * @apiSuccess {Object} appointments.info   Object with information about the
       appointment
   * @apiSuccess {Number} appointments.info.appointment_number   Number to identify
@@ -27,8 +31,11 @@ var pool = require('../modules/database.js');
   * @apiSuccess {String} appointments.info.end_time   End time of appointment
   * @apiSuccess {String} appointments.info.appointment_type   Type of appointment
       ("shopping" or "new bed")
-  * @apiSuccess {String} appointments.info.location_name   "Roseville" or "Bloomington"
-  * @apiSuccess {String} appointments.info.location_address   Address of location
+  * @apiSuccess {Object} appointments.info.location   Object with info about appointment location
+  * @apiSuccess {String} appointments.info.location.name   "Roseville" or "Bloomington"
+  * @apiSuccess {String} appointments.info.location.street   Street address of location
+  * @apiSuccess {String} appointments.info.location.city   City for address of location
+  * @apiSuccess {String} appointments.info.location.state   State for address of location (2-letter abbreviation)
   * @apiSuccess {Date} appointments.info.date  Date of appointment
   * @apiSuccess {Date} appointments.info.delivery_date  Date of delivery (if applicable)
   * @apiSuccess {String} appointments.info.delivery_date    Status of appointment
@@ -40,7 +47,11 @@ var pool = require('../modules/database.js');
         "client": {
           "first": "Jim",
           "last": "Tolliver",
-          "address": "1400 Lizard Ln, St. Paul, MN"
+          "address": {
+            "street": "1400 Lizard Ln",
+            "city": "St. Paul",
+            "state": "MN"
+          }
         },
         "info": {
           "appointment_number" : 4590,
@@ -48,8 +59,12 @@ var pool = require('../modules/database.js');
           "end_time": "10:15 am",
           "appointment_type": "shopping",
           "delivery_method": "pickup",
-          "location_name": "Bloomington",
-          "location_address": "201 W 87th St, Bloomington, MN",
+          "location": {
+              "name": "Bloomington",
+              "street": "201 W 87th St",
+              "city": "Bloomington",
+              "state": "MN",
+            }
           "appointment_date": "4/21/17",
           "delivery_date": "4/22/17"
           "status": "confirmed",
@@ -60,8 +75,6 @@ var pool = require('../modules/database.js');
 */
 router.get('/existing/:user_id', function(req, res) {
   // TODO: add code
-  }
-});
 });
 
 /**
@@ -86,10 +99,12 @@ router.get('/existing/:user_id', function(req, res) {
   * @apiSuccess {String} appointments.appointment_type   Type of appointment
       ("shopping" or "new bed")
   * @apiSuccess {String} appointments.delivery_method   "delivery" or "pickup"
-  * @apiSuccess {String} appointments.location_name   Name of location
+  * @apiSuccess {Object} appointments.location   Object containing location info
+  * @apiSuccess {String} appointments.location.name   Name of location
       ("Bloomington" or "Roseville")
-  * @apiSuccess {String} appointments.location_address   Address of location
-
+  * @apiSuccess {String} appointments.location.street   Street address of location
+  * @apiSuccess {String} appointments.location.city   City for address of location
+  * @apiSuccess {String} appointments.location.state   State for address of location (2-letter abbreviation)
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{
@@ -99,8 +114,12 @@ router.get('/existing/:user_id', function(req, res) {
         "end_time": "10:15 am",
         "appointment_type": "shopping",
         "delivery_method": "pickup",
-        "location_name": "Bloomington",
-        "location_address": "201 W 87th St, Bloomington, MN",
+        "location": {
+          "name": "Bloomington",
+          "street": "201 W 87th St",
+          "city": "Bloomington",
+          "state": "MN",
+        }
       }]
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
@@ -111,18 +130,16 @@ router.get('/available', function(req, res) {
 
 /**
   * @api {post} /appointments/reserve Make Appointment
-  * @apiVersion 0.1.0
+  * @apiVersion 0.1.1
   * @apiName MakeAppointment
   * @apiGroup Appointments
   * @apiDescription Makes appointment & saves to database
 
-  * @apiParam {Date} date   Date of appointment
-  * @apiParam {String} start_time   Start time of appointment
-  * @apiParam {String} end_time   End time of appointment
+  * @apiParam {Date} appointment_date   Date of appointment
   * @apiParam {Number} user_id   Unique id of user creating the appointment
   * @apiParam {Number} client_id   Unique id of client for whom appointment was created
   * @apiParam {Number} appointment_slot_id   Unique id of appointment slot
-  * @apiParam {Date} appointment_date_added   Date on which appointment was created (current date)
+  * @apiParam {Date} created_date   Date on which appointment was created (current date)
   * @apiParam {String} status   Whether appointment is confirmed, canceled, or pending (should pass in pending)
   * @apiSuccess {Number} appointment_id   Unique ID of appointment that has been created
   * @apiErrorExample {json} List error
@@ -133,7 +150,7 @@ router.post('/reserve', function(req, res) {
 });
 
 /**
-  * @api {put} /appointments/existing Update Appointment
+  * @api {put} /appointments/existing Update Appointment Status
   * @apiVersion 0.1.0
   * @apiName UpdateAppointment
   * @apiGroup Appointments

@@ -97,4 +97,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# apidoc
+apidoc/
+
 # End of https://www.gitignore.io/api/osx
