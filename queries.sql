@@ -1,18 +1,22 @@
 ---- ADD A NEW AGENCY ----
 -- Adds a new agency's information to the "agencies" table in the database
-INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "primary_job_title", "primary_department", "beds_allowed_option_id")
-VALUES(
-'Fake County Housing Services', -- variable: name
-1234, -- variable: bridging_agency_id
-'Fakey', -- variable: primary contact first name
-'McFake', -- variable: primary contact last name
-'888-888-8888', -- variable: primary contact business phone
-NULL, -- variable: primary contact business phone extension
-'999-999-9999', -- variable: primary contact mobile phone
-'mcfake@fakecounty.gov', -- variable: primary contact email address
-'Chief Head Person', -- variable: primary contact job title
-'Department of Magical Objects', -- variable: primary contact department
-(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = 'yes')); -- variable: beds_allowed_option
+INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first",
+  "primary_last", "primary_business_phone", "primary_business_phone_ext",
+  "primary_mobile_phone", "primary_email", "primary_job_title",
+  "primary_department", "beds_allowed_option_id")
+VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11));
+-- $1: name
+-- $2: bridging_agency_id
+-- $3: primary contact first name
+-- $4: primary contact last name
+-- $5: primary contact business phone
+-- $6: primary contact business phone extension
+-- $7: primary contact mobile phone
+-- $8: primary contact email address
+-- $9: primary contact job title
+-- $10: primary contact department
+-- $11: beds_allowed_option
 
 ---- DELETE AGENCY ----
 -- Deletes specified agency from the database
@@ -115,6 +119,18 @@ VALUES (
 'Weasley', -- variable: caseworker last name
 '888-888-8888', -- variable: day phone number for caseworker
 NULL); -- variable: day phone number for caseworker
+
+---- DELETE CASEWORKER ----
+-- Deletes specified caseworker from the database
+
+---- GET ALL CASEWORKERS ----
+-- Retrieves all caseworkers' high-level information from the database
+
+---- GET ONE CASEWORKER ----
+-- Retrieves a specific caseworker's information from the database
+
+---- UPDATE CASEWORKER ----
+-- Updates specified properties for a caseworker
 
 ---- GET LOCATIONS FOR ZIP CODE ----
 -- Determines which location(s) should be available to a user given the client's ZIP code
