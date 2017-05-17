@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var pool = require('../modules/database.js');
 
 /**
   * @api {get} /caseworkers Get All Caseworkers
@@ -79,7 +80,36 @@ router.get('/:caseworker_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    var user_type_id = req.body.user_type_id;
+    var agency_id = req.body.agency_id;
+    var first = req.body.first;
+    var last = req.body.last;
+    var day_phone = req.body.day_phone;
+    var ext = req.body.ext;
+    var email = req.body.email;
+    var caseworker_access_disabled = req.body.caseworker_access_disabled;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('', [user_type_id, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /caseworkers POST', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful insert into "caseworkers"', result);
+              res.send(result);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+  } else { // user NOT authenticated
+    res.sendStatus(401);
+  }
 });
 
 /**
