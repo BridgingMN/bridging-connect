@@ -4,6 +4,20 @@ angular
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
+  // Binds user data from factory
+  vm.user = UserService.userObject;
+
+  // Stores current appointment filter, by default should show all appointments
+  vm.appointmentFilter = '';
+
+  // Methods
+  vm.setAppointmentFilter = setAppointmentFilter;
+  vm.rescheduleAppointment = rescheduleAppointment;
+  vm.editAppointmentInfo = editAppointmentInfo;
+  vm.deleteAppointment = deleteAppointment;
+  vm.showAppointmentDetails = showAppointmentDetails;
+
+
   vm.caseworkerAppointments = [
     {
       appointment_date: new Date(),
@@ -95,5 +109,31 @@ angular
     }
 
   ];
+
+  function setAppointmentFilter(filter) {
+    console.log(filter);
+    //This function will filter the view to show the desired types of appointments
+  }
+
+  function rescheduleAppointment(appointment_id) {
+    console.log(appointment_id);
+    //This function will redirect the caseworker to a view where they can reschedule their appointment
+  }
+
+  function editAppointmentInfo(appointment_id) {
+    console.log(appointment_id);
+    //This function will redirect the caseworker to a view where they can edit the referall form for their client
+  }
+
+  function deleteAppointment(appointment_id) {
+    console.log(appointment_id);
+    //This function should confirm that the user intends to delete an appointment and then delete that appointment
+  }
+
+  function showAppointmentDetails(appointment_id) {
+    console.log(appointment_id);
+    //This function would show the details for a particular appointment.
+  }
+
 
 }]);
