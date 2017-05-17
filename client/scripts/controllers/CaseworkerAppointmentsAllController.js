@@ -17,7 +17,7 @@ angular
   vm.deleteAppointment = deleteAppointment;
   vm.showAppointmentDetails = showAppointmentDetails;
 
-
+  //This is a placeholder, in production appointsments will be an array property on the user object.
   vm.caseworkerAppointments = [
     {
       appointment_date: new Date(),
