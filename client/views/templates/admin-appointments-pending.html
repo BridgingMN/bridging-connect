@@ -1,4 +1,5 @@
-<p>{{vm.hello}}</p>
+<div layout="column" flex layout-align = "start center">
+    <h2>Pending Appointments</h2>
 
 <div layout = "row" layout-align = "center center">
   <md-table-container>
@@ -44,3 +45,4 @@
   </md-table-container>
 </div>
   <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{desserts.count}}" md-on-paginate="getDesserts" md-page-select></md-table-pagination>
+</div>
