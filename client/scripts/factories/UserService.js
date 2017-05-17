@@ -50,7 +50,7 @@ angular
   }
 
   function redirectToAdminAppointmentsPending() {
-    $location.path('/admin-appointments-pending');
+    $location.path('/admin-appointments-all');
   }
 
   function redirectToCaseworkerAppointmentsAll() {

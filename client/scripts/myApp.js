@@ -1,5 +1,5 @@
 angular
-  .module('myApp', ['ngRoute', 'ngMaterial'])
+  .module('myApp', ['ngRoute', 'ngMaterial', 'md.data.table'])
   .config(['$locationProvider', '$routeProvider', config]);
 // -----ROUTES-----
 function config($locationProvider, $routeProvider) {
