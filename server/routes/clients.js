@@ -3,14 +3,17 @@ var router = express.Router();
 
 /**
   * @api {post} /clients Add a client
-  * @apiVersion 0.1.0
+  * @apiVersion 0.1.1
   * @apiName PostClient
   * @apiGroup Clients
   * @apiDescription Saves a client's information to database
 
   * @apiParam {String} first   First name of client
   * @apiParam {String} last   Last name of client
-  * @apiParam {String} address   Address of client
+  * @apiParam {Date} dob Client date of birth
+  * @apiParam {String} street   Street address of client
+  * @apiParam {String} city   City of client address
+  * @apiParam {String} state State of client address (2-letter abbreviation)
 
   * @apiSuccess {Number} client_id   Unique ID of client that has been added
   * @apiErrorExample {json} Post error
