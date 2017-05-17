@@ -2,23 +2,28 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h1>Bridging Scheduling Application</h1>
-      <md-button
-        ng-if="vm.user.type === 'caseworker'"
-        class="md-raised"
-        href="#caseworker-appointments-all">
-          My Appointments
+      <md-button ng-if="vm.user.type === 'caseworker'" class="md-raised" href="#caseworker-appointments-all">
+        My Appointments
       </md-button>
+      <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
+        <md-button class="md-raised" href="#admin-appointments-pending">Pending Appointment</md-button>
+        <md-button class="md-raised" href="#admin-appointments-all">All Appointments</md-button>
+        <md-button class="md-raised" href="#admin-appointments-customize">Custom Appointments</md-button>
+        <md-button class="md-raised" href="#admin-appointments-default">Edit Default Schedule</md-button>
+      </section>
       <span flex></span>
-      <section
-        class="caseworker-toolbar-buttons"
-        layout="row"
-        ng-if="vm.user.type === 'caseworker'"
-        flex>
-          <md-button class="md-raised" href="#caseworker-appointment-new">Create Appointment</md-button>
-          <md-button class="md-raised" href="#caseworker-appointment-new" >Order Bed</md-button>
-          <md-button class="md-raised">Account Settings</md-button>
-          <span flex></span>
-          <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
+      <section class="caseworker-toolbar-buttons" layout="row" ng-if="vm.user.type === 'caseworker'" flex>
+        <md-button class="md-raised" href="#caseworker-appointment-new">Create Appointment</md-button>
+        <md-button class="md-raised" href="#caseworker-appointment-new">Order Bed</md-button>
+        <md-button class="md-raised">Account Settings</md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
+      </section>
+      <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
+        <md-button class="md-raised" href="#admin-caseworker-overview">Caseworkers</md-button>
+        <md-button class="md-raised" href="#admin-agency-overview">Agencies</md-button>
+        <span flex></span>
+        <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
       </section>
     </div>
   </md-toolbar>
