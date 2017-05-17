@@ -1,22 +1,39 @@
 ---- ADD A NEW AGENCY ----
 -- Adds a new agency's information to the "agencies" table in the database
--- TODO: add query
+INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "primary_job_title", "primary_department", "beds_allowed_option_id")
+VALUES(
+'Fake County Housing Services', -- variable: name
+1234, -- variable: bridging_agency_id
+'Fakey', -- variable: primary contact first name
+'McFake', -- variable: primary contact last name
+'888-888-8888', -- variable: primary contact business phone
+NULL, -- variable: primary contact business phone extension
+'999-999-9999', -- variable: primary contact mobile phone
+'mcfake@fakecounty.gov', -- variable: primary contact email address
+'Chief Head Person', -- variable: primary contact job title
+'Department of Magical Objects', -- variable: primary contact department
+(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = 'yes')); -- variable: beds_allowed_option
 
 ---- DELETE AGENCY ----
 -- Deletes specified agency from the database
--- TODO: add query
+DELETE FROM "agencies" WHERE "id" = 192; -- variable: agency_id
 
 ---- GET ALL AGENCIES ----
 -- Retrieves all agencies high-leavel information from the "agencies" table of the database
--- TODO: add query
+SELECT "name", "id", "bridging_agency_id", "access_disabled" FROM "agencies";
 
 ---- GET ONE AGENCY ----
 -- Retrieve a specific agency's information from the "agencies" table of the database
--- TODO: add query
+SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled"
+FROM "agencies"
+WHERE "id" = 16; -- variable: agency_id
 
 ---- UPDATE AGENCY ----
--- Updates specified properties for an agency
--- TODO: add query
+-- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
+UPDATE "agencies"
+SET "primary_first" -- variable: key
+= 'Trimothy' -- variable: value
+WHERE "id" = 193; -- variable: agency_id
 
 ---- GET USER APPOINTMENTS ----
 -- Get all appointments for a user from their user_id
@@ -62,7 +79,9 @@ VALUES (
 
 ---- UPDATE APPOINTMENT STATUS ----
 -- Updates status of an appointment in database
--- TODO: add query
+UPDATE "appointments" SET "status_id" =
+(SELECT "id" FROM "statuses" WHERE "status" = 'confirmed') -- variable: status
+WHERE "id" = 6; -- variable: appointment_id
 
 ---- ADD A CLIENT ----
 -- Save a new client to clients table
@@ -79,7 +98,11 @@ VALUES (
 
 ---- UPDATE A CLIENT ----
 -- Changes specified properties for a client and changes them to new values
--- TODO: add query
+-- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
+UPDATE "clients"
+SET "first" -- variable: key
+= 'Trimothy' -- variable: value
+WHERE "id" = 4; -- variable: client_id
 
 ---- [NAME OF ADMIN CREATE APPOINTMENT SLOT ROUTE] ----
 -- Save a new appointment slot
@@ -93,21 +116,17 @@ VALUES (
 '11:15', -- variable: (& put in correct format
 3); -- variable: (num_allowed)
 
----- [NAME OF ADMIN CREATE NEW CASEWORKER ROUTE] ----
--- Save a new caseworker
-INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "street", "city", "state", "zip_code", "department")
+---- ADD A NEW CASEWORKER ----
+-- Adds a new caseworker's information to the "users" table in the database
+INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "ext")
 VALUES (
 (SELECT "id" FROM "user_types" WHERE "user_type" = 'caseworker'),
 (SELECT "id" FROM "agencies" WHERE "name" = 'American Indian Family Center'), -- variable: agency name
-'fake@superfake.com', -- variable: email address of caseworker
+'fakest@superfake.com', -- variable: email address of caseworker
 'Arthur', -- variable: caseworker first name
 'Weasley', -- variable: caseworker last name
 '888-888-8888', -- variable: day phone number for caseworker
-'1111 Lemon Ave', -- variable: case worker street address (of agency? is this needed?)
-'Bloomington', -- variable: case worker city (of agency? is this needed?)
-'MN', -- variable: case worker state (of agency? is this needed?)
-'55404', -- variable: case worker zip (of agency? is this needed?)
-'Department of Magical Inquiry'); -- variable: case worker department name
+NULL); -- variable: day phone number for caseworker
 
 ---- GET LOCATIONS FOR ZIP CODE ----
 -- Determines which location(s) should be available to a user given the client's ZIP code
