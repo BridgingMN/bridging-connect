@@ -60,8 +60,6 @@ var pool = require('../modules/database.js');
 */
 router.get('/existing/:user_id', function(req, res) {
   // TODO: add code
-  }
-});
 });
 
 /**
