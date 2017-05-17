@@ -1,4 +1,17 @@
-<p>{{vm.hello}}</p>
+<div layout="column" flex="100">
+  <h2>Agencies</h2>
+<div layout = "row">
+  <md-button class="md-raised md-primary" href="#admin-agency-new">
+      Add New Agency</md-button>
+</div>
+
+<div>
+  <md-input-container>
+    <label>Search</label>
+    <input ng-model = "">
+  </md-input-continer>
+</div>
+
 <div layout = "row" layout-align = "center center">
 
   <md-table-container>
@@ -33,3 +46,4 @@
   </md-table-container>
 </div>
   <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{desserts.count}}" md-on-paginate="getDesserts" md-page-select></md-table-pagination>
+</div>
