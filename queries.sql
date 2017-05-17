@@ -104,18 +104,6 @@ SET "first" -- variable: key
 = 'Trimothy' -- variable: value
 WHERE "id" = 4; -- variable: client_id
 
----- [NAME OF ADMIN CREATE APPOINTMENT SLOT ROUTE] ----
--- Save a new appointment slot
-INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed")
-VALUES (
-(SELECT "id" FROM "appointment_types" WHERE "appointment_type" = 'shopping'), -- variable:
-(SELECT "id" FROM "days" WHERE "name" = 'Sunday'), -- variable:
-(SELECT "id" FROM "delivery_methods" WHERE "delivery_method" = 'pickup'), -- variable:
-(SELECT "id" FROM "locations" WHERE "location" = 'Bloomington'), -- variable:
-'10:15', -- variable: (& put in correct format
-'11:15', -- variable: (& put in correct format
-3); -- variable: (num_allowed)
-
 ---- ADD A NEW CASEWORKER ----
 -- Adds a new caseworker's information to the "users" table in the database
 INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "ext")
@@ -131,3 +119,15 @@ NULL); -- variable: day phone number for caseworker
 ---- GET LOCATIONS FOR ZIP CODE ----
 -- Determines which location(s) should be available to a user given the client's ZIP code
 -- TODO: add query
+
+---- ADD APPOINTMENT SLOT ----
+-- Save a new appointment slot
+INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed")
+VALUES (
+(SELECT "id" FROM "appointment_types" WHERE "appointment_type" = 'shopping'), -- variable:
+(SELECT "id" FROM "days" WHERE "name" = 'Sunday'), -- variable:
+(SELECT "id" FROM "delivery_methods" WHERE "delivery_method" = 'pickup'), -- variable:
+(SELECT "id" FROM "locations" WHERE "location" = 'Bloomington'), -- variable:
+'10:15', -- variable: (& put in correct format
+'11:15', -- variable: (& put in correct format
+3); -- variable: (num_allowed)
