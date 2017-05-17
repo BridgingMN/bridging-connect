@@ -1,3 +1,23 @@
+---- ADD A NEW AGENCY ----
+-- Adds a new agency's information to the "agencies" table in the database
+-- TODO: add query
+
+---- DELETE AGENCY ----
+-- Deletes specified agency from the database
+-- TODO: add query
+
+---- GET ALL AGENCIES ----
+-- Retrieves all agencies high-leavel information from the "agencies" table of the database
+-- TODO: add query
+
+---- GET ONE AGENCY ----
+-- Retrieve a specific agency's information from the "agencies" table of the database
+-- TODO: add query
+
+---- UPDATE AGENCY ----
+-- Updates specified properties for an agency
+-- TODO: add query
+
 ---- GET USER APPOINTMENTS ----
 -- Get all appointments for a user from their user_id
 SELECT "appointments"."id", "clients"."first", "clients"."last", "clients"."street", "clients"."city", "clients"."state", "appointments"."confirmation_id", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_types"."appointment_type", "locations"."location", "locations"."street", "locations"."city", "locations"."state", "appointments"."appointment_date"
@@ -40,6 +60,10 @@ VALUES (
 (SELECT "id" FROM "statuses" WHERE "status" = 'pending'),
 'June 20, 2017'); -- variable: appointment date
 
+---- UPDATE APPOINTMENT STATUS ----
+-- Updates status of an appointment in database
+-- TODO: add query
+
 ---- ADD A CLIENT ----
 -- Save a new client to clients table
 INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code")
@@ -53,6 +77,10 @@ VALUES (
 'MN', -- variable: state
 55101); -- variable: zip_code
 
+---- UPDATE A CLIENT ----
+-- Changes specified properties for a client and changes them to new values
+-- TODO: add query
+
 ---- [NAME OF ADMIN CREATE APPOINTMENT SLOT ROUTE] ----
 -- Save a new appointment slot
 INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed")
@@ -65,7 +93,7 @@ VALUES (
 '11:15', -- variable: (& put in correct format
 3); -- variable: (num_allowed)
 
---- [NAME OF CREATE NEW CASEWORKER ROUTE] ----
+---- [NAME OF ADMIN CREATE NEW CASEWORKER ROUTE] ----
 -- Save a new caseworker
 INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "street", "city", "state", "zip_code", "department")
 VALUES (
@@ -80,3 +108,7 @@ VALUES (
 'MN', -- variable: case worker state (of agency? is this needed?)
 '55404', -- variable: case worker zip (of agency? is this needed?)
 'Department of Magical Inquiry'); -- variable: case worker department name
+
+---- GET LOCATIONS FOR ZIP CODE ----
+-- Determines which location(s) should be available to a user given the client's ZIP code
+-- TODO: add query
