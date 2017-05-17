@@ -94,20 +94,20 @@ router.post('/', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('INSERT INTO "teams" ("name", "creator_id") VALUES ($1, $2) RETURNING "id";', [name, req.user.id],
+        database.query('', [name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, beds_allowed_option, access_disabled],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
-              console.log('error making query on /teams POST', queryErr);
+              console.log('error making query on /agencies POST', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful insert into "teams"', result);
+              console.log('successful insert into "agencies"', result);
               res.send(result);
             }
         }); // end query
       } // end if-else
     }); // end pool.connect
-  } else {
+  } else { // user NOT authenticated
     res.sendStatus(401);
   }
 });
