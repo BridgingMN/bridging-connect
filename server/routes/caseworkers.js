@@ -15,7 +15,7 @@ var router = express.Router();
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database - stored in the "agencies" table.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
   * @apiSuccess {Boolean} caseworker_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
-  
+
 
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -64,7 +64,7 @@ router.get('/:caseworker_id', function(req, res) {
   * @apiGroup Caseworkers
   * @apiDescription Adds a new caseworker's information to the "users" table in the database.
 
-  * @apiParam {Number} user_type_id Mandatory Indicator for the type of user being created. 2 == caseworker.
+  * @apiParam {String} user_type Mandatory Indicator for the type of user being created. Options are "caseworker" or "admin".
   * @apiParam {Number} agency_id Mandatory Unique ID of the agency the caseworker is associated with.
   * @apiParam {String} first First name of the caseworker from the "users" table.
   * @apiParam {String} last Last name of the caseworker from the "users" table.
