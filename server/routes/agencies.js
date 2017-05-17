@@ -6,9 +6,10 @@ var router = express.Router();
   * @apiVersion 0.1.0
   * @apiName GetAgencies
   * @apiGroup Agencies
-  * @apiDescription Retrieves all agencies high-leavel information from the "agencies" table of the database.
+  * @apiDescription Retrieves all agencies high-level information from the "agencies" table of the database.
 
   * @apiSuccess {String} name Name of the agency.
+  * @apiSuccess {Number} agency_id Unique ID of the agency.
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database.
   * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
 
@@ -29,6 +30,7 @@ router.get('/', function(req, res) {
   * @apiParam {Number} agency_id Agency's unique ID that is stored in the database.
 
   * @apiSuccess {String} name Name of the agency.
+  * @apiSuccess {Number} agency_id Unique ID of the new agency.
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database
   * @apiSuccess {String} primary_first First name of agency's primary contact.
   * @apiSuccess {String} primary_last Last name of agency's primary contact.
@@ -64,7 +66,7 @@ router.get('/:agency_id', function(req, res) {
   * @apiParam {Number} beds_allowed_option_id Mandatory Number corresponding to the "beds_allowed_options" table.
   * @apiParam {Boolean} access_disabled Mandatory Current agency status. True = access disabled.
 
-  * @apiSuccess {Number} agency_id Unique ID of the new agency.
+  * @apiSuccess {Number} id Unique ID of the new agency.
 
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -81,6 +83,7 @@ router.post('/', function(req, res) {
   * @apiDescription Updates specified properties for an agency.
   *
   * @apiParam {String} name Name of the agency.
+  * @apiParam {Number} agency_id Unique ID of the new agency.  
   * @apiParam {Number} bridging_agency_id Agency ID from the Bridging Access Database
   * @apiParam {String} primary_first First name of agency's primary contact.
   * @apiParam {String} primary_last Last name of agency's primary contact.
@@ -107,7 +110,7 @@ router.put('/:agency_id', function(req, res) {
   * @apiGroup Agencies
   * @apiDescription Deletes specified agency from the database.
   *
-  * @apiParam {Number} agency_id Unique ID of the new agency.
+  * @apiParam {Number} agency_id Unique ID of the agency in the "agencies" table.
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK

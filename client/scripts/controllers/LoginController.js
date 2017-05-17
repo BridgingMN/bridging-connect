@@ -17,7 +17,7 @@ angular
       vm.message = '';
       UserService.loginUser(tempUser).then(function(loginValue) {
         if (loginValue === 1) {
-          UserService.redirectToAdminAppointmentsPending();
+          UserService.redirectToAdminAppointmentsAll();
         } else if (loginValue === 2) {
           UserService.redirectToCaseworkerAppointmentsAll();
         } else {
