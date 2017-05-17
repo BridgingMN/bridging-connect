@@ -103,8 +103,8 @@ router.get('/existing/:user_id', function(req, res) {
   * @apiSuccess {String} appointments.location.name   Name of location
       ("Bloomington" or "Roseville")
   * @apiSuccess {String} appointments.location.street   Street address of location
-  * @apiSuccess {String} appointments.info.location.city   City for address of location
-  * @apiSuccess {String} appointments.info.location.state   State for address of location (2-letter abbreviation)
+  * @apiSuccess {String} appointments.location.city   City for address of location
+  * @apiSuccess {String} appointments.location.state   State for address of location (2-letter abbreviation)
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{

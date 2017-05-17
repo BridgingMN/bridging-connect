@@ -14,13 +14,20 @@ var router = express.Router();
   * @apiSuccess {Object} locations.location   Object containing the location's name and address
   * @apiSuccess {String} locations.location.name   Name of location ("Bloomington
   *    or Roseville")
-  * @apiSuccess {String} locations.location.address   Address of location
+  * @apiSuccess {String} locations.location.street   Street address of location
+  * @apiSuccess {String} locations.location.city   City for address of location
+  * @apiSuccess {String} locations.location.state   State address of location (2-letter abbreviation)
   * @apiSuccessExample {json} Success-Response:
   *    HTTP/1.1 200 OK
   *    [
   *      {
-  *        "name": "Roseville",
-  *        "address": "1730 Terrace Dr, Roseville, MN",
+  *
+  *        "location": {
+              "name": "Roseville",
+              "street": "1730 Terrace Dr",
+              "city": "Roseville",
+              "state": "MN",
+            }
   *      }
   *    ]
   * @apiErrorExample {json} List error
