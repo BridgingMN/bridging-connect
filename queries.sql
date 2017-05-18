@@ -1,22 +1,22 @@
 ---- ADD A NEW AGENCY ----
 -- Adds a new agency's information to the "agencies" table in the database
 INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first",
-  "primary_last", "primary_business_phone", "primary_business_phone_ext",
-  "primary_mobile_phone", "primary_email", "primary_job_title",
-  "primary_department", "beds_allowed_option_id")
+  "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext",
+  "primary_mobile_phone", "primary_email","beds_allowed_option_id", "access_disabled")
 VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
 (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11));
 -- $1: name
 -- $2: bridging_agency_id
 -- $3: primary contact first name
 -- $4: primary contact last name
--- $5: primary contact business phone
--- $6: primary contact business phone extension
--- $7: primary contact mobile phone
--- $8: primary contact email address
--- $9: primary contact job title
--- $10: primary contact department
+-- $5: primary job title
+-- $6: primary department
+-- $7: primary contact business phone
+-- $8: primary contact business phone extension
+-- $9: primary contact mobile phone
+-- $10: primary contact email address
 -- $11: beds_allowed_option
+-- $12: access_disabled
 
 ---- DELETE AGENCY ----
 -- Deletes specified agency from the database

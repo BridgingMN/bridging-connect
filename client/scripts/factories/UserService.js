@@ -69,6 +69,30 @@ angular
   }
   //------END SUPPORT FUNCTIONS-----
 
+  function postAgency(object) {
+    console.log('hi');
+    $http.post('/agencies', object).then(function(response) {
+      console.log(response);
+    });
+  }
+
+  var agencyObject = {
+    name : 'Fake Agency',
+    bridging_agency_id: 9939,
+    primary_first: 'Lumpy',
+    primary_last: 'Robertson',
+    primary_job_title: 'Honcho',
+    primary_department: 'Bricks',
+    primary_business_phone: '555.6666',
+    primary_business_phone_ext: '32',
+    primary_mobile_phone: '444.555',
+    primary_email: 'lumpy@lumps.com',
+    beds_allowed_option: 'yes',
+    access_disabled: false
+  };
+
+  postAgency(agencyObject);
+
   return {
     userObject: userObject,
     loginUser: loginUser,

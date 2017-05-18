@@ -76,7 +76,7 @@ router.get('/:agency_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/', function(req, res) {
-  if (req.isAuthenticated()) { // user is authenticated
+  // if (req.isAuthenticated()) { // user is authenticated
     var name = req.body.name;
     var bridging_agency_id = req.body.bridging_agency_id;
     var primary_first = req.body.primary_first;
@@ -95,11 +95,11 @@ router.post('/', function(req, res) {
         res.sendStatus(500);
       } else { // we connected
         database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", \
-        "primary_first", "primary_last", "primary_business_phone", \
-        "primary_business_phone_ext", "primary_mobile_phone", "primary_email", \
-        "primary_job_title", "primary_department", "beds_allowed_option_id") \
+        "primary_first", "primary_last", "primary_job_title", "primary_department", \
+        "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", \
+         "primary_email", "beds_allowed_option_id", "access_disabled") \
         VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, \
-        (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11))',
+        (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11), $12)',
         [name, bridging_agency_id, primary_first, primary_last, primary_job_title,
         primary_department, primary_business_phone, primary_business_phone_ext,
         primary_mobile_phone, primary_email, beds_allowed_option, access_disabled],
@@ -115,9 +115,9 @@ router.post('/', function(req, res) {
         }); // end query
       } // end if-else
     }); // end pool.connect
-  } else { // user NOT authenticated
-    res.sendStatus(401);
-  }
+  // } else { // user NOT authenticated
+    // res.sendStatus(401);
+  // }
 });
 
 /**
