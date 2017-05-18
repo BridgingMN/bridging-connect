@@ -49,10 +49,10 @@ app.use(passport.session());
 app.use('/register', register);
 app.use('/user', user);
 app.use('/agencies', agencies);
-app.use('/agencies', appointments);
-app.use('/agencies', caseworkers);
-app.use('/agencies', clients);
-app.use('/agencies', rules);
+app.use('/appointments', appointments);
+app.use('/caseworkers', caseworkers);
+app.use('/clients', clients);
+app.use('/rules', rules);
 app.use('/*', index);
 
 // LISTEN
