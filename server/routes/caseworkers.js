@@ -160,6 +160,7 @@ router.post('/', function(req, res) {
   * @apiGroup Caseworkers
   * @apiDescription Updates specified properties for a caseworker.
   *
+  * @apiParam {Number} id Unique ID of the caseworker.
   * @apiParam {Number} agency_id Unique ID of the agency the caseworker is associated with.
   * @apiParam {String} first First name of the caseworker.
   * @apiParam {String} last Last name of the caseworker.
@@ -174,7 +175,38 @@ router.post('/', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.put('/:caseworker_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    // req.params variables
+    var caseworker_id = req.params.caseworker_id;
+    // req.body variables
+    var agency_id = req.body.agency_id;
+    var first = req.body.first;
+    var last = req.body.last;
+    var day_phone = req.body.day_phone;
+    var ext = req.body.ext;
+    var email = req.body.email;
+    var caseworker_access_disabled = req.body.caseworker_access_disabled;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('', [caseworker_id, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /caseworkers/:caseworker_id PUT', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful update in "caseworkers"', result);
+              res.send(result);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+  } else { // user NOT authenticated
+    res.sendStatus(401);
+  }
 });
 
 /**
