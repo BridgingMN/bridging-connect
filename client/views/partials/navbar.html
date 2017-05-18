@@ -1,0 +1,45 @@
+<div ng-controller="UserController as vm">
+<div ng-cloak ng-if="vm.user.type === 'caseworker'">
+  <md-content class="md-padding">
+    <md-nav-bar
+      md-selected-nav-item="currentNavItem"
+      nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-href="#caseworker-appointments-all" name="all">
+        My Appointments
+      </md-nav-item>
+      <md-nav-item md-nav-href="#caseworker-appointment-new" name="pending">
+        Create Shopping Appointment
+      </md-nav-item>
+      <md-nav-item  md-nav-href="#caseworker-appointment-new" name="caseworker">
+        Order New Bed ONLY
+      </md-nav-item>
+      <md-nav-item md-nav-href="#" name="agencies">
+        Account Settings</md-nav-item>
+    </md-nav-bar>
+  </md-content>
+</div>
+
+<div ng-cloak ng-if="vm.user.type === 'admin'">
+<md-content class="md-padding">
+  <md-nav-bar
+    md-selected-nav-item="currentNavItem"
+    nav-bar-aria-label="navigation links">
+    <md-nav-item md-nav-href="#admin-appointments-all" name="all">
+      All Appointments
+    </md-nav-item>
+    <md-nav-item md-nav-href="#admin-appointments-pending" name="pending">
+      Pending Appointments
+    </md-nav-item>
+    <md-nav-item  md-nav-href="#admin-caseworker-overview" name="caseworker">
+      Caseworkers
+    </md-nav-item>
+    <md-nav-item md-nav-href="#admin-agency-overview" name="agencies">
+      Agencies</md-nav-item>
+    <md-nav-item md-nav-href="#admin-appointments-default" name="default">
+      Default Schedule</md-nav-item>
+    <md-nav-item md-nav-href="#admin-appointments-customize" name="customize">
+      Customize Days</md-nav-item>
+  </md-nav-bar>
+</md-content>
+</div>
+</div>
