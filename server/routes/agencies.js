@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT * FROM "agencies"',
+        database.query('SELECT "name", "id", "bridging_agency_id", "access_disabled" FROM "agencies";',
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
@@ -75,7 +75,9 @@ router.get('/:agency_id', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT * FROM "agencies" WHERE "id" = $1;', [agency_id],
+        database.query('SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled" ' +
+                       'FROM "agencies" ' +
+                       'WHERE "id" = $1;', [agency_id],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
