@@ -8,7 +8,7 @@ var pool = require('../modules/database.js');
   * @apiName GetCaseworkers
   * @apiGroup Caseworkers
   * @apiDescription Retrieves all caseworkers' high-level information from the database.
-
+  *
   * @apiSuccess {String} first First name of the caseworker from the "users" table.
   * @apiSuccess {String} last Last name of the caseworker from the "users" table.
   * @apiSuccess {String} name Name of the agency from the "agencies" table.
@@ -16,8 +16,7 @@ var pool = require('../modules/database.js');
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database - stored in the "agencies" table.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
   * @apiSuccess {Boolean} caseworker_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
-  
-
+  *  
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -51,9 +50,9 @@ router.get('/', function(req, res) {
   * @apiName GetCaseworker
   * @apiGroup Caseworkers
   * @apiDescription Retrieve a specific caseworker's information from the database.
-
+  *
   * @apiParam {Number} caseworker_id Caseworker's unique ID that is stored in the database.
-
+  *
   * @apiSuccess {String} first First name of the caseworker from the "users" table.
   * @apiSuccess {String} last Last name of the caseworker from the "users" table.
   * @apiSuccess {String} day_phone Daytime phone number of the caseworker from the "users" table.
@@ -70,7 +69,7 @@ router.get('/', function(req, res) {
   * @apiSuccess {String} primary_email E-mail address of agency's primary contact from the "agencies" table.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
   * @apiSuccess {Boolean} caseworker_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
-
+  *
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -105,7 +104,7 @@ router.get('/:caseworker_id', function(req, res) {
   * @apiName PostCaseworker
   * @apiGroup Caseworkers
   * @apiDescription Adds a new caseworker's information to the "users" table in the database.
-
+  *
   * @apiParam {String} user_type Mandatory Indicator for the type of user being created. Corresponds to an entry in the "user_types" table.
   * @apiParam {Number} agency_id Mandatory Unique ID of the agency the caseworker is associated with.
   * @apiParam {String} first First name of the caseworker from the "users" table.
@@ -114,9 +113,9 @@ router.get('/:caseworker_id', function(req, res) {
   * @apiParam {String} ext Phone number extension of caseworker from the "users" table.
   * @apiParam {String} email Mandatory Email address of caseworker from the "users" table.
   * @apiParam {Boolean} caseworker_access_disabled Mandatory Current caseworker status. True = access disabled.
-
+  *
   * @apiSuccess {Number} id Unique ID of the new caseworker.
-
+  *
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
 */
