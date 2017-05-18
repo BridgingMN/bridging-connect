@@ -140,6 +140,8 @@ router.get('/available', function(req, res) {
   * @apiParam {Date} appointment_date_added   Date on which appointment was created (current date)
   * @apiParam {String} status   Whether appointment is confirmed, canceled, or pending (should pass in pending)
   * @apiSuccess {Number} appointment_id   Unique ID of appointment that has been created
+  * @apiSuccessExample Success-Response:
+  *   HTTP/1.1 201 Created
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -160,13 +162,13 @@ router.post('/reserve', function(req, res) {
       VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
       WHERE "status" = \'pending\'))',
       [appointment_slot_id, user_id, client_id, created_date, appointment_date],
-      function(queryError, result){
+      function(queryError){
         done();
         if (queryError) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
-          res.send(result.rows);
+          res.sendStatus(201);
         }
       });
     }
