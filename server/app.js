@@ -18,6 +18,7 @@ var session = require('express-session');
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var register = require('./routes/register.js');
+var agencies = require('./routes/agencies.js');
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
@@ -43,6 +44,7 @@ app.use(passport.session());
 // ROUTES
 app.use('/register', register);
 app.use('/user', user);
+app.use('/agencies', agencies);
 app.use('/*', index);
 
 // LISTEN
