@@ -23,14 +23,14 @@ router.get('/', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "id", "name", "bridging_agency_id", "access_disabled" FROM "agencies"',
+        database.query('SELECT * FROM "agencies"',
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
               console.log('error making query:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('got users_teams/teams', result);
+              console.log('sucessful get from /agencies', result);
               res.send(result);
             }
         }); // end query callback
@@ -50,8 +50,8 @@ router.get('/', function(req, res) {
   *
   * @apiParam {Number} agency_id Agency's unique ID that is stored in the database.
   *
+  * @apiSuccess {Number} id Unique ID of the new agency.
   * @apiSuccess {String} name Name of the agency.
-  * @apiSuccess {Number} agency_id Unique ID of the new agency.
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database
   * @apiSuccess {String} primary_first First name of agency's primary contact.
   * @apiSuccess {String} primary_last Last name of agency's primary contact.
@@ -68,7 +68,29 @@ router.get('/', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/:agency_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    var agency_id = req.params.agency_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('SELECT * FROM "agencies" WHERE "id" = $1;', [agency_id],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /agencies/:agency_id GET', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful get from /agencies/:agency_id', result);
+              res.send(result);
+            }
+          }); // end query callback
+        } // end if-else
+      }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
 });
 
 /**
