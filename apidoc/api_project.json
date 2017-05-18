@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-{  "name": "Bridging Connect API",  "version": "0.1.0",  "description": "Routes for Bridging scheduling app",  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2017-05-17T13:51:21.309Z",    "url": "http://apidocjs.com",    "version": "0.17.5"  }}
-=======
-{  "name": "Bridging Connect API",  "version": "0.1.0",  "description": "Routes for Bridging scheduling app",  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2017-05-17T16:23:56.643Z",    "url": "http://apidocjs.com",    "version": "0.17.5"  }}
->>>>>>> bacae5e8cea741007c410b556d62d8e27aa82cf4

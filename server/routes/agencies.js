@@ -119,7 +119,7 @@ router.get('/:agency_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/', function(req, res) {
-  if (req.isAuthenticated()) { // user is authenticated
+  // if (req.isAuthenticated()) { // user is authenticated
     var name = req.body.name;
     var bridging_agency_id = req.body.bridging_agency_id;
     var primary_first = req.body.primary_first;
@@ -137,8 +137,16 @@ router.post('/', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('', [name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, beds_allowed_option, access_disabled],
-          function(queryErr, result) { // query callback
+        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", \
+        "primary_first", "primary_last", "primary_job_title", "primary_department", \
+        "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", \
+         "primary_email", "beds_allowed_option_id", "access_disabled") \
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, \
+        (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11), $12)',
+        [name, bridging_agency_id, primary_first, primary_last, primary_job_title,
+        primary_department, primary_business_phone, primary_business_phone_ext,
+        primary_mobile_phone, primary_email, beds_allowed_option, access_disabled],
+        function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
               console.log('error making query on /agencies POST', queryErr);
@@ -150,9 +158,9 @@ router.post('/', function(req, res) {
         }); // end query
       } // end if-else
     }); // end pool.connect
-  } else { // user NOT authenticated
-    res.sendStatus(401);
-  }
+  // } else { // user NOT authenticated
+    // res.sendStatus(401);
+  // }
 });
 
 /**
@@ -163,7 +171,7 @@ router.post('/', function(req, res) {
   * @apiDescription Updates specified properties for an agency.
   *
   * @apiParam {String} name Mandatory Name of the agency.
-  * @apiParam {Number} agency_id Mandatory Unique ID of the new agency.  
+  * @apiParam {Number} agency_id Mandatory Unique ID of the new agency.
   * @apiParam {Number} bridging_agency_id Agency ID from the Bridging Access Database
   * @apiParam {String} primary_first First name of agency's primary contact.
   * @apiParam {String} primary_last Last name of agency's primary contact.

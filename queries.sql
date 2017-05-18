@@ -1,3 +1,46 @@
+---- ADD A NEW AGENCY ----
+-- Adds a new agency's information to the "agencies" table in the database
+INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first",
+  "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext",
+  "primary_mobile_phone", "primary_email","beds_allowed_option_id", "access_disabled")
+VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11));
+-- $1: name
+-- $2: bridging_agency_id
+-- $3: primary contact first name
+-- $4: primary contact last name
+-- $5: primary job title
+-- $6: primary department
+-- $7: primary contact business phone
+-- $8: primary contact business phone extension
+-- $9: primary contact mobile phone
+-- $10: primary contact email address
+-- $11: beds_allowed_option
+-- $12: access_disabled
+
+---- DELETE AGENCY ----
+-- Deletes specified agency from the database
+DELETE FROM "agencies" WHERE "id" = $1;
+-- $1: agency_id
+
+---- GET ALL AGENCIES ----
+-- Retrieves all agencies high-level information from the "agencies" table of the database
+SELECT "name", "id", "bridging_agency_id", "access_disabled" FROM "agencies";
+
+---- GET ONE AGENCY ----
+-- Retrieve a specific agency's information from the "agencies" table of the database
+SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled"
+FROM "agencies"
+WHERE "id" = $1;
+--$1: agency_id
+
+---- UPDATE AGENCY ----
+-- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
+UPDATE "agencies" SET $1 = $2 WHERE "id" = $3;
+-- $1: key
+-- $2: value
+-- $3: agency_id
+
 ---- GET USER APPOINTMENTS ----
 -- Get all appointments for a user from their user_id
 SELECT "appointments"."id", "clients"."first", "clients"."last", "clients"."street", "clients"."city", "clients"."state", "appointments"."confirmation_id", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_types"."appointment_type", "locations"."location", "locations"."street", "locations"."city", "locations"."state", "appointments"."appointment_date"
@@ -6,8 +49,9 @@ JOIN "clients" ON "appointments"."client_id" = "clients"."id"
 JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"
 JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"
 JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"
-WHERE "appointments"."user_id" = 'USER_ID' -- variable: user_id
+WHERE "appointments"."user_id" = $1
 ORDER BY "appointments"."appointment_date" ASC;
+-- $1: user_id
 
 ---- GET AVAILABLE APPOINTMENTS ----
 -- Get all appointment slots by appointment_type, delivery_method, and location_id
@@ -17,9 +61,12 @@ JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"
 JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"
 JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"
 JOIN "days" ON "appointment_slots"."day_id" = "days"."id"
-WHERE "appointment_types"."appointment_type" = 'shopping'
-AND "delivery_methods"."delivery_method" = 'delivery'
-AND "locations"."id" = 1;
+WHERE "appointment_types"."appointment_type" = $1
+AND "delivery_methods"."delivery_method" = $2
+AND "locations"."id" = $3
+-- $1: appointment_type
+-- $2: delivery_method
+-- $3: location_id
 
 -- Get count of existing appointments for each date & appointment slot
 SELECT "appointments"."appointment_date", COUNT(*)
@@ -31,52 +78,101 @@ GROUP BY "appointments"."appointment_date"
 
 ---- MAKE APPOINTMENT ----
 -- Save an appointment to appointments table
-INSERT INTO "appointments" ("appointment_slot_id", "user_id", "client_id", "created_date", "status_id",  "appointment_date")
-VALUES (
-1, -- variable: appointment slot id
-1, -- variable: user_id
-1, -- variable: client_id
-'May 15, 2017', -- variable: created date
-(SELECT "id" FROM "statuses" WHERE "status" = 'pending'),
-'June 20, 2017'); -- variable: appointment date
+INSERT INTO "appointments" ("appointment_slot_id", "user_id", "client_id", "created_date", "appointment_date", "status_id")
+VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" WHERE "status" = 'pending'));
+-- $1: appointment_slot_id
+-- $2: user_id
+-- $3: client_id
+-- $4: created_date
+-- $5: appointment_date
+
+---- UPDATE APPOINTMENT STATUS ----
+-- Updates status of an appointment in database
+UPDATE "appointments" SET "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1)
+WHERE "id" = $2;
+-- $1: status
+-- $2: appointment_id
 
 ---- ADD A CLIENT ----
 -- Save a new client to clients table
 INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code")
 VALUES (
-'Liz', -- variable: first name
-'Fakington',  -- variable: last name
-'5/6/69',  -- variable: date of birth
-(SELECT "id" FROM "race_ethnicity" WHERE 'race_ethnicity' = 'African'), -- variable: race_ethnicity
-'333 Lil Sebastian Lane', -- variable: street
-'Ham Lake', -- variable: city
-'MN', -- variable: state
-55101); -- variable: zip_code
+$1, $2, $3,
+(SELECT "id" FROM "race_ethnicity" WHERE 'race_ethnicity' = $4),
+$5, $6, $7, $8);
+-- $1: first name
+-- $2: last name
+-- $3: date of birth
+-- $4: race_ethnicity
+-- $5: street (address)
+-- $6: city
+-- $7: state (2-letter abbreviation)
+-- $8: zip_code
 
----- [NAME OF ADMIN CREATE APPOINTMENT SLOT ROUTE] ----
+---- UPDATE A CLIENT ----
+-- Changes specified properties for a client and changes them to new values
+-- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
+UPDATE "clients" SET $1 = $2 WHERE "id" = $3;
+-- $1: key
+-- $2: value
+-- $3: client_id
+
+---- ADD A NEW CASEWORKER ----
+-- Adds a new caseworker's information to the "users" table in the database
+INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "ext")
+VALUES ((SELECT "id" FROM "user_types" WHERE "user_type" = 'caseworker'),
+(SELECT "id" FROM "agencies" WHERE "name" = $1), $2, $3, $4, $5, $6);
+-- $1: agency
+-- $2: email
+-- $3: first name
+-- $4: last name
+-- $5: day_phone
+-- $6: day phone extension
+
+---- DELETE CASEWORKER ----
+-- Deletes specified caseworker from the database
+DELETE FROM "users" WHERE "id" = $1;
+-- $1: user_id
+
+---- GET ALL CASEWORKERS ----
+-- Retrieves all caseworkers' high-level information from the database
+SELECT "users"."first", "users"."last", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."access_disabled", "users"."access_disabled"
+FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id";
+
+---- GET ONE CASEWORKER ----
+-- Retrieves a specific caseworker's information from the database
+SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "agencies"."access_disabled", "users"."access_disabled"
+FROM "users"
+JOIN "agencies" ON "users"."agency_id" = "agencies"."id"
+WHERE "users"."id" = $1;
+-- $1: user_id
+
+---- UPDATE CASEWORKER ----
+-- Updates specified properties for a caseworker
+-- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
+UPDATE $1 SET "last" = $2 WHERE "id" = $3;
+-- $1: key
+-- $2: value
+-- $3: user_id
+
+---- GET LOCATIONS FOR ZIP CODE ----
+-- Determines which location(s) should be available to a user given the client's ZIP code
+SELECT "locations"."location", "locations"."street", "locations"."city", "locations"."state"
+FROM "locations" JOIN "zip_codes" ON "locations"."id" = "zip_codes"."location_id"
+WHERE "zip_codes"."zip_code" = $1;
+-- $1: zip_code (string)
+
+---- ADD APPOINTMENT SLOT ----
 -- Save a new appointment slot
 INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed")
-VALUES (
-(SELECT "id" FROM "appointment_types" WHERE "appointment_type" = 'shopping'), -- variable:
-(SELECT "id" FROM "days" WHERE "name" = 'Sunday'), -- variable:
-(SELECT "id" FROM "delivery_methods" WHERE "delivery_method" = 'pickup'), -- variable:
-(SELECT "id" FROM "locations" WHERE "location" = 'Bloomington'), -- variable:
-'10:15', -- variable: (& put in correct format
-'11:15', -- variable: (& put in correct format
-3); -- variable: (num_allowed)
-
---- [NAME OF CREATE NEW CASEWORKER ROUTE] ----
--- Save a new caseworker
-INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "street", "city", "state", "zip_code", "department")
-VALUES (
-(SELECT "id" FROM "user_types" WHERE "user_type" = 'caseworker'),
-(SELECT "id" FROM "agencies" WHERE "name" = 'American Indian Family Center'), -- variable: agency name
-'fake@superfake.com', -- variable: email address of caseworker
-'Arthur', -- variable: caseworker first name
-'Weasley', -- variable: caseworker last name
-'888-888-8888', -- variable: day phone number for caseworker
-'1111 Lemon Ave', -- variable: case worker street address (of agency? is this needed?)
-'Bloomington', -- variable: case worker city (of agency? is this needed?)
-'MN', -- variable: case worker state (of agency? is this needed?)
-'55404', -- variable: case worker zip (of agency? is this needed?)
-'Department of Magical Inquiry'); -- variable: case worker department name
+VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1),
+(SELECT "id" FROM "days" WHERE "name" = $2),
+(SELECT "id" FROM "delivery_methods" WHERE "delivery_method" = $3),
+(SELECT "id" FROM "locations" WHERE "location" = $4), $5, $6, $7);
+-- $1: appointment_type
+-- $2: day
+-- $3: delivery_method
+-- $4: location
+-- $5: start_time
+-- $6: end_time
+-- $7: num_allowed

@@ -16,7 +16,7 @@ var pool = require('../modules/database.js');
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database - stored in the "agencies" table.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
   * @apiSuccess {Boolean} caseworker_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
-  *  
+  *
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
