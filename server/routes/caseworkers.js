@@ -22,7 +22,27 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT * FROM "caseworkers"',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /caseworkers', result);
+              res.send(result);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
 });
 
 /**
