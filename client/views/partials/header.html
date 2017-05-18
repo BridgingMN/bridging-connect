@@ -2,31 +2,32 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h1>Bridging Scheduling Application</h1>
-      <md-button ng-if="vm.user.type === 'caseworker'" class="md-raised" href="#caseworker-appointments-all">
-        My Appointments
-      </md-button>
-      <!-- <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
-        <md-button class="md-raised" href="#admin-appointments-pending">Pending Appointment</md-button>
-        <md-button class="md-raised" href="#admin-appointments-all">All Appointments</md-button>
-        <md-button class="md-raised" href="#admin-appointments-customize">Custom Appointments</md-button>
-        <md-button class="md-raised" href="#admin-appointments-default">Edit Default Schedule</md-button>
-      </section> -->
-      <span flex></span>
-      <section class="caseworker-toolbar-buttons" layout="row" ng-if="vm.user.type === 'caseworker'" flex>
-        <md-button class="md-raised" href="#caseworker-appointment-new">Create Appointment</md-button>
-        <md-button class="md-raised" href="#caseworker-appointment-new">Order Bed</md-button>
-        <md-button class="md-raised">Account Settings</md-button>
-        <span flex></span>
-        <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
-      </section>
-      <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
-        <!-- <md-button class="md-raised" href="#admin-caseworker-overview">Caseworkers</md-button>
-        <md-button class="md-raised" href="#admin-agency-overview">Agencies</md-button> -->
+      <section class="caseworker-toolbar-buttons" layout="row" flex>
         <span flex></span>
         <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
       </section>
     </div>
     </md-toolbar>
+
+  <div ng-cloak ng-if="vm.user.type === 'caseworker'">
+    <md-content class="md-padding">
+      <md-nav-bar
+        md-selected-nav-item="currentNavItem"
+        nav-bar-aria-label="navigation links">
+        <md-nav-item md-nav-href="#caseworker-appointments-all" name="all">
+          My Appointments
+        </md-nav-item>
+        <md-nav-item md-nav-href="#caseworker-appointment-new" name="pending">
+          Create Shopping Appointment
+        </md-nav-item>
+        <md-nav-item  md-nav-href="#caseworker-appointment-new" name="caseworker">
+          Order New Bed ONLY
+        </md-nav-item>
+        <md-nav-item md-nav-href="#" name="agencies">
+          Account Settings</md-nav-item>
+      </md-nav-bar>
+    </md-content>
+  </div>
 
   <div ng-cloak ng-if="vm.user.type === 'admin'">
   <md-content class="md-padding">
@@ -42,12 +43,12 @@
       <md-nav-item  md-nav-href="#admin-caseworker-overview" name="caseworker">
         Caseworkers
       </md-nav-item>
-      <md-nav-item md-nav-href="#admin-agency-overview" name="agencies">Agencies</md-nav-item>
-      <md-nav-item md-nav-href="#admin-appointments-default" name="default">Default Schedule</md-nav-item>
-      <md-nav-item md-nav-href="#admin-appointments-customize" name="customize">Custom Schedule</md-nav-item>
-
+      <md-nav-item md-nav-href="#admin-agency-overview" name="agencies">
+        Agencies</md-nav-item>
+      <md-nav-item md-nav-href="#admin-appointments-default" name="default">
+        Default Schedule</md-nav-item>
+      <md-nav-item md-nav-href="#admin-appointments-customize" name="customize">
+        Customize Days</md-nav-item>
     </md-nav-bar>
-
   </md-content>
-
 </div>
