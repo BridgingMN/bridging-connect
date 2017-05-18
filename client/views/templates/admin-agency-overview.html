@@ -20,6 +20,7 @@
         <th md-column md-order-by="nameToLower"><span>Agency</span></th>
         <th md-column md-numeric md-order-by="time.value"><span>Agency ID</span></th>
         <th md-column md-numeric>On-Hold</th>
+        <th md-column md-numeric>View Profile</th>
       </tr>
     </thead>
     <tbody md-body>
@@ -27,6 +28,7 @@
         <td md-cell>Ramsey County {{dessert.name}}</td>
         <td md-cell>1567 {{dessert.calories.value}}</td>
         <td md-cell>No {{dessert.fat.value | number: 1}}</td>
+        <td md-cell><a href="#admin-agency-edit">See Details</a></td>
 
       </tr>
     </tbody>

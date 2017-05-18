@@ -21,6 +21,8 @@
         <th md-column md-order-by="nameToLower"><span>Caseworker</span></th>
         <th md-column md-numeric md-order-by="time.value"><span>Agency</span></th>
         <th md-column md-numeric>Agency ID</th>
+        <th md-column md-numeric>On-Hold</th>
+        <th md-column md-numeric>View Profile</th>
       </tr>
     </thead>
     <tbody md-body>
@@ -28,16 +30,22 @@
         <td md-cell>Amina Mohammed</td>
         <td md-cell>Ramsey County</td>
         <td md-cell>1578</td>
+        <td md-cell>No</td>
+        <td md-cell><a href="#admin-caseworker-edit">See Details</a></td>
       </tr>
       <tr md-row >
         <td md-cell>Betsy Rowley</td>
         <td md-cell>County</td>
         <td md-cell>1580</td>
+        <td md-cell>Yes</td>
+        <td md-cell><a href="#admin-caseworker-edit">See Details</a></td>
       </tr>
       <tr md-row >
         <td md-cell>Nic Wilson</td>
         <td md-cell>Lifetrack</td>
         <td md-cell>1530</td>
+        <td md-cell>No</td>
+        <td md-cell><a href="#admin-caseworker-edit">See Details</a></td>
       </tr>
     </tbody>
       <!-- <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="dessert in desserts.data">
