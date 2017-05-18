@@ -11,6 +11,7 @@
     "no-unused-vars": "warn",
     "quotes": [2, "single"],
     "semi": ["warn", "always"],
-    "no-console": ["warn", {"allow": ["log", "warn", "error"]}]
+    "no-console": ["warn", {"allow": ["log", "warn", "error"]}],
+    "no-trailing-spaces": "error"
   }
 }
