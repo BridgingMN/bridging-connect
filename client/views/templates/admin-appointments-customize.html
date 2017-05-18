@@ -6,16 +6,60 @@
 
     <div layout = "row" flex>
       <div class ="flex">
-        <h3>Location</h3>
+        <h3>Pick a Location</h3>
+        <div class="md-padding" ng-cloak>
+          <div>
+            <div layout="row">
+              <md-input-container>
+                <label>Locations</label>
+                <md-select ng-model="selectedLocation" md-selected-text="getSelectedLocation()">
+                  <md-optgroup label="locations">
+                    <md-option ng-value="location" ng-repeat="location in locations">{{location}}</md-option>
+                  </md-optgroup>
+                </md-select>
+              </md-input-container>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class ="flex">
-        <h3>Days</h3>
-        <md-calendar ng-model="birthday"></md-calendar>
+        <h3>Select a Date</h3>
+        <md-content layout-padding ng-cloak>
+          <div layout-gt-xs="row">
+            <div flex-gt-xs>
+                <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
+            </div>
+          </div>
+        </md-content>
       </div>
 
       <div class ="flex">
-        <h3>Time Slots</h3>
+        <h3>Select a Time Slot</h3>
+        <div class="md-padding" ng-cloak>
+          <div>
+            <div layout="row">
+              <md-input-container>
+                <label>Time Slots</label>
+                <md-select ng-model="selectedVegetables"
+                           md-on-close="clearSearchTerm()"
+                           data-md-container-class="selectdemoSelectHeader"
+                           multiple>
+                  <md-select-header class="demo-select-header">
+                    <input ng-model="searchTerm"
+                           type="search"
+                           placeholder="Search for a vegetable.."
+                           class="demo-header-searchbox md-text">
+                  </md-select-header>
+                  <md-optgroup label="vegetables">
+                    <md-option ng-value="vegetable" ng-repeat="vegetable in vegetables |
+                      filter:searchTerm">{{vegetable}}</md-option>
+                  </md-optgroup>
+                </md-select>
+              </md-input-container>
+            </div>
+         </div>
+        </div>
       </div>
 
       <div class ="flex">
