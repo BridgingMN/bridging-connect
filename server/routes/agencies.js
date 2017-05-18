@@ -82,8 +82,8 @@ router.post('/', function(req, res) {
   * @apiGroup Agencies
   * @apiDescription Updates specified properties for an agency.
   *
-  * @apiParam {Number} agency_id Unique ID of the agency.  
   * @apiParam {String} name Name of the agency.
+  * @apiParam {Number} agency_id Unique ID of the new agency.
   * @apiParam {Number} bridging_agency_id Agency ID from the Bridging Access Database
   * @apiParam {String} primary_first First name of agency's primary contact.
   * @apiParam {String} primary_last Last name of agency's primary contact.
