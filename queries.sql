@@ -24,7 +24,7 @@ DELETE FROM "agencies" WHERE "id" = $1;
 -- $1: agency_id
 
 ---- GET ALL AGENCIES ----
--- Retrieves all agencies high-leavel information from the "agencies" table of the database
+-- Retrieves all agencies high-level information from the "agencies" table of the database
 SELECT "name", "id", "bridging_agency_id", "access_disabled" FROM "agencies";
 
 ---- GET ONE AGENCY ----
