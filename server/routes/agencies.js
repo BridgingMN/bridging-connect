@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../modules/database.js');
+
 /**
   * @api {get} /agencies Get All Agencies
   * @apiVersion 0.1.0
@@ -8,8 +9,8 @@ var pool = require('../modules/database.js');
   * @apiGroup Agencies
   * @apiDescription Retrieves all agencies high-level information from the "agencies" table of the database.
   *
+  * @apiSuccess {Number} id Unique ID of the agency.
   * @apiSuccess {String} name Name of the agency.
-  * @apiSuccess {Number} agency_id Unique ID of the agency.
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database.
   * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
   *
@@ -17,7 +18,27 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "id", "name", "bridging_agency_id", "access_disabled" FROM "agencies"',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('got users_teams/teams', result);
+              res.send(result);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
 });
 
 /**
