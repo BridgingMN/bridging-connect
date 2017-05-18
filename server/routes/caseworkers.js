@@ -199,7 +199,7 @@ router.put('/:caseworker_id', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful update in "caseworkers"', result);
-              res.send(result);
+              res.sendStatus(200);
             }
         }); // end query
       } // end if-else
@@ -224,7 +224,28 @@ router.put('/:caseworker_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.delete('/:caseworker_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    var caseworker_id = req.params.caseworker_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('DELETE FROM "caseworkers" WHERE "id" = $1;', [caseworker_id],
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful deletion from /caseworkers/:caseworker_id', result);
+              res.sendStatus(200);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
 });
 
 module.exports = router;
