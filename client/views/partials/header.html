@@ -5,12 +5,12 @@
       <md-button ng-if="vm.user.type === 'caseworker'" class="md-raised" href="#caseworker-appointments-all">
         My Appointments
       </md-button>
-      <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
+      <!-- <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
         <md-button class="md-raised" href="#admin-appointments-pending">Pending Appointment</md-button>
         <md-button class="md-raised" href="#admin-appointments-all">All Appointments</md-button>
         <md-button class="md-raised" href="#admin-appointments-customize">Custom Appointments</md-button>
         <md-button class="md-raised" href="#admin-appointments-default">Edit Default Schedule</md-button>
-      </section>
+      </section> -->
       <span flex></span>
       <section class="caseworker-toolbar-buttons" layout="row" ng-if="vm.user.type === 'caseworker'" flex>
         <md-button class="md-raised" href="#caseworker-appointment-new">Create Appointment</md-button>
@@ -20,12 +20,34 @@
         <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
       </section>
       <section class="admin-toolbar-buttons" layout="row" ng-if="vm.user.type === 'admin'" flex>
-        <md-button class="md-raised" href="#admin-caseworker-overview">Caseworkers</md-button>
-        <md-button class="md-raised" href="#admin-agency-overview">Agencies</md-button>
+        <!-- <md-button class="md-raised" href="#admin-caseworker-overview">Caseworkers</md-button>
+        <md-button class="md-raised" href="#admin-agency-overview">Agencies</md-button> -->
         <span flex></span>
         <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
       </section>
     </div>
-  </md-toolbar>
+    </md-toolbar>
+
+  <div ng-cloak ng-if="vm.user.type === 'admin'">
+  <md-content class="md-padding">
+    <md-nav-bar
+      md-selected-nav-item="currentNavItem"
+      nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-href="#admin-appointments-all" name="all">
+        All Appointments
+      </md-nav-item>
+      <md-nav-item md-nav-href="#admin-appointments-pending" name="pending">
+        Pending Appointments
+      </md-nav-item>
+      <md-nav-item  md-nav-href="#admin-caseworker-overview" name="caseworker">
+        Caseworkers
+      </md-nav-item>
+      <md-nav-item md-nav-href="#admin-agency-overview" name="agencies">Agencies</md-nav-item>
+      <md-nav-item md-nav-href="#admin-appointments-default" name="default">Default Schedule</md-nav-item>
+      <md-nav-item md-nav-href="#admin-appointments-customize" name="customize">Custom Schedule</md-nav-item>
+
+    </md-nav-bar>
+
+  </md-content>
 
 </div>
