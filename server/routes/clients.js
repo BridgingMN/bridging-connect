@@ -21,7 +21,7 @@ var pool = require('../modules/database.js');
   * @apiParam {String} state  State of client address (2-letter abbreviation)
   * @apiParam {String} zip_code   Client zip code
 
-  * @apiSuccess {Number} client_id   Unique ID of client that has been added
+  * @apiSuccess {Number} id Unique ID of client that has been added
   * @apiErrorExample {json} Post error
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -43,15 +43,15 @@ router.post('/', function(req, res) {
       db.query('INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
       'VALUES ($1, $2, $3, ' +
       '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-      '$5, $6, $7, $8);',
+      '$5, $6, $7, $8) RETURNING "id"',
       [first, last, dob, race_ethnicity, street, city, state, zip_code],
-      function(queryError){
+      function(queryError, result){
         done();
         if (queryError) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
-          res.sendStatus(201);
+          res.send(result.rows[0]);
         }
       });
     }
