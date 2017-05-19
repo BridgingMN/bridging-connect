@@ -144,6 +144,7 @@ router.get('/available', function(req, res) {
       'WHERE "appointment_types"."appointment_type" = $1' +
       'AND "delivery_methods"."delivery_method" = $2' +
       'AND "locations"."id" = $3',
+      [appointment_type, delivery_method, location_id],
       function(queryError, result){
         done();
         if (queryError) {
@@ -196,9 +197,9 @@ router.post('/reserve', function(req, res) {
       VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
       WHERE "status" = $6)) RETURNING "id"',
       [appointment_slot_id, user_id, client_id, created_date, appointment_date, status],
-      function(queryError){
+      function(queryError, result){
         done();
-        if (queryError, result) {
+        if (queryError) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
