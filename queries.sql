@@ -1,10 +1,9 @@
 ---- ADD A NEW AGENCY ----
 -- Adds a new agency's information to the "agencies" table in the database
-INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first",
-  "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext",
-  "primary_mobile_phone", "primary_email","beds_allowed_option_id", "access_disabled")
-VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11));
+INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id")
+VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $13))
+RETURNING "id";
 -- $1: name
 -- $2: bridging_agency_id
 -- $3: primary contact first name
@@ -15,8 +14,9 @@ VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
 -- $8: primary contact business phone extension
 -- $9: primary contact mobile phone
 -- $10: primary contact email address
--- $11: beds_allowed_option
--- $12: access_disabled
+-- $11: access_disabled
+-- $12: notes
+-- $13: beds_allowed_option
 
 ---- DELETE AGENCY ----
 -- Deletes specified agency from the database
@@ -35,11 +35,23 @@ WHERE "id" = $1;
 --$1: agency_id
 
 ---- UPDATE AGENCY ----
--- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
-UPDATE "agencies" SET $1 = $2 WHERE "id" = $3;
--- $1: key
--- $2: value
--- $3: agency_id
+UPDATE "agencies"
+SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") = ($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13, (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14))
+WHERE "id" = $1;
+-- $1: id
+-- $2: name
+-- $3: bridging_agency_id
+-- $4: primary contact first name
+-- $5: primary contact last name
+-- $6: primary job title
+-- $7: primary department
+-- $8: primary contact business phone
+-- $9: primary contact business phone extension
+-- $10: primary contact mobile phone
+-- $11: primary contact email address
+-- $12: access_disabled
+-- $13: notes
+-- $14: beds_allowed_option
 
 ---- GET USER APPOINTMENTS ----
 -- Get all appointments for a user from their user_id
@@ -98,7 +110,7 @@ WHERE "id" = $2;
 INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code")
 VALUES (
 $1, $2, $3,
-(SELECT "id" FROM "race_ethnicity" WHERE 'race_ethnicity' = $4),
+(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),
 $5, $6, $7, $8);
 -- $1: first name
 -- $2: last name

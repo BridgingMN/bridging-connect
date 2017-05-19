@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT * FROM "agencies"',
+        database.query('SELECT "id", "name", "bridging_agency_id", "access_disabled" FROM "agencies";',
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
@@ -75,7 +75,10 @@ router.get('/:agency_id', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT * FROM "agencies" WHERE "id" = $1;', [agency_id],
+        database.query('SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled", "notes" ' +
+                       'FROM "agencies" ' +
+                       'WHERE "id" = $1;',
+                       [agency_id],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
@@ -110,8 +113,9 @@ router.get('/:agency_id', function(req, res) {
   * @apiParam {String} primary_business_phone_ext Optional Business phone number extension of new agency's primary contact.
   * @apiParam {String} primary_mobile_phone Optional Mobile phone number of new agency's primary contact.
   * @apiParam {String} primary_email Optional E-mail address of new agency's primary contact.
-  * @apiParam {String} beds_allowed_option Mandatory String corresponding to an entry the "beds_allowed_options" table.
   * @apiParam {Boolean} access_disabled Mandatory Current agency status. True = access disabled.
+  * @apiParam {String} notes Optional Any notes the administrator wants to keep regarding this particular agency.
+  * @apiParam {String} beds_allowed_option Mandatory String corresponding to an entry the "beds_allowed_options" table.
   *
   * @apiSuccess {Number} id Unique ID of the new agency.
   *
@@ -130,22 +134,19 @@ router.post('/', function(req, res) {
     var primary_business_phone_ext = req.body.primary_business_phone_ext;
     var primary_mobile_phone = req.body.primary_mobile_phone;
     var primary_email = req.body.primary_email;
-    var beds_allowed_option = req.body.beds_allowed_option;
     var access_disabled = req.body.access_disabled;
+    var notes = req.body.notes;
+    var beds_allowed_option = req.body.beds_allowed_option;
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", \
-        "primary_first", "primary_last", "primary_job_title", "primary_department", \
-        "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", \
-         "primary_email", "beds_allowed_option_id", "access_disabled") \
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, \
-        (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11), $12)',
-        [name, bridging_agency_id, primary_first, primary_last, primary_job_title,
-        primary_department, primary_business_phone, primary_business_phone_ext,
-        primary_mobile_phone, primary_email, beds_allowed_option, access_disabled],
+        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", beds_allowed_option_id") ' +
+                        'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12 ' +
+                        '(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $13)) ' +
+                        'RETURNING "id";',
+                       [name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, access_disabled, notes, beds_allowed_option],
         function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
@@ -170,8 +171,8 @@ router.post('/', function(req, res) {
   * @apiGroup Agencies
   * @apiDescription Updates specified properties for an agency.
   *
-  * @apiParam {String} name Mandatory Name of the agency.
   * @apiParam {Number} agency_id Mandatory Unique ID of the new agency.
+  * @apiParam {String} name Mandatory Name of the agency.
   * @apiParam {Number} bridging_agency_id Agency ID from the Bridging Access Database
   * @apiParam {String} primary_first First name of agency's primary contact.
   * @apiParam {String} primary_last Last name of agency's primary contact.
@@ -181,8 +182,9 @@ router.post('/', function(req, res) {
   * @apiParam {String} primary_business_phone_ext Business phone number extension of agency's primary contact.
   * @apiParam {String} primary_mobile_phone Mobile phone number of agency's primary contact.
   * @apiParam {String} primary_email E-mail address of agency's primary contact.
-  * @apiParam {String} beds_allowed_option Mandatory String corresponding to the "beds_allowed_options" table.
   * @apiParam {Boolean} access_disabled Mandatory Current agency status. True = access disabled.
+  * @apiParam {String} notes Optional Any notes the administrator wants to keep regarding this particular agency.
+  * @apiParam {String} beds_allowed_option Mandatory String corresponding to the "beds_allowed_options" table.
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -190,7 +192,48 @@ router.post('/', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.put('/:agency_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    // req.params variables
+    var agency_id = req.params.agency_id;
+    // req.body variables
+    var name = req.body.name;
+    var bridging_agency_id = req.body.bridging_agency_id;
+    var primary_first = req.body.primary_first;
+    var primary_last = req.body.primary_last;
+    var primary_job_title = req.body.primary_job_title;
+    var primary_department = req.body.primary_department;
+    var primary_business_phone = req.body.primary_business_phone;
+    var primary_business_phone_ext = req.body.primary_business_phone_ext;
+    var primary_mobile_phone = req.body.primary_mobile_phone;
+    var primary_email = req.body.primary_email;
+    var access_disabled = req.body.access_disabled;
+    var notes = req.body.notes;
+    var beds_allowed_option = req.body.beds_allowed_option;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('UPDATE "agencies"' +
+                        'SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", beds_allowed_option_id") = ($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13 ' +
+                        '(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14))' +
+                        'WHERE "id" = $1;',
+                        [agency_id, name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, access_disabled, notes, beds_allowed_option],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /caseworkers/:caseworker_id PUT', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful update in "caseworkers"', result);
+              res.sendStatus(200);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+  } else { // user NOT authenticated
+    res.sendStatus(401);
+  }
 });
 
 /**
