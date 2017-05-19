@@ -45,7 +45,7 @@ router.get('/zip/:zip_code', function(req, res) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       res.sendStatus(500);
     } else {
-      db.query('SELECT "locations"."location", "locations"."street", "locations"."city", "locations"."state" ' +
+      db.query('SELECT "locations"."location", "locations"."id" + "locations"."street", "locations"."city", "locations"."state" ' +
       'FROM "locations" JOIN "zip_codes" ON "locations"."id" = "zip_codes"."location_id" ' +
       'WHERE "zip_codes"."zip_code" = $1;',
       [zip_code],
