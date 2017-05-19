@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS "agencies" (
   primary_business_phone_ext VARCHAR(10),
   primary_mobile_phone VARCHAR(30),
   primary_email VARCHAR(120),
-  access_disabled BOOLEAN DEFAULT FALSE
+  access_disabled BOOLEAN DEFAULT FALSE,
+  notes TEXT
 );
 
 -- create "Users" table
@@ -58,7 +59,8 @@ CREATE TABLE IF NOT EXISTS "users" (
   department VARCHAR(50),
   token VARCHAR(120),
   token_expiration DATE,
-  last_login_date DATE
+  last_login_date DATE,
+  notes TEXT
 );
 
 -- create "Statuses" table
