@@ -16,6 +16,7 @@ angular
   vm.editAppointmentInfo = editAppointmentInfo;
   vm.deleteAppointment = deleteAppointment;
   vm.showAppointmentDetails = showAppointmentDetails;
+  vm.createNewAppointment = createNewAppointment;
 
   //This is a placeholder, in production appointsments will be an array property on the user object.
   vm.caseworkerAppointments = [
@@ -135,5 +136,8 @@ angular
     //This function would show the details for a particular appointment.
   }
 
-
+  function createNewAppointment() {
+    console.log('Resetting Appointment object');
+    //This function should call a method in the service that resets the newAppointment object and redirects the caseworker to the new appointment view
+  }
 }]);

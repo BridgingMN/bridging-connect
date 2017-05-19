@@ -5,12 +5,12 @@
     <p>For this appointment will your client be picking up the furniture or having it delivered?</p>
     <md-button
       class="md-raised md-accent"
-      href="#caseworker-appointment-location">
+      ng-click="vm.selectDeliveryType(vm.CONSTANTS.DELIVERYMETHOD_PICKUP)">
         I will pick up my furniture using a vehicle I provide
     </md-button>
     <md-button
       class="md-raised md-primary"
-      href="#caseworker-appointment-zipcode">
+      ng-click="vm.selectDeliveryType(vm.CONSTANTS.DELIVERYMETHOD_DELIVERY)">
         I will have my furniture delivered by Bridging
     </md-button>
   </div>
