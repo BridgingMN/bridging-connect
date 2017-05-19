@@ -3,24 +3,24 @@
   <h3>Client Referall Form</h3>
   <div class="caseworker-appointment-info" layout="row" layout-align="center center">
     <div class="md-padding appointment-type">
-      <span>Shopping w/ Delivery</span>
+      <span>{{vm.appointment.appointment_type}} w/ {{vm.appointment.delivery_method}}</span>
     </div>
     <div class="md-padding appointment-location">
       <i class="material-icons">place</i>
-      <span>Bloomington</span>
+      <span>{{vm.appointment.location.name}}</span>
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
-      <span>5/29/17,
-      9:15 AM</span>
-
+      <span>{{vm.appointment.appointment.date | date: "shortDate"}},
+      {{vm.appointment.appointment.start_time}}</span>
     </div>
   </div>
-  <form class="client-referall-form" layout="column" >
+  <form class="client-referall-form" layout="column">
     <md-input-container>
       <label>Client First Name</label>
       <input
         type="text"
+        ng-model="vm.clientReferralForm.first"
         placeholder="Client First Name"
         required>
     </md-input-container>
@@ -28,12 +28,13 @@
       <label>Client Last Name</label>
       <input
         type="text"
+        ng-model="vm.clientReferralForm.last"
         placeholder="Client Last Name"
         required>
     </md-input-container>
     <md-input-container>
       <label>Client Date of Birth</label>
-      <md-datepicker ng-model="vm.clientDateOfBirth"></md-datepicker>
+      <md-datepicker ng-model="vm.clientReferralForm.dob"></md-datepicker>
     </md-input-container>
     <md-input-container>
       <label>Select a race/ethnicity</label>
@@ -47,8 +48,23 @@
       <input
         type="text"
         placeholder="Address"
+        ng-model = "vm.clientReferralForm.street"
         required>
     </md-input-container>
+    <div layout-gt-sm="row">
+      <md-input-container class="md-block" flex-gt-sm>
+        <label>City</label>
+        <input ng-model="vm.clientReferralForm.city">
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm>
+        <label>State</label>
+        <md-select ng-model="vm.clientReferralForm.state">
+          <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
+            {{state.abbrev}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
     <md-button class="md-raised md-primary" href="#caseworker-appointments-all">Submit</md-button>
   </form>
 </div>

@@ -1,8 +1,22 @@
 angular
   .module('myApp')
-  .factory('UserService', ['$http', '$location', function($http, $location){
+  .factory('UserService', ['$http', '$location', 'AppointmentService', function($http, $location, AppointmentService){
   var userObject = {
 
+  };
+
+  var newAppointment = new AppointmentService.Appointment();
+
+  return {
+    userObject: userObject,
+    newAppointment: newAppointment,
+    loginUser: loginUser,
+    registerUser: registerUser,
+    getUser: getUser,
+    logout: logout,
+    redirectToLogin: redirectToLogin,
+    redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
+    redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
   };
 
   //--------AUTHENTICATION--------
@@ -69,14 +83,4 @@ angular
   }
   //------END SUPPORT FUNCTIONS-----
 
-  return {
-    userObject: userObject,
-    loginUser: loginUser,
-    registerUser: registerUser,
-    getUser: getUser,
-    logout: logout,
-    redirectToLogin: redirectToLogin,
-    redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
-    redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
-  };
 }]);

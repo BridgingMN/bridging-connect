@@ -3,15 +3,15 @@
   <h3>Appointment Date and Time</h3>
   <div class="caseworker-appointment-info" layout="row" layout-align="center center">
     <div class="md-padding appointment-type">
-      <span>Shopping w/ Delivery</span>
+      <span>{{vm.appointment.appointment_type}} w/ {{vm.appointment.delivery_method}}</span>
     </div>
     <div class="md-padding appointment-location">
       <i class="material-icons">place</i>
-      <span>Bloomington</span>
+      <span>{{vm.appointment.location.name}}</span>
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
-      <span>{{vm.myDate |date: 'shortDate'}},
+      <span>{{vm.selectedDate |date: 'shortDate'}},
       {{vm.selectedAppointment}}</span>
 
     </div>
@@ -19,7 +19,8 @@
   <div class="caseworker-appointment-schedule-inputs" layout="row">
     <div class="appoint-schedule-calendar">
       <md-calendar
-          ng-model="vm.myDate"
+          ng-model="vm.selectedDate"
+          ng-change="vm.selectDate(vm.selectedDate)"
           md-min-date="vm.minDate" md-max-date="vm.maxDate"
           md-date-filter="vm.onlyMonToThursPredicate">
       </md-calendar>
@@ -30,10 +31,10 @@
             <md-radio-button
               ng-value="appointment"
               ng-repeat="appointment in vm.appointmentSlots">
-                {{appointment}}
+                {{appointment.start_time}}
             </md-radio-button>
           </md-radio-group>
-        <md-button class="md-raised md-primary" href="#caseworker-appointment-form">Next</md-button>
+        <md-button class="md-raised md-primary" ng-click="vm.submit()"">Next</md-button>
     </form>
   </div>
 </div>
