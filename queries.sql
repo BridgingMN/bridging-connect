@@ -1,10 +1,9 @@
 ---- ADD A NEW AGENCY ----
 -- Adds a new agency's information to the "agencies" table in the database
-INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first",
-  "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext",
-  "primary_mobile_phone", "primary_email","beds_allowed_option_id", "access_disabled")
-VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $11));
+INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "beds_allowed_option_id")
+VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,
+(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $12))
+RETURNING "id";
 -- $1: name
 -- $2: bridging_agency_id
 -- $3: primary contact first name
@@ -35,11 +34,9 @@ WHERE "id" = $1;
 --$1: agency_id
 
 ---- UPDATE AGENCY ----
--- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
-UPDATE "agencies" SET $1 = $2 WHERE "id" = $3;
--- $1: key
--- $2: value
--- $3: agency_id
+UPDATE "agencies"
+SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled") = ($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $13))
+WHERE "id" = $1;
 
 ---- GET USER APPOINTMENTS ----
 -- Get all appointments for a user from their user_id

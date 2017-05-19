@@ -19,6 +19,7 @@ var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var register = require('./routes/register.js');
 var agencies = require('./routes/agencies.js');
+var caseworkers = require('./routes/caseworkers.js');
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
@@ -45,6 +46,7 @@ app.use(passport.session());
 app.use('/register', register);
 app.use('/user', user);
 app.use('/agencies', agencies);
+app.use('/caseworkers', caseworkers);
 app.use('/*', index);
 
 // LISTEN
