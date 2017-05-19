@@ -152,6 +152,7 @@ router.post('/reserve', function(req, res) {
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
   var created_date = appointment.appointment_date_added;
+  var status = appointment.status;
   pool.connect(function(connectionError, db, done) {
     if (connectionError) {
       console.log('ERROR CONNECTING TO DATABASE');
@@ -160,8 +161,8 @@ router.post('/reserve', function(req, res) {
       db.query('INSERT INTO "appointments" ("appointment_slot_id", "user_id", \
        "client_id", "created_date", "appointment_date", "status_id")  \
       VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
-      WHERE "status" = \'pending\'))',
-      [appointment_slot_id, user_id, client_id, created_date, appointment_date],
+      WHERE "status" = $6))',
+      [appointment_slot_id, user_id, client_id, created_date, appointment_date, status],
       function(queryError){
         done();
         if (queryError) {
