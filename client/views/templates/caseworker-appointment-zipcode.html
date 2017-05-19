@@ -5,11 +5,11 @@
     <p>Please enter the zip code for the address where your furniture will be delivered.</p>
     <md-input-container>
       <label>Zipcode</label>
-      <input type="number">
+      <input ng-model="vm.zipCode" type="number">
     </md-input-container>
     <md-button
       class="md-raised md-primary"
-      href="#caseworker-appointment-schedule">
+      ng-click="vm.submitZipCode(vm.zipCode)">
         Next
     </md-button>
   </div>

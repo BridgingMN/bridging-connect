@@ -13,7 +13,8 @@ angular
     date: new Date(
       vm.selectedDate.getFullYear(),
       vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 4)
+      vm.selectedDate.getDate() + 4),
+    appointment_slot_id: 1
   },{
     date: new Date(
       vm.selectedDate.getFullYear(),
@@ -50,10 +51,9 @@ angular
   vm.selectDate = selectDate;
   vm.submit = submit;
 
-  // getAvailableAppointments(vm.minDate, vm.maxDate);
+  getAvailableAppointments(vm.minDate, vm.maxDate);
 
   function onlyMonToThursPredicate (date) {
-    console.log(date);
     return vm.availableAppointments.some(filterAppointmentsByDate, date);
   }
 
@@ -73,6 +73,7 @@ angular
 
   //Sends a request to the server to get available appointments.
   function getAvailableAppointments(min_date, max_date) {
+    console.log("Getting Appointments");
     UserService.newAppointment.getAvailableAppointments(min_date, max_date)
       .then(availableAppointmentsSuccess, availableAppointmentsError);
   }

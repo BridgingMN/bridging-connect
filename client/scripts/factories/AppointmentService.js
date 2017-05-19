@@ -3,9 +3,6 @@ angular
   .factory('AppointmentService', ['$http', function ($http) {
     function Appointment(appointment_type) {
       this.appointment_type = appointment_type;
-      this.location = {
-        location_id: 1
-      };
     }
 
     Appointment.prototype.setDeliveryType = function (delivery_method) {
@@ -13,9 +10,9 @@ angular
       return this.delivery_method;
     };
 
-    Appointment.prototype.setZipcode = function (zip_code) {
+    Appointment.prototype.submitZipCode = function (zip_code) {
       var rulesURL = '/rules/zip/' + zip_code;
-      return $http.get(rulesURL).then(setLocation, returnError);
+      return $http.get(rulesURL).then(returnResponse, returnError);
     };
 
     Appointment.prototype.getAvailableAppointments = function (min_date, max_date) {
@@ -24,7 +21,7 @@ angular
         max_date: max_date,
         appointment_type: this.appointment_type,
         delivery_method: this.delivery_method,
-        location_id: this.location.location_id
+        location_id: this.loc.id
       };
       return $http.get('/appointments/available', {params: params})
         .then(returnResponse, returnError);
@@ -32,20 +29,23 @@ angular
 
     Appointment.prototype.submitAppointment = function (selectedAppointment) {
       this.appointment = selectedAppointment;
+      console.log(this);
     };
 
     Appointment.prototype.createNewAppointment = function (clientReferralForm) {
+      console.log('POSTing New Client');
+      var appointmentInfo = this.appointment;
+      console.log('appointmentInfo', appointmentInfo);
       return $http.post('/clients', {
         params: clientReferralForm
       }).then(function (response) {
+        console.log('POSTING new appointment', response);
         return $http.post('/appointments/reserve', {
-          params: {
             user_id: 1,
-            client_id: response,
-            appointment_slot_id: this.appointment.appointment_slot_id,
-            appointment_date: this.appointment.date,
+            client_id: response.data.id,
+            appointment_slot_id: appointmentInfo.appointment_slot_id,
+            appointment_date: appointmentInfo.date,
             status: 'pending'
-          }
         }).then(returnResponse, returnError);
       });
 
@@ -55,11 +55,7 @@ angular
       Appointment: Appointment
     };
 
-    function setLocation(location) {
-      console.log(location);
-      this.location = location;
-      return this.location;
-    }
+
 
     function returnResponse(response) {
       console.log('Success', response );

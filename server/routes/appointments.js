@@ -146,12 +146,13 @@ router.get('/available', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/reserve', function(req, res) {
+  console.log(req.body);
   var appointment = req.body;
   var appointment_date = appointment.date;
   var user_id = appointment.user_id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
-  var created_date = appointment.appointment_date_added;
+  var created_date = new Date();
   var status = appointment.status;
   pool.connect(function(connectionError, db, done) {
     if (connectionError) {
@@ -163,10 +164,10 @@ router.post('/reserve', function(req, res) {
       VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
       WHERE "status" = $6)) RETURNING "id"',
       [appointment_slot_id, user_id, client_id, created_date, appointment_date, status],
-      function(queryError){
+      function(queryError, result){
         done();
-        if (queryError, result) {
-          console.log('ERROR MAKING QUERY');
+        if (queryError) {
+          console.log('ERROR MAKING QUERY', queryError);
           res.sendStatus(500);
         } else {
           res.send(result.rows[0]);

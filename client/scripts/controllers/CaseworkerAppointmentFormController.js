@@ -39,7 +39,7 @@ angular
   }
 
   function appointmentCreateError(error) {
-    console.log.error('Failed to create appointment', error);
+    console.error('Failed to create appointment', error);
   }
 
 }]);
