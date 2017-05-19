@@ -143,8 +143,8 @@ router.post('/', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", beds_allowed_option") ' +
-                        'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12 ' +
+        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") ' +
+                        'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, ' +
                         '(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $13)) ' +
                         'RETURNING "id";',
                        [name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, access_disabled, notes, beds_allowed_option],
