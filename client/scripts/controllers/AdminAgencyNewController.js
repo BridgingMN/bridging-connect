@@ -9,9 +9,9 @@ angular
   vm.createAgency = createAgency;
 
   //Creates a new Agency
-  function createAgency(agency) {
+  function createAgency() {
     console.log('submit clicked', vm.agency);
-    $http.post('/agencies', agency).then(function(response) {
+    $http.post('/agencies', vm.agency).then(function(response) {
       console.log(response);
       $location.path('/admin-agency-overview');
       alert('Your agency has been added.');
