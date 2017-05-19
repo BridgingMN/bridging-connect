@@ -161,7 +161,7 @@ router.post('/reserve', function(req, res) {
       db.query('INSERT INTO "appointments" ("appointment_slot_id", "user_id", \
        "client_id", "created_date", "appointment_date", "status_id")  \
       VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
-      WHERE "status" = $6) RETURNING "id")',
+      WHERE "status" = $6)) RETURNING "id"',
       [appointment_slot_id, user_id, client_id, created_date, appointment_date, status],
       function(queryError){
         done();
