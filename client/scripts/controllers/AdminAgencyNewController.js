@@ -28,7 +28,7 @@ angular
     $http.post('/agencies', vm.agency).then(function(response) {
       console.log(response);
       $location.path('/admin-agency-overview');
-      alert('Your agency has been added.');
+      alert('The new agency has been added.');
     });
   }
 
