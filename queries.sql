@@ -110,7 +110,7 @@ WHERE "id" = $2;
 INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code")
 VALUES (
 $1, $2, $3,
-(SELECT "id" FROM "race_ethnicity" WHERE 'race_ethnicity' = $4),
+(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),
 $5, $6, $7, $8);
 -- $1: first name
 -- $2: last name
