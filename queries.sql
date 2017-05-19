@@ -91,7 +91,7 @@ GROUP BY "appointments"."appointment_date"
 ---- MAKE APPOINTMENT ----
 -- Save an appointment to appointments table
 INSERT INTO "appointments" ("appointment_slot_id", "user_id", "client_id", "created_date", "appointment_date", "status_id")
-VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" WHERE "status" = 'pending'));
+VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" WHERE "status" = 'pending')) RETURNING "id";
 -- $1: appointment_slot_id
 -- $2: user_id
 -- $3: client_id
@@ -111,7 +111,7 @@ INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "c
 VALUES (
 $1, $2, $3,
 (SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),
-$5, $6, $7, $8);
+$5, $6, $7, $8) RETURNING "id";
 -- $1: first name
 -- $2: last name
 -- $3: date of birth

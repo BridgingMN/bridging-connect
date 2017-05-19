@@ -121,7 +121,41 @@ router.get('/existing/:user_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/available', function(req, res) {
-  // TODO: add code
+  var params = req.query;
+  var min_date = params.min_date;
+  var max_date = params.max_date;
+  var appointment_type = params.appointment_type;
+  var delivery_method = params.delivery_method;
+  var location_id = params.location_id;
+  pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      res.sendStatus(500);
+    } else {
+      db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
+      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
+      '"locations"."location", "locations"."street", "locations"."city",' +
+      '"locations"."state", "appointment_types"."appointment_type",' +
+      '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
+      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+      'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
+      'WHERE "appointment_types"."appointment_type" = $1' +
+      'AND "delivery_methods"."delivery_method" = $2' +
+      'AND "locations"."id" = $3',
+      [appointment_type, delivery_method, location_id],
+      function(queryError, result){
+        done();
+        if (queryError) {
+          console.log(queryError, 'ERROR MAKING QUERY');
+          res.sendStatus(500);
+        } else {
+          res.send(result.rows);
+        }
+      });
+    }
+  });
 });
 
 /**
@@ -163,9 +197,9 @@ router.post('/reserve', function(req, res) {
       VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
       WHERE "status" = $6)) RETURNING "id"',
       [appointment_slot_id, user_id, client_id, created_date, appointment_date, status],
-      function(queryError){
+      function(queryError, result){
         done();
-        if (queryError, result) {
+        if (queryError) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
