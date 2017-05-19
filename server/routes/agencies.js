@@ -127,17 +127,17 @@ router.post('/', function(req, res) {
     console.log('POSTING...', req.body);
     var name = req.body.name;
     var bridging_agency_id = req.body.bridging_agency_id;
-    var primary_first = req.body.primary_first;
-    var primary_last = req.body.primary_last;
-    var primary_job_title = req.body.primary_job_title;
-    var primary_department = req.body.primary_department;
-    var primary_business_phone = req.body.primary_business_phone;
-    var primary_business_phone_ext = req.body.primary_business_phone_ext;
-    var primary_mobile_phone = req.body.primary_mobile_phone;
-    var primary_email = req.body.primary_email;
-    var access_disabled = req.body.access_disabled;
-    var notes = req.body.notes;
-    var beds_allowed_option = req.body.beds_allowed_option;
+    var primary_first = req.body.primary_first || null;
+    var primary_last = req.body.primary_last || null;
+    var primary_job_title = req.body.primary_job_title || null;
+    var primary_department = req.body.primary_department || null;
+    var primary_business_phone = req.body.primary_business_phone || null;
+    var primary_business_phone_ext = req.body.primary_business_phone_ext || null;
+    var primary_mobile_phone = req.body.primary_mobile_phone || null;
+    var primary_email = req.body.primary_email || null;
+    var access_disabled = req.body.access_disabled || false;
+    var notes = req.body.notes || null;
+    var beds_allowed_option = req.body.beds_allowed_option || 'yes';
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);

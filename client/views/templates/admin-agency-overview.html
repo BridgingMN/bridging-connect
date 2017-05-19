@@ -15,7 +15,7 @@
 
   <md-table-container>
     <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-    <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+    <thead md-head md-order="query.order">
       <tr md-row>
         <th md-column md-order-by="nameToLower"><span>Agency</span></th>
         <th md-column md-numeric md-order-by="time.value"><span>Agency ID</span></th>
@@ -24,15 +24,15 @@
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row >
+      <!-- <tr md-row >
         <td md-cell>Ramsey County {{dessert.name}}</td>
         <td md-cell>1567 {{dessert.calories.value}}</td>
         <td md-cell>No {{dessert.fat.value | number: 1}}</td>
         <td md-cell><a href="#admin-agency-edit">See Details</a></td>
 
-      </tr>
+      </tr> -->
     </tbody>
-      <!-- <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="dessert in desserts.data">
+      <tr md-row md-select="agency" md-select-id="name" md-auto-select ng-repeat="agency in agencies.data">
         <td md-cell>{{dessert.name}}</td>
         <td md-cell>{{dessert.calories.value}}</td>
         <td md-cell>{{dessert.fat.value | number: 1}}</td>
@@ -40,8 +40,8 @@
         <td md-cell>{{dessert.protein.value | number: 1}}</td>
         <td md-cell>{{dessert.sodium.value}}</td>
         <td md-cell>{{dessert.calcium.value}}{{dessert.calcium.unit}}</td>
-        <td md-cell><a href="#">See Detail</a></td>
-      </tr> -->
+        <td md-cell><a href="#admin-agency-edit">See Details</a></td>
+      </tr>
     </tbody>
   </table>
   </md-table-container>

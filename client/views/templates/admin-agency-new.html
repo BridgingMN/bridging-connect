@@ -8,12 +8,23 @@
         <div layout-gt-xs = "row">
           <md-input-container class = "md-block" flex-gt-xs>
             <label>Agency</label>
-            <input ng-model="vm.agency.name">
+            <input ng-model="vm.agency.name" required>
+            <div ng-messages="newAgencyForm.name.$error" role="alert">
+              <div ng-message="required" class="my-message">
+                You must enter an Agency name.</div>
+            </div>
           </md-input-container>
 
           <md-input-container>
            <label>Agency ID</label>
-           <input ng-model="vm.agency.bridging_agency_id">
+           <input ng-model="vm.agency.bridging_agency_id"
+                  required ng-pattern = "/^[0-9]/">
+           <div ng-messages="newAgencyForm.agency_id.$error" role="alert" multiple>
+             <div ng-message="required" class="my-message">
+               You must enter an Agency ID.</div>
+               <div ng-message = "pattern" class = "my-message">
+                 The Agency ID must be a number.</div>
+           </div>
          </md-input-container>
         </div>
 
@@ -145,7 +156,7 @@
             <md-button type="submit" class="md-raised md-primary"
               ng-click = "vm.createAgency()">
               Submit</md-button>
-            <a href="#admin-agency-overview"><md-button type="button">Cancel</md-button></a>   
+            <a href="#admin-agency-overview"><md-button type="button">Cancel</md-button></a>
           </div>
 
 
