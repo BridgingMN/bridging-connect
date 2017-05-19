@@ -69,7 +69,6 @@ angular
   }
   //------END SUPPORT FUNCTIONS-----
 
-
   return {
     userObject: userObject,
     loginUser: loginUser,
