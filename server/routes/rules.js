@@ -11,7 +11,7 @@ var pool = require('../modules/database.js');
   * @apiDescription Determines which location(s) should be available to a user
   *    given the client's ZIP code
   *
-  * @apiParam {Number} zip_code   ZIP code of client seeking appointment
+  * @apiParam {String} zip_code   ZIP code of client seeking appointment
   * @apiSuccess {Object[]} locations   Array of location objects representing
   *    the Bridging locations at which the user is permitted make an appointment
   * @apiSuccess {Object} locations.location   Object containing the location's name and address
@@ -39,15 +39,16 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/zip/:zip_code', function(req, res) {
-  var zip_code = req.params.zip_code;
+  var zip_code = req.params.zip_code.toString();
+  console.log(zip_code);
   pool.connect(function(connectionError, db, done) {
     if (connectionError) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       res.sendStatus(500);
     } else {
-      db.query('SELECT "locations"."location", "locations"."id" + "locations"."street", "locations"."city", "locations"."state" ' +
+      db.query('SELECT "locations"."location", "locations"."id", "locations"."street", "locations"."city", "locations"."state" ' +
       'FROM "locations" JOIN "zip_codes" ON "locations"."id" = "zip_codes"."location_id" ' +
-      'WHERE "zip_codes"."zip_code" = $1;',
+      'WHERE "zip_codes"."zip_code" = $1',
       [zip_code],
       function(queryError, result){
         done();
