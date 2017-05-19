@@ -1,8 +1,21 @@
 angular
   .module('myApp')
-  .controller('AdminAgencyNewController', ['UserService', function(UserService) {
+  .controller('AdminAgencyNewController', ['UserService', '$http', '$location',
+      function(UserService, $http, $location) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.hello = "Hello in Agency-New!";
+
+  vm.agency = {};
+  vm.createAgency = createAgency;
+
+  //Creates a new Agency
+  function createAgency(agency) {
+    console.log('submit clicked', vm.agency);
+    $http.post('/agencies', agency).then(function(response) {
+      console.log(response);
+      $location.path('/admin-agency-overview');
+      alert('Your agency has been added.');
+    });
+  }
 
 }]);
