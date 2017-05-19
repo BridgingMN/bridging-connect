@@ -1,7 +1,8 @@
 angular
   .module('myApp')
   .factory('AppointmentService', ['$http', function ($http) {
-    function Appointment() {
+    function Appointment(appointment_type) {
+      this.appointment_type = appointment_type;
       this.location = {
         location_id: 1
       };
@@ -55,6 +56,7 @@ angular
     };
 
     function setLocation(location) {
+      console.log(location);
       this.location = location;
       return this.location;
     }
