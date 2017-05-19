@@ -69,25 +69,6 @@ angular
   }
   //------END SUPPORT FUNCTIONS-----
 
-  function postClient(clientObj) {
-    $http.post('/clients', clientObj).then(function(response){
-      console.log(response);
-    });
-  }
-
-  var clientObj = {
-    first: 'Snoozie',
-    last: 'Withers',
-    dob: '5/6/1917',
-    race_ethnicity: 'Other',
-    street: '1415 Bumblebee Ave',
-    city: 'St. Paul',
-    state: 'MN',
-    zip_code: '55101'
-  };
-
-  postClient(clientObj);
-
   return {
     userObject: userObject,
     loginUser: loginUser,
