@@ -125,7 +125,6 @@ router.get('/:caseworker_id', function(req, res) {
 router.post('/', function(req, res) {
   console.log('in the post route for creating caseworker', req.body);
   if (req.isAuthenticated()) { // user is authenticated
-    console.log('adding a new caseworker', req.body);
     var agency_id = req.body.agency_id;
     var first = req.body.first;
     var last = req.body.last;
