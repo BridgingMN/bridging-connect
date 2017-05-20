@@ -7,21 +7,23 @@
         <div layout-gt-xs = "row">
           <md-input-container class = "md-block" flex-gt-xs>
             <label>Agency</label>
-            <md-select ng-model = "caseworker.agency">
-                <md-option ng-repeat = "" value = "{{}}">
-                  {{}}
+            <md-select ng-model = "vm.caseworker.name">
+                <md-option ng-repeat = "agency in vm.agencies.array"
+                            ng-value = "agency.name">
+                  {{agency.name}}
                 </md-option>
             </md-select>
           </md-input-container>
 
-          <md-input-container>
+          <!-- <md-input-container>
            <label>Agency ID</label>
-           <md-select ng-model = "caseworker.bridging_agency_id">
-               <md-option ng-repeat = "" value = "{{}}">
-                 {{}}
+           <md-select ng-model = "vm.caseworker.bridging_agency_id">
+               <md-option ng-repeat = "agency in vm.agencies.array"
+                            ng-value = "agency.bridging_id">
+                 {{agency.bridging_agency_id}}
                </md-option>
            </md-select>
-         </md-input-container>
+         </md-input-container> -->
 
         </div>
 
@@ -57,11 +59,7 @@
 
             <md-input-container class="md-block" flex-gt-sm>
               <label>State</label>
-              <md-select ng-model="vm.caseworker.state">
-                <md-option ng-repeat="state in states" value="{{state.abbrev}}">
-                  {{state.abbrev}}
-                </md-option>
-              </md-select>
+              <input ng-model="vm.caseworker.state" placeholder="MN">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-sm>
@@ -107,7 +105,7 @@
           </md-input-container>
 
           <div>
-            <md-button type="submit" class="md-raised md-primary" ng-click = "createCaseworker">
+            <md-button type="submit" class="md-raised md-primary" ng-click = "vm.createCaseworker()">
               Submit</md-button>
             <a href="#admin-caseworker-overview"><md-button type="button">Cancel</md-button></a>
           </div>
