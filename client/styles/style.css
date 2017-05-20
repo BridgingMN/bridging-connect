@@ -20,3 +20,7 @@
 .md-calendar-date .md-calendar-date-selection-indicator {
   background-color: lightgreen;
 }
+
+#addAgency {
+  max-height: 50px;
+}

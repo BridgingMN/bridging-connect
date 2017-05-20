@@ -5,18 +5,20 @@ angular
   var vm = this; // controller reference
 
   //model for the zipcode input
-  vm.zipcode = '';
+  vm.zipCode = 55405;
 
-  vm.submitZipcode = submitZipCode;
+  vm.submitZipCode = submitZipCode;
 
   function submitZipCode(zip_code) {
     console.log(zip_code);
+    console.log(UserService.newAppointment.submitZipCode);
     UserService.newAppointment.submitZipCode(zip_code)
       .then(zipCodeSuccess, zipCodeError);
   }
 
-  function zipCodeSuccess(location) {
-    console.log(location);
+  function zipCodeSuccess(response) {
+    UserService.newAppointment.loc = response.data[0];
+    console.log('quack', UserService.newAppointment);
     $location.path('/caseworker-appointment-schedule');
   }
 
