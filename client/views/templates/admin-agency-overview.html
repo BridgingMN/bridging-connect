@@ -12,7 +12,6 @@
   </md-input-continer>
 </div>
 
-<div layout = "row" layout-align = "start center">
 
   <md-table-container>
     <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
@@ -35,6 +34,6 @@
     </tbody>
   </table>
   </md-table-container>
-</div>
+
   <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{agencies.count}}" md-on-paginate="getAgencies" md-page-select></md-table-pagination>
 </div>
