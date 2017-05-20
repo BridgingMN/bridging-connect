@@ -125,22 +125,14 @@ router.get('/:caseworker_id', function(req, res) {
 router.post('/', function(req, res) {
   console.log('in the post route for creating caseworker', req.body);
   if (req.isAuthenticated()) { // user is authenticated
-<<<<<<< HEAD
-=======
     var user_type = 'caseworker';
->>>>>>> develop
     var agency_id = req.body.agency_id;
     var first = req.body.first;
     var last = req.body.last;
     var day_phone = req.body.day_phone || null;
     var ext = req.body.ext || null;
     var email = req.body.email;
-<<<<<<< HEAD
-    var caseworker_access_disabled = req.body.caseworker_access_disabled;
-    var user_type = req.body.user_type;
-=======
     var caseworker_access_disabled = req.body.caseworker_access_disabled || false;
->>>>>>> develop
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
