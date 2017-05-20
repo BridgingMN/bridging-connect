@@ -56,6 +56,7 @@ router.get('/zip/:zip_code', function(req, res) {
           console.log(queryError, 'ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
+          console.log(result);
           res.send(result.rows);
         }
       });

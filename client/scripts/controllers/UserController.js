@@ -5,7 +5,7 @@ angular
   var vm = this; // controller reference
 
   vm.user = {
-    type: 'admin'
+    type: 'caseworker'
   };
 
   // DATA-BINDING FUNCTIONS
