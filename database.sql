@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "agencies" (
   id SERIAL PRIMARY KEY,
   name VARCHAR(120) NOT NULL UNIQUE,
   beds_allowed_option_id INTEGER REFERENCES "beds_allowed_options" DEFAULT 1,
-  bridging_agency_id INTEGER,
+  bridging_agency_id INTEGER NOT NULL,
   street VARCHAR(200),
   city VARCHAR(30),
   state VARCHAR(2),

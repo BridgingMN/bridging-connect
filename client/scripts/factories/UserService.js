@@ -5,11 +5,15 @@ angular
 
   };
 
+
+  var agencies = {};
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
   return {
     userObject: userObject,
     newAppointment: newAppointment,
+    agencies: agencies,
+    getAgencies: getAgencies,
     loginUser: loginUser,
     registerUser: registerUser,
     getUser: getUser,
@@ -83,4 +87,12 @@ angular
   }
   //------END SUPPORT FUNCTIONS-----
 
+  //GETS all agencies from db
+  function getAgencies() {
+    console.log('client sent request to server for all agencies');
+    $http.get('/agencies').then(function(response) {
+        agencies.array = response.data;
+        console.log(agencies.array);
+    });
+  }
 }]);
