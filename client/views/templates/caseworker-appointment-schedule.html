@@ -22,7 +22,7 @@
           ng-model="vm.selectedDate"
           ng-change="vm.selectDate(vm.selectedDate)"
           md-min-date="vm.minDate" md-max-date="vm.maxDate"
-          md-date-filter="vm.onlyMonToThursPredicate">
+          md-date-filter="vm.availableAppointmentsPredicate">
       </md-calendar>
     </div>
     <form class="md-padding appoint-schedule-slot" layout="column" layout-align="center center">
@@ -34,7 +34,7 @@
                 {{appointment.start_time}}
             </md-radio-button>
           </md-radio-group>
-        <md-button class="md-raised md-primary" ng-click="vm.submit()">Next</md-button>
+        <md-button class="md-raised md-primary" ng-click="vm.reserveAppointment()">Next</md-button>
     </form>
   </div>
 </div>
