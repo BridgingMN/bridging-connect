@@ -18,6 +18,7 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/', function(req, res) {
+  console.log('in agencies get all agencies router');
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
       if (err) { // connection error
@@ -30,8 +31,8 @@ router.get('/', function(req, res) {
               console.log('error making query:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('sucessful get from /agencies', result);
-              res.send(result);
+              // console.log('sucessful get from /agencies', result.rows);
+              res.send(result.rows);
             }
         }); // end query callback
       } // end DB connection if-else

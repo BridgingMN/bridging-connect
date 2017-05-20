@@ -5,7 +5,7 @@ angular
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
-  vm.agency = {};
+  vm.agency = {}; //properties created in Admin-agency-new form
   vm.createAgency = createAgency;
 
   //Creates a new Agency

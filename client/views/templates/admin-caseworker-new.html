@@ -7,7 +7,7 @@
         <div layout-gt-xs = "row">
           <md-input-container class = "md-block" flex-gt-xs>
             <label>Agency</label>
-            <md-select ng-model = "">
+            <md-select ng-model = "caseworker.agency">
                 <md-option ng-repeat = "" value = "{{}}">
                   {{}}
                 </md-option>
@@ -16,7 +16,7 @@
 
           <md-input-container>
            <label>Agency ID</label>
-           <md-select ng-model = "">
+           <md-select ng-model = "caseworker.bridging_agency_id">
                <md-option ng-repeat = "" value = "{{}}">
                  {{}}
                </md-option>
@@ -109,7 +109,7 @@
           <div>
             <md-button type="submit" class="md-raised md-primary" ng-click = "createCaseworker">
               Submit</md-button>
-            <a href="#admin-caseworker-overview"><md-button type="button">Cancel</md-button></a>  
+            <a href="#admin-caseworker-overview"><md-button type="button">Cancel</md-button></a>
           </div>
 
 
