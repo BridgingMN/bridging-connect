@@ -125,23 +125,25 @@ router.get('/:caseworker_id', function(req, res) {
 router.post('/', function(req, res) {
   console.log('in the post route for creating caseworker', req.body);
   if (req.isAuthenticated()) { // user is authenticated
-    var user_type = 'caseworker';
+    console.log('adding a new caseworker', req.body);
     var agency_id = req.body.agency_id;
     var first = req.body.first;
     var last = req.body.last;
     var day_phone = req.body.day_phone || null;
     var ext = req.body.ext || null;
     var email = req.body.email;
-    var caseworker_access_disabled = req.body.caseworker_access_disabled || false;
+    var access_disabled = req.body.access_disabled || false;
+    var notes = req.body.notes || null;
+    var user_type = 'caseworker';
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "caseworker_access_disabled", "user_type_id") ' +
-                        'VALUES ((SELECT "id" FROM "user_types" WHERE "user_type" = \'caseworker\'), ' +
-                        '(SELECT "id" FROM "agencies" WHERE "name" = $1), $2, $3, $4, $5, $6);',
-                        [user_type, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
+        database.query('INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id") ' +
+                        'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, ' +
+                        '(SELECT "id" FROM "user_types" WHERE "user_type" = $9));',
+                        [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
