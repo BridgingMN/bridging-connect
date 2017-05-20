@@ -26,7 +26,8 @@ router.get('/', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT * FROM "caseworkers"',
+        database.query('SELECT "users"."first", "users"."last", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."access_disabled", "users"."access_disabled" ' +
+                        'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id";',
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
@@ -80,7 +81,9 @@ router.get('/:caseworker_id', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT * FROM "caseworkers" WHERE "id" = $1;', [caseworker_id],
+        database.query('SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "agencies"."access_disabled", "users"."access_disabled" ' +
+                        'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
+                        'WHERE "users"."id" = $1;', [caseworker_id],
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
@@ -121,7 +124,6 @@ router.get('/:caseworker_id', function(req, res) {
 */
 router.post('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
-    var user_type = req.body.user_type;
     var agency_id = req.body.agency_id;
     var first = req.body.first;
     var last = req.body.last;
@@ -129,12 +131,16 @@ router.post('/', function(req, res) {
     var ext = req.body.ext;
     var email = req.body.email;
     var caseworker_access_disabled = req.body.caseworker_access_disabled;
+    var user_type = req.body.user_type;
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('', [user_type, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
+        database.query('INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "caseworker_access_disabled", "user_type_id") ' +
+                        'VALUES ((SELECT "id" FROM "user_types" WHERE "user_type" = \'caseworker\'), ' +
+                        '(SELECT "id" FROM "agencies" WHERE "name" = $1), $2, $3, $4, $5, $6);',
+                        [user_type, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
@@ -190,7 +196,10 @@ router.put('/:caseworker_id', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('', [caseworker_id, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
+        database.query('UPDATE "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "caseworker_access_disabled", "user_type_id") ' +
+                        'VALUES ((SELECT "id" FROM "user_types" WHERE "user_type" = \'caseworker\'), ' +
+                        '(SELECT "id" FROM "agencies" WHERE "name" = $1), $2, $3, $4, $5, $6) ' +
+                        'WHERE "id" = $$$$$$$;', [caseworker_id, agency_id, first, last, day_phone, ext, email, caseworker_access_disabled],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
