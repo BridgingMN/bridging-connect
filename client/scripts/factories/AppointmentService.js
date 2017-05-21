@@ -52,7 +52,8 @@ angular
     };
 
     return {
-      Appointment: Appointment
+      Appointment: Appointment,
+      getUserAppointments: getUserAppointments
     };
 
 
@@ -65,6 +66,11 @@ angular
     function returnError(error) {
       console.log('Error', error);
       return error;
+    }
+
+    function getUserAppointments() {
+      return $http.get('/appointments/existing')
+        .then( returnResponse, returnError);
     }
 
   }]);

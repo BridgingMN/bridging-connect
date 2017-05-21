@@ -48,8 +48,11 @@ angular
   function getUser() {
     $http.get('/user').then(function(response) {
       if (!response.data.email) {
-        // redirectToLogin();
+        redirectToLogin();
+      } else {
+        userObject.user = response.data;
       }
+      console.log(userObject);
     });
   } // end getUser()
 

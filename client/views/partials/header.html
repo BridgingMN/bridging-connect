@@ -9,7 +9,7 @@
     </div>
     </md-toolbar>
 
-  <div ng-cloak ng-if="vm.user.type === 'caseworker'">
+  <div ng-cloak ng-if="vm.userObject.user.user_type_id === vm.CONSTANTS.USER_TYPE_CASEWORKER">
     <md-content class="md-padding">
       <md-nav-bar
         md-selected-nav-item="currentNavItem"
@@ -29,7 +29,7 @@
     </md-content>
   </div>
 
-  <div ng-cloak ng-if="vm.user.type === 'admin'">
+  <div ng-cloak ng-if="vm.userObject.user.user_type_id === vm.CONSTANTS.USER_TYPE_ADMIN">
   <md-content class="md-padding">
     <md-nav-bar
       md-selected-nav-item="currentNavItem"

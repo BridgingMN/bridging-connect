@@ -1,12 +1,11 @@
 angular
   .module('myApp')
-  .controller('UserController', ['UserService', function(UserService) {
+  .controller('UserController', ['CONSTANTS', 'UserService', function(CONSTANTS, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
-  vm.user = {
-    type: 'caseworker'
-  };
+  vm.CONSTANTS = CONSTANTS;
+  vm.userObject = UserService.userObject;
 
   // DATA-BINDING FUNCTIONS
   vm.logout = UserService.logout;
