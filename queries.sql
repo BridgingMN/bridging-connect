@@ -87,7 +87,11 @@ FROM "appointments"
 JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"
 JOIN "days" ON "appointment_slots"."day_id" = "days"."id"
 WHERE "appointments"."appointment_slot_id" IN (1,5) -- variable: array of allowed appointment slots
+AND "appointments"."appointment_date" >= $1
+AND "appointments"."appointment_date" <= $2
 GROUP BY "appointments"."appointment_date"
+-- $1: min_date
+-- $2: max_date
 
 ---- MAKE APPOINTMENT ----
 -- Save an appointment to appointments table

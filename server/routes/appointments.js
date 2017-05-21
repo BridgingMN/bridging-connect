@@ -112,7 +112,7 @@ router.get('/available', function(req, res) {
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
 
-  function getAvailableAppointments(appointment_type, delivery_method, location_id) {
+  function getAvailableAppts(appointment_type, delivery_method, location_id) {
     pool.connect(function(connectionError, db, done) {
       if (connectionError) {
         console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
