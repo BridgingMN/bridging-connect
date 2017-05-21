@@ -1,10 +1,10 @@
 /**
  * Controller For caseworker-appointment-schedule
- * @module caseworker/schedule-appointment
+ * @module caseworker/reschedule-appointment
  */
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentScheduleController', ['$location', 'UserService', function($location, UserService) {
+  .controller('CaseworkerAppointmentRescheduleController', ['$location', 'UserService', function($location, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
   vm.appointment = UserService.newAppointment;
