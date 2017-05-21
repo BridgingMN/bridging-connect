@@ -36,7 +36,8 @@ WHERE "id" = $1;
 
 ---- UPDATE AGENCY ----
 UPDATE "agencies"
-SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") = ($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13, (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14))
+SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") =
+($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13, (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14))
 WHERE "id" = $1;
 -- $1: id
 -- $2: name
@@ -131,15 +132,17 @@ UPDATE "clients" SET $1 = $2 WHERE "id" = $3;
 
 ---- ADD A NEW CASEWORKER ----
 -- Adds a new caseworker's information to the "users" table in the database
-INSERT INTO "users" ("user_type_id", "agency_id", "email", "first", "last", "day_phone", "ext")
-VALUES ((SELECT "id" FROM "user_types" WHERE "user_type" = 'caseworker'),
-(SELECT "id" FROM "agencies" WHERE "name" = $1), $2, $3, $4, $5, $6);
--- $1: agency
--- $2: email
--- $3: first name
--- $4: last name
--- $5: day_phone
--- $6: day phone extension
+INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id")
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, (SELECT "id" FROM "user_types" WHERE "user_type" = $9));
+-- $1: agency_id
+-- $2: first name
+-- $3: last name
+-- $4: day_phone
+-- $5: day phone extension
+-- $6: email
+-- $7: access_disabled
+-- $8: notes
+-- $9: user_type
 
 ---- DELETE CASEWORKER ----
 -- Deletes specified caseworker from the database
@@ -153,19 +156,27 @@ FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id";
 
 ---- GET ONE CASEWORKER ----
 -- Retrieves a specific caseworker's information from the database
-SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "agencies"."access_disabled", "users"."access_disabled"
-FROM "users"
-JOIN "agencies" ON "users"."agency_id" = "agencies"."id"
+SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled", "users"."access_disabled"
+FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id"
 WHERE "users"."id" = $1;
 -- $1: user_id
 
 ---- UPDATE CASEWORKER ----
 -- Updates specified properties for a caseworker
--- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
-UPDATE $1 SET "last" = $2 WHERE "id" = $3;
--- $1: key
--- $2: value
--- $3: user_id
+UPDATE "users"
+SET ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id") =
+($1, $2, $3, $4, $5, $6, $7, $8, (SELECT "id" FROM "user_types" WHERE "user_type" = $9))
+WHERE "id" = $10;
+-- $1: agency_id
+-- $2: first name
+-- $3: last name
+-- $4: day_phone
+-- $5: day phone extension
+-- $6: email
+-- $7: access_disabled
+-- $8: notes
+-- $9: user_type
+-- $10: user_id
 
 ---- GET LOCATIONS FOR ZIP CODE ----
 -- Determines which location(s) should be available to a user given the client's ZIP code

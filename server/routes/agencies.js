@@ -217,8 +217,8 @@ router.put('/:agency_id', function(req, res) {
         res.sendStatus(500);
       } else { // we connected
         database.query('UPDATE "agencies"' +
-                        'SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", beds_allowed_option_id") = ($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13 ' +
-                        '(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14))' +
+                        'SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") = ' +
+                        '($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13, (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14)) ' +
                         'WHERE "id" = $1;',
                         [agency_id, name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, access_disabled, notes, beds_allowed_option],
           function(queryErr, result) { // query callback
@@ -253,7 +253,28 @@ router.put('/:agency_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.delete('/:agency_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    var agency_id = req.params.agency_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('DELETE FROM "agencies" WHERE "id" = $1;', [agency_id],
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful deletion from /agencies/:agency_id', result);
+              res.sendStatus(200);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
 });
 
 module.exports = router;
