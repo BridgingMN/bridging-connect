@@ -88,7 +88,7 @@ router.get('/:agency_id', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful get from /agencies/:agency_id', result);
-              res.send(result);
+              res.send(result.rows);
             }
           }); // end query callback
         } // end if-else
@@ -157,7 +157,7 @@ router.post('/', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful insert into "agencies"', result);
-              res.send(result);
+              res.send(result.rows);
             }
         }); // end query
       } // end if-else

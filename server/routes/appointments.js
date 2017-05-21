@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
 var moment = require('moment');
-
 var pool = require('../modules/database.js');
 
 /**
@@ -220,6 +218,34 @@ router.put('/existing', function(req, res) {
 });
 
 // START ADMIN-ONLY APPOINTMENT ROUTES
+/**
+  * @api {get} /agencies Get All Pending Appointments
+  * @apiVersion 0.1.0
+  * @apiName GetPendingAppointments
+  * @apiGroup Appointments
+  * @apiDescription Retrieves all appointments with a status of "pending" and associated appointment information.
+  *
+  * @apiSuccess {Number} id Unique ID of each appointment.
+  * @apiSuccess {Date} appointment_date Date for which the appointment is scheduled.
+  * @apiSuccess {Date} delivery_date Tentative delivery date, if any, for the appointment.
+  * @apiSuccess {Number} confirmation_id Appointment confirmation number from the "appointments" table.
+  * @apiSuccess {Number} appointment_slot_id Unique ID corresponding to an entry in the "appointment_slots" table.
+  * @apiSuccess {String} appointment_type Appointment type - corresponds to an entry in the "appointment_types" table.
+  * @apiSuccess {String} start_time Appointment start time - corresponds to the "appointment_slot_id" row in the "appointment_slots" table.
+  * @apiSuccess {Number} agency_id Unique ID of the agency associated with each appointment.
+  * @apiSuccess {String} name Name of the agency associated with each appointment.
+  * @apiSuccess {Number} user_id Unique ID of the user associated with each appointment.
+  * @apiSuccess {String} user_fist First name of the user associated with each appointment.
+  * @apiSuccess {String} user_last Last name of the user associated with each appointment.
+  * @apiSuccess {Number} client_id Unique ID of the client associated with each appointment.
+  * @apiSuccess {String} client_fist First name of the client associated with each appointment.
+  * @apiSuccess {String} client_last Last name of the client associated with each appointment.
+  * @apiSuccess {Number} status_id Unique ID corresponding to an entry in the "statuses" table.
+  * @apiSuccess {String} status Appointment status - corresponds to the "status_id" row in the "statuses" table.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/pending', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var status = 'pending';
@@ -228,7 +254,7 @@ router.get('/pending', function(req, res) {
         console.log('error connecting to the database on /appointments/pending route:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first", "users"."last", "appointments"."client_id", "clients"."first", "clients"."last", "appointments"."status_id", "statuses"."status" ' +
+        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
                         'FROM "appointments" ' +
                         'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id" ' +
                         'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id" ' +
@@ -245,7 +271,7 @@ router.get('/pending', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful get from /agencies/:agency_id', result);
-              res.send(result);
+              res.send(result.rows);
             }
           }); // end query callback
         } // end if-else
@@ -253,7 +279,7 @@ router.get('/pending', function(req, res) {
   } else { // user not authenticated
     res.sendStatus(401);
   }
-})
+});
 
 // END ADMIN-ONLY APPOINTMENT ROUTES
 
