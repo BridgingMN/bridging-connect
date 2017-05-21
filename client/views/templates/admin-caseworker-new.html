@@ -8,9 +8,9 @@
         <div layout-gt-xs = "row">
           <md-input-container class = "md-block" flex-gt-xs>
             <label>Agency</label>
-            <md-select ng-model = "vm.caseworker.name" required>
+            <md-select ng-model = "vm.caseworker.agency_id" required>
                 <md-option ng-repeat = "agency in vm.agencies.array"
-                            ng-value = "agency.name">
+                            ng-value = "agency.id">
                   {{agency.name}}
                 </md-option>
             </md-select>

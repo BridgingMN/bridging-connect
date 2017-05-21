@@ -7,7 +7,7 @@ angular
   vm.agencies = UserService.agencies;
   vm.getAgencies = UserService.getAgencies;
   vm.caseworker = {
-    name: '',
+    agency_id: '',
     first: '',
     last: '',
     email: ''
