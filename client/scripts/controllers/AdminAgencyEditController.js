@@ -6,5 +6,17 @@ angular
   var vm = this; // controller reference
   vm.agency = UserService.agency;
   vm.viewAgency = UserService.viewAgency;
+  vm.editAgency = editAgency;
+
+  //Saves edits made to Agency record in the Agency-Edit viewAgency
+  function editAgency(agency) {
+    console.log('Save changes clicked: ', agency.id);
+    $http.put('/agencies/' + agency.id).then(function() {
+      console.log('saves edits', agency.id);
+      alert('Your edits have been saved.');
+      location.path('/admin-agency-overview');
+    });
+
+  }
 
 }]);

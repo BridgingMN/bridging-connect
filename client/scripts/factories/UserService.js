@@ -103,13 +103,13 @@ angular
   }
 
   //Views details of single selected agency
-  function viewAgency(agency) {
-    console.log('view details clicked ', agency);
-    var id = agency.id;
+  function viewAgency(agency_id) {
+    console.log('view details clicked ', agency_id);
+    var id = agency_id.id;
     console.log('agency id: ', id);
     $http.get('/agencies/' + id).then(function(response) {
-      agency = response.data;
-      console.log('Agency record back from db: ', agency);
+      agency.selected = response.data;
+      console.log('Agency record back from db: ', agency.selected);
     });
   }
 }]);
