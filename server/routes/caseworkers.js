@@ -34,8 +34,8 @@ router.get('/', function(req, res) {
               console.log('error making query:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('sucessful get from /caseworkers', result);
-              res.send(result);
+              console.log('sucessful get from /caseworkers', result.rows);
+              res.send(result.rows);
             }
         }); // end query callback
       } // end DB connection if-else
