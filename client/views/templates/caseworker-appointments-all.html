@@ -1,17 +1,16 @@
-<div class="caseworker-home" layout="column" flex="100">
-  <h2>My Appointments</h2>
-  <div class="caseworker-appointment-view-controls" layout="row">
+<div class="caseworker-home" layout="column">
+  <div class="md-padding caseworker-appointment-view-controls" layout="row">
     <md-button class="md-raised md-primary">Show All</md-button>
     <md-button class="md-raised">Show Shopping Appointments Only</md-button>
     <md-button class="md-raised">Show Bed Orders Only</md-button>
   </div>
-  <md-content class="md-padding caseworker-appointment-cards" layout="row" layout-align="space-around" layout-wrap flex>
+  <md-content class="md-padding caseworker-appointment-cards" layout="row" layout-align="space-around" layout-wrap>
     <div
     class="appointment-card"
     ng-repeat="appointment in vm.caseworkerAppointments"
     layout="column"
     flex="20">
-      <div class="appointment-card-header" layout="row" layout-align="space-around center" >
+      <div class="appointment-card-header" layout="row" layout-align="space-around center">
         <div class="appointment-date">
           <p layout="column" layout-align="center center">
             <span>{{appointment.appointment_date | date: 'MMM'}}</span>
