@@ -6,13 +6,12 @@ var moment = require('moment');
 var pool = require('../modules/database.js');
 
 /**
-  * @api {get} /appointments/existing/:user_id Get User Appointments
+  * @api {get} /appointments/existing Get User Appointments
   * @apiVersion 0.1.0
   * @apiName GetUserAppointments
   * @apiGroup Appointments
   * @apiDescription Get a user's existing appointments
 
-  * @apiParam {Number} user_id User's unique ID
   * @apiSuccess {Object[]} appointments   Array of appointment objects
   * @apiSuccess {Number} appointments.id   Unique ID of appointment
   * @apiSuccess {Object} appointments.client   Object with information about
@@ -59,8 +58,8 @@ var pool = require('../modules/database.js');
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
 */
-router.get('/existing/:user_id', function(req, res) {
-  // TODO: add code
+router.get('/existing', function(req, res) {
+  var user_id = req.user.id;
 });
 
 /**
@@ -144,7 +143,36 @@ router.get('/available', function(req, res) {
     });
   }
 
-  function countExistingAppointments() {}
+  function countExistingAppts(min_date, max_date) {
+    pool.connect(function(connectionError, db, done) {
+      if (connectionError) {
+        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+        res.sendStatus(500);
+      } else {
+        db.query('SELECT "appointments"."appointment_date", COUNT(*)' +
+          'FROM "appointments"' +
+          'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
+          'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
+          'WHERE "appointments"."appointment_slot_id" IN (1,5)' +
+          'AND "appointments"."appointment_date" >= $1' +
+          'AND "appointments"."appointment_date" <= $2' +
+          'GROUP BY "appointments"."appointment_date"',
+        [appointment_type, delivery_method, location_id], // <array>).then
+        function(queryError, result){
+          done();
+          if (queryError) {
+            console.log(queryError, 'ERROR MAKING QUERY');
+            res.sendStatus(500);
+          } else {
+            res.send(result.rows);
+          }
+        });
+      }
+    });
+  }
+
+
+
 });
 
 /**
