@@ -228,8 +228,15 @@ router.get('/pending', function(req, res) {
         console.log('error connecting to the database on /appointments/pending route:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT * FROM "appointments" ' +
-                       'WHERE "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1);',
+        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first", "users"."last", "appointments"."client_id", "clients"."first", "clients"."last", "appointments"."status_id", "statuses"."status" ' +
+                        'FROM "appointments" ' +
+                        'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id" ' +
+                        'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id" ' +
+                        'JOIN "users" ON "appointments"."user_id" = "users"."id" ' +
+                        'JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
+                        'JOIN "clients" ON "appointments"."client_id" = "clients"."id" ' +
+                        'JOIN "statuses" ON "appointments"."status_id" = "statuses"."id" ' +
+                        'WHERE "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1);',
                        [status],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
