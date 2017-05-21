@@ -1,10 +1,8 @@
 angular
   .module('myApp')
   .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
-  var userObject = {
 
-  };
-
+  var userObject = {};
 
   var agencies = {};
   var agency = {};
@@ -85,11 +83,9 @@ angular
 
   //---------SUPPORT FUNCTIONS-------
   function clearCurrentUser() {
-    // clear out the userObject's properties on logout
-    // for example purposes:
-    // userObject.firstName = '';
-    // userObject.lastName = '';
-    // appointmentsArray = [];
+    userObject.user = {};
+    userObject.newAppointment = {};
+    userObject.agencies = {};
   }
   //------END SUPPORT FUNCTIONS-----
 
