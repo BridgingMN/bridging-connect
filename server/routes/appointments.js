@@ -220,7 +220,33 @@ router.put('/existing', function(req, res) {
 });
 
 // START ADMIN-ONLY APPOINTMENT ROUTES
-
+router.get('/pending', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    var status = 'pending';
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database on /appointments/pending route:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('SELECT * FROM "appointments" ' +
+                       'WHERE "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1);',
+                       [status],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /agencies/:agency_id GET', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful get from /agencies/:agency_id', result);
+              res.send(result);
+            }
+          }); // end query callback
+        } // end if-else
+      }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+})
 
 // END ADMIN-ONLY APPOINTMENT ROUTES
 
