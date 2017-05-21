@@ -1,5 +1,7 @@
 var moment = require('moment');
 var pool = require('../modules/database.js');
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
 
 function getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date) {
   var apptSlotsArray = [];
@@ -7,7 +9,7 @@ function getAvailableAppts(appointment_type, delivery_method, location_id, min_d
   var apptCountsArray = [];
   var overridesArray = [];
 
-  return getApptSlots(appointment_type, delivery_method, location_id)
+  getApptSlots(appointment_type, delivery_method, location_id)
   .then(function(apptSlots) {
     apptSlotsArray = apptSlots;
     apptSlotIdsArray = apptSlotsArray.filter(function(apptSlot) {
@@ -25,42 +27,44 @@ function getAvailableAppts(appointment_type, delivery_method, location_id, min_d
   })
   .then(function(apptsAvailable) {
     return apptsAvailable;
+  })
+  .catch(function(error) {
+    console.log(error);
   });
 }
 
 function getApptSlots(appointment_type, delivery_method, location_id) {
-  return pool.connect(function(connectionError, db) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-      return connectionError;
-    } else {
-      db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
-      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-      '"locations"."location", "locations"."street", "locations"."city",' +
-      '"locations"."state", "appointment_types"."appointment_type",' +
-      '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
-      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
-      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
-      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
-      'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-      'WHERE "appointment_types"."appointment_type" = $1' +
-      'AND "delivery_methods"."delivery_method" = $2' +
-      'AND "locations"."id" = $3',
-      [appointment_type, delivery_method, location_id])
-      .then(function(result) {
-        var apptSlots = result.rows;
-        return apptSlots;
-      }).catch(function(queryError) {
-        console.log(queryError, 'ERROR MAKING QUERY');
-      });
-    }
+  console.log('in get appt slots');
+  return pool.connect().then(function(db) {
+    db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
+    '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
+    '"locations"."location", "locations"."street", "locations"."city",' +
+    '"locations"."state", "appointment_types"."appointment_type",' +
+    '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
+    'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+    'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+    'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+    'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
+    'WHERE "appointment_types"."appointment_type" = $1' +
+    'AND "delivery_methods"."delivery_method" = $2' +
+    'AND "locations"."id" = $3',
+    [appointment_type, delivery_method, location_id])
+    .then(function(result) {
+      db.release();
+      var apptSlots = result.rows;
+      console.log('ApptSlots:', apptSlots);
+      return apptSlots;
+    }).catch(function(queryError) {
+      db.release();
+      console.log(queryError, 'ERROR MAKING QUERY');
+    });
   });
 }
 
 // apptSlots is an array of appointment_slot_ids
 // min_date & max_date are dates that act as inclusive bounds of the date range to be searched
 function countExistingAppts(apptSlotIds, min_date, max_date) {
-  return pool.connect(function(connectionError, db) {
+  return pool.connect().then(function(connectionError, db) {
     if (connectionError) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       return connectionError;
@@ -85,7 +89,7 @@ function countExistingAppts(apptSlotIds, min_date, max_date) {
 }
 
 function getOverrides(min_date, max_date) {
-  return pool.connect(function(connectionError, db) {
+  return pool.connect().then(function(connectionError, db) {
     if (connectionError) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       return connectionError;
