@@ -18,6 +18,7 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/', function(req, res) {
+  console.log('in agencies get all agencies router');
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
       if (err) { // connection error
@@ -30,8 +31,8 @@ router.get('/', function(req, res) {
               console.log('error making query:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('sucessful get from /agencies', result);
-              res.send(result);
+              // console.log('sucessful get from /agencies', result.rows);
+              res.send(result.rows);
             }
         }); // end query callback
       } // end DB connection if-else
@@ -124,26 +125,27 @@ router.get('/:agency_id', function(req, res) {
 */
 router.post('/', function(req, res) {
   // if (req.isAuthenticated()) { // user is authenticated
+    console.log('POSTING...', req.body);
     var name = req.body.name;
     var bridging_agency_id = req.body.bridging_agency_id;
-    var primary_first = req.body.primary_first;
-    var primary_last = req.body.primary_last;
-    var primary_job_title = req.body.primary_job_title;
-    var primary_department = req.body.primary_department;
-    var primary_business_phone = req.body.primary_business_phone;
-    var primary_business_phone_ext = req.body.primary_business_phone_ext;
-    var primary_mobile_phone = req.body.primary_mobile_phone;
-    var primary_email = req.body.primary_email;
-    var access_disabled = req.body.access_disabled;
-    var notes = req.body.notes;
-    var beds_allowed_option = req.body.beds_allowed_option;
+    var primary_first = req.body.primary_first || null;
+    var primary_last = req.body.primary_last || null;
+    var primary_job_title = req.body.primary_job_title || null;
+    var primary_department = req.body.primary_department || null;
+    var primary_business_phone = req.body.primary_business_phone || null;
+    var primary_business_phone_ext = req.body.primary_business_phone_ext || null;
+    var primary_mobile_phone = req.body.primary_mobile_phone || null;
+    var primary_email = req.body.primary_email || null;
+    var access_disabled = req.body.access_disabled || false;
+    var notes = req.body.notes || null;
+    var beds_allowed_option = req.body.beds_allowed_option || 'yes';
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", beds_allowed_option_id") ' +
-                        'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12 ' +
+        database.query('INSERT INTO "agencies" ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") ' +
+                        'VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, ' +
                         '(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $13)) ' +
                         'RETURNING "id";',
                        [name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, access_disabled, notes, beds_allowed_option],
@@ -215,8 +217,8 @@ router.put('/:agency_id', function(req, res) {
         res.sendStatus(500);
       } else { // we connected
         database.query('UPDATE "agencies"' +
-                        'SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", beds_allowed_option_id") = ($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13 ' +
-                        '(SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14))' +
+                        'SET ("name", "bridging_agency_id", "primary_first", "primary_last", "primary_job_title", "primary_department", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "access_disabled", "notes", "beds_allowed_option_id") = ' +
+                        '($2, $3, 4, $5, $6, $7, $8, $9, $10, $11, $12, $13, (SELECT "id" FROM "beds_allowed_options" WHERE "beds_allowed_option" = $14)) ' +
                         'WHERE "id" = $1;',
                         [agency_id, name, bridging_agency_id, primary_first, primary_last, primary_job_title, primary_department, primary_business_phone, primary_business_phone_ext, primary_mobile_phone, primary_email, access_disabled, notes, beds_allowed_option],
           function(queryErr, result) { // query callback
@@ -251,7 +253,28 @@ router.put('/:agency_id', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.delete('/:agency_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+    var agency_id = req.params.agency_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('DELETE FROM "agencies" WHERE "id" = $1;', [agency_id],
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful deletion from /agencies/:agency_id', result);
+              res.sendStatus(200);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
 });
 
 module.exports = router;

@@ -27,7 +27,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -38,7 +38,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -49,7 +49,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -60,7 +60,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -71,7 +71,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -82,7 +82,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -93,7 +93,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     },
@@ -104,7 +104,7 @@ angular
       client_last: 'Toddney',
       client_street: '123 Fake Street',
       appointment_type: 'Shopping',
-      location: 'Bloomington',
+      loc: 'Bloomington',
       delivery_type: 'Delivery',
       start_time: '9:15 AM'
     }

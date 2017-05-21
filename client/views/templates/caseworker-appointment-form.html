@@ -7,7 +7,7 @@
     </div>
     <div class="md-padding appointment-location">
       <i class="material-icons">place</i>
-      <span>{{vm.appointment.location.name}}</span>
+      <span>{{vm.appointment.loc.location}}</span>
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
@@ -65,6 +65,6 @@
         </md-select>
       </md-input-container>
     </div>
-    <md-button class="md-raised md-primary" href="#caseworker-appointments-all">Submit</md-button>
+    <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Submit</md-button>
   </form>
 </div>

@@ -1,8 +1,9 @@
 angular
   .module('myApp')
-  .controller('AdminAgencyEditController', ['UserService', function(UserService) {
+  .controller('AdminAgencyEditController', ['UserService', '$http',
+      function(UserService, $http) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.hello = "Hello in Agency-Edit!";
+  
 
 }]);

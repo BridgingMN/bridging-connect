@@ -169,12 +169,13 @@ router.get('/available', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/reserve', function(req, res) {
+  console.log(req.body);
   var appointment = req.body;
   var appointment_date = moment(appointment.date).format('M/D/YYYY');
   var user_id = appointment.user_id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
-  var created_date = appointment.appointment_date_added;
+  var created_date = new Date();
   var status = appointment.status;
 
   pool.connect(function(connectionError, db, done) {
@@ -190,7 +191,7 @@ router.post('/reserve', function(req, res) {
       function(queryError, result){
         done();
         if (queryError) {
-          console.log('ERROR MAKING QUERY');
+          console.log('ERROR MAKING QUERY', queryError);
           res.sendStatus(500);
         } else {
           res.send(result.rows[0]);
