@@ -4,6 +4,7 @@ angular
       function(UserService, $http) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  
+  vm.agency = UserService.agency;
+  vm.viewAgency = UserService.viewAgency;
 
 }]);

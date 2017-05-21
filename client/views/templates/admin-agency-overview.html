@@ -26,7 +26,8 @@
         <td md-cell>{{agency.name}}</td>
         <td md-cell>{{agency.bridging_agency_id}}</td>
         <td md-cell>{{agency.access_disabled}}</td>
-        <td md-cell><a href="#admin-agency-edit">See Details</a></td>
+        <td md-cell><a href="#admin-agency-edit" ng-click = "vm.viewAgency(agency)">
+            See Details</a></td>
       </tr>
     </tbody>
   </table>

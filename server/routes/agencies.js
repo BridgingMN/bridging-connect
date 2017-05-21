@@ -76,7 +76,7 @@ router.get('/:agency_id', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled", "notes" ' +
+        database.query('SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "primary_department", "primary_job_title", "beds_allowed_option_id", "access_disabled", "notes" ' +
                        'FROM "agencies" ' +
                        'WHERE "id" = $1;',
                        [agency_id],
@@ -86,8 +86,8 @@ router.get('/:agency_id', function(req, res) {
               console.log('error making query on /agencies/:agency_id GET', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful get from /agencies/:agency_id', result);
-              res.send(result);
+              console.log('successful get from /agencies/:agency_id', result.rows);
+              res.send(result.rows);
             }
           }); // end query callback
         } // end if-else
