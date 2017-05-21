@@ -105,13 +105,15 @@ router.get('/existing', function(req, res) {
 */
 router.get('/available', function(req, res) {
   var params = req.query;
-  var min_date = params.min_date;
-  var max_date = params.max_date;
+  var min_date = moment(params.min_date).format('YYYY-MM-DD');
+  var max_date = moment(params.max_date).format('YYYY-MM-DD');
   var appointment_type = params.appointment_type;
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
 
-  function getAvailableAppts(appointment_type, delivery_method, location_id) {
+  getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date);
+
+  function getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date) {
     pool.connect(function(connectionError, db, done) {
       if (connectionError) {
         console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
@@ -136,15 +138,25 @@ router.get('/available', function(req, res) {
             console.log(queryError, 'ERROR MAKING QUERY');
             res.sendStatus(500);
           } else {
-            res.send(result.rows);
+            var apptSlots = result.rows;
+            var apptSlotIds = apptSlots.filter(function(apptSlot) {
+              return apptSlot.id;
+            });
+            countExistingAppts(apptSlotIds, min_date, max_date)
+            .then(function(existingApptCounts) {
+              var apptsAvailable = fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts);
+              res.send(apptsAvailable);
+            });
           }
         });
       }
     });
   }
 
-  function countExistingAppts(min_date, max_date) {
-    pool.connect(function(connectionError, db, done) {
+  // apptSlots is an array of appointment_slot_ids
+  // min_date & max_date are dates that act as inclusive bounds of the date range to be searched
+  function countExistingAppts(apptSlotIds, min_date, max_date) {
+    return pool.connect(function(connectionError, db, done) {
       if (connectionError) {
         console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
         res.sendStatus(500);
@@ -153,26 +165,92 @@ router.get('/available', function(req, res) {
           'FROM "appointments"' +
           'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
           'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-          'WHERE "appointments"."appointment_slot_id" IN (1,5)' +
-          'AND "appointments"."appointment_date" >= $1' +
-          'AND "appointments"."appointment_date" <= $2' +
+          'WHERE "appointments"."appointment_slot_id" = ANY($1::int[])' +
+          'AND "appointments"."appointment_date" >= $2' +
+          'AND "appointments"."appointment_date" <= $3' +
           'GROUP BY "appointments"."appointment_date"',
-        [appointment_type, delivery_method, location_id], // <array>).then
+        [apptSlotIds, min_date, max_date], // <array>).then
         function(queryError, result){
           done();
           if (queryError) {
             console.log(queryError, 'ERROR MAKING QUERY');
             res.sendStatus(500);
           } else {
-            res.send(result.rows);
+            return result.rows;
           }
         });
       }
     });
   }
 
+  function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts) {
+    var apptsAvailable = [];
+    var date = min_date;
+    while (date <= max_date) {
+      var slotsForDate = [];
+      checkOverrides(date)
+      .then(function(overrides) {
+        if(overrides) {
+          slotsForDate = overrides;
+        } else {
+          slotsForDate = findRelevant(apptSlots, date);
+        }
+        for (var i = 0; i < slotsForDate.length; i++) {
+          var apptSlot = slotsForDate[i];
+          var isAvailable = checkAvailability(apptSlot, date, existingApptCounts);
+          if (isAvailable){
+            apptsAvailable.push(apptSlot);
+          }
+        }
+        date.add(1, 'days');
+      })
+    }
+    return apptsAvailable;
+  }
 
+  function findRelevant(apptSlots, date) {
+    return apptSlots.filter(function(apptSlot) {
+      return apptSlot.name === date.day(String);
+    });
+  }
 
+  // checks to see if an appt slot on a particular date is still available
+  // (i.e. not completely filled) and returns true if it is
+  function checkAvailability(apptSlot, date, existingApptCounts) {
+    for (var i = 0; i < existingApptCounts.length; i++) {
+      var appt = existingApptCounts[i];
+      if (appt.appointment_date == date && appt.appointment_slot_id == apptSlot.id) {
+        console.log('date match:', appt.appointment_date, date);
+        console.log('slot match:', appt.appointment_slot_id, apptSlot.id);
+        if (appt.count < apptSlot.num_allowed) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  function checkOverrides(date) {
+    return pool.connect(function(connectionError, db, done) {
+      if (connectionError) {
+        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+        res.sendStatus(500);
+      } else {
+        db.query('SELECT * FROM "overrides" WHERE "override_date" = $1;', [date],
+        function(queryError, result){
+          done();
+          if (queryError) {
+            console.log(queryError, 'ERROR MAKING QUERY');
+            res.sendStatus(500);
+          } else {
+            return result.rows;
+          }
+        });
+      }
+    });
+  }
 });
 
 /**
@@ -199,7 +277,7 @@ router.get('/available', function(req, res) {
 router.post('/reserve', function(req, res) {
   console.log(req.body);
   var appointment = req.body;
-  var appointment_date = moment(appointment.date).format('M/D/YYYY');
+  var appointment_date = moment(appointment.date).format('YYYY-MM-DD');
   var user_id = appointment.user_id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;

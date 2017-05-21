@@ -203,3 +203,12 @@ VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1),
 -- $5: start_time
 -- $6: end_time
 -- $7: num_allowed
+
+---- CHECK OVERRIDES ----
+-- Selects any rows from the overrides table that match a particular date range
+SELECT *
+FROM "overrides"
+WHERE "override_date" >= '5/20/17'
+AND "override_date" <= '6/21/17';
+-- $1: min_date
+-- $2: max_date
