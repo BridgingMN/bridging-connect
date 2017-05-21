@@ -62,7 +62,8 @@ router.get('/', function(req, res) {
   * @apiSuccess {String} primary_business_phone_ext Business phone number extension of agency's primary contact.
   * @apiSuccess {String} primary_mobile_phone Mobile phone number of agency's primary contact.
   * @apiSuccess {String} primary_email E-mail address of agency's primary contact.
-  * @apiSuccess {String} beds_allowed_option String corresponding to an entry in the "beds_allowed_options" table.
+  * @apiSuccess {Number} beds_allowed_option_id Unique ID corresponding to the "beds_allowed_options" table.
+  * @apiSuccess {String} beds_allowed_option String corresponding to the "beds_allowed_option_id" row from the "beds_allowed_options" table.
   * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
   *
   * @apiErrorExample {json} Get Error:
@@ -76,9 +77,10 @@ router.get('/:agency_id', function(req, res) {
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "name", "id", "bridging_agency_id", "primary_first", "primary_last", "primary_business_phone", "primary_business_phone", "primary_business_phone_ext", "primary_mobile_phone", "primary_email", "beds_allowed_option_id", "access_disabled", "notes" ' +
-                       'FROM "agencies" ' +
-                       'WHERE "id" = $1;',
+        database.query('SELECT "agencies"."id", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_job_title", "agencies"."primary_department", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "agencies"."beds_allowed_option_id", "beds_allowed_options"."beds_allowed_option", "agencies"."access_disabled", "agencies"."notes" ' +
+                        'FROM "agencies" ' +
+                        'JOIN "beds_allowed_options" ON "beds_allowed_options"."id" = "agencies"."beds_allowed_option_id" ' +
+                        'WHERE "agencies"."id" = $1;',
                        [agency_id],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
