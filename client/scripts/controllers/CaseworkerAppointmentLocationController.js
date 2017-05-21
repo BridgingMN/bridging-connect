@@ -1,14 +1,15 @@
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentLocationController', ['UserService', function(UserService) {
+  .controller('CaseworkerAppointmentLocationController', ['CONSTANTS', 'UserService', function(CONSTANTS, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
+  vm.CONSTANTS = CONSTANTS;
   vm.selectPickUpLocation = selectPickUpLocation;
 
   function selectPickUpLocation(location) {
     console.log(location);
-    //This function should call a function in the service that sets the location for the appointment in the newAppointment object and then redirects the caseworker to the next view.
+    UserService.newAppointment.loc = location;
   }
 
 }]);

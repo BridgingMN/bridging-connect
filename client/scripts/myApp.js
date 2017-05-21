@@ -185,6 +185,16 @@ function config($locationProvider, $routeProvider) {
         }]
       }
     })
+    .when('/caseworker-appointment-reschedule', {
+      templateUrl: '/views/templates/caseworker-appointment-reschedule.html',
+      controller: 'CaseworkerAppointmentRescheduleController',
+      controllerAs: 'vm',
+      resolve: { // get user from factory
+        getuser : ['UserService', function(UserService){
+          return UserService.getUser();
+        }]
+      }
+    })
     .when('/caseworker-appointment-form', {
       templateUrl: '/views/templates/caseworker-appointment-form.html',
       controller: 'CaseworkerAppointmentFormController',

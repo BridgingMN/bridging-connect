@@ -33,7 +33,10 @@
                 {{appointment.start_time}}
             </md-radio-button>
           </md-radio-group>
-        <md-button class="md-raised md-primary" ng-click="vm.reserveAppointment()">Next</md-button>
+          <div layout="row">
+            <md-button class="md-raised md-warn" ng-click="">Cancel</md-button>
+            <md-button class="md-raised md-primary" ng-click="vm.reserveAppointment()">Update</md-button>
+          </div>
     </form>
   </div>
 </div>
