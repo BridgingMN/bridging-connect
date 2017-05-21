@@ -84,6 +84,26 @@ function countExistingAppts(apptSlotIds, min_date, max_date) {
   });
 }
 
+function getOverrides(min_date, max_date) {
+  return pool.connect(function(connectionError, db) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      return connectionError;
+    } else {
+      db.query('SELECT * FROM "overrides"' +
+      'WHERE "override_date" >= $1' +
+      'AND "override_date" <= $2',
+      [min_date, max_date])
+      .then(function(result) {
+        return result.rows;
+      }).catch(function(queryError) {
+        console.log(queryError, 'ERROR MAKING QUERY');
+        return queryError;
+      });
+    }
+  });
+}
+
 function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, overrides) {
   var apptsAvailable = [];
   var date = min_date;
@@ -139,26 +159,6 @@ function checkForOverrides(date, overrides) {
   } else {
     return false;
   }
-}
-
-function getOverrides(min_date, max_date) {
-  return pool.connect(function(connectionError, db) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-      return connectionError;
-    } else {
-      db.query('SELECT * FROM "overrides"' +
-      'WHERE "override_date" >= $1' +
-      'AND "override_date" <= $2',
-      [min_date, max_date])
-      .then(function(result) {
-        return result.rows;
-      }).catch(function(queryError) {
-        console.log(queryError, 'ERROR MAKING QUERY');
-        return queryError;
-      });
-    }
-  });
 }
 
 module.exports = getAvailableAppts;

@@ -4,7 +4,7 @@ var passport = require('passport');
 var moment = require('moment');
 
 var pool = require('../modules/database.js');
-
+var getAvailableAppts = require('../modules/getAvailableAppts.js');
 /**
   * @api {get} /appointments/existing Get User Appointments
   * @apiVersion 0.1.0
@@ -111,146 +111,8 @@ router.get('/available', function(req, res) {
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
 
-  getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date);
-
-  function getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date) {
-    pool.connect(function(connectionError, db, done) {
-      if (connectionError) {
-        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-        res.sendStatus(500);
-      } else {
-        db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
-        '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-        '"locations"."location", "locations"."street", "locations"."city",' +
-        '"locations"."state", "appointment_types"."appointment_type",' +
-        '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
-        'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
-        'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
-        'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
-        'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-        'WHERE "appointment_types"."appointment_type" = $1' +
-        'AND "delivery_methods"."delivery_method" = $2' +
-        'AND "locations"."id" = $3',
-        [appointment_type, delivery_method, location_id], // <array>).then
-        function(queryError, result){
-          done();
-          if (queryError) {
-            console.log(queryError, 'ERROR MAKING QUERY');
-            res.sendStatus(500);
-          } else {
-            var apptSlots = result.rows;
-            var apptSlotIds = apptSlots.filter(function(apptSlot) {
-              return apptSlot.id;
-            });
-            countExistingAppts(apptSlotIds, min_date, max_date)
-            .then(function(existingApptCounts) {
-              var apptsAvailable = fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts);
-              res.send(apptsAvailable);
-            });
-          }
-        });
-      }
-    });
-  }
-
-  // apptSlots is an array of appointment_slot_ids
-  // min_date & max_date are dates that act as inclusive bounds of the date range to be searched
-  function countExistingAppts(apptSlotIds, min_date, max_date) {
-    return pool.connect(function(connectionError, db, done) {
-      if (connectionError) {
-        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-        res.sendStatus(500);
-      } else {
-        db.query('SELECT "appointments"."appointment_date", COUNT(*)' +
-          'FROM "appointments"' +
-          'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
-          'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-          'WHERE "appointments"."appointment_slot_id" = ANY($1::int[])' +
-          'AND "appointments"."appointment_date" >= $2' +
-          'AND "appointments"."appointment_date" <= $3' +
-          'GROUP BY "appointments"."appointment_date"',
-        [apptSlotIds, min_date, max_date], // <array>).then
-        function(queryError, result){
-          done();
-          if (queryError) {
-            console.log(queryError, 'ERROR MAKING QUERY');
-            res.sendStatus(500);
-          } else {
-            return result.rows;
-          }
-        });
-      }
-    });
-  }
-
-  function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts) {
-    var apptsAvailable = [];
-    var date = min_date;
-    while (date <= max_date) {
-      var slotsForDate = [];
-      checkOverrides(date)
-      .then(function(overrides) {
-        if(overrides) {
-          slotsForDate = overrides;
-        } else {
-          slotsForDate = findRelevant(apptSlots, date);
-        }
-        for (var i = 0; i < slotsForDate.length; i++) {
-          var apptSlot = slotsForDate[i];
-          var isAvailable = checkAvailability(apptSlot, date, existingApptCounts);
-          if (isAvailable){
-            apptsAvailable.push(apptSlot);
-          }
-        }
-        date.add(1, 'days');
-      })
-    }
-    return apptsAvailable;
-  }
-
-  function findRelevant(apptSlots, date) {
-    return apptSlots.filter(function(apptSlot) {
-      return apptSlot.name === date.day(String);
-    });
-  }
-
-  // checks to see if an appt slot on a particular date is still available
-  // (i.e. not completely filled) and returns true if it is
-  function checkAvailability(apptSlot, date, existingApptCounts) {
-    for (var i = 0; i < existingApptCounts.length; i++) {
-      var appt = existingApptCounts[i];
-      if (appt.appointment_date == date && appt.appointment_slot_id == apptSlot.id) {
-        console.log('date match:', appt.appointment_date, date);
-        console.log('slot match:', appt.appointment_slot_id, apptSlot.id);
-        if (appt.count < apptSlot.num_allowed) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  function checkOverrides(date) {
-    return pool.connect(function(connectionError, db, done) {
-      if (connectionError) {
-        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-        res.sendStatus(500);
-      } else {
-        db.query('SELECT * FROM "overrides" WHERE "override_date" = $1;', [date],
-        function(queryError, result){
-          done();
-          if (queryError) {
-            console.log(queryError, 'ERROR MAKING QUERY');
-            res.sendStatus(500);
-          } else {
-            return result.rows;
-          }
-        });
-      }
-    });
-  }
+  var availableAppts = getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date);
+  res.send(availableAppts);
 });
 
 /**
