@@ -156,7 +156,7 @@ FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id";
 
 ---- GET ONE CASEWORKER ----
 -- Retrieves a specific caseworker's information from the database
-SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled", "users"."access_disabled"
+SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled"
 FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id"
 WHERE "users"."id" = $1;
 -- $1: user_id

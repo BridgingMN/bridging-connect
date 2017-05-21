@@ -70,7 +70,7 @@ router.get('/', function(req, res) {
   * @apiSuccess {String} primary_email E-mail address of agency's primary contact from the "agencies" table.
   * @apiSuccess {String} notes Any notes the administrator leaves regarding a caseworker.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
-  * @apiSuccess {Boolean} caseworker_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
+  * @apiSuccess {Boolean} user_access_disabled Current caseworker status. True = access disabled. - from the "users" table.
   *
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -82,7 +82,7 @@ router.get('/:caseworker_id', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled", "users"."access_disabled" ' +
+        database.query('SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
                         'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                         'WHERE "users"."id" = $1;', [caseworker_id],
           function(queryErr, result) { // query callback
