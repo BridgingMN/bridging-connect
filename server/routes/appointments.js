@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var moment = require('moment');
 
 var pool = require('../modules/database.js');
 
@@ -60,23 +61,6 @@ var pool = require('../modules/database.js');
 */
 router.get('/existing/:user_id', function(req, res) {
   // TODO: add code
-  // var user_id = req.params.user_id;
-  // pool.connect(function(connectionError, db, done) {
-  //   if (connectionError) {
-  //     console.log('ERROR CONNECTING TO DATABASE');
-  //     res.sendStatus(500);
-  //   } else {
-  //     db.query('', function(queryError, result){
-  //       done();
-  //       if (queryError) {
-  //         console.log('ERROR MAKING QUERY');
-  //         res.sendStatus(500);
-  //       } else {
-  //         res.send(result.rows);
-  //       }
-  //     });
-  //   }
-  // });
 });
 
 /**
@@ -127,35 +111,40 @@ router.get('/available', function(req, res) {
   var appointment_type = params.appointment_type;
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
-  pool.connect(function(connectionError, db, done) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-      res.sendStatus(500);
-    } else {
-      db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
-      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-      '"locations"."location", "locations"."street", "locations"."city",' +
-      '"locations"."state", "appointment_types"."appointment_type",' +
-      '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
-      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
-      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
-      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
-      'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-      'WHERE "appointment_types"."appointment_type" = $1' +
-      'AND "delivery_methods"."delivery_method" = $2' +
-      'AND "locations"."id" = $3',
-      [appointment_type, delivery_method, location_id],
-      function(queryError, result){
-        done();
-        if (queryError) {
-          console.log(queryError, 'ERROR MAKING QUERY');
-          res.sendStatus(500);
-        } else {
-          res.send(result.rows);
-        }
-      });
-    }
-  });
+
+  function getAvailableAppointments(appointment_type, delivery_method, location_id) {
+    pool.connect(function(connectionError, db, done) {
+      if (connectionError) {
+        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+        res.sendStatus(500);
+      } else {
+        db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
+        '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
+        '"locations"."location", "locations"."street", "locations"."city",' +
+        '"locations"."state", "appointment_types"."appointment_type",' +
+        '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
+        'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+        'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+        'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+        'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
+        'WHERE "appointment_types"."appointment_type" = $1' +
+        'AND "delivery_methods"."delivery_method" = $2' +
+        'AND "locations"."id" = $3',
+        [appointment_type, delivery_method, location_id], // <array>).then
+        function(queryError, result){
+          done();
+          if (queryError) {
+            console.log(queryError, 'ERROR MAKING QUERY');
+            res.sendStatus(500);
+          } else {
+            res.send(result.rows);
+          }
+        });
+      }
+    });
+  }
+
+  function countExistingAppointments() {}
 });
 
 /**
@@ -182,12 +171,13 @@ router.get('/available', function(req, res) {
 router.post('/reserve', function(req, res) {
   console.log(req.body);
   var appointment = req.body;
-  var appointment_date = appointment.date;
+  var appointment_date = moment(appointment.date).format('M/D/YYYY');
   var user_id = appointment.user_id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
   var created_date = new Date();
   var status = appointment.status;
+
   pool.connect(function(connectionError, db, done) {
     if (connectionError) {
       console.log('ERROR CONNECTING TO DATABASE');
@@ -228,5 +218,10 @@ router.post('/reserve', function(req, res) {
 router.put('/existing', function(req, res) {
   // TODO: add code
 });
+
+// START ADMIN-ONLY APPOINTMENT ROUTES
+
+
+// END ADMIN-ONLY APPOINTMENT ROUTES
 
 module.exports = router;

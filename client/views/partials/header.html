@@ -2,54 +2,52 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h1>Bridging Scheduling Application</h1>
+      <span flex></span>
+      <section class="navigation-tabs">
+        <div ng-cloak ng-if="vm.user.type === 'caseworker'">
+          <md-content class="">
+            <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+              <md-nav-item md-nav-href="#caseworker-appointments-all" name="all">
+                My Appointments
+              </md-nav-item>
+              <md-nav-item md-nav-href="#caseworker-appointment-new" name="pending">
+                Create Shopping Appointment
+              </md-nav-item>
+              <md-nav-item md-nav-href="#caseworker-appointment-new" name="caseworker">
+                Order New Bed ONLY
+              </md-nav-item>
+              <md-nav-item md-nav-href="#" name="agencies">
+                Account Settings</md-nav-item>
+            </md-nav-bar>
+          </md-content>
+        </div>
+
+        <div ng-cloak ng-if="vm.user.type === 'admin'">
+          <md-content class="">
+            <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+              <md-nav-item md-nav-href="#admin-appointments-all" name="all">
+                All Appointments
+              </md-nav-item>
+              <md-nav-item md-nav-href="#admin-appointments-pending" name="pending">
+                Pending Appointments
+              </md-nav-item>
+              <md-nav-item md-nav-href="#admin-caseworker-overview" name="caseworker">
+                Caseworkers
+              </md-nav-item>
+              <md-nav-item md-nav-href="#admin-agency-overview" name="agencies">
+                Agencies</md-nav-item>
+              <md-nav-item md-nav-href="#admin-appointments-default" name="default">
+                Default Schedule</md-nav-item>
+              <md-nav-item md-nav-href="#admin-appointments-customize" name="customize">
+                Customize Days</md-nav-item>
+            </md-nav-bar>
+          </md-content>
+        </div>
+      </section>
       <section class="caseworker-toolbar-buttons" layout="row" flex>
         <span flex></span>
         <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
       </section>
     </div>
-    </md-toolbar>
-
-  <div ng-cloak ng-if="vm.user.type === 'caseworker'">
-    <md-content class="md-padding">
-      <md-nav-bar
-        md-selected-nav-item="currentNavItem"
-        nav-bar-aria-label="navigation links">
-        <md-nav-item md-nav-href="#caseworker-appointments-all" name="all">
-          My Appointments
-        </md-nav-item>
-        <md-nav-item md-nav-href="#caseworker-appointment-new" name="pending">
-          Create Shopping Appointment
-        </md-nav-item>
-        <md-nav-item  md-nav-href="#caseworker-appointment-new" name="caseworker">
-          Order New Bed ONLY
-        </md-nav-item>
-        <md-nav-item md-nav-href="#" name="agencies">
-          Account Settings</md-nav-item>
-      </md-nav-bar>
-    </md-content>
-  </div>
-
-  <div ng-cloak ng-if="vm.user.type === 'admin'">
-  <md-content class="md-padding">
-    <md-nav-bar
-      md-selected-nav-item="currentNavItem"
-      nav-bar-aria-label="navigation links">
-      <md-nav-item md-nav-href="#admin-appointments-all" name="all">
-        All Appointments
-      </md-nav-item>
-      <md-nav-item md-nav-href="#admin-appointments-pending" name="pending">
-        Pending Appointments
-      </md-nav-item>
-      <md-nav-item  md-nav-href="#admin-caseworker-overview" name="caseworker">
-        Caseworkers
-      </md-nav-item>
-      <md-nav-item md-nav-href="#admin-agency-overview" name="agencies">
-        Agencies</md-nav-item>
-      <md-nav-item md-nav-href="#admin-appointments-default" name="default">
-        Default Schedule</md-nav-item>
-      <md-nav-item md-nav-href="#admin-appointments-customize" name="customize">
-        Customize Days</md-nav-item>
-    </md-nav-bar>
-  </md-content>
-</div>
+  </md-toolbar>
 </div>

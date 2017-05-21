@@ -1,6 +1,12 @@
+/**
+ * Controller For caseworker-appointments-all
+ * The caseworker homepage
+ * @module caseworker/appointments-all
+ */
+
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentsAllController', ['UserService', function(UserService) {
+  .controller('CaseworkerAppointmentsAllController', ['AppointmentService', 'UserService', function(AppointmentService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
@@ -11,6 +17,7 @@ angular
   vm.appointmentFilter = '';
 
   // Methods
+  vm.getUserAppointments = getUserAppointments;
   vm.setAppointmentFilter = setAppointmentFilter;
   vm.rescheduleAppointment = rescheduleAppointment;
   vm.editAppointmentInfo = editAppointmentInfo;
@@ -110,6 +117,36 @@ angular
     }
 
   ];
+
+  //Setup models
+  activate();
+
+  /**
+   * Run once upon loading controller, sets up models and other variables used by controller.
+   * @function activate
+   */
+  function activate() {
+    // getUserAppointments();
+  }
+
+
+  /**
+   * Calls a method of the AppointmentService to GET extant appointment for this caseworker.
+   * @function getUserAppointments
+   */
+  function getUserAppointments() {
+    AppointmentService.getUserAppointments().then(
+      getAppointmentsSuccess, getAppointmentsError
+    );
+  }
+
+  function getAppointmentsSuccess(appointments) {
+    vm.availableAppointments = appointments;
+  }
+
+  function getAppointmentsError(error) {
+    console.log(error);
+  }
 
   function setAppointmentFilter(filter) {
     console.log(filter);

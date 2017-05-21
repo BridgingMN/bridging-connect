@@ -26,7 +26,7 @@ router.get('/', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "users"."first", "users"."last", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."access_disabled", "users"."access_disabled" ' +
+        database.query('SELECT "users"."first", "users"."last", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
                         'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id";',
           function(queryErr, result) { // query callback
             done();
