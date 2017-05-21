@@ -10,10 +10,10 @@
               <md-nav-item md-nav-href="#caseworker-appointments-all" name="all">
                 My Appointments
               </md-nav-item>
-              <md-nav-item md-nav-href="#caseworker-appointment-new" name="pending">
+              <md-nav-item md-nav-href="#caseworker-appointment-new" ng-click="vm.newShoppingAppointment()" name="pending">
                 Create Shopping Appointment
               </md-nav-item>
-              <md-nav-item md-nav-href="#caseworker-appointment-new" name="caseworker">
+              <md-nav-item md-nav-href="#caseworker-appointment-new" ng-click="vm.newBedAppointment()" name="caseworker">
                 Order New Bed ONLY
               </md-nav-item>
               <md-nav-item md-nav-href="#" name="agencies">
@@ -44,7 +44,7 @@
           </md-content>
         </div>
       </section>
-      <section class="caseworker-toolbar-buttons" layout="row" flex>
+      <section ng-if="vm.userObject.user.email" class="caseworker-toolbar-buttons" layout="row" flex>
         <span flex></span>
         <md-button class="md-raised" ng-click="vm.logout()">Log Out</md-button>
       </section>
