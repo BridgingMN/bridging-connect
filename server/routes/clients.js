@@ -59,6 +59,51 @@ router.post('/', function(req, res) {
 });
 
 /**
+  * @api {post} /clients/:client_id Get All Info for a Client
+  * @apiVersion 0.1.1
+  * @apiName GetClient
+  * @apiGroup Clients
+  * @apiDescription Returns all info from client referral form for a particular client
+
+  * @apiSuccess {Number} id   Unique ID of client
+  * @apiSuccess {String} first   First name of client
+  * @apiSuccess {String} last   Last name of client
+  * @apiSuccess {Date} dob  Client date of birth
+  * @apiSuccess {String} race_ethnicity   Client race or ethnicity.
+      Options: "African", "American Indian or Alaska Native",
+      "Asian or Pacific Islander", "Black or African American", "Hispanic",
+      "Mixed Racial Background", "White", "Other"
+  * @apiSuccess {String} street   Street address of client
+  * @apiSuccess {String} city   City of client address
+  * @apiSuccess {String} state  State of client address (2-letter abbreviation)
+  * @apiSuccess {String} zip_code   Client zip code
+
+  * @apiErrorExample {json} Post error
+  *    HTTP/1.1 500 Internal Server Error
+*/
+router.get('/:client_id', function(req, res) {
+  var client_id = req.params.client_id;
+  pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      res.sendStatus(500);
+    } else {
+      db.query('SELECT * FROM "clients" WHERE "id" = $1',
+      [client_id],
+      function(queryError, result){
+        done();
+        if (queryError) {
+          console.log('ERROR MAKING QUERY');
+          res.sendStatus(500);
+        } else {
+          res.send(result.rows);
+        }
+      });
+    }
+  });
+});
+
+/**
   * @api {put} /clients Update client
   * @apiVersion 0.1.0
   * @apiName UpdateClient
@@ -94,29 +139,27 @@ router.put('/', function(req, res) {
   var city = client.city;
   var state = client.state;
   var zip_code = client.zip_code;
-//   pool.connect(function(connectionError, db, done) {
-//     if (connectionError) {
-//       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-//       res.sendStatus(500);
-//     } else {
-//       db.query('UPDATE "clients" SET ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
-//       'VALUES ($1, $2, $3, ' +
-//       '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-//       '$5, $6, $7, $8) RETURNING "id"',
-//       [first, last, dob, race_ethnicity, street, city, state, zip_code],
-//       function(queryError, result){
-//         done();
-//         if (queryError) {
-//           console.log('ERROR MAKING QUERY');
-//           res.sendStatus(500);
-//         } else {
-//           res.send(result.rows[0]);
-//         }
-//       });
-//     }
-//   });
-// }
-
+  pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      res.sendStatus(500);
+    } else {
+      db.query('UPDATE "clients" SET ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
+      'VALUES ($1, $2, $3, ' +
+      '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
+      '$5, $6, $7, $8) RETURNING "id"',
+      [first, last, dob, race_ethnicity, street, city, state, zip_code],
+      function(queryError, result){
+        done();
+        if (queryError) {
+          console.log('ERROR MAKING QUERY');
+          res.sendStatus(500);
+        } else {
+          res.send(result.rows[0]);
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;
