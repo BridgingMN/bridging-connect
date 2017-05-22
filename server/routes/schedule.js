@@ -6,9 +6,9 @@ var pool = require('../modules/database.js');
 /**
   * @api {post} /schedule Add a New Appointment Slot
   * @apiVersion 0.1.0
-  * @apiName PostCaseworker
-  * @apiGroup Caseworkers
-  * @apiDescription Adds a new caseworker's information to the "users" table in the database.
+  * @apiName PostAppointmentSlot
+  * @apiGroup Appointment Schedule
+  * @apiDescription Adds a new appointment slot to the "appointment_slots" table in the database.
   *
   * @apiParam {Number} agency_id Mandatory Unique ID of the agency the caseworker is associated with.
   * @apiParam {String} first First name of the caseworker from the "users" table.
