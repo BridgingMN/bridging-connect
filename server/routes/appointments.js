@@ -6,6 +6,7 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
 var formatters = require('../modules/formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
+var formatDateForPostgres = formatters.formatDateForPostgres;
 
 /**
   * @api {get} /appointments/existing Get User Appointments
@@ -32,6 +33,7 @@ var formatTime = formatters.formatTime;
   * @apiSuccess {String} appointments.info.end_time   End time of appointment
   * @apiSuccess {String} appointments.info.appointment_type   Type of appointment
       ("shopping" or "new bed")
+  * @apiSuccess {String} appointments.info.location_id   Unique ID of location
   * @apiSuccess {String} appointments.info.location_name   "Roseville" or "Bloomington"
   * @apiSuccess {String} appointments.info.street   Street address of location
   * @apiSuccess {String} appointments.info.city   City of location address
@@ -59,6 +61,7 @@ var formatTime = formatters.formatTime;
           "end_time": "10:15 am",
           "appointment_type": "shopping",
           "delivery_method": "pickup",
+          "location_id": 1,
           "location_name": "Bloomington",
           "location_address": "201 W 87th St",
           "city": "Bloomington",
@@ -84,8 +87,8 @@ router.get('/existing', function(req, res) {
       '"clients"."street" AS "client_street", "clients"."city" AS "client_city", "clients"."state" AS "client_state",' +
       '"appointments"."confirmation_id" AS "appointment_number", "appointment_slots"."start_time",' +
       '"appointment_slots"."end_time", "appointment_types"."appointment_type",' +
-      '"locations"."location" AS "location_name", "locations"."street" AS "location_street", "locations"."city" AS "location_city",' +
-      '"locations"."state" AS "location_state", "appointments"."appointment_date",' +
+      '"locations"."location" AS "location_name",  "locations"."street" AS "location_street", "locations"."city" AS "location_city",' +
+      '"locations"."id" AS "location_id", "locations"."state" AS "location_state", "appointments"."appointment_date",' +
       '"appointments"."delivery_date", "statuses"."status", "delivery_methods"."delivery_method"' +
       'FROM "appointments"' +
       'JOIN "clients" ON "appointments"."client_id" = "clients"."id"' +
@@ -126,6 +129,7 @@ router.get('/existing', function(req, res) {
         start_time: formatTime(userAppt.start_time),
         end_time: formatTime(userAppt.end_time),
         appointment_type: userAppt.appointment_type,
+        location_id: userAppt.location_id,
         location_name: userAppt.location_name,
         street: userAppt.location_street,
         city: userAppt.location_city,
@@ -192,8 +196,8 @@ router.get('/existing', function(req, res) {
 */
 router.get('/available', function(req, res) {
   var params = req.query;
-  var min_date = moment(params.min_date).format('YYYY-MM-DD');
-  var max_date = moment(params.max_date).format('YYYY-MM-DD');
+  var min_date = formatDateForPostgres(params.min_date);
+  var max_date = formatDateForPostgres(params.max_date);
   var appointment_type = params.appointment_type;
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
@@ -209,9 +213,6 @@ router.get('/available', function(req, res) {
   * @apiDescription Makes appointment & saves to database
 
   * @apiParam {Date} date   Date of appointment
-  * @apiParam {String} start_time   Start time of appointment
-  * @apiParam {String} end_time   End time of appointment
-  * @apiParam {Number} user_id   Unique id of user creating the appointment
   * @apiParam {Number} client_id   Unique id of client for whom appointment was created
   * @apiParam {Number} appointment_slot_id   Unique id of appointment slot
   * @apiParam {Date} appointment_date_added   Date on which appointment was created (current date)
@@ -224,8 +225,8 @@ router.get('/available', function(req, res) {
 */
 router.post('/reserve', function(req, res) {
   var appointment = req.body;
-  var appointment_date = moment(appointment.date).format('YYYY-MM-DD');
-  var user_id = appointment.user_id;
+  var appointment_date = formatDateForPostgres(appointment.date);
+  var user_id = req.user.id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
   var created_date = new Date();
