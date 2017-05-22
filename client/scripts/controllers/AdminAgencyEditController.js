@@ -1,7 +1,8 @@
 angular
   .module('myApp')
-  .controller('AdminAgencyEditController', ['UserService', '$http', '$location', '$mdDialog', '$document',
-      function(UserService, $http, $location, $mdDialog, $document) {
+  .controller('AdminAgencyEditController', ['$http', '$location', '$mdDialog',
+      '$document', 'UserService',
+      function($http, $location, $mdDialog, $document, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.agency = UserService.agency;
@@ -29,9 +30,9 @@ angular
     });
   }
 
+//Deletes selected Agency from the admin-agency-edit view
   function deleteAgency(agency) {
     console.log('Delete clicked: ', agency);
-    // confirm('Are you sure you want to delete ' + agency.name + '?');
     if(confirm('Are you sure you want to delete ' + agency.name + '?')) {
       $http.delete('/agencies/' + agency.id).then(function() {
         console.log('Deleted Agency: ', agency.id);
