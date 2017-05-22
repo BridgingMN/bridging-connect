@@ -94,28 +94,28 @@ router.put('/', function(req, res) {
   var city = client.city;
   var state = client.state;
   var zip_code = client.zip_code;
-  pool.connect(function(connectionError, db, done) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-      res.sendStatus(500);
-    } else {
-      db.query('UPDATE "clients" SET ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
-      'VALUES ($1, $2, $3, ' +
-      '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-      '$5, $6, $7, $8) RETURNING "id"',
-      [first, last, dob, race_ethnicity, street, city, state, zip_code],
-      function(queryError, result){
-        done();
-        if (queryError) {
-          console.log('ERROR MAKING QUERY');
-          res.sendStatus(500);
-        } else {
-          res.send(result.rows[0]);
-        }
-      });
-    }
-  });
-}
+//   pool.connect(function(connectionError, db, done) {
+//     if (connectionError) {
+//       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+//       res.sendStatus(500);
+//     } else {
+//       db.query('UPDATE "clients" SET ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
+//       'VALUES ($1, $2, $3, ' +
+//       '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
+//       '$5, $6, $7, $8) RETURNING "id"',
+//       [first, last, dob, race_ethnicity, street, city, state, zip_code],
+//       function(queryError, result){
+//         done();
+//         if (queryError) {
+//           console.log('ERROR MAKING QUERY');
+//           res.sendStatus(500);
+//         } else {
+//           res.send(result.rows[0]);
+//         }
+//       });
+//     }
+//   });
+// }
 
 });
 
