@@ -209,9 +209,6 @@ router.get('/available', function(req, res) {
   * @apiDescription Makes appointment & saves to database
 
   * @apiParam {Date} date   Date of appointment
-  * @apiParam {String} start_time   Start time of appointment
-  * @apiParam {String} end_time   End time of appointment
-  * @apiParam {Number} user_id   Unique id of user creating the appointment
   * @apiParam {Number} client_id   Unique id of client for whom appointment was created
   * @apiParam {Number} appointment_slot_id   Unique id of appointment slot
   * @apiParam {Date} appointment_date_added   Date on which appointment was created (current date)
@@ -225,7 +222,7 @@ router.get('/available', function(req, res) {
 router.post('/reserve', function(req, res) {
   var appointment = req.body;
   var appointment_date = moment(appointment.date).format('YYYY-MM-DD');
-  var user_id = appointment.user_id;
+  var user_id = req.user.id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
   var created_date = new Date();
