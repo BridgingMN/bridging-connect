@@ -78,7 +78,7 @@ router.get('/existing', function(req, res) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       return connectionError;
     } else {
-      db.query('SELECT "appointments"."id", "clients"."first", "clients"."last",' +
+      db.query('SELECT "appointments"."id", "clients"."first", "clients"."last", "clients"."id" AS "client_id",' +
       '"clients"."street" AS "client_street", "clients"."city" AS "client_city", "clients"."state" AS "client_state",' +
       '"appointments"."confirmation_id" AS "appointment_number", "appointment_slots"."start_time",' +
       '"appointment_slots"."end_time", "appointment_types"."appointment_type",' +
@@ -112,6 +112,7 @@ router.get('/existing', function(req, res) {
     var formattedAppts = userAppts.map(function(userAppt) {
       var apptObj = {id: userAppt.id};
       apptObj.client = {
+        client_id: userAppt.client_id,
         first: userAppt.first,
         last: userAppt.last,
         street: userAppt.client_street,
