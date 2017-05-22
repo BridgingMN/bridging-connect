@@ -72,7 +72,7 @@ angular
    * @function activate
    */
   function activate() {
-    // getUserAppointments();
+    getUserAppointments();
   }
 
 
@@ -87,7 +87,7 @@ angular
   }
 
   function getAppointmentsSuccess(appointments) {
-    vm.availableAppointments = appointments;
+    vm.caseworkerAppointments = appointments;
   }
 
   function getAppointmentsError(error) {

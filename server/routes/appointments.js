@@ -71,6 +71,7 @@ var formatTime = formatters.formatTime;
 */
 router.get('/existing', function(req, res) {
   var user_id = req.user.id;
+  console.log('user_id',user_id);
 
   pool.connect(function(connectionError, db, done) {
     if (connectionError) {
@@ -127,10 +128,12 @@ router.get('/existing', function(req, res) {
         city: userAppt.location_city,
         state: userAppt.location_state,
         date: formatDate(userAppt.appointment_date),
-        delivery_date: formatDate(userAppt.delivery_date),
         status: userAppt.status,
         delivery_method: userAppt.delivery_method
       };
+      if (userAppt.delivery_date) {
+        apptObj.info.delivery_date = formatDate(userAppt.delivery_date);
+      }
       return apptObj;
     });
     return formattedAppts;
