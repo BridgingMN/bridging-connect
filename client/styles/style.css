@@ -32,3 +32,10 @@
 .addButton {
   max-height: 50px;
 }
+
+#agencyInfo {
+  text-align: center;
+  background-color: LightSteelBlue;
+  border-radius: 25px;
+  width: 100%;
+}
