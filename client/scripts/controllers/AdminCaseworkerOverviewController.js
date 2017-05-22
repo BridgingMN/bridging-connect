@@ -12,6 +12,8 @@ angular
   };
   vm.caseworkers = {};
   vm.getCaseworkers = getCaseworkers;
+  vm.caseworker = UserService.caseworker;
+  vm.viewCaseworker = UserService.viewCaseworker;
 
   //GETS all caseworkers from db
   function getCaseworkers() {

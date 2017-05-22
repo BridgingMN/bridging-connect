@@ -27,7 +27,7 @@ router.get('/', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "users"."first", "users"."last", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
+        database.query('SELECT "users"."id", "users"."first", "users"."last", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
                         'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id"' +
                         'WHERE "users"."user_type_id" = (SELECT "id" FROM "user_types" WHERE "user_type" = $1);',
                         [user_type],
@@ -85,7 +85,7 @@ router.get('/:caseworker_id', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "agencies"."name", "agencies"."id", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
+        database.query('SELECT "users"."id", "users"."department", "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "users"."notes", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
                         'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                         'WHERE "users"."id" = $1;', [caseworker_id],
           function(queryErr, result) { // query callback
@@ -94,8 +94,8 @@ router.get('/:caseworker_id', function(req, res) {
               console.log('error making query:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('sucessful get from /caseworkers/:caseworker_id', result);
-              res.send(result);
+              console.log('sucessful get from /caseworkers/:caseworker_id', result.rows);
+              res.send(result.rows);
             }
         }); // end query callback
       } // end DB connection if-else
@@ -188,10 +188,11 @@ router.post('/', function(req, res) {
   * @apiErrorExample Update Error:
   *    HTTP/1.1 500 Internal Server Error
 */
-router.put('/:caseworker_id', function(req, res) {
+router.put('/', function(req, res) {
+  console.log(req.body);
   if (req.isAuthenticated()) { // user is authenticated
     // req.params variables
-    var caseworker_id = req.params.caseworker_id;
+    var caseworker_id = req.body.caseworker_id;
     // req.body variables
     var agency_id = req.body.agency_id;
     var first = req.body.first;
