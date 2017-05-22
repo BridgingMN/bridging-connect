@@ -18,6 +18,13 @@
         </div>
 
         <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Department/Program</label>
+            <input ng-model="vm.caseworker.department">
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>First Name</label>
               <input ng-model="vm.caseworker.first" required>
@@ -33,43 +40,6 @@
               <div ng-messages="newCaseworkerForm.last.$error" role="alert">
                 <div ng-message="required" class="my-message">
                   Cannot leave name blank.</div>
-              </div>
-            </md-input-container>
-          </div>
-
-
-          <div layout-gt-sm="row">
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Department/Program</label>
-              <input ng-model="vm.caseworker.department">
-            </md-input-container>
-          </div>
-
-          <md-input-container class="md-block">
-            <label>Address</label>
-            <input ng-model="vm.caseworker.street">
-          </md-input-container>
-
-          <div layout-gt-sm="row">
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>City</label>
-              <input ng-model="vm.caseworker.city">
-            </md-input-container>
-
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>State</label>
-              <input ng-model="vm.caseworker.state" placeholder="MN"
-              ng-pattern="/^[0-9]{2}$/" md-maxlength="2">
-            </md-input-container>
-
-            <md-input-container class="md-block" flex-gt-sm>
-              <label>Postal Code</label>
-              <input name="postalCode" ng-model="vm.caseworker.zip_code"
-                     ng-pattern="/^[0-9]{5}$/" md-maxlength="5">
-
-              <div ng-messages="userForm.postalCode.$error" role="alert">
-                <div ng-message="pattern" class="my-message">
-                  Please enter a 5 digit postal code.</div>
               </div>
             </md-input-container>
           </div>

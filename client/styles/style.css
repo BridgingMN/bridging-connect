@@ -29,6 +29,6 @@
   background-color: lightgreen;
 }
 
-#addAgency {
+.addButton {
   max-height: 50px;
 }
