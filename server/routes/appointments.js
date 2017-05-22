@@ -3,6 +3,9 @@ var router = express.Router();
 var moment = require('moment');
 var pool = require('../modules/database.js');
 var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
+var formatters = require('../modules/formatters.js');
+var formatDate = formatters.formatDate;
+var formatTime = formatters.formatTime;
 
 /**
   * @api {get} /appointments/existing Get User Appointments
@@ -67,7 +70,74 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/existing', function(req, res) {
-    var user_id = req.user.id;
+  var user_id = req.user.id;
+  console.log('user_id',user_id);
+
+  pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      return connectionError;
+    } else {
+      db.query('SELECT "appointments"."id", "clients"."first", "clients"."last",' +
+      '"clients"."street" AS "client_street", "clients"."city" AS "client_city", "clients"."state" AS "client_state",' +
+      '"appointments"."confirmation_id" AS "appointment_number", "appointment_slots"."start_time",' +
+      '"appointment_slots"."end_time", "appointment_types"."appointment_type",' +
+      '"locations"."location" AS "location_name", "locations"."street" AS "location_street", "locations"."city" AS "location_city",' +
+      '"locations"."state" AS "location_state", "appointments"."appointment_date",' +
+      '"appointments"."delivery_date", "statuses"."status", "delivery_methods"."delivery_method"' +
+      'FROM "appointments"' +
+      'JOIN "clients" ON "appointments"."client_id" = "clients"."id"' +
+      'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
+      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+      'JOIN "statuses" ON "appointments"."status_id" = "statuses"."id"' +
+      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+      'WHERE "appointments"."user_id" = $1' +
+      'ORDER BY "appointments"."appointment_date" ASC',
+      [user_id],
+      function(queryError, result){
+        done();
+        if (queryError) {
+          console.log(queryError, 'ERROR MAKING QUERY');
+        } else {
+          var userAppts = result.rows;
+          var formattedAppts = formatAppts(userAppts);
+          res.send(formattedAppts);
+        }
+      });
+    }
+  });
+
+  function formatAppts(userAppts) {
+    var formattedAppts = userAppts.map(function(userAppt) {
+      var apptObj = {id: userAppt.id};
+      apptObj.client = {
+        first: userAppt.first,
+        last: userAppt.last,
+        street: userAppt.client_street,
+        city: userAppt.client_city,
+        state: userAppt.client_state
+      };
+      apptObj.info = {
+        appointment_number: userAppt.appointment_number,
+        start_time: formatTime(userAppt.start_time),
+        end_time: formatTime(userAppt.end_time),
+        appointment_type: userAppt.appointment_type,
+        location_name: userAppt.location_name,
+        street: userAppt.location_street,
+        city: userAppt.location_city,
+        state: userAppt.location_state,
+        date: formatDate(userAppt.appointment_date),
+        status: userAppt.status,
+        delivery_method: userAppt.delivery_method
+      };
+      if (userAppt.delivery_date) {
+        apptObj.info.delivery_date = formatDate(userAppt.delivery_date);
+      }
+      return apptObj;
+    });
+    return formattedAppts;
+  }
 });
 
 /**

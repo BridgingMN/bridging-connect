@@ -163,7 +163,6 @@ function checkForOverrides(date, overrides) {
 }
 
 function formatTime(time) {
-  console.log('time', time);
   var formattedTime = moment(time, 'h:mm a');
   formattedTime = formattedTime.format('h:mm a');
   return formattedTime;

@@ -56,7 +56,7 @@ WHERE "id" = $1;
 
 ---- GET USER APPOINTMENTS ----
 -- Get all appointments for a user from their user_id
-SELECT "appointments"."id", "clients"."first", "clients"."last", "clients"."street", "clients"."city", "clients"."state", "appointments"."confirmation_id", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_types"."appointment_type", "locations"."location", "locations"."street", "locations"."city", "locations"."state", "appointments"."appointment_date"
+SELECT "appointments"."id", "clients"."first", "clients"."last", "clients"."street", "clients"."city", "clients"."state", "appointments"."confirmation_id", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_types"."appointment_type", "locations"."location", "locations"."street", "locations"."city", "locations"."state", "appointments"."appointment_date", "appointments"."delivery_date"
 FROM "appointments"
 JOIN "clients" ON "appointments"."client_id" = "clients"."id"
 JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"
