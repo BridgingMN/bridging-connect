@@ -17,7 +17,9 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
       the client for whom the appointment was made
   * @apiSuccess {String} appointments.client.first   First name of client
   * @apiSuccess {String} appointments.client.last   Last name of client
-  * @apiSuccess {String} appointments.client.address   Address of client
+  * @apiSuccess {String} appointments.client.street   Street address of client
+  * @apiSuccess {String} appointments.client.city   City of client address
+  * @apiSuccess {String} appointments.client.state   State of client address
   * @apiSuccess {Object} appointments.info   Object with information about the
       appointment
   * @apiSuccess {Number} appointments.info.appointment_number   Number to identify
@@ -27,14 +29,14 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
   * @apiSuccess {String} appointments.info.appointment_type   Type of appointment
       ("shopping" or "new bed")
   * @apiSuccess {String} appointments.info.location_name   "Roseville" or "Bloomington"
-  * @apiSuccess {String} appointments.info.location_address   Address of location
+  * @apiSuccess {String} appointments.info.street   Street address of location
+  * @apiSuccess {String} appointments.info.city   City of location address
+  * @apiSuccess {String} appointments.info.state   State of location address
   * @apiSuccess {Date} appointments.info.date  Date of appointment
   * @apiSuccess {Date} appointments.info.delivery_date  Date of delivery (if applicable)
-  * @apiSuccess {String} appointments.info.delivery_date    Status of appointment
+  * @apiSuccess {String} appointments.info.status   Status of appointment
       ("confirmed" or "pending")
-
-  * Status
-  * Delivery_method
+  * @apiSuccess {String} appointments.info.delivery_method  Delivery method ("pickup" or "delivery")
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{
@@ -42,18 +44,22 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
         "client": {
           "first": "Jim",
           "last": "Tolliver",
-          "address": "1400 Lizard Ln, St. Paul, MN"
+          "address": "1400 Lizard Ln",
+          "city": "St. Paul",
+          "state": "MN"
         },
         "info": {
-          "appointment_number" : 4590,
+          "appointment_number": 4590,
           "start_time": "9:15 am",
           "end_time": "10:15 am",
           "appointment_type": "shopping",
           "delivery_method": "pickup",
           "location_name": "Bloomington",
-          "location_address": "201 W 87th St, Bloomington, MN",
-          "appointment_date": "4/21/17",
-          "delivery_date": "4/22/17"
+          "location_address": "201 W 87th St",
+          "city": "Bloomington",
+          "state": "MN",
+          "appointment_date": "April 21, 2017",
+          "delivery_date": "April 22, 2017"
           "status": "confirmed",
         },
       }]
