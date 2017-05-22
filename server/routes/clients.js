@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var formatters = require('../modules/formatters.js');
+var formatDate = formatters.formatDate;
+var formatTime = formatters.formatTime;
+var formatDateForPostgres = formatters.formatDateForPostgres;
 
 var pool = require('../modules/database.js');
 /**
@@ -29,7 +33,7 @@ router.post('/', function(req, res) {
     var client = req.body;
     var first = client.first;
     var last = client.last;
-    var dob = client.dob;
+    var dob = formatDateForPostgres(client.dob);
     var race_ethnicity = client.race_ethnicity;
     var street = client.street;
     var city = client.city;
@@ -96,7 +100,8 @@ router.get('/:client_id', function(req, res) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
-          res.send(result.rows);
+          var clientObj = formatClientObj(result.rows);
+          res.send(clientObj);
         }
       });
     }
@@ -133,7 +138,7 @@ router.put('/', function(req, res) {
   var client_id = client.client_id;
   var first = client.first;
   var last = client.last;
-  var dob = client.dob;
+  var dob = formatDateForPostgres(client.dob);
   var race_ethnicity = client.race_ethnicity;
   var street = client.street;
   var city = client.city;
@@ -144,22 +149,30 @@ router.put('/', function(req, res) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       res.sendStatus(500);
     } else {
-      db.query('UPDATE "clients" SET ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
-      'VALUES ($1, $2, $3, ' +
-      '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-      '$5, $6, $7, $8) RETURNING "id"',
-      [first, last, dob, race_ethnicity, street, city, state, zip_code],
+      db.query('UPDATE "clients"' +
+      'SET "first" = $1, "last" = $2, "dob" = $3,' +
+      '"race_ethnicity_id" = (SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
+      '"street" = $5, "city" = $6, "state" = $7, "zip_code" = $8' +
+      'WHERE "id" = $9',
+      [first, last, dob, race_ethnicity, street, city, state, zip_code, client_id],
       function(queryError, result){
         done();
         if (queryError) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
-          res.send(result.rows[0]);
+          var clientObj = formatClientObj(result.rows);
+          res.send(clientObj);
         }
       });
     }
   });
 });
+
+function formatClientObj(rows) {
+  var clientObj = rows;
+  clientObj.dob = formatDate(clientObj.dob);
+  return clientObj;
+}
 
 module.exports = router;

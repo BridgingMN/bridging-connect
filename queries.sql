@@ -128,11 +128,20 @@ $5, $6, $7, $8) RETURNING "id";
 
 ---- UPDATE A CLIENT ----
 -- Changes specified properties for a client and changes them to new values
--- NOTE: WILL IT WORK TO INSERT A VARIABLE FOR A COLUMN NAME??
-UPDATE "clients" SET $1 = $2 WHERE "id" = $3;
--- $1: key
--- $2: value
--- $3: client_id
+UPDATE "clients"
+SET "first" = $1, "last" = $2, "dob" = $3,
+"race_ethnicity_id" = (SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),
+"street" = $5, "city" = $6, "state" = $7, "zip_code" = $8
+WHERE "id" = $9;
+-- $1: first
+-- $2: last
+-- $3: dob
+-- $4: race_ethnicity
+-- $5: street
+-- $6: city
+-- $7: state
+-- $8: zip_code
+-- $9: client_id
 
 ---- GET ALL INFO FOR A CLIENT----
 -- Returns all info from client referral form for a particular client --
