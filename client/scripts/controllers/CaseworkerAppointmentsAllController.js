@@ -6,7 +6,7 @@
 
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentsAllController', ['$mdToast', '$mdDialog', 'AppointmentService', 'UserService', function($mdToast, $mdDialog, AppointmentService, UserService) {
+  .controller('CaseworkerAppointmentsAllController', ['$location', '$mdToast', '$mdDialog', 'AppointmentService', 'UserService', function($location, $mdToast, $mdDialog, AppointmentService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
@@ -72,7 +72,7 @@ angular
    * @function activate
    */
   function activate() {
-    // getUserAppointments();
+    getUserAppointments();
   }
 
 
@@ -87,7 +87,7 @@ angular
   }
 
   function getAppointmentsSuccess(appointments) {
-    vm.availableAppointments = appointments;
+    vm.caseworkerAppointments = appointments;
   }
 
   function getAppointmentsError(error) {
@@ -104,9 +104,11 @@ angular
     //This function will redirect the caseworker to a view where they can reschedule their appointment
   }
 
-  function editAppointmentInfo(appointment_id) {
-    console.log(appointment_id);
-    //This function will redirect the caseworker to a view where they can edit the referall form for their client
+  //This function will redirect the caseworker to a view where they can edit the referall form for their client
+  function editAppointmentInfo(appointment) {
+    console.log(appointment);
+    UserService.userObject.client_id = appointment.id;
+    $location.path('/caseworker-appointment-edit-form');
   }
 
   function confirmCancelAppointment(appointment) {
@@ -145,6 +147,7 @@ angular
         .hideDelay(3000)
     );
   }
+
   function showAppointmentDetails(appointment_id) {
     console.log(appointment_id);
     //This function would show the details for a particular appointment.
