@@ -26,36 +26,38 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/', function(req, res) {
-  var client = req.body;
-  var first = client.first;
-  var last = client.last;
-  var dob = client.dob;
-  var race_ethnicity = client.race_ethnicity;
-  var street = client.street;
-  var city = client.city;
-  var state = client.state;
-  var zip_code = client.zip_code;
-  pool.connect(function(connectionError, db, done) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-      res.sendStatus(500);
-    } else {
-      db.query('INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
-      'VALUES ($1, $2, $3, ' +
-      '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-      '$5, $6, $7, $8) RETURNING "id"',
-      [first, last, dob, race_ethnicity, street, city, state, zip_code],
-      function(queryError, result){
-        done();
-        if (queryError) {
-          console.log('ERROR MAKING QUERY');
-          res.sendStatus(500);
-        } else {
-          res.send(result.rows[0]);
-        }
-      });
-    }
-  });
+  if (req.isAuthenticated()) { // user is authenticated
+    var client = req.body;
+    var first = client.first;
+    var last = client.last;
+    var dob = client.dob;
+    var race_ethnicity = client.race_ethnicity;
+    var street = client.street;
+    var city = client.city;
+    var state = client.state;
+    var zip_code = client.zip_code;
+    pool.connect(function(connectionError, db, done) {
+      if (connectionError) {
+        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+        res.sendStatus(500);
+      } else {
+        db.query('INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
+        'VALUES ($1, $2, $3, ' +
+        '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
+        '$5, $6, $7, $8) RETURNING "id"',
+        [first, last, dob, race_ethnicity, street, city, state, zip_code],
+        function(queryError, result){
+          done();
+          if (queryError) {
+            console.log('ERROR MAKING QUERY');
+            res.sendStatus(500);
+          } else {
+            res.send(result.rows[0]);
+          }
+        });
+      }
+    });
+  }
 });
 
 /**
@@ -89,7 +91,8 @@ router.post('/', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/:client_id', function(req, res) {
-
+  if (req.isAuthenticated()) { // user is authenticated
+  }
 });
 
 module.exports = router;
