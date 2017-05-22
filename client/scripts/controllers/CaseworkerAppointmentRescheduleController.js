@@ -4,7 +4,7 @@
  */
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentRescheduleController', ['$location', 'UserService', function($location, UserService) {
+  .controller('CaseworkerAppointmentRescheduleController', ['$location', 'AppointmentService', 'UserService', function($location, AppointmentService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
   vm.appointment = UserService.newAppointment;
@@ -86,9 +86,27 @@ angular
    * @function reserveAppointment
    */
   function reserveAppointment() {
+    var id = UserService.newAppointment.id;
     console.log(vm.selectedAppointment);
-    UserService.newAppointment.reserveAppointment(vm.selectedAppointment);
-    $location.path('/caseworker-appointment-form');
+    UserService.newAppointment.reserveAppointment(vm.selectedAppointment)
+    .then(
+      function (reserveResponse) {
+        console.log('Reserve Appointment Success Response', reserveResponse);
+        AppointmentService.cancelAppointment(id)
+        .then(
+          function (cancelResponse) {
+            console.log('Cancel Old Appointment Success Response', cancelResponse);
+            $location.path('/caseworker-appointments-all');
+          },
+          function (cancelError) {
+            console.log('Cancel Error Response', cancelError);
+          }
+        );
+      },
+      function (reserveError) {
+        console.log('Reserve Error', reserveError);
+      }
+    );
   }
 
   /**
