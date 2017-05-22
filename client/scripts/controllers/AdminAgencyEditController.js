@@ -9,7 +9,7 @@ angular
   vm.editAgency = editAgency;
   vm.deleteAgency = deleteAgency;
 
-  //Saves edits made to Agency record in the Agency-Edit viewAgency
+  //Saves edits made to Agency record in the admin-agency-edit view
   function editAgency(agency) {
     console.log('Save changes clicked: ', agency);
     $http.put('/agencies/', agency).then(function() {

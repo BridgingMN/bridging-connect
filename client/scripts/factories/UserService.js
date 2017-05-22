@@ -6,6 +6,7 @@ angular
 
   var agencies = {};
   var agency = {};
+  var caseworker = {};
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
   return {
@@ -14,6 +15,8 @@ angular
     agencies: agencies,
     agency: agency,
     getAgencies: getAgencies,
+    caseworker: caseworker,
+    viewCaseworker: viewCaseworker,
     viewAgency: viewAgency,
     loginUser: loginUser,
     registerUser: registerUser,
@@ -108,4 +111,15 @@ angular
       console.log('Agency record back from db: ', agency.selected);
     });
   }
+  //Views details of single selected caseworker
+  function viewCaseworker(caseworker_id) {
+    console.log('view details clicked ', caseworker_id);
+    var id = caseworker_id.id;
+    console.log('caseworker id: ', id);
+    $http.get('/caseworkers/' + id).then(function(response) {
+      caseworker.selected = response.data;
+      console.log('Caseworker record back from db: ', caseworker.selected);
+    });
+  }
+
 }]);
