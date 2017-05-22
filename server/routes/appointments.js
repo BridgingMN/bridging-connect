@@ -33,6 +33,7 @@ var formatDateForPostgres = formatters.formatDateForPostgres;
   * @apiSuccess {String} appointments.info.end_time   End time of appointment
   * @apiSuccess {String} appointments.info.appointment_type   Type of appointment
       ("shopping" or "new bed")
+  * @apiSuccess {String} appointments.info.location_id   Unique ID of location
   * @apiSuccess {String} appointments.info.location_name   "Roseville" or "Bloomington"
   * @apiSuccess {String} appointments.info.street   Street address of location
   * @apiSuccess {String} appointments.info.city   City of location address
@@ -60,6 +61,7 @@ var formatDateForPostgres = formatters.formatDateForPostgres;
           "end_time": "10:15 am",
           "appointment_type": "shopping",
           "delivery_method": "pickup",
+          "location_id": 1,
           "location_name": "Bloomington",
           "location_address": "201 W 87th St",
           "city": "Bloomington",
@@ -85,8 +87,8 @@ router.get('/existing', function(req, res) {
       '"clients"."street" AS "client_street", "clients"."city" AS "client_city", "clients"."state" AS "client_state",' +
       '"appointments"."confirmation_id" AS "appointment_number", "appointment_slots"."start_time",' +
       '"appointment_slots"."end_time", "appointment_types"."appointment_type",' +
-      '"locations"."location" AS "location_name", "locations"."street" AS "location_street", "locations"."city" AS "location_city",' +
-      '"locations"."state" AS "location_state", "appointments"."appointment_date",' +
+      '"locations"."location" AS "location_name",  "locations"."street" AS "location_street", "locations"."city" AS "location_city",' +
+      '"locations"."id" AS "location_id", "locations"."state" AS "location_state", "appointments"."appointment_date",' +
       '"appointments"."delivery_date", "statuses"."status", "delivery_methods"."delivery_method"' +
       'FROM "appointments"' +
       'JOIN "clients" ON "appointments"."client_id" = "clients"."id"' +
@@ -127,6 +129,7 @@ router.get('/existing', function(req, res) {
         start_time: formatTime(userAppt.start_time),
         end_time: formatTime(userAppt.end_time),
         appointment_type: userAppt.appointment_type,
+        location_id: userAppt.location_id,
         location_name: userAppt.location_name,
         street: userAppt.location_street,
         city: userAppt.location_city,
