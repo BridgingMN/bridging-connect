@@ -29,9 +29,9 @@ angular
     });
   }
 
+//Deletes selected Agency from the admin-agency-edit view
   function deleteAgency(agency) {
     console.log('Delete clicked: ', agency);
-    // confirm('Are you sure you want to delete ' + agency.name + '?');
     if(confirm('Are you sure you want to delete ' + agency.name + '?')) {
       $http.delete('/agencies/' + agency.id).then(function() {
         console.log('Deleted Agency: ', agency.id);
