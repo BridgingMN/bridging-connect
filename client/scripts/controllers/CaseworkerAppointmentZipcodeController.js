@@ -17,7 +17,10 @@ angular
   }
 
   function zipCodeSuccess(response) {
-    UserService.newAppointment.loc = response.data[0];
+    console.log(response);
+    var locationObject = response[0];
+    UserService.newAppointment.location_name = locationObject.location;
+    UserService.newAppointment.location_id =  locationObject.id;
     console.log('quack', UserService.newAppointment);
     $location.path('/caseworker-appointment-schedule');
   }

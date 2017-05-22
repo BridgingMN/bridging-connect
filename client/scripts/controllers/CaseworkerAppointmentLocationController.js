@@ -8,8 +8,9 @@ angular
   vm.selectPickUpLocation = selectPickUpLocation;
 
   function selectPickUpLocation(location) {
-    console.log(location);
-    UserService.newAppointment.loc = location;
+    console.log('Selected location', location);
+    UserService.newAppointment.location_id = location.location_id;
+    UserService.newAppointment.location_name = location.location_name;
   }
 
 }]);

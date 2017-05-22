@@ -56,7 +56,11 @@ angular
   vm.selectDate = selectDate;
   vm.reserveAppointment = reserveAppointment;
 
-  // getAvailableAppointments(vm.minDate, vm.maxDate);
+  activate();
+
+  function activate() {
+    getAvailableAppointments(vm.minDate, vm.maxDate);
+  }
 
   function availableAppointmentsPredicate (date) {
     return vm.availableAppointments.some(filterAppointmentsByDate, date);
@@ -83,7 +87,7 @@ angular
    */
   function reserveAppointment() {
     console.log(vm.selectedAppointment);
-    UserService.newAppointment.submitAppointment(vm.selectedAppointment);
+    UserService.newAppointment.reserveAppointment(vm.selectedAppointment);
     $location.path('/caseworker-appointment-form');
   }
 
@@ -143,6 +147,4 @@ angular
     date2 = moment(date2).format('YYYY-MM-DD');
     return moment(date1).isSame(date2);
   }
-
-
 }]);

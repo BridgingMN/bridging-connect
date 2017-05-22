@@ -36,7 +36,7 @@
         </p>
         <p>
           <i class="material-icons">place</i>
-          {{appointment.loc.location}}
+          {{appointment.location_name}}
         </p>
       </div>
       <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
@@ -45,7 +45,7 @@
       <div class="appointment-card-buttons" layout="column">
           <md-button
             class="md-raised"
-            href="#caseworker-appointment-reschedule">
+            ng-click="vm.rescheduleAppointment(appointment)">
               <i class="material-icons">today</i>
               Reschedule
           </md-button>
