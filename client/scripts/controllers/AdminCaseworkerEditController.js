@@ -13,7 +13,7 @@ angular
   //Saves edits made to Caseworker record in the admin-caseworker-edit view
   function editCaseworker(caseworker) {
     console.log('EDITING CASEWORKER: ', caseworker);
-    $http.put('/caseworkers/', caseworker).then(function() {
+    $http.put('/caseworkers', caseworker).then(function() {
       $location.path('/admin-caseworker-overview');
       alert('Your edits to ' + caseworker.first + caseworker.last + ' have been saved.');
     });
@@ -24,7 +24,7 @@ angular
       console.log('Delete clicked: ', caseworker);
       if(confirm('Are you sure you want to delete ' + caseworker.first + ' ' +
                   caseworker.last + '?')) {
-        $http.delete('/caseworkers/' + caseworker.id).then(function() {
+        $http.delete('/caseworkers/' + caseworker.user_id).then(function() {
           console.log('Deleted caseworker: ', caseworker.id);
           $location.path('/admin-caseworker-overview');
           alert(caseworker.first + ' ' + caseworker.last + ' has been deleted.');
