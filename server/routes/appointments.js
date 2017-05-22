@@ -6,6 +6,7 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
 var formatters = require('../modules/formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
+var formatDateForPostgres = formatters.formatDateForPostgres;
 
 /**
   * @api {get} /appointments/existing Get User Appointments
@@ -192,8 +193,8 @@ router.get('/existing', function(req, res) {
 */
 router.get('/available', function(req, res) {
   var params = req.query;
-  var min_date = moment(params.min_date).format('YYYY-MM-DD');
-  var max_date = moment(params.max_date).format('YYYY-MM-DD');
+  var min_date = formatDateForPostgres(params.min_date);
+  var max_date = formatDateForPostgres(params.max_date);
   var appointment_type = params.appointment_type;
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
@@ -221,7 +222,7 @@ router.get('/available', function(req, res) {
 */
 router.post('/reserve', function(req, res) {
   var appointment = req.body;
-  var appointment_date = moment(appointment.date).format('YYYY-MM-DD');
+  var appointment_date = formatDateForPostgres(appointment.date);
   var user_id = req.user.id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
