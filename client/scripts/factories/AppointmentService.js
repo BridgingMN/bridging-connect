@@ -1,6 +1,6 @@
 angular
   .module('myApp')
-  .factory('AppointmentService', ['$http', function ($http) {
+  .factory('AppointmentService', ['$http', 'CONSTANTS', function ($http, CONSTANTS) {
     function Appointment(appointment_type) {
       this.appointment_type = appointment_type;
     }
@@ -75,8 +75,8 @@ angular
     }
 
     function cancelAppointment(appointment_id) {
-      var deleteURL = '/appointments/cancel/' + appointment_id;
-      return $http.delete(deleteURL)
+      var cancelURL = '/appointments/update/' + appointment_id + '/' + CONSTANTS.APPOINTMENT_STATUS_CANCELED;
+      return $http.put(cancelURL)
         .then(returnResponse, returnError);
     }
 
