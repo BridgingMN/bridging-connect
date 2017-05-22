@@ -4,7 +4,7 @@ var passport = require('passport');
 var moment = require('moment');
 
 var pool = require('../modules/database.js');
-var getAvailableAppts = require('../modules/getAvailableAppts.js');
+var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
 /**
   * @api {get} /appointments/existing Get User Appointments
   * @apiVersion 0.1.0
@@ -111,8 +111,7 @@ router.get('/available', function(req, res) {
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
 
-  var availableAppts = getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date);
-  res.send(availableAppts);
+  getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date, res);
 });
 
 /**

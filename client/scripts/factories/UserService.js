@@ -9,25 +9,25 @@ angular
   var agencies = {};
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
-  function getAvailAppts(paramsObj) {
-    $http({
-      url: '/appointments/available',
-      method: 'GET',
-      params: paramsObj
-    }).then(function(response) {
-      console.log(response);
-    });
-  }
-
-  var paramsObj = {
-    min_date: new Date('May 24, 2017'),
-    max_date: new Date('June 20, 2017'),
-    appointment_type: 'shopping',
-    delivery_method: 'delivery',
-    location_id: 1
-  };
-
-  getAvailAppts(paramsObj);
+  // function getAvailAppts(paramsObj) {
+  //   $http({
+  //     url: '/appointments/available',
+  //     method: 'GET',
+  //     params: paramsObj
+  //   }).then(function(response) {
+  //     console.log(response);
+  //   });
+  // }
+  //
+  // var paramsObj = {
+  //   min_date: new Date('May 20, 2017'),
+  //   max_date: new Date('June 20, 2017'),
+  //   appointment_type: 'shopping',
+  //   delivery_method: 'delivery',
+  //   location_id: 1
+  // };
+  //
+  // getAvailAppts(paramsObj);
 
   return {
     userObject: userObject,
