@@ -87,7 +87,11 @@ FROM "appointments"
 JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"
 JOIN "days" ON "appointment_slots"."day_id" = "days"."id"
 WHERE "appointments"."appointment_slot_id" IN (1,5) -- variable: array of allowed appointment slots
+AND "appointments"."appointment_date" >= $1
+AND "appointments"."appointment_date" <= $2
 GROUP BY "appointments"."appointment_date"
+-- $1: min_date
+-- $2: max_date
 
 ---- MAKE APPOINTMENT ----
 -- Save an appointment to appointments table
@@ -199,3 +203,12 @@ VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1),
 -- $5: start_time
 -- $6: end_time
 -- $7: num_allowed
+
+---- CHECK OVERRIDES ----
+-- Selects any rows from the overrides table that match a particular date range
+SELECT *
+FROM "overrides"
+WHERE "override_date" >= '5/20/17'
+AND "override_date" <= '6/21/17';
+-- $1: min_date
+-- $2: max_date

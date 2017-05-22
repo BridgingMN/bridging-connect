@@ -65,6 +65,7 @@ router.get('/', function(req, res) {
   * @apiSuccess {Number} beds_allowed_option_id Unique ID corresponding to the "beds_allowed_options" table.
   * @apiSuccess {String} beds_allowed_option String corresponding to the "beds_allowed_option_id" row from the "beds_allowed_options" table.
   * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
+  * @apiSuccess {String} notes Any notes the administrator leaves regarding an agency.
   *
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -88,7 +89,7 @@ router.get('/:agency_id', function(req, res) {
               console.log('error making query on /agencies/:agency_id GET', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful get from /agencies/:agency_id', result.rows);
+              console.log('successful get from /agencies/:agency_id', result);
               res.send(result.rows);
             }
           }); // end query callback
@@ -117,7 +118,7 @@ router.get('/:agency_id', function(req, res) {
   * @apiParam {String} primary_mobile_phone Optional Mobile phone number of new agency's primary contact.
   * @apiParam {String} primary_email Optional E-mail address of new agency's primary contact.
   * @apiParam {Boolean} access_disabled Mandatory Current agency status. True = access disabled.
-  * @apiParam {String} notes Optional Any notes the administrator wants to keep regarding this particular agency.
+  * @apiParam {String} notes Optional Any notes the administrator wants to keep regarding a particular agency.
   * @apiParam {String} beds_allowed_option Mandatory String corresponding to an entry the "beds_allowed_options" table.
   *
   * @apiSuccess {Number} id Unique ID of the new agency.
@@ -158,7 +159,7 @@ router.post('/', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful insert into "agencies"', result);
-              res.send(result);
+              res.send(result.rows);
             }
         }); // end query
       } // end if-else

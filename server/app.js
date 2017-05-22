@@ -13,6 +13,7 @@ var database = require('./modules/database.js');
 // AUTHENTICATION MODULES
 var passport = require('./strategies/user_sql.js');
 var session = require('express-session');
+var isLoggedIn = require('./modules/authentication.js');
 
 // ROUTE MODULES
 var index = require('./routes/index.js');
@@ -47,12 +48,12 @@ app.use(passport.session());
 
 // ROUTES
 app.use('/register', register);
-app.use('/user', user);
-app.use('/agencies', agencies);
-app.use('/appointments', appointments);
-app.use('/caseworkers', caseworkers);
-app.use('/clients', clients);
-app.use('/rules', rules);
+app.use('/user', isLoggedIn, user);
+app.use('/agencies', isLoggedIn, agencies);
+app.use('/appointments', isLoggedIn, appointments);
+app.use('/caseworkers', isLoggedIn, caseworkers);
+app.use('/clients', isLoggedIn, clients);
+app.use('/rules', isLoggedIn, rules);
 app.use('/*', index);
 
 // LISTEN
