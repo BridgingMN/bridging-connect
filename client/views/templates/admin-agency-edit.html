@@ -111,8 +111,8 @@
               Save Changes</md-button>
             <a href="#admin-agency-overview"><md-button type="button">Cancel Changes
                 </md-button></a>
-            <md-button type="submit" class="md-raised md-primary"
-              ng-click = "vm.deleteAgency(agency)">
+            <md-button type="submit" class="md-raised md-warn"
+              ng-click = "vm.deleteAgency(vm.agency.selected[0])">
               Delete Agency</md-button>
           </div>
 
