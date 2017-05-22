@@ -172,7 +172,7 @@ router.post('/', function(req, res) {
   * @apiGroup Caseworkers
   * @apiDescription Updates specified properties for a caseworker.
   *
-  * @apiParam {Number} id Unique ID of the caseworker.
+  * @apiParam {Number} user_id Unique ID of the caseworker.
   * @apiParam {Number} agency_id Unique ID of the agency the caseworker is associated with.
   * @apiParam {String} first First name of the caseworker.
   * @apiParam {String} last Last name of the caseworker.

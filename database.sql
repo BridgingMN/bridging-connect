@@ -189,7 +189,7 @@ INSERT INTO "days" ("name") VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednes
 ('Thursday'), ('Friday'), ('Saturday');
 
 -- add data to "Statuses" table
-INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled');
+INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled'), ('denied');
 
 -- add data to "Locations" table
 INSERT INTO "locations" ("location", "street", "city", "state", "zip_code") VALUES ('Bloomington', '201 W 87th St.',
