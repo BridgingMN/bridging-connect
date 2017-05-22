@@ -254,26 +254,6 @@ router.post('/reserve', function(req, res) {
   });
 });
 
-/**
-  * @api {put} /appointments/existing Update Appointment
-  * @apiVersion 0.1.0
-  * @apiName UpdateAppointment
-  * @apiGroup Appointments
-  * @apiDescription Updates status of an appointment in database
-
-  * @apiParam {Number} appointment_id  Unique ID of appointment
-  * @apiParam {String} status  Status of appointment ("confirmed", "pending", or "canceled")
-  * @apiSuccessExample Success-Response:
-  *     HTTP/1.1 200 OK
-  * @apiErrorExample Not found error
-  *    HTTP/1.1 404 Not found
-*/
-router.put('/existing', function(req, res) {
-  if (req.isAuthenticated()) { // user is authenticated
-  // TODO: add code
-  }
-});
-
 // START ADMIN-ONLY APPOINTMENT ROUTES
 /**
   * @api {get} /agencies Get All Appointments
