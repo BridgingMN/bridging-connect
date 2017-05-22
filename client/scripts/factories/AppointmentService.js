@@ -3,6 +3,7 @@ angular
   .factory('AppointmentService', ['$http', 'CONSTANTS', function ($http, CONSTANTS) {
     function Appointment(appointment_type) {
       this.appointment_type = appointment_type;
+      this.appointment = {};
     }
 
     Appointment.prototype.setDeliveryType = function (delivery_method) {
@@ -21,7 +22,7 @@ angular
         max_date: max_date,
         appointment_type: this.appointment_type,
         delivery_method: this.delivery_method,
-        location_id: this.loc.id
+        location_id: this.location_id
       };
       return $http.get('/appointments/available', {params: params})
         .then(returnResponse, returnError);
@@ -41,14 +42,21 @@ angular
       }).then(function (response) {
         console.log('POSTING new appointment', response);
         return $http.post('/appointments/reserve', {
-            user_id: 1,
             client_id: response.data.id,
             appointment_slot_id: appointmentInfo.appointment_slot_id,
-            appointment_date: appointmentInfo.date,
             status: 'pending'
         }).then(returnResponse, returnError);
       });
+    };
 
+    Appointment.prototype.reserveAppointment = function () {
+      var appointmentInfo = this.appointment;
+      console.log(this);
+      return $http.post('/appointments/reserve', {
+        client_id: appointmentInfo.client_id,
+        appointment_slot_id: appointmentInfo.appointment_slot_id,
+        status: 'pending'
+      }).then(returnResponse, returnError);
     };
 
     return {

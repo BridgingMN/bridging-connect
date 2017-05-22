@@ -38,9 +38,8 @@ angular
         appointment_date: new Date(),
         delivery_date: new Date(),
         appointment_type: 'Shopping',
-        loc: {
-          location: 'Bloomington'
-        },
+        location_name: 'Bloomington',
+        location_id: 1,
         delivery_type: 'Delivery',
         start_time: '9:15 AM'
       }
@@ -56,6 +55,7 @@ angular
         delivery_date: new Date(),
         appointment_type: 'Shopping',
         loc: {
+          id: 1,
           location: 'Bloomington'
         },
         delivery_type: 'Delivery',
@@ -99,9 +99,17 @@ angular
     //This function will filter the view to show the desired types of appointments
   }
 
-  function rescheduleAppointment(appointment_id) {
-    console.log(appointment_id);
-    //This function will redirect the caseworker to a view where they can reschedule their appointment
+  //This function will redirect the caseworker to a view where they can reschedule their appointment
+  function rescheduleAppointment(appointment) {
+    console.log('Rescheduling', appointment);
+    UserService.newAppointment = new AppointmentService.Appointment(appointment.info.appointment_type);
+    UserService.newAppointment.appointment.date = appointment.info.appointment_date;
+    UserService.newAppointment.appointment.start_time = appointment.info.start_time;
+    UserService.newAppointment.client_id = appointment.client.client_id;
+    UserService.newAppointment.delivery_method = appointment.info.delivery_type;
+    UserService.newAppointment.location_id = appointment.info.location_id;
+    UserService.newAppointment.location_name = appointment.info.location_name;
+    $location.path('/caseworker-appointment-reschedule');
   }
 
   //This function will redirect the caseworker to a view where they can edit the referall form for their client
