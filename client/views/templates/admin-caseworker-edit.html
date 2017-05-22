@@ -9,7 +9,7 @@
       {{vm.caseworker.selected[0].primary_business_phone_ext}}</p>
   <p>Cell: {{vm.caseworker.selected[0].primary_mobile_phone}}</p>
   <p>Email: {{vm.caseworker.selected[0].primary_email}}</p>
-  <p>Agency On-Hold: {{vm.caseworker.selected[0].agency_access_disabled}}</p>
+  <p>Agency Access Disabled: {{vm.caseworker.selected[0].agency_access_disabled}}</p>
 </div>
   <md-content layout-padding>
     <div>
@@ -72,7 +72,7 @@
 
           <md-input-container class="md-block">
             <md-checkbox name = "disabled" ng-model = "vm.caseworker.selected[0].user_access_disabled">
-              Caseworker Account On-Hold (Caseworker cannot schedule appointments if checked)
+              Caseworker Access Disabled (Caseworker cannot schedule appointments if checked)
             </md-checkbox>
           </md-input-container>
 
