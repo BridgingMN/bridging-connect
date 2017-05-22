@@ -1,7 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminCaseworkerOverviewController', ['UserService', '$http',
-      function(UserService, $http) {
+  .controller('AdminCaseworkerOverviewController', ['$http', 'UserService',
+      function($http, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.selected = [];
@@ -12,6 +12,8 @@ angular
   };
   vm.caseworkers = {};
   vm.getCaseworkers = getCaseworkers;
+  vm.caseworker = UserService.caseworker;
+  vm.viewCaseworker = UserService.viewCaseworker;
 
   //GETS all caseworkers from db
   function getCaseworkers() {

@@ -1,33 +1,31 @@
-<div layout="column" flex = "100" layout-align = "start center"
-      ng-init = "vm.getAgencies()">
-    <h2>New Caseworker</h2>
-
+<div layout="column" flex = "100" layout-align = "start center">
+    <h2>View/Edit Caseworker</h2>
+<div id = "agencyInfo">
+  <h3>{{vm.caseworker.selected[0].name}}
+      ({{vm.caseworker.selected[0].bridging_agency_id}})</h3>
+  <p>Primary Contact: {{vm.caseworker.selected[0].primary_first}}
+      {{vm.caseworker.selected[0].primary_last}}</p>
+  <p>Business Phone: {{vm.caseworker.selected[0].primary_business_phone}}
+      {{vm.caseworker.selected[0].primary_business_phone_ext}}</p>
+  <p>Cell: {{vm.caseworker.selected[0].primary_mobile_phone}}</p>
+  <p>Email: {{vm.caseworker.selected[0].primary_email}}</p>
+  <p>Agency On-Hold: {{vm.caseworker.selected[0].agency_access_disabled}}</p>
+</div>
   <md-content layout-padding>
-    <div flex>
+    <div>
       <form name = "newCaseworkerForm">
-        <div layout-gt-xs = "row">
-          <md-input-container class = "md-block" flex-gt-xs>
-            <label>Agency</label>
-            <md-select ng-model = "vm.caseworker.agency_id" required>
-                <md-option ng-repeat = "agency in vm.agencies.array"
-                            ng-value = "agency.id">
-                  {{agency.name}}
-                </md-option>
-            </md-select>
-          </md-input-container>
-        </div>
 
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Department/Program</label>
-            <input ng-model="vm.caseworker.department">
+            <input ng-model="vm.caseworker.selected[0].department">
           </md-input-container>
         </div>
 
         <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>First Name</label>
-              <input ng-model="vm.caseworker.first" required>
+              <input ng-model="vm.caseworker.selected[0].first" required>
               <div ng-messages="newCaseworkerForm.first.$error" role="alert">
                 <div ng-message="required" class="my-message">
                   Cannot leave name blank.</div>
@@ -36,7 +34,7 @@
 
             <md-input-container class="md-block" flex-gt-sm>
               <label>Last Name</label>
-              <input ng-model="vm.caseworker.last" required>
+              <input ng-model="vm.caseworker.selected[0].last" required>
               <div ng-messages="newCaseworkerForm.last.$error" role="alert">
                 <div ng-message="required" class="my-message">
                   Cannot leave name blank.</div>
@@ -47,12 +45,12 @@
           <div layout-gt-xs="row">
             <md-input-container class="md-block" flex-gt-xs>
               <label>Phone</label>
-              <input ng-model="vm.caseworker.day_phone">
+              <input ng-model="vm.caseworker.selected[0].day_phone">
             </md-input-container>
 
             <md-input-container class="md-block">
               <label>Ext.</label>
-              <input ng-model="vm.caseworker.ext">
+              <input ng-model="vm.caseworker.selected[0].ext">
             </md-input-container>
 
           </div>
@@ -60,7 +58,7 @@
           <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>Email</label>
-              <input ng-model="vm.caseworker.email" required>
+              <input ng-model="vm.caseworker.selected[0].email" required>
               <div ng-messages="newCaseworkerForm.email.$error" role="alert">
                 <div ng-message="required" class="my-message">
                   Cannot leave email blank.</div>
@@ -69,23 +67,28 @@
 
           <md-input-container class="md-block">
             <label>Additional Notes</label>
-            <textarea ng-model="vm.caseworker.notes" rows="5" md-select-on-focus></textarea>
+            <textarea ng-model="vm.caseworker.selected[0].notes" rows="5" md-select-on-focus></textarea>
           </md-input-container>
 
           <md-input-container class="md-block">
-            <md-checkbox name = "disabled" ng-model = "vm.caseworker.access_disabled">
+            <md-checkbox name = "disabled" ng-model = "vm.caseworker.selected[0].user_access_disabled">
               Caseworker Account On-Hold (Caseworker cannot schedule appointments if checked)
             </md-checkbox>
           </md-input-container>
 
           <div>
-            <md-button type="submit" class="md-raised md-primary" ng-click = "vm.createCaseworker()">
+            <md-button type="submit" class="md-raised md-primary" ng-click = "vm.editCaseworker(vm.caseworker.selected[0])">
               Submit</md-button>
-            <a href="#admin-caseworker-overview"><md-button type="button">Cancel</md-button></a>
+            <a href="#admin-caseworker-overview"><md-button type="button">
+                Cancel Changes</md-button></a>
+            <md-button type="submit" class="md-raised md-warn"
+                ng-click = "vm.deleteCaseworker(vm.caseworker.selected[0])">
+                Delete Caseworker</md-button>
           </div>
 
 
         </form>
       </div>
+    </div>
     </md-content>
 </div>

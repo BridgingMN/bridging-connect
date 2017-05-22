@@ -15,7 +15,7 @@
     <thead md-head md-order="vm.query.order" md-on-reorder="vm.getCaseworkers">
       <tr md-row>
         <th md-column md-order-by="nameToLower"><span>Caseworker</span></th>
-        <th md-column md-numeric md-order-by="time.value"><span>Agency</span></th>
+        <th md-column md-order-by="vm.caseworker.name"><span>Agency</span></th>
         <th md-column md-numeric>Agency ID</th>
         <th md-column md-numeric>On-Hold</th>
         <th md-column md-numeric>View Profile</th>
@@ -23,12 +23,13 @@
     </thead>
     <tbody md-body>
       <tr md-row md-select="caseworker" md-select-id="name" md-auto-select
-          ng-repeat="caseworker in vm.caseworkers.array | filter : test | limitTo: vm.query.limit: vm.query.page">
+          ng-repeat="caseworker in vm.caseworkers.array | filter : test | limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
         <td md-cell>{{caseworker.first}} {{caseworker.last}}</td>
         <td md-cell>{{caseworker.name}}</td>
         <td md-cell>{{caseworker.bridging_agency_id}}</td>
         <td md-cell>{{caseworker.user_access_disabled}}</td>
-        <td md-cell><a href="#admin-caseworker-edit">See Detail</a></td>
+        <td md-cell><a href="#admin-caseworker-edit"
+            ng-click = "vm.viewCaseworker(caseworker.user_id)">See Detail</a></td>
       </tr>
     </tbody>
   </table>

@@ -1,7 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminAgencyNewController', ['UserService', '$http', '$location',
-      function(UserService, $http, $location) {
+  .controller('AdminAgencyNewController', ['$http', '$location', 'UserService',
+      function($http, $location, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 

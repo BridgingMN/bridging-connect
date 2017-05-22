@@ -1,7 +1,8 @@
 angular
   .module('myApp')
-  .controller('AdminAgencyEditController', ['UserService', '$http', '$location',
-      function(UserService, $http, $location) {
+  .controller('AdminAgencyEditController', ['$http', '$location', '$mdDialog',
+      '$document', 'UserService',
+      function($http, $location, $mdDialog, $document, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.agency = UserService.agency;
@@ -9,19 +10,29 @@ angular
   vm.editAgency = editAgency;
   vm.deleteAgency = deleteAgency;
 
-  //Saves edits made to Agency record in the Agency-Edit viewAgency
+  //Saves edits made to Agency record in the admin-agency-edit view
   function editAgency(agency) {
     console.log('Save changes clicked: ', agency);
     $http.put('/agencies/', agency).then(function() {
       console.log('saves edits', agency);
       $location.path('/admin-agency-overview');
-      alert('Your edits to ' + agency.name + ' have been saved.');
+      $mdDialog.show(
+        $mdDialog.alert()
+          .parent(angular.element($document.querySelector('#popupContainer')))
+          .clickOutsideToClose(true)
+          .title('Saved')
+          .textContent('Your edits to ' + agency.name + ' have been saved.')
+          .ariaLabel('Alert Agency Saved')
+          .ok('Okay!')
+          // .targetEvent(agency)
+      );
+      // alert('Your edits to ' + agency.name + ' have been saved.');
     });
   }
 
+//Deletes selected Agency from the admin-agency-edit view
   function deleteAgency(agency) {
     console.log('Delete clicked: ', agency);
-    // confirm('Are you sure you want to delete ' + agency.name + '?');
     if(confirm('Are you sure you want to delete ' + agency.name + '?')) {
       $http.delete('/agencies/' + agency.id).then(function() {
         console.log('Deleted Agency: ', agency.id);

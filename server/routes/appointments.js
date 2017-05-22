@@ -2,22 +2,27 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment');
 var pool = require('../modules/database.js');
+var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
+var formatters = require('../modules/formatters.js');
+var formatDate = formatters.formatDate;
+var formatTime = formatters.formatTime;
 
 /**
-  * @api {get} /appointments/existing/:user_id Get User Appointments
+  * @api {get} /appointments/existing Get User Appointments
   * @apiVersion 0.1.0
   * @apiName GetUserAppointments
   * @apiGroup Appointments
   * @apiDescription Get a user's existing appointments
 
-  * @apiParam {Number} user_id User's unique ID
   * @apiSuccess {Object[]} appointments   Array of appointment objects
   * @apiSuccess {Number} appointments.id   Unique ID of appointment
   * @apiSuccess {Object} appointments.client   Object with information about
       the client for whom the appointment was made
   * @apiSuccess {String} appointments.client.first   First name of client
   * @apiSuccess {String} appointments.client.last   Last name of client
-  * @apiSuccess {String} appointments.client.address   Address of client
+  * @apiSuccess {String} appointments.client.street   Street address of client
+  * @apiSuccess {String} appointments.client.city   City of client address
+  * @apiSuccess {String} appointments.client.state   State of client address
   * @apiSuccess {Object} appointments.info   Object with information about the
       appointment
   * @apiSuccess {Number} appointments.info.appointment_number   Number to identify
@@ -27,11 +32,14 @@ var pool = require('../modules/database.js');
   * @apiSuccess {String} appointments.info.appointment_type   Type of appointment
       ("shopping" or "new bed")
   * @apiSuccess {String} appointments.info.location_name   "Roseville" or "Bloomington"
-  * @apiSuccess {String} appointments.info.location_address   Address of location
+  * @apiSuccess {String} appointments.info.street   Street address of location
+  * @apiSuccess {String} appointments.info.city   City of location address
+  * @apiSuccess {String} appointments.info.state   State of location address
   * @apiSuccess {Date} appointments.info.date  Date of appointment
   * @apiSuccess {Date} appointments.info.delivery_date  Date of delivery (if applicable)
-  * @apiSuccess {String} appointments.info.delivery_date    Status of appointment
+  * @apiSuccess {String} appointments.info.status   Status of appointment
       ("confirmed" or "pending")
+  * @apiSuccess {String} appointments.info.delivery_method  Delivery method ("pickup" or "delivery")
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{
@@ -39,26 +47,97 @@ var pool = require('../modules/database.js');
         "client": {
           "first": "Jim",
           "last": "Tolliver",
-          "address": "1400 Lizard Ln, St. Paul, MN"
+          "address": "1400 Lizard Ln",
+          "city": "St. Paul",
+          "state": "MN"
         },
         "info": {
-          "appointment_number" : 4590,
+          "appointment_number": 4590,
           "start_time": "9:15 am",
           "end_time": "10:15 am",
           "appointment_type": "shopping",
           "delivery_method": "pickup",
           "location_name": "Bloomington",
-          "location_address": "201 W 87th St, Bloomington, MN",
-          "appointment_date": "4/21/17",
-          "delivery_date": "4/22/17"
+          "location_address": "201 W 87th St",
+          "city": "Bloomington",
+          "state": "MN",
+          "appointment_date": "April 21, 2017",
+          "delivery_date": "April 22, 2017"
           "status": "confirmed",
         },
       }]
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
 */
-router.get('/existing/:user_id', function(req, res) {
-  // TODO: add code
+router.get('/existing', function(req, res) {
+  var user_id = req.user.id;
+  console.log('user_id',user_id);
+
+  pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      return connectionError;
+    } else {
+      db.query('SELECT "appointments"."id", "clients"."first", "clients"."last",' +
+      '"clients"."street" AS "client_street", "clients"."city" AS "client_city", "clients"."state" AS "client_state",' +
+      '"appointments"."confirmation_id" AS "appointment_number", "appointment_slots"."start_time",' +
+      '"appointment_slots"."end_time", "appointment_types"."appointment_type",' +
+      '"locations"."location" AS "location_name", "locations"."street" AS "location_street", "locations"."city" AS "location_city",' +
+      '"locations"."state" AS "location_state", "appointments"."appointment_date",' +
+      '"appointments"."delivery_date", "statuses"."status", "delivery_methods"."delivery_method"' +
+      'FROM "appointments"' +
+      'JOIN "clients" ON "appointments"."client_id" = "clients"."id"' +
+      'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
+      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+      'JOIN "statuses" ON "appointments"."status_id" = "statuses"."id"' +
+      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+      'WHERE "appointments"."user_id" = $1' +
+      'ORDER BY "appointments"."appointment_date" ASC',
+      [user_id],
+      function(queryError, result){
+        done();
+        if (queryError) {
+          console.log(queryError, 'ERROR MAKING QUERY');
+        } else {
+          var userAppts = result.rows;
+          var formattedAppts = formatAppts(userAppts);
+          res.send(formattedAppts);
+        }
+      });
+    }
+  });
+
+  function formatAppts(userAppts) {
+    var formattedAppts = userAppts.map(function(userAppt) {
+      var apptObj = {id: userAppt.id};
+      apptObj.client = {
+        first: userAppt.first,
+        last: userAppt.last,
+        street: userAppt.client_street,
+        city: userAppt.client_city,
+        state: userAppt.client_state
+      };
+      apptObj.info = {
+        appointment_number: userAppt.appointment_number,
+        start_time: formatTime(userAppt.start_time),
+        end_time: formatTime(userAppt.end_time),
+        appointment_type: userAppt.appointment_type,
+        location_name: userAppt.location_name,
+        street: userAppt.location_street,
+        city: userAppt.location_city,
+        state: userAppt.location_state,
+        date: formatDate(userAppt.appointment_date),
+        status: userAppt.status,
+        delivery_method: userAppt.delivery_method
+      };
+      if (userAppt.delivery_date) {
+        apptObj.info.delivery_date = formatDate(userAppt.delivery_date);
+      }
+      return apptObj;
+    });
+    return formattedAppts;
+  }
 });
 
 /**
@@ -79,70 +158,44 @@ router.get('/existing/:user_id', function(req, res) {
   * @apiSuccess {Number} appointments.appointment_slot_id   Unique ID of appointment slot
   * @apiSuccess {Date} appointments.date  Date of appointment
   * @apiSuccess {String} appointments.start_time   Start time of appointment
+  * @apiSuccess {String} appointments.day   Day of week of appointment
   * @apiSuccess {String} appointments.end_time   End time of appointment
   * @apiSuccess {String} appointments.appointment_type   Type of appointment
       ("shopping" or "new bed")
   * @apiSuccess {String} appointments.delivery_method   "delivery" or "pickup"
   * @apiSuccess {String} appointments.location_name   Name of location
       ("Bloomington" or "Roseville")
-  * @apiSuccess {String} appointments.location_address   Address of location
+  * @apiSuccess {String} appointments.street   Street address of location
+  * @apiSuccess {String} appointments.city   City for address of location
+    * @apiSuccess {String} appointments.state   State for address of location (2-letter abbreviation)
 
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{
         "appointment_slot_id": 3,
-        "date": "June 9, 2017",
-        "start_time": "9:15 am",
-        "end_time": "10:15 am",
         "appointment_type": "shopping",
+        "city": "Bloomington",
+        "day": "Monday",
+        "date": "June 9, 2017",
         "delivery_method": "pickup",
+        "end_time": "10:15 am",
         "location_name": "Bloomington",
-        "location_address": "201 W 87th St, Bloomington, MN",
+        "start_time": "9:15 am",
+        "street": "201 W 87th St",
+        "state": "MN"
       }]
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/available', function(req, res) {
   var params = req.query;
-  var min_date = params.min_date;
-  var max_date = params.max_date;
+  var min_date = moment(params.min_date).format('YYYY-MM-DD');
+  var max_date = moment(params.max_date).format('YYYY-MM-DD');
   var appointment_type = params.appointment_type;
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
 
-  function getAvailableAppointments(appointment_type, delivery_method, location_id) {
-    pool.connect(function(connectionError, db, done) {
-      if (connectionError) {
-        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-        res.sendStatus(500);
-      } else {
-        db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
-        '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-        '"locations"."location", "locations"."street", "locations"."city",' +
-        '"locations"."state", "appointment_types"."appointment_type",' +
-        '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
-        'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
-        'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
-        'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
-        'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-        'WHERE "appointment_types"."appointment_type" = $1' +
-        'AND "delivery_methods"."delivery_method" = $2' +
-        'AND "locations"."id" = $3',
-        [appointment_type, delivery_method, location_id], // <array>).then
-        function(queryError, result){
-          done();
-          if (queryError) {
-            console.log(queryError, 'ERROR MAKING QUERY');
-            res.sendStatus(500);
-          } else {
-            res.send(result.rows);
-          }
-        });
-      }
-    });
-  }
-
-  function countExistingAppointments() {}
+  getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date, res);
 });
 
 /**
@@ -167,9 +220,8 @@ router.get('/available', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/reserve', function(req, res) {
-  console.log(req.body);
   var appointment = req.body;
-  var appointment_date = moment(appointment.date).format('M/D/YYYY');
+  var appointment_date = moment(appointment.date).format('YYYY-MM-DD');
   var user_id = appointment.user_id;
   var client_id = appointment.client_id;
   var appointment_slot_id = appointment.appointment_slot_id;
@@ -214,7 +266,9 @@ router.post('/reserve', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/existing', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
   // TODO: add code
+  }
 });
 
 // START ADMIN-ONLY APPOINTMENT ROUTES
