@@ -8,6 +8,7 @@ router.get('/', function(req, res) {
     console.log('checking /user route ');
     if(req.isAuthenticated()) {
         // send back user object from database
+        console.log('DONE GETTING USER', req.user);
         var userObject = {
           access_disabled: req.user.access_disabled,
           agency_id: req.user.agency_id,

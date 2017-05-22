@@ -32,27 +32,27 @@ passport.deserializeUser(function(id, done) {
 
     var user = {};
 
-    client.query("SELECT * FROM users WHERE id = $1", [id], function(err, result) {
-
-      // Handle Errors
-      if(err) {
-        //---console.log('query err ', err);
-        done(err);
+    client.query('SELECT "users"."id" AS "user_id", "users"."department", "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "users"."notes", "agencies"."id" AS "agency_id", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."notes", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
+                  'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
+                  'WHERE "users"."id" = $1;', [id],
+      function(err, result) {
+        // Handle Errors
+        if(err) {
+          //---console.log('query err ', err);
+          done(err);
+          release();
+        }
+        user = result.rows[0];
         release();
-      }
 
-      user = result.rows[0];
-      release();
-
-      if(!user) {
-          // user not found
-          return done(null, false, {message: 'Incorrect credentials.'});
-      } else {
-        // user found
-        //---console.log('User row ', user);
-        done(null, user);
-      }
-
+        if(!user) {
+            // user not found
+            return done(null, false, {message: 'Incorrect credentials.'});
+        } else {
+          // user found
+          //---console.log('User row ', user);
+          done(null, user);
+        }
     });
   });
 });
