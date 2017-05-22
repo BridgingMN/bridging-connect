@@ -11,7 +11,13 @@ function formatDate(date) {
   return formattedDate;
 }
 
+function formatDateForPostgres(date) {
+  var formattedDate = moment(date).format('YYYY-MM-DD');
+  return formattedDate;
+}
+
 module.exports = {
   formatTime: formatTime,
-  formatDate: formatDate
+  formatDate: formatDate,
+  formatDateForPostgres: formatDateForPostgres
 };

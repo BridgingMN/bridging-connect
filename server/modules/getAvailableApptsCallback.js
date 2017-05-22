@@ -1,5 +1,8 @@
 var moment = require('moment');
 var pool = require('../modules/database.js');
+var formatters = require('./formatters.js');
+var formatDate = formatters.formatDate;
+var formatTime = formatters.formatTime;
 
 function getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date, res) {
   getApptSlots(appointment_type, delivery_method, location_id, min_date, max_date, res);
@@ -160,17 +163,6 @@ function checkForOverrides(date, overrides) {
   } else {
     return false;
   }
-}
-
-function formatTime(time) {
-  var formattedTime = moment(time, 'h:mm a');
-  formattedTime = formattedTime.format('h:mm a');
-  return formattedTime;
-}
-
-function formatDate(date) {
-  var formattedDate = moment(date).format('MMMM D, YYYY');
-  return formattedDate;
 }
 
 module.exports = getAvailableAppts;

@@ -7,7 +7,7 @@ angular.module('myApp')
     DELIVERYMETHOD_DELIVERY: 'delivery',
     LOCATION_BLOOMINGTON: {
       location_id: 1,
-      location: 'Bloomington',
+      location_name: 'Bloomington',
       street: '201 W 87th St.',
       city: 'Bloomington',
       state: 'MN',
@@ -15,7 +15,7 @@ angular.module('myApp')
     },
     LOCATION_ROSEVILLE: {
       location_id: 2,
-      location: 'Roseville',
+      location_name: 'Roseville',
       street: '1730 Terrace Dr.',
       city: 'Roseville',
       state: 'MN',
