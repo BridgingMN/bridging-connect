@@ -8,21 +8,29 @@ router.get('/', function(req, res) {
     console.log('checking /user route ');
     if(req.isAuthenticated()) {
         // send back user object from database
+        console.log('DONE GETTING USER', req.user);
         var userObject = {
-          access_disabled: req.user.access_disabled,
-          agency_id: req.user.agency_id,
-          city: req.user.city,
-          day_phone: req.user.day_phone,
-          department: req.user.department,
-          email: req.user.email,
-          ext: req.user.ext,
+          user_id: req.user.user_id,
+          user_type_id: req.user.user_type_id,
           first: req.user.first,
           last: req.user.last,
-          state: req.user.state,
-          street: req.user.street,
-          user_type_id: req.user.user_type_id,
-          zip_code: req.user.zip_code
+          email: req.user.email,
+          day_phone: req.user.day_phone,
+          ext: req.user.ext,
+          department: req.user.department,
+          user_access_disabled: req.user.user_access_disabled,
+          agency_access_disabled: req.user.agency_access_disabled,
+          agency_id: req.user.agency_id,
+          bridging_agency_id: req.user.bridging_agency_id,
+          agency_name: req.user.name,
+          primary_first: req.user.primary_first,
+          primary_last: req.user.primary_last,
+          primary_business_phone: req.user.primary_business_phone,
+          primary_business_phone_ext: req.user.primary_business_phone_ext,
+          primary_mobile_phone: req.user.primary_mobile_phone,
+          primary_email: req.user.primary_email,
         };
+        console.log('USER OBJECT BEING SENT:', userObject);
         res.send(userObject);
     } else {
         // failure best handled on the server. do redirect here.
