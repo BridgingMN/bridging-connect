@@ -53,7 +53,8 @@ angular
 
     return {
       Appointment: Appointment,
-      getUserAppointments: getUserAppointments
+      getUserAppointments: getUserAppointments,
+      cancelAppointment: cancelAppointment
     };
 
 
@@ -71,6 +72,12 @@ angular
     function getUserAppointments() {
       return $http.get('/appointments/existing')
         .then( returnResponse, returnError);
+    }
+
+    function cancelAppointment(appointment_id) {
+      var deleteURL = '/appointments/cancel/' + appointment_id;
+      return $http.delete(deleteURL)
+        .then(returnResponse, returnError);
     }
 
   }]);
