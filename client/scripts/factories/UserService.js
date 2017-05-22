@@ -1,12 +1,11 @@
 angular
   .module('myApp')
   .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
-  var userObject = {
 
-  };
-
+  var userObject = {};
 
   var agencies = {};
+  var agency = {};
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
   // function getAvailAppts(paramsObj) {
@@ -33,7 +32,9 @@ angular
     userObject: userObject,
     newAppointment: newAppointment,
     agencies: agencies,
+    agency: agency,
     getAgencies: getAgencies,
+    viewAgency: viewAgency,
     loginUser: loginUser,
     registerUser: registerUser,
     getUser: getUser,
@@ -68,8 +69,11 @@ angular
   function getUser() {
     $http.get('/user').then(function(response) {
       if (!response.data.email) {
-        // redirectToLogin();
+        redirectToLogin();
+      } else {
+        userObject.user = response.data;
       }
+      console.log(userObject);
     });
   } // end getUser()
 
@@ -99,11 +103,9 @@ angular
 
   //---------SUPPORT FUNCTIONS-------
   function clearCurrentUser() {
-    // clear out the userObject's properties on logout
-    // for example purposes:
-    // userObject.firstName = '';
-    // userObject.lastName = '';
-    // appointmentsArray = [];
+    userObject.user = {};
+    userObject.newAppointment = {};
+    userObject.agencies = {};
   }
   //------END SUPPORT FUNCTIONS-----
 
@@ -113,6 +115,17 @@ angular
     $http.get('/agencies').then(function(response) {
         agencies.array = response.data;
         console.log(agencies.array);
+    });
+  }
+
+  //Views details of single selected agency
+  function viewAgency(agency_id) {
+    console.log('view details clicked ', agency_id);
+    var id = agency_id.id;
+    console.log('agency id: ', id);
+    $http.get('/agencies/' + id).then(function(response) {
+      agency.selected = response.data;
+      console.log('Agency record back from db: ', agency.selected);
     });
   }
 }]);
