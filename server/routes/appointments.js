@@ -340,6 +340,24 @@ router.get('/pending', function(req, res) {
   }
 });
 
+/**
+  * @api {put} /appointments/update/:status Update Appointment
+  * @apiVersion 0.1.0
+  * @apiName UpdateAppointmentStatus
+  * @apiGroup Appointments
+  * @apiDescription Updates status of an appointment in database
+  *
+  * @apiParam {String} status Mandatory Status the appointment should be set to - corresponds to entry in the "statuses" table
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  * @apiErrorExample Not found error
+  *    HTTP/1.1 404 Not found
+*/
+router.put('/update/:status', function(req, res) {
+  // TODO: add code
+});
+
 // END ADMIN-ONLY APPOINTMENT ROUTES
 
 module.exports = router;
