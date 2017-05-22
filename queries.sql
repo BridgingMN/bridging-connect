@@ -134,6 +134,11 @@ UPDATE "clients" SET $1 = $2 WHERE "id" = $3;
 -- $2: value
 -- $3: client_id
 
+---- GET ALL INFO FOR A CLIENT----
+-- Returns all info from client referral form for a particular client --
+SELECT * FROM "clients" WHERE "id" = $1;
+-- $1: client_id
+
 ---- ADD A NEW CASEWORKER ----
 -- Adds a new caseworker's information to the "users" table in the database
 INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id")
