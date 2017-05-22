@@ -304,7 +304,7 @@ router.get('/all', function(req, res) {
               console.log('error making query on /appointments/all GET route:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful GET from /appointments/all route:', result);
+              console.log('successful GET from /appointments/all route:', result.rows);
               res.send(result.rows);
             }
           }); // end query callback
@@ -366,7 +366,7 @@ router.get('/pending', function(req, res) {
               console.log('error making query on /appointments/pending GET route:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful GET from /appointments/pending route:', result);
+              console.log('successful GET from /appointments/pending route:', result.rows);
               res.send(result.rows);
             }
           }); // end query callback

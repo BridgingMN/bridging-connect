@@ -7,11 +7,19 @@ angular
   var agencies = {};
   var agency = {};
   var caseworker = {};
+  var selected = [];
+  var query = {
+    order: 'name',
+    limit: 5,
+    page: 1
+  };
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
   return {
     userObject: userObject,
     newAppointment: newAppointment,
+    selected: selected,
+    query: query,
     agencies: agencies,
     agency: agency,
     getAgencies: getAgencies,
