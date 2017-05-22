@@ -13,34 +13,34 @@
       <div class="appointment-card-header" layout="row" layout-align="space-around center">
         <div class="appointment-date">
           <p layout="column" layout-align="center center">
-            <span>{{appointment.appointment_date | date: 'MMM'}}</span>
-            <span>{{appointment.appointment_date | date: 'dd'}}</span>
+            <span>{{appointment.info.appointment_date | date: 'MMM'}}</span>
+            <span>{{appointment.info.appointment_date | date: 'dd'}}</span>
           </p>
         </div>
         <div class="md-padding appointment-type-info">
           <p layout="column" layout-align="center center">
-            <span>{{appointment.appointment_type}}</span>
-            <span>with {{appointment.delivery_type}}</span>
+            <span>{{appointment.info.appointment_type}}</span>
+            <span>with {{appointment.info.delivery_type}}</span>
           </p>
         </div>
       </div>
       <div class="appointment-card-body" layout="column" layout-align="center center">
         <p>
           <i class="material-icons">access_time</i>
-          {{appointment.start_time}}
+          {{appointment.info.start_time}}
         </p>
         <p>
           <i class="material-icons">person</i>
-          {{appointment.client_first}}
-          {{appointment.client_last}}
+          {{appointment.client.first}}
+          {{appointment.client.last}}
         </p>
         <p>
           <i class="material-icons">place</i>
-          {{appointment.loc}}
+          {{appointment.loc.location}}
         </p>
       </div>
       <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
-          <p>Delivered {{appointment.delivery_date | date: 'shortDate'}}.</p>
+          <p>Delivered {{appointment.info.delivery_date | date: 'shortDate'}}.</p>
       </div>
       <div class="appointment-card-buttons" layout="column">
           <md-button
@@ -57,9 +57,9 @@
           </md-button>
           <md-button
             class="md-raised"
-            href="#caseworker-appointments-all">
+            ng-click="vm.confirmCancelAppointment(appointment)">
               <i class="material-icons">clear</i>
-              Delete Appointment
+              Cancel Appointment
           </md-button>
       </div>
     </md-content>
