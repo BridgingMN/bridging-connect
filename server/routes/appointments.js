@@ -18,6 +18,7 @@ var formatTime = formatters.formatTime;
   * @apiSuccess {Number} appointments.id   Unique ID of appointment
   * @apiSuccess {Object} appointments.client   Object with information about
       the client for whom the appointment was made
+  * @apiSuccess {String} appointments.client.client_id   Unique ID of client
   * @apiSuccess {String} appointments.client.first   First name of client
   * @apiSuccess {String} appointments.client.last   Last name of client
   * @apiSuccess {String} appointments.client.street   Street address of client
@@ -45,6 +46,7 @@ var formatTime = formatters.formatTime;
       [{
         "id": 1,
         "client": {
+          "client_id": 1,
           "first": "Jim",
           "last": "Tolliver",
           "address": "1400 Lizard Ln",
