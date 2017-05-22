@@ -11,11 +11,11 @@ function getApptSlots(appointment_type, delivery_method, location_id, min_date, 
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       return connectionError;
     } else {
-      db.query('SELECT "appointment_slots"."id", "appointment_slots"."num_allowed",' +
+      db.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
       '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-      '"locations"."location", "locations"."street", "locations"."city",' +
+      '"locations"."location" AS "location_name", "locations"."street", "locations"."city",' +
       '"locations"."state", "appointment_types"."appointment_type",' +
-      '"delivery_methods"."delivery_method", "days"."name" FROM "appointment_slots"' +
+      '"delivery_methods"."delivery_method", "days"."name" AS "day" FROM "appointment_slots"' +
       'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
       'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
       'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
@@ -113,12 +113,13 @@ function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, ove
       var apptSlot = slotsForDate[i];
       var isAvailable = checkAvailability(apptSlot, date, existingApptCounts, res);
       if (isAvailable){
+        apptSlot.date = formatDate(date);
+        apptSlot.start_time = formatTime(apptSlot.start_time);
+        apptSlot.end_time = formatTime(apptSlot.end_time);
         apptsAvailable.push(apptSlot);
       }
     }
-    console.log('old date', date);
     date = moment(date).add(1, 'days').format('YYYY-MM-DD');
-    console.log('new date', date);
   }
   console.log(apptsAvailable);
   res.send(apptsAvailable);
@@ -128,7 +129,7 @@ function findRelevant(apptSlots, date) {
   var momentOfDate = moment(date);
   var day = momentOfDate.format('dddd');
   var slotList = apptSlots.filter(function(apptSlot) {
-    return apptSlot.name === day;
+    return apptSlot.day === day;
   });
   return slotList;
 }
@@ -159,6 +160,18 @@ function checkForOverrides(date, overrides) {
   } else {
     return false;
   }
+}
+
+function formatTime(time) {
+  console.log('time', time);
+  var formattedTime = moment(time, 'h:mm a');
+  formattedTime = formattedTime.format('h:mm a');
+  return formattedTime;
+}
+
+function formatDate(date) {
+  var formattedDate = moment(date).format('MMMM D, YYYY');
+  return formattedDate;
 }
 
 module.exports = getAvailableAppts;

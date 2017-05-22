@@ -3,6 +3,7 @@ var router = express.Router();
 var moment = require('moment');
 var pool = require('../modules/database.js');
 var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
+
 /**
   * @api {get} /appointments/existing Get User Appointments
   * @apiVersion 0.1.0
@@ -31,6 +32,9 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
   * @apiSuccess {Date} appointments.info.delivery_date  Date of delivery (if applicable)
   * @apiSuccess {String} appointments.info.delivery_date    Status of appointment
       ("confirmed" or "pending")
+
+  * Status
+  * Delivery_method
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{
@@ -57,7 +61,7 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/existing', function(req, res) {
-  var user_id = req.user.id;
+    var user_id = req.user.id;
 });
 
 /**
@@ -78,25 +82,31 @@ router.get('/existing', function(req, res) {
   * @apiSuccess {Number} appointments.appointment_slot_id   Unique ID of appointment slot
   * @apiSuccess {Date} appointments.date  Date of appointment
   * @apiSuccess {String} appointments.start_time   Start time of appointment
+  * @apiSuccess {String} appointments.day   Day of week of appointment
   * @apiSuccess {String} appointments.end_time   End time of appointment
   * @apiSuccess {String} appointments.appointment_type   Type of appointment
       ("shopping" or "new bed")
   * @apiSuccess {String} appointments.delivery_method   "delivery" or "pickup"
   * @apiSuccess {String} appointments.location_name   Name of location
       ("Bloomington" or "Roseville")
-  * @apiSuccess {String} appointments.location_address   Address of location
+  * @apiSuccess {String} appointments.street   Street address of location
+  * @apiSuccess {String} appointments.city   City for address of location
+    * @apiSuccess {String} appointments.state   State for address of location (2-letter abbreviation)
 
   * @apiSuccessExample {json} Success-Response:
       HTTP/1.1 200 OK
       [{
         "appointment_slot_id": 3,
-        "date": "June 9, 2017",
-        "start_time": "9:15 am",
-        "end_time": "10:15 am",
         "appointment_type": "shopping",
+        "city": "Bloomington",
+        "day": "Monday",
+        "date": "June 9, 2017",
         "delivery_method": "pickup",
+        "end_time": "10:15 am",
         "location_name": "Bloomington",
-        "location_address": "201 W 87th St, Bloomington, MN",
+        "start_time": "9:15 am",
+        "street": "201 W 87th St",
+        "state": "MN"
       }]
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
@@ -134,7 +144,6 @@ router.get('/available', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/reserve', function(req, res) {
-  console.log(req.body);
   var appointment = req.body;
   var appointment_date = moment(appointment.date).format('YYYY-MM-DD');
   var user_id = appointment.user_id;
@@ -181,7 +190,9 @@ router.post('/reserve', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/existing', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
   // TODO: add code
+  }
 });
 
 // START ADMIN-ONLY APPOINTMENT ROUTES
