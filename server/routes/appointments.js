@@ -422,6 +422,45 @@ router.put('/update/:appointment_id/:status', function(req, res) {
   }
 });
 
+/**
+  * @api {delete} /appointments/:appointment_id Delete Appointment
+  * @apiVersion 0.1.0
+  * @apiName DeleteAppointment
+  * @apiGroup Appointments
+  * @apiDescription Deletes specified appointment from the database.
+  *
+  * @apiParam {Number} appointment_id Unique ID of the appointment in the "appointments" table.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  * @apiErrorExample Delete Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
+router.delete('/:appointment_id', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    var appointment_id = req.params.appointment_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('DELETE FROM "appointments" WHERE "id" = $1;', [appointment_id],
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful deletion from /appointments/:appointment_id', result);
+              res.sendStatus(200);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
 // END ADMIN-ONLY APPOINTMENT ROUTES
 
 module.exports = router;
