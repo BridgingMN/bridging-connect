@@ -205,9 +205,9 @@ function config($locationProvider, $routeProvider) {
         }]
       }
     })
-    .when('/caseworker-appointment-edit', {
-      templateUrl: '/views/templates/caseworker-appointment-edit.html',
-      controller: 'CaseworkerAppointmentEditController',
+    .when('/caseworker-appointment-edit-form', {
+      templateUrl: '/views/templates/caseworker-appointment-edit-form.html',
+      controller: 'CaseworkerAppointmentEditFormController',
       controllerAs: 'vm',
       resolve: { // get user from factory
         getuser : ['UserService', function(UserService){
