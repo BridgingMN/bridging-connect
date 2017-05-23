@@ -1,6 +1,7 @@
 <div layout="column" flex="100" layout-align = "start center"
       ng-init = "vm.getCaseworkers()">
   <h2>Caseworkers</h2>
+
 <div layout = "row" class = "addButton">
   <md-button class="md-raised md-primary" href="#admin-caseworker-new">
       Add New Caseworker</md-button>
@@ -17,19 +18,22 @@
         <th md-column md-order-by="nameToLower"><span>Caseworker</span></th>
         <th md-column md-order-by="vm.caseworker.name"><span>Agency</span></th>
         <th md-column md-numeric>Agency ID</th>
-        <th md-column md-numeric>On-Hold</th>
+        <th md-column md-numeric>Agency Disabled</th>
+        <th md-column md-numeric>Caseworker Disabled</th>
         <th md-column md-numeric>View Profile</th>
       </tr>
     </thead>
     <tbody md-body>
       <tr md-row md-select="caseworker" md-select-id="name" md-auto-select
-          ng-repeat="caseworker in vm.caseworkers.array | filter : test | limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          ng-repeat="caseworker in vm.caseworkers.array | filter : test |
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
         <td md-cell>{{caseworker.first}} {{caseworker.last}}</td>
         <td md-cell>{{caseworker.name}}</td>
         <td md-cell>{{caseworker.bridging_agency_id}}</td>
+        <td md-cell>{{caseworker.agency_access_disabled}}</td>
         <td md-cell>{{caseworker.user_access_disabled}}</td>
         <td md-cell><a href="#admin-caseworker-edit"
-            ng-click = "vm.viewCaseworker(caseworker.user_id)">See Detail</a></td>
+            ng-click = "vm.viewCaseworker(caseworker.user_id)">See Details</a></td>
       </tr>
     </tbody>
   </table>
