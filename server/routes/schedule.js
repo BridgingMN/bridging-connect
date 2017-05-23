@@ -3,6 +3,7 @@ var router = express.Router();
 var pool = require('../modules/database.js');
 var formatters = require('../modules/formatters.js');
 var formatTimeForPostgres = formatters.formatTimeForPostgres;
+var formatTimeForClient = formatters.formatTimeForClient;
 
 // get appt types
 router.get('/types', function(req, res) {
@@ -111,6 +112,42 @@ router.get('/locations', function(req, res) {
               });
               console.log('appointment delivery methods formatted:', locationsArray);
               res.send(locationsArray);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
+// get current appointment slots
+router.get('/default', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_slots"."num_allowed" ' +
+                        'FROM "appointment_slots" ' +
+                        'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
+                        'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
+                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
+                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id";',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /schedule/current', result.rows);
+              var defaultScheduleArray = result.rows;
+              defaultScheduleArray.forEach(function(appointmentSlotObj) {
+                appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
+                appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
+              });
+              console.log('default schedule array formatted:', defaultScheduleArray);
+              res.send(defaultScheduleArray);
             }
         }); // end query callback
       } // end DB connection if-else
