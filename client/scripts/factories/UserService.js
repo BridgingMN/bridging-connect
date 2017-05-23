@@ -7,6 +7,10 @@ angular
   var agencies = {};
   var agency = {};
   var caseworker = {};
+  var locations = {};
+  var days = {};
+  var types = {};
+  var methods = {};
   var selected = [];
   var query = {
     order: 'name',
@@ -20,12 +24,20 @@ angular
     newAppointment: newAppointment,
     selected: selected,
     query: query,
+    locations: locations,
+    days: days,
+    types: types,
+    methods: methods,
     agencies: agencies,
     agency: agency,
     getAgencies: getAgencies,
     caseworker: caseworker,
     viewCaseworker: viewCaseworker,
     viewAgency: viewAgency,
+    getLocations: getLocations,
+    getDays: getDays,
+    getTypes: getTypes,
+    getMethods: getMethods,
     loginUser: loginUser,
     registerUser: registerUser,
     getUser: getUser,
@@ -125,6 +137,42 @@ angular
     $http.get('/caseworkers/' + caseworker_id).then(function(response) {
       caseworker.selected = response.data;
       console.log('Caseworker record back from db: ', caseworker.selected);
+    });
+  }
+
+  //GETS all warehouse locations from db
+  function getLocations() {
+    console.log('client sent request to server for all locations');
+    $http.get('/schedule/locations').then(function(response) {
+        locations.array = response.data;
+        console.log('locations: ', locations.array);
+    });
+  }
+
+  //GETS all days of the week from db
+  function getDays() {
+    console.log('client sent request to server for all days');
+    $http.get('/schedule/days').then(function(response) {
+        days.array = response.data;
+        console.log('days: ', days.array);
+    });
+  }
+
+  //GETS all appointment types from db
+  function getTypes() {
+    console.log('client sent request to server for all appointment types');
+    $http.get('/schedule/types').then(function(response) {
+        types.array = response.data;
+        console.log('types: ', types.array);
+    });
+  }
+
+  //GETS all delivery methods from db
+  function getMethods() {
+    console.log('client sent request to server for all delivery methods');
+    $http.get('/schedule/deliverymethods').then(function(response) {
+        methods.array = response.data;
+        console.log('methods: ', methods.array);
     });
   }
 

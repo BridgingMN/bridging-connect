@@ -12,6 +12,13 @@ angular
   vm.getTypes = UserService.getTypes;
   vm.methods = UserService.methods;
   vm.getMethods = UserService.getMethods;
-  
+  vm.init = init;
+
+  function init() {
+    vm.getLocations();
+    vm.getDays();
+    vm.getTypes();
+    vm.getMethods();
+  }
 
 }]);
