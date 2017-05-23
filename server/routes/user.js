@@ -8,7 +8,6 @@ router.get('/', function(req, res) {
     console.log('checking /user route ');
     if(req.isAuthenticated()) {
         // send back user object from database
-        console.log('DONE GETTING USER', req.user);
         var userObject = {
           user_id: req.user.user_id,
           user_type_id: req.user.user_type_id,
@@ -30,7 +29,6 @@ router.get('/', function(req, res) {
           primary_mobile_phone: req.user.primary_mobile_phone,
           primary_email: req.user.primary_email,
         };
-        console.log('USER OBJECT BEING SENT:', userObject);
         res.send(userObject);
     } else {
         // failure best handled on the server. do redirect here.

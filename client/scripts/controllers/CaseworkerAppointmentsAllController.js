@@ -27,42 +27,7 @@ angular
 
 
   //This is a placeholder, in production appointsments will be an array property on the user object.
-  vm.caseworkerAppointments = [
-    {
-      id: 1,
-      client: {
-        first: 'Rod',
-        last: 'Todd'
-      },
-      info: {
-        appointment_date: new Date(),
-        delivery_date: new Date(),
-        appointment_type: 'Shopping',
-        location_name: 'Bloomington',
-        location_id: 1,
-        delivery_type: 'Delivery',
-        start_time: '9:15 AM'
-      }
-    },
-    {
-      id: 1,
-      client: {
-        first: 'Rod',
-        last: 'Todd'
-      },
-      info: {
-        appointment_date: new Date(),
-        delivery_date: new Date(),
-        appointment_type: 'Shopping',
-        loc: {
-          id: 1,
-          location: 'Bloomington'
-        },
-        delivery_type: 'Delivery',
-        start_time: '9:15 AM'
-      }
-    },
-  ];
+  vm.caseworkerAppointments = [];
 
   //Setup models
   activate();
@@ -73,6 +38,7 @@ angular
    */
   function activate() {
     getUserAppointments();
+    console.log('caseworker appts', vm.caseworkerAppointments);
   }
 
 
@@ -115,7 +81,7 @@ angular
   //This function will redirect the caseworker to a view where they can edit the referall form for their client
   function editAppointmentInfo(appointment) {
     console.log(appointment);
-    UserService.userObject.client_id = appointment.id;
+    UserService.userObject.client_id = appointment.client.client_id;
     $location.path('/caseworker-appointment-edit-form');
   }
 

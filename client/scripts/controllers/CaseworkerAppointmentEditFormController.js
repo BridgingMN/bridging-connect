@@ -36,12 +36,13 @@ angular
   }
 
   function getClientReferralForm(client_id) {
-    UserService.getClientReferralForm(client_id)
+    AppointmentService.getClientReferralForm(client_id)
     .then(getClientReferralFormSuccess, getClientReferralFormError);
   }
 
   function getClientReferralFormSuccess(response) {
     vm.clientReferralForm = response;
+    console.log('clientReferralForm', vm.clientReferralForm);
   }
 
   function getClientReferralFormError(error) {

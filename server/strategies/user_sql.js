@@ -32,7 +32,7 @@ passport.deserializeUser(function(id, done) {
 
     var user = {};
 
-    client.query('SELECT "users"."id" AS "user_id", "users"."department", "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "users"."notes", "agencies"."id" AS "agency_id", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."user_type_id", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
+    client.query('SELECT "users"."id", "users"."department", "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "users"."notes", "agencies"."id" AS "agency_id", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."user_type_id", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
                   'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                   'WHERE "users"."id" = $1;', [id],
       function(err, result) {
@@ -43,7 +43,6 @@ passport.deserializeUser(function(id, done) {
           release();
         }
         user = result.rows[0];
-        console.log('HERE\'S THE USER!!! ', user);
         release();
 
         if(!user) {
@@ -84,7 +83,6 @@ passport.use('local', new localStrategy({
 
             if(result.rows[0] !== undefined) {
               user = result.rows[0];
-              console.log('User obj', user);
               console.log(user.password);
               // Hash and compare
               if(encryptLib.comparePassword(password, user.password)) {

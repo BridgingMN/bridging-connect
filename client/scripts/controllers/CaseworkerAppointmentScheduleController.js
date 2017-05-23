@@ -56,7 +56,7 @@ angular
   vm.selectDate = selectDate;
   vm.reserveAppointment = reserveAppointment;
 
-  // getAvailableAppointments(vm.minDate, vm.maxDate);
+  getAvailableAppointments(vm.minDate, vm.maxDate);
 
   function availableAppointmentsPredicate (date) {
     return vm.availableAppointments.some(filterAppointmentsByDate, date);

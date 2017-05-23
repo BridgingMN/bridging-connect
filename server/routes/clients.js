@@ -4,6 +4,7 @@ var formatters = require('../modules/formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
 var formatDateForPostgres = formatters.formatDateForPostgres;
+var formatClient = formatters.formatClient;
 
 var pool = require('../modules/database.js');
 /**
@@ -31,6 +32,8 @@ var pool = require('../modules/database.js');
 */
 router.post('/', function(req, res) {
     var client = req.body;
+
+    console.log('client from other side', client);
     var first = client.first;
     var last = client.last;
     var dob = formatDateForPostgres(client.dob);
@@ -39,6 +42,8 @@ router.post('/', function(req, res) {
     var city = client.city;
     var state = client.state;
     var zip_code = client.zip_code;
+
+    console.log(first, last, dob, race_ethnicity, street, city, state, zip_code);
     pool.connect(function(connectionError, db, done) {
       if (connectionError) {
         console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
@@ -55,6 +60,7 @@ router.post('/', function(req, res) {
             console.log('ERROR MAKING QUERY');
             res.sendStatus(500);
           } else {
+            console.log('result:', result.rows[0]);
             res.send(result.rows[0]);
           }
         });
@@ -100,7 +106,8 @@ router.get('/:client_id', function(req, res) {
           console.log('ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
-          var clientObj = formatClientObj(result.rows);
+          var clientObj = formatClient(result.rows);
+          console.log('THIS SHOULD SAY CLIENT_ID', clientObj);
           res.send(clientObj);
         }
       });
@@ -135,10 +142,12 @@ router.get('/:client_id', function(req, res) {
 */
 router.put('/', function(req, res) {
   var client = req.body;
+  console.log('client from other side', client);
   var client_id = client.client_id;
   var first = client.first;
   var last = client.last;
   var dob = formatDateForPostgres(client.dob);
+  console.log('new dob', dob);
   var race_ethnicity = client.race_ethnicity;
   var street = client.street;
   var city = client.city;
@@ -158,21 +167,14 @@ router.put('/', function(req, res) {
       function(queryError, result){
         done();
         if (queryError) {
-          console.log('ERROR MAKING QUERY');
+          console.log(queryError, 'ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
-          var clientObj = formatClientObj(result.rows);
-          res.send(clientObj);
+          res.sendStatus(200);
         }
       });
     }
   });
 });
-
-function formatClientObj(rows) {
-  var clientObj = rows;
-  clientObj.dob = formatDate(clientObj.dob);
-  return clientObj;
-}
 
 module.exports = router;

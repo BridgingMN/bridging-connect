@@ -394,16 +394,16 @@ router.get('/pending', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/update/:appointment_id/:status', function(req, res) {
+  console.log('params', req.params);
   var appointment_id = req.params.appointment_id;
   var status = req.params.status;
-  if (req.isAuthenticated()) {
     pool.connect(function(err, database, done) {
     if (err) { // connection error
       console.log('error connecting to the database:', err);
       res.sendStatus(500);
     } else { // we connected
       database.query('UPDATE "appointments" ' +
-                      'SET "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $2)) ' +
+                      'SET "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $2) ' +
                       'WHERE "id" = $1;',
                       [appointment_id, status],
         function(queryErr, result) { // query callback
@@ -418,9 +418,6 @@ router.put('/update/:appointment_id/:status', function(req, res) {
         }); // end query
       } // end if-else
     }); // end pool.connect
-  } else { // user NOT authenticated
-    res.sendStatus(401);
-  }
 });
 
 /**

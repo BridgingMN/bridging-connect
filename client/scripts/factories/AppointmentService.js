@@ -37,9 +37,7 @@ angular
       console.log('POSTing New Client');
       var appointmentInfo = this.appointment;
       console.log('appointmentInfo', appointmentInfo);
-      return $http.post('/clients', {
-        params: clientReferralForm
-      }).then(function (response) {
+      return $http.post('/clients', clientReferralForm).then(function (response) {
         console.log('POSTING new appointment', response);
         return $http.post('/appointments/reserve', {
             client_id: response.data.id,

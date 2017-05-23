@@ -34,7 +34,7 @@ function getApptSlots(appointment_type, delivery_method, location_id, min_date, 
         } else {
           var apptSlots = result.rows;
           var apptSlotIds = apptSlots.map(function(apptSlot) {
-            return apptSlot.id;
+            return apptSlot.appointment_slot_id;
           });
           console.log('apptSlots', apptSlots);
           console.log('apptSlotIds', apptSlotIds);
@@ -60,15 +60,19 @@ function countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res) {
         'WHERE "appointments"."appointment_slot_id" = ANY($1::int[])' +
         'AND "appointments"."appointment_date" >= $2' +
         'AND "appointments"."appointment_date" <= $3' +
+        'AND ("appointments"."status_id" =' +
+        '(SELECT "id" FROM "statuses" WHERE "status" = $4)' +
+        'OR "appointments"."status_id" =' +
+        '(SELECT "id" FROM "statuses" WHERE "status" = $5))' +
         'GROUP BY "appointments"."appointment_date"',
-      [apptSlotIds, min_date, max_date],
+      [apptSlotIds, min_date, max_date, 'pending', 'confirmed'],
       function(queryError, result){
           done();
           if (queryError) {
             console.log(queryError, 'ERROR MAKING QUERY');
           } else {
             var existingApptCounts = result.rows;
-            console.log(existingApptCounts);
+            console.log('existingApptCounts', existingApptCounts);
             return getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCounts, res);
           }
         });
@@ -101,24 +105,38 @@ function getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCo
 }
 
 function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, overrides, res) {
+  console.log('apptSlots to start with', apptSlots);
   var apptsAvailable = [];
   var date = min_date;
   while (date <= max_date) {
+    console.log('DATE', date);
     var slotsForDate = [];
     var overridesForDate = checkForOverrides(date, overrides);
     if(overridesForDate) {
       slotsForDate = overridesForDate;
     } else {
       slotsForDate = findRelevant(apptSlots, date);
-      console.log('slotsForDate', slotsForDate);
     }
+
     for (var i = 0; i < slotsForDate.length; i++) {
-      var apptSlot = slotsForDate[i];
-      var isAvailable = checkAvailability(apptSlot, date, existingApptCounts, res);
+      console.log(slotsForDate)
+      var apptSlot = {};
+      var isAvailable = checkAvailability(slotsForDate[i], date, existingApptCounts, res);
       if (isAvailable){
+        console.log('************* apptSlot', apptSlot)
         apptSlot.date = formatDate(date);
-        apptSlot.start_time = formatTime(apptSlot.start_time);
-        apptSlot.end_time = formatTime(apptSlot.end_time);
+        console.log('-------- apptSlot.date', apptSlot.date, typeof apptSlot.date);
+        apptSlot.appointment_slot_id = slotsForDate[i].appointment_slot_id;
+        apptSlot.num_allowed = slotsForDate[i].num_allowed;
+        apptSlot.start_time = formatTime(slotsForDate[i].start_time);
+        apptSlot.end_time = formatTime(slotsForDate[i].end_time);
+        apptSlot.location_name = slotsForDate[i].location_name;
+        apptSlot.street = slotsForDate[i].street;
+        apptSlot.city = slotsForDate[i].city;
+        apptSlot.state = slotsForDate[i].state;
+        apptSlot.appointment_type = slotsForDate[i].appointment_type;
+        apptSlot.delivery_method = slotsForDate[i].delivery_method;
+        apptSlot.day = slotsForDate[i].day;
         apptsAvailable.push(apptSlot);
       }
     }
@@ -137,11 +155,23 @@ function findRelevant(apptSlots, date) {
   return slotList;
 }
 
+// function checkAndPush(apptSlot, apptsAvailable) {
+//   var apptAvailable;
+//   var isAvailable = checkAvailability(apptSlot, date, existingApptCounts, res);
+//   if (isAvailable) {
+//     apptSlot.date = formatDate(date);
+//     apptSlot.start_time = formatTime(apptSlot.start_time);
+//     apptSlot.end_time = formatTime(apptSlot.end_time);
+//     apptsAvailable.push(apptSlot);
+//   }
+// }
+
 // checks to see if an appt slot on a particular date is still available
 // (i.e. not completely filled) and returns true if it is
 function checkAvailability(apptSlot, date, existingApptCounts) {
   for (var i = 0; i < existingApptCounts.length; i++) {
     var appt = existingApptCounts[i];
+    console.log('appt date', appt.appointment_date);
     if (appt.appointment_date == date && appt.appointment_slot_id == apptSlot.id) {
       console.log('date match:', appt.appointment_date, date);
       console.log('slot match:', appt.appointment_slot_id, apptSlot.id);
