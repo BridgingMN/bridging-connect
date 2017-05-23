@@ -1,48 +1,49 @@
-<div layout="column" flex layout-align = "start center">
+<div layout="column" flex layout-align = "start center"
+      ng-init = "vm.getPendingAppointments()">
     <h2>Pending Appointments</h2>
 
-<div layout = "row" layout-align = "center center">
+  <div layout = "row">
+    <md-input-container>
+      <label>Search</label>
+      <input ng-model = "test">
+    </md-input-continer>
+  </div>
+
   <md-table-container>
-    <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
-    <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+    <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
+    <thead md-head md-order="vm.query.order" md-on-reorder="vm.getPendingAppointments">
       <tr md-row>
-        <th md-column md-order-by="nameToLower"><span>Date</span></th>
-        <th md-column md-numeric md-order-by="time.value"><span>Time</span></th>
+        <th md-column md-date md-order-by="vm.pendingAppointments.date"><span>Date</span></th>
+        <th md-column md-numeric md-order-by="vm.pendingAppointments.time"><span>Time</span></th>
         <th md-column md-numeric>Type</th>
         <th md-column md-numeric>Agency</th>
         <th md-column md-numeric>Caseworker</th>
         <th md-column md-numeric>Client</th>
         <th md-column md-numeric>Status</th>
         <th md-column md-numeric>Confirmation#</th>
-        <th md-column md-numeric>Actions</th>
+        <th md-column md-numeric>View Appointment</th>
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row >
-        <td md-cell>5/10/2017 {{dessert.name}}</td>
-        <td md-cell>9:15 am {{dessert.calories.value}}</td>
-        <td md-cell>Shopping Pick Up {{dessert.fat.value | number: 1}}</td>
-        <td md-cell>Hennepin County {{dessert.carbs.value}}</td>
-        <td md-cell>Amina Mohammed {{dessert.protein.value | number: 1}}</td>
-        <td md-cell>Bob Jones {{dessert.sodium.value}}</td>
-        <td md-cell>Pending {{dessert.calcium.value}}{{dessert.calcium.unit}}</td>
-        <td md-cell>45001 {{dessert.sodium.value}}</td>
-        <td md-cell><a href="#">See Detail</a> {{dessert.iron.value}}{{dessert.iron.unit}}</td>
+      <tr md-row md-select="appointment" md-select-id="name" md-auto-select
+          ng-repeat="appointment in vm.pendingAppointments.array | filter : test |
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          <td md-cell>{{appointment.date}}</td>
+          <td md-cell>{{appointment.time}}</td>
+          <td md-cell>{{appointment.type}}</td>
+          <td md-cell>{{appointment.name}}</td>
+          <td md-cell>{{appointment.caseworker}}</td>
+          <td md-cell>{{appointment.client}}</td>
+          <td md-cell>{{appointment.status}}</td>
+          <td md-cell>{{appointment.confirmationNumber}}</td>
+          <td md-cell><a href="#admin-appointment-review"
+              ng-click = "vm.viewAppointment(appointment)">See Details</a></td>
       </tr>
     </tbody>
-      <!-- <tr md-row md-select="dessert" md-select-id="name" md-auto-select ng-repeat="dessert in desserts.data">
-        <td md-cell>{{dessert.name}}</td>
-        <td md-cell>{{dessert.calories.value}}</td>
-        <td md-cell>{{dessert.fat.value | number: 1}}</td>
-        <td md-cell>{{dessert.carbs.value}}</td>
-        <td md-cell>{{dessert.protein.value | number: 1}}</td>
-        <td md-cell>{{dessert.sodium.value}}</td>
-        <td md-cell>{{dessert.calcium.value}}{{dessert.calcium.unit}}</td>
-        <td md-cell><a href="#">See Detail</a></td>
-      </tr> -->
-    </tbody>
+
   </table>
   </md-table-container>
-</div>
-  <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{desserts.count}}" md-on-paginate="getDesserts" md-page-select></md-table-pagination>
+  <md-table-pagination md-limit="vm.query.limit" md-limit-options="[5, 10, 15]"
+        md-page="vm.query.page" md-total="{{vm.pendingAppointments.array.length}}"
+        md-on-paginate="vm.getPendingAppointments" md-page-select></md-table-pagination>
 </div>

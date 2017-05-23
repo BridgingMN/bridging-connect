@@ -24,6 +24,7 @@ var appointments = require('./routes/appointments.js');
 var caseworkers = require('./routes/caseworkers.js');
 var clients = require('./routes/clients.js');
 var rules = require('./routes/rules.js');
+var schedule = require('./routes/schedule.js');
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
@@ -54,6 +55,7 @@ app.use('/appointments', isLoggedIn, appointments);
 app.use('/caseworkers', isLoggedIn, caseworkers);
 app.use('/clients', isLoggedIn, clients);
 app.use('/rules', isLoggedIn, rules);
+app.use('/schedule', isLoggedIn, schedule);
 app.use('/*', index);
 
 // LISTEN

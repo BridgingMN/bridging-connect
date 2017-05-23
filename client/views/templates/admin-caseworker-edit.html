@@ -1,5 +1,5 @@
 <div layout="column" flex = "100" layout-align = "start center">
-    <h2>View/Edit Caseworker</h2>
+    <h2>Caseworker Profile</h2>
 <div id = "agencyInfo">
   <h3>{{vm.caseworker.selected[0].name}}
       ({{vm.caseworker.selected[0].bridging_agency_id}})</h3>
@@ -9,7 +9,7 @@
       {{vm.caseworker.selected[0].primary_business_phone_ext}}</p>
   <p>Cell: {{vm.caseworker.selected[0].primary_mobile_phone}}</p>
   <p>Email: {{vm.caseworker.selected[0].primary_email}}</p>
-  <p>Agency On-Hold: {{vm.caseworker.selected[0].agency_access_disabled}}</p>
+  <p>Agency Access Disabled: {{vm.caseworker.selected[0].agency_access_disabled}}</p>
 </div>
   <md-content layout-padding>
     <div>
@@ -72,13 +72,13 @@
 
           <md-input-container class="md-block">
             <md-checkbox name = "disabled" ng-model = "vm.caseworker.selected[0].user_access_disabled">
-              Caseworker Account On-Hold (Caseworker cannot schedule appointments if checked)
+              Caseworker Access Disabled (Caseworker cannot schedule appointments if checked)
             </md-checkbox>
           </md-input-container>
 
           <div>
             <md-button type="submit" class="md-raised md-primary" ng-click = "vm.editCaseworker(vm.caseworker.selected[0])">
-              Submit</md-button>
+              Save Changes</md-button>
             <a href="#admin-caseworker-overview"><md-button type="button">
                 Cancel Changes</md-button></a>
             <md-button type="submit" class="md-raised md-warn"

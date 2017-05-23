@@ -16,7 +16,6 @@ function formatDateForPostgres(date) {
   return formattedDate;
 }
 
-
 function formatAppts(userAppts) {
   var formattedAppts = userAppts.map(function(userAppt) {
     var apptObj = {id: userAppt.id};
@@ -60,10 +59,15 @@ function formatClient(rows) {
   return clientObj;
 }
 
+function formatTimeForPostgres(time) {
+  return moment(time).format('HH:mm');
+}
+
 module.exports = {
   formatTime: formatTime,
   formatDate: formatDate,
   formatDateForPostgres: formatDateForPostgres,
+  formatTimeForPostgres: formatTimeForPostgres,
   formatAppts: formatAppts,
   formatClient: formatClient
 };

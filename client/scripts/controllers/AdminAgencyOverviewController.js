@@ -8,11 +8,7 @@ angular
   vm.getAgencies = UserService.getAgencies;
   vm.agency = UserService.agency;
   vm.viewAgency = UserService.viewAgency;
-  vm.selected = [];
-  vm.query = {
-    order: 'name',
-    limit: 5,
-    page: 1
-  };
+  vm.selected = UserService.selected;
+  vm.query = UserService.query;
 
 }]);
