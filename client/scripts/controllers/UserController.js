@@ -13,10 +13,15 @@ angular
   vm.newBedAppointment = newBedAppointment;
 
   function newShoppingAppointment() {
-    UserService.newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
+    if (!UserService.userObject.user.agency_access_disabled && !UserService.userObject.user.user_access_disabled) {
+      UserService.newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
+    }
   }
 
   function newBedAppointment() {
-    UserService.newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_BED);
+    if (!UserService.userObject.user.agency_access_disabled && !UserService.userObject.user.user_access_disabled) {
+      UserService.newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_BED);
+    }
   }
+
 }]);
