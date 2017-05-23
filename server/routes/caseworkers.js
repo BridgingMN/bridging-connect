@@ -146,7 +146,8 @@ router.post('/', function(req, res) {
       } else { // we connected
         database.query('INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id") ' +
                         'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, ' +
-                        '(SELECT "id" FROM "user_types" WHERE "user_type" = $9));',
+                        '(SELECT "id" FROM "user_types" WHERE "user_type" = $9)) ' +
+                        'RETURNING "id";',
                         [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
