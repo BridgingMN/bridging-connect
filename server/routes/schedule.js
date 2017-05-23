@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../modules/database.js');
 var formatters = require('../modules/formatters.js');
+var formatTime = formatters.formatTime;
 var formatTimeForPostgres = formatters.formatTimeForPostgres;
 
 // get appt types
@@ -121,7 +122,7 @@ router.get('/locations', function(req, res) {
 });
 
 // get current appointment slots
-router.get('/current', function(req, res) {
+router.get('/default', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
       if (err) { // connection error
@@ -140,7 +141,13 @@ router.get('/current', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('sucessful get from /schedule/current', result.rows);
-              res.send(result.rows);
+              var defaultScheduleArray = result.rows;
+              for (var appointmentSlotObj in defaultScheduleArray) {
+                appointmentSlotObj.start_time = formatTime(appointmentSlotObj.start_time);
+                appointmentSlotObj.end_time = formatTime(appointmentSlotObj.end_time);
+              }
+              console.log('default schedule array formatted:', defaultScheduleArray);
+              res.send(defaultScheduleArray);
             }
         }); // end query callback
       } // end DB connection if-else
