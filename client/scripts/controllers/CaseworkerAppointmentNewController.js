@@ -4,7 +4,7 @@
  */
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentNewController', ['$location', 'CONSTANTS', 'UserService', function($location, CONSTANTS, UserService) {
+  .controller('CaseworkerAppointmentNewController', ['$location', '$mdDialog', 'CONSTANTS', 'UserService', function($location, $mdDialog, CONSTANTS, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.CONSTANTS = CONSTANTS;
@@ -12,6 +12,14 @@ angular
   // methods
   vm.selectDeliveryType = selectDeliveryType;
 
+  activate();
+
+  function activate() {
+    if (UserService.userObject.user.agency_access_disabled || UserService.userObject.user.user_access_disabled) {
+      accessDisabledDialog();
+      $location.path('/caseworker-appointments-all');
+    }
+  }
   /**
    * This should call a method on the Appointment Object in the UserService
    * It will set the appointment_type property on the Appointment object
@@ -39,5 +47,16 @@ angular
     else {
       $location.path('/caseworker-appointment-zipcode');
     }
+  }
+
+  function accessDisabledDialog() {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title('Your Account Has Been Disabled')
+       .textContent('Please contact Bridging For More Information')
+       .ariaLabel('Access Disabled Alert')
+       .ok('Okay')
+   );
   }
 }]);
