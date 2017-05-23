@@ -121,7 +121,7 @@ router.get('/locations', function(req, res) {
 });
 
 /**
-  * @api {post} /schedule Add a New Appointment Slot
+  * @api {post} /schedule/default Add a New Appointment Slot
   * @apiVersion 0.1.0
   * @apiName PostAppointmentSlot
   * @apiGroup Appointment Schedule
@@ -140,43 +140,45 @@ router.get('/locations', function(req, res) {
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
 */
-// router.post('/', function(req, res) {
-//   console.log('in the post route for creating caseworker', req.body);
-//   if (req.isAuthenticated()) { // user is authenticated
-//     var appointment_type = req.body.appointment_type;
-//     var day = req.body.day;
-//     var delivery_method = req.body.delivery_method;
-//     var location = req.body.location;
-//     var start_time = formatTimeForPostgres(req.body.start_time);
-//     var end_time = formatTimeForPostgres(req.body.end_time);
-//     var num_allowed = req.body.num_allowed;
-//     pool.connect(function(err, database, done) {
-//       if (err) { // connection error
-//         console.log('error connecting to the database:', err);
-//         res.sendStatus(500);
-//       } else { // we connected
-//         database.query('INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed") ' +
-//                         'VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $$$$), ' +
-//                         '(SELECT "id" FROM "days" WHERE "name" = $$$$), ' +
-//                         '(SELECT "id" FROM "delivery_method_id" WHERE "name" = $$$$), ' +'
-//                         ');',
-//                         [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type],
-//           function(queryErr, result) { // query callback
-//             done(); // release connection to the pool
-//             if (queryErr) {
-//               console.log('error making query on /caseworkers POST', queryErr);
-//               res.sendStatus(500);
-//             } else {
-//               console.log('successful insert into "caseworkers"', result);
-//               res.send(result);
-//             }
-//         }); // end query
-//       } // end if-else
-//     }); // end pool.connect
-//   } else { // user NOT authenticated
-//     res.sendStatus(401);
-//   }
-// });
+router.post('/default', function(req, res) {
+  console.log('in the post route for creating caseworker', req.body);
+  if (req.isAuthenticated()) { // user is authenticated
+    var appointment_type = req.body.appointment_type;
+    var day = req.body.day;
+    var delivery_method = req.body.delivery_method;
+    var location = req.body.location;
+    var start_time = formatTimeForPostgres(req.body.start_time);
+    var end_time = formatTimeForPostgres(req.body.end_time);
+    var num_allowed = req.body.num_allowed;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed") ' +
+                        'VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1), ' +
+                        '(SELECT "id" FROM "days" WHERE "name" = $2), ' +
+                        '(SELECT "id" FROM "delivery_methods" WHERE "delivery_method" = $3), ' +
+                        '(SELECT "id" FROM "locations" WHERE "location" = $4), ' +
+                        '$5, $6, $7) ' +
+                        'RETURNING "id";',
+                        [appointment_type, day, delivery_method, location, start_time, end_time, num_allowed],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /caseworkers POST', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful insert into "caseworkers"', result);
+              res.send(result);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+  } else { // user NOT authenticated
+    res.sendStatus(401);
+  }
+});
 
 
 
