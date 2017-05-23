@@ -120,6 +120,36 @@ router.get('/locations', function(req, res) {
   }
 });
 
+// get current appointment slots
+router.get('/current', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_slots"."num_allowed" ' +
+                        'FROM "appointment_slots" ' +
+                        'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
+                        'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
+                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
+                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id";',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /schedule/current', result.rows);
+              res.send(result.rows);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
 /**
   * @api {post} /schedule/default Add a New Appointment Slot
   * @apiVersion 0.1.0
