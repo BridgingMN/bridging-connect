@@ -4,7 +4,7 @@ var pool = require('../modules/database.js');
 var formatters = require('../modules/formatters.js');
 var formatTimeForPostgres = formatters.formatTimeForPostgres;
 
-
+// get appt types
 router.get('/types', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
@@ -19,11 +19,98 @@ router.get('/types', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('sucessful get from /schedule/types', result.rows);
-              var appointment_types = result.rows.map(function(apptTypeObj) {
+              var appointmentTypesArray = result.rows.map(function(apptTypeObj) {
                 return apptTypeObj.appointment_type;
               });
-              console.log('appointment types formatted:', appointment_types);
-              res.send(appointment_types);
+              console.log('appointment types formatted:', appointmentTypesArray);
+              res.send(appointmentTypesArray);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
+// get appt days
+router.get('/days', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "name" FROM "days";',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /schedule/days', result.rows);
+              var daysArray = result.rows.map(function(dayNamesObj) {
+                return dayNamesObj.name;
+              });
+              console.log('appointment days formatted:', daysArray);
+              res.send(daysArray);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
+// get delivery methods
+router.get('/deliverymethods', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "delivery_method" FROM "delivery_methods";',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /schedule/deliverymethods', result.rows);
+              var deliveryMethodsArray = result.rows.map(function(deliveryMethodsObj) {
+                return deliveryMethodsObj.delivery_method;
+              });
+              console.log('appointment delivery methods formatted:', deliveryMethodsArray);
+              res.send(deliveryMethodsArray);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
+// get warehouse locations
+router.get('/locations', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "location" FROM "locations";',
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /schedule/locations', result.rows);
+              var locationsArray = result.rows.map(function(locationsObj) {
+                return locationsObj.location;
+              });
+              console.log('appointment delivery methods formatted:', locationsArray);
+              res.send(locationsArray);
             }
         }); // end query callback
       } // end DB connection if-else
@@ -53,43 +140,43 @@ router.get('/types', function(req, res) {
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
 */
-router.post('/', function(req, res) {
-  console.log('in the post route for creating caseworker', req.body);
-  if (req.isAuthenticated()) { // user is authenticated
-    var appointment_type = req.body.appointment_type;
-    var day = req.body.day;
-    var delivery_method = req.body.delivery_method;
-    var location = req.body.location;
-    var start_time = formatTimeForPostgres(req.body.start_time);
-    var end_time = formatTimeForPostgres(req.body.end_time);
-    var num_allowed = req.body.num_allowed;
-    pool.connect(function(err, database, done) {
-      if (err) { // connection error
-        console.log('error connecting to the database:', err);
-        res.sendStatus(500);
-      } else { // we connected
-        database.query('INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed") ' +
-                        'VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $$$$), ' +
-                        '(SELECT "id" FROM "days" WHERE "name" = $$$$), ' +
-                        '(SELECT "id" FROM "delivery_method_id" WHERE "name" = $$$$), ' +'
-                        ');',
-                        [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type],
-          function(queryErr, result) { // query callback
-            done(); // release connection to the pool
-            if (queryErr) {
-              console.log('error making query on /caseworkers POST', queryErr);
-              res.sendStatus(500);
-            } else {
-              console.log('successful insert into "caseworkers"', result);
-              res.send(result);
-            }
-        }); // end query
-      } // end if-else
-    }); // end pool.connect
-  } else { // user NOT authenticated
-    res.sendStatus(401);
-  }
-});
+// router.post('/', function(req, res) {
+//   console.log('in the post route for creating caseworker', req.body);
+//   if (req.isAuthenticated()) { // user is authenticated
+//     var appointment_type = req.body.appointment_type;
+//     var day = req.body.day;
+//     var delivery_method = req.body.delivery_method;
+//     var location = req.body.location;
+//     var start_time = formatTimeForPostgres(req.body.start_time);
+//     var end_time = formatTimeForPostgres(req.body.end_time);
+//     var num_allowed = req.body.num_allowed;
+//     pool.connect(function(err, database, done) {
+//       if (err) { // connection error
+//         console.log('error connecting to the database:', err);
+//         res.sendStatus(500);
+//       } else { // we connected
+//         database.query('INSERT INTO "appointment_slots" ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed") ' +
+//                         'VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $$$$), ' +
+//                         '(SELECT "id" FROM "days" WHERE "name" = $$$$), ' +
+//                         '(SELECT "id" FROM "delivery_method_id" WHERE "name" = $$$$), ' +'
+//                         ');',
+//                         [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type],
+//           function(queryErr, result) { // query callback
+//             done(); // release connection to the pool
+//             if (queryErr) {
+//               console.log('error making query on /caseworkers POST', queryErr);
+//               res.sendStatus(500);
+//             } else {
+//               console.log('successful insert into "caseworkers"', result);
+//               res.send(result);
+//             }
+//         }); // end query
+//       } // end if-else
+//     }); // end pool.connect
+//   } else { // user NOT authenticated
+//     res.sendStatus(401);
+//   }
+// });
 
 
 
