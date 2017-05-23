@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../modules/database.js');
 var formatters = require('../modules/formatters.js');
-var formatTime = formatters.formatTime;
 var formatTimeForPostgres = formatters.formatTimeForPostgres;
+var formatTimeForClient = formatters.formatTimeForClient;
 
 // get appt types
 router.get('/types', function(req, res) {
@@ -142,10 +142,10 @@ router.get('/default', function(req, res) {
             } else {
               console.log('sucessful get from /schedule/current', result.rows);
               var defaultScheduleArray = result.rows;
-              for (var appointmentSlotObj in defaultScheduleArray) {
-                appointmentSlotObj.start_time = formatTime(appointmentSlotObj.start_time);
-                appointmentSlotObj.end_time = formatTime(appointmentSlotObj.end_time);
-              }
+              defaultScheduleArray.forEach(function(appointmentSlotObj) {
+                appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
+                appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
+              });
               console.log('default schedule array formatted:', defaultScheduleArray);
               res.send(defaultScheduleArray);
             }
