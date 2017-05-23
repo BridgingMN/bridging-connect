@@ -16,8 +16,13 @@ function formatDateForPostgres(date) {
   return formattedDate;
 }
 
+function formatTimeForPostgres(time) {
+  return moment(time).format('HH:mm');
+}
+
 module.exports = {
   formatTime: formatTime,
   formatDate: formatDate,
-  formatDateForPostgres: formatDateForPostgres
+  formatDateForPostgres: formatDateForPostgres,
+  formatTimeForPostgres: formatTimeForPostgres
 };

@@ -93,6 +93,28 @@ GROUP BY "appointments"."appointment_date"
 -- $1: min_date
 -- $2: max_date
 
+-- GET ALL SAVED APPOINTMENTS (regardless of status)
+SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status"
+FROM "appointments"
+JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"
+JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"
+JOIN "users" ON "appointments"."user_id" = "users"."id"
+JOIN "agencies" ON "users"."agency_id" = "agencies"."id"
+JOIN "clients" ON "appointments"."client_id" = "clients"."id"
+JOIN "statuses" ON "appointments"."status_id" = "statuses"."id";
+
+-- GET ALL PENDING APPOINTMENTS (status = 'pending')
+SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status"
+FROM "appointments"
+JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"
+JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"
+JOIN "users" ON "appointments"."user_id" = "users"."id"
+JOIN "agencies" ON "users"."agency_id" = "agencies"."id"
+JOIN "clients" ON "appointments"."client_id" = "clients"."id"
+JOIN "statuses" ON "appointments"."status_id" = "statuses"."id"
+WHERE "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1);
+-- $1: status ('pending')
+
 ---- MAKE APPOINTMENT ----
 -- Save an appointment to appointments table
 INSERT INTO "appointments" ("appointment_slot_id", "user_id", "client_id", "created_date", "appointment_date", "status_id")
@@ -105,10 +127,15 @@ VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" WHERE "status" = 'pendi
 
 ---- UPDATE APPOINTMENT STATUS ----
 -- Updates status of an appointment in database
-UPDATE "appointments" SET "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1)
-WHERE "id" = $2;
--- $1: status
--- $2: appointment_id
+UPDATE "appointments"
+SET "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $2))
+WHERE "id" = $1;
+-- $1: appointment_id
+-- $2: status
+
+-- DELETE APPOINTMENT
+DELETE FROM "appointments" WHERE "id" = $1;
+-- $1: appointment_id
 
 ---- ADD A CLIENT ----
 -- Save a new client to clients table
