@@ -65,8 +65,8 @@ function config($locationProvider, $routeProvider) {
         }]
       }
     })
-    .when('/admin-default-appointments-new', {
-      templateUrl: '/views/templates/admin-default-appointments-new.html',
+    .when('/admin-default-appointment-new', {
+      templateUrl: '/views/templates/admin-default-appointment-new.html',
       controller: 'AdminDefaultAppointmentNewController',
       controllerAs: 'vm',
       resolve: { // get user from factory

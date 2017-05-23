@@ -7,56 +7,82 @@
 
   <md-card>
     <md-card-title>
-      <md-card-title-text>
+      <md-card-title-text layout-align = "start center">
         <span class="md-headline">Appointment Slot</span>
-        <span class="md-subhead">Create a new Default Appointment time.</span>
+        <span class="md-subhead">Create a New Default Appointment</span>
       </md-card-title-text>
     </md-card-title>
 
 
-  <md-content layout-padding>
+  <md-card-content layout-padding>
     <div>
       <form name = "defaultForm">
         <div layout-gt-xs="row">
+
           <md-input-container class="md-block" flex-gt-xs>
-            <label>Pick a Location</label>
-            <input ng-model="default.location" disabled>
+          <label>Location</label>
+          <md-select ng-model="vm.default.location">
+            <md-option ng-repeat="location in vm.locations" ng-value="location.option"
+                        ng-disabled="$index === 1">{{location.option}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container>
+        <label>Week Day</label>
+        <md-select ng-model="vm.default.day">
+          <md-option ng-repeat="day in vm.week" ng-value="day.option"
+                      ng-disabled="$index === 1">{{day.option}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+        </div>
+
+        <div layout-gt-xs="row">
+          <md-input-container class="md-block" flex-gt-xs>
+          <label>Appointment Type</label>
+          <md-select ng-model="vm.default.type">
+            <md-option ng-repeat="type in vm.types" ng-value="type.option"
+                        ng-disabled="$index === 1">{{type.option}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container>
+        <label>Delivery or Pick Up</label>
+        <md-select ng-model="vm.default.delivery_method">
+          <md-option ng-repeat="method in vm.methods" ng-value="method.option"
+                      ng-disabled="$index === 1">{{method.option}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+        </div>
+
+        <div layout-gt-xs="row">
+          <md-input-container class="md-block" flex-gt-xs>
+            <label>Start Time</label>
+            <input type = "time" ng-model="vm.default.start_time">
           </md-input-container>
 
-          <md-input-container>
-            <label>Select a Day</label>
-            <md-datepicker ng-model="default.date"></md-datepicker>
+          <md-input-container class="md-block" flex-gt-xs>
+            <label>End Time</label>
+            <input type = "time" ng-model="vm.default.end_time">
           </md-input-container>
         </div>
 
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Appointment Type</label>
-            <input ng-model="user.firstName">
-          </md-input-container>
+        <md-input-container class ="md-block">
+        <label>Number of Appointments Allowed at that time</label>
+        <input type = "number" ng-model="vm.default.num_allowed">
+        </md-input-container>
 
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Delivery or Pick Up</label>
-            <input ng-model="theMax">
-          </md-input-container>
-        </div>
-
-        <div>
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Select a Time Slot</label>
-            <input ng-model="theMax">
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>How many appointments are allowed at that time?</label>
-            <input ng-model="theMax">
-          </md-input-container>
-        </div>
 
         <div layout = "row">
           <md-button type="submit"  class="md-raised md-primary">Create</md-button>
+          <a href="#admin-appointments-default"><md-button type="button">Cancel
+              </md-button></a>
         </div>
       </form>
     </div>
-  <md-content>
+  <md-card-content>
+  </md-card>
 </div>
