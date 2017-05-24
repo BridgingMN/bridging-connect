@@ -63,7 +63,7 @@ angular
 
   function setAppointmentFilter(filter) {
     console.log(filter);
-    //This function will filter the view to show the desired types of appointments
+    vm.appointmentFilter = filter;
   }
 
   //This function will redirect the caseworker to a view where they can reschedule their appointment
@@ -104,7 +104,12 @@ angular
 
   function cancelAppointment(appointment) {
     AppointmentService.cancelAppointment(appointment.id)
-    .then(showToastSuccess, showToastError);
+    .then(cancelAppointmentSuccess, showToastError);
+  }
+
+  function cancelAppointmentSuccess(response) {
+    getUserAppointments();
+    showToastSuccess(response);
   }
 
   function showToastSuccess (text) {
