@@ -4,11 +4,12 @@
  */
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentScheduleController', ['$location', '$scope', 'AppointmentService', 'UserService', function($location, $scope, AppointmentService, UserService) {
+  .controller('CaseworkerAppointmentScheduleController', ['$location', '$scope', 'CONSTANTS', 'AppointmentService', 'UserService', function($location, $scope, CONSTANTS,  AppointmentService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
   console.log('UserService.appointment assigned to vm.appointment', UserService.newAppointment);
   vm.appointment = UserService.newAppointment;
+  vm.CONSTANTS = CONSTANTS;
 
   //Model for the currently selected date
   vm.selectedDate = new Date();

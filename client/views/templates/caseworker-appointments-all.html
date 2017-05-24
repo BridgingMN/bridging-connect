@@ -12,16 +12,20 @@
     flex="20"
     ng-if="appointment.info.status != 'canceled'">
       <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
-        <div class="appointment-date">
-          <p layout="column" layout-align="center center">
+        <div class="appointment-icon">
+          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
+        </div>
+        <div class="md-title appointment-date">
+          <p class="" layout="column" layout-align="center center">
             <span>{{appointment.info.date | date: 'MMM'}}</span>
             <span>{{appointment.info.date | date: 'dd'}}</span>
           </p>
         </div>
-        <div class="md-padding appointment-type-info">
+        <div class="md-title md-padding appointment-type-info">
           <p layout="column" layout-align="center center">
-            <span>{{appointment.info.appointment_type | uppercase}}</span>
-            <span>w/{{appointment.info.delivery_method | uppercase}}</span>
+            <span class="appointment-type">{{appointment.info.appointment_type}}</span>
+            <span>with <span class="appointment-delivery">{{appointment.info.delivery_method}}</span></span>
           </p>
         </div>
       </div>
