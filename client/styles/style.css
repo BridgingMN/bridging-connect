@@ -1,3 +1,11 @@
+.md-toolbar-tools .logo{
+  max-height: 100%;
+  margin: 8px;
+  margin-left: 0px;
+  position: relative;
+  top: 5px;
+}
+
 .navigation-tabs md-content {
   background-color: inherit;
 }
@@ -12,12 +20,8 @@
 }
 
 .appointment-card .appointment-card-header {
-  background-color: rgb(63,81,181);
+  background-color: #54C0C9;
   color: white;
-}
-
-.appointment-card .appointment-card-header .appointment-date {
-  font-weight: bold;
 }
 
 .appointment-card .appointment-card-delivery-info {
@@ -31,6 +35,10 @@
 
 .addButton {
   max-height: 50px;
+}
+
+.appointment-date, .appointment-delivery, .appointment-type {
+  text-transform: capitalize;
 }
 
 #agencyInfo {

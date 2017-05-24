@@ -1,11 +1,13 @@
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentFormController', ['$location', 'UserService', function($location, UserService) {
+  .controller('CaseworkerAppointmentFormController', ['$location', 'CONSTANTS', 'UserService', function($location, CONSTANTS, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
+  vm.CONSTANTS = CONSTANTS;
 
   //Model for the appointment info header
   vm.appointment = UserService.newAppointment;
+  console.log('UserService in form controller', UserService);
 
   //Model for the clientReferralForm
   vm.clientReferralForm = {

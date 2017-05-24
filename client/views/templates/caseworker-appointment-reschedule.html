@@ -1,8 +1,10 @@
 <div class="caseworker-appointment-new" layout="column" layout-align="start center" flex>
   <h3>Appointment Date and Time</h3>
   <div class="caseworker-appointment-info" layout="row" layout-align="center center">
-    <div class="md-padding appointment-type">
-      <span>{{vm.appointment.appointment_type}} w/ {{vm.appointment.delivery_method}}</span>
+    <div class="md-padding">
+      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
+      <span><span class="appointment-type">{{vm.appointment.appointment_type}}</span> w/ <span class="appointment-delivery">{{vm.appointment.delivery_method}}</span></span>
     </div>
     <div class="md-padding appointment-location">
       <i class="material-icons">place</i>
@@ -10,9 +12,8 @@
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
-      <span>{{vm.selectedDate |date: 'shortDate'}},
-      {{vm.selectedAppointment.start_time}}</span>
-
+      <span>{{vm.selectedDate | date: 'shortDate' }},
+      {{vm.selectedAppointment.start_time | uppercase}}</span>
     </div>
   </div>
   <div class="caseworker-appointment-schedule-inputs" layout="row">
