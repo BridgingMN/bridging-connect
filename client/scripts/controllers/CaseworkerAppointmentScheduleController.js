@@ -81,8 +81,6 @@ angular
     $location.path('/caseworker-appointment-form');
   }
 
-
-
   /**
   * Filter appointments by date
   * @function filterAppointmentsByDate
@@ -91,7 +89,6 @@ angular
   */
   function filterAppointmentsByDate(appointment) {
     var date = this;
-    // console.log('appointment.date', appointment.date, typeof appointment.date, 'date', date, typeof date);
     return compareDates(appointment.date, date);
   }
 
@@ -108,6 +105,4 @@ angular
     //Return a comparison of the two dates.
     return appointmentDate.getTime() == date.getTime();
   }
-
-
 }]);

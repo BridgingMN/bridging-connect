@@ -5,7 +5,18 @@ var formatters = require('../modules/formatters.js');
 var formatTimeForPostgres = formatters.formatTimeForPostgres;
 var formatTimeForClient = formatters.formatTimeForClient;
 
-// get appt types
+/**
+  * @api {get} /schedule/types Get Appointment Type Options
+  * @apiVersion 0.1.0
+  * @apiName GetScheduleTypes
+  * @apiGroup Schedule
+  * @apiDescription Retrieve all appointment types from the "appointment_types" table of the database.
+  *
+  * @apiSuccess {String[]} appointmentTypesArray Array of strings corresponding to all available appointment types.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/types', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
@@ -34,7 +45,18 @@ router.get('/types', function(req, res) {
   }
 });
 
-// get appt days
+/**
+  * @api {get} /schedule/days Get Appointment Day Options
+  * @apiVersion 0.1.0
+  * @apiName GetScheduleDays
+  * @apiGroup Schedule
+  * @apiDescription Retrieve all days from the "days" table of the database.
+  *
+  * @apiSuccess {String[]} daysArray Array of strings corresponding to all available days for which an appointment slot can be scheduled.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/days', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
@@ -63,7 +85,18 @@ router.get('/days', function(req, res) {
   }
 });
 
-// get delivery methods
+/**
+  * @api {get} /schedule/days Get Delivery Method Options
+  * @apiVersion 0.1.0
+  * @apiName GetDeliveryMethods
+  * @apiGroup Schedule
+  * @apiDescription Retrieve all delivery methods from the "delivery_methods" table of the database.
+  *
+  * @apiSuccess {String[]} deliveryMethodsArray Array of strings corresponding to all available delivery methods for an appointment slot.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/deliverymethods', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
@@ -92,7 +125,18 @@ router.get('/deliverymethods', function(req, res) {
   }
 });
 
-// get warehouse locations
+/**
+  * @api {get} /schedule/locations Get Locations
+  * @apiVersion 0.1.0
+  * @apiName GetLocations
+  * @apiGroup Schedule
+  * @apiDescription Retrieve all Bridging locations from the "locations" table of the database.
+  *
+  * @apiSuccess {String[]} locationsArray Array of strings corresponding to all available Bridging locations where an appointment can be made.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/locations', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
@@ -121,7 +165,26 @@ router.get('/locations', function(req, res) {
   }
 });
 
-// get current appointment slots
+/**
+  * @api {get} /schedule/default Get All Current Appointment Slots
+  * @apiVersion 0.1.0
+  * @apiName GetDefaultSchedule
+  * @apiGroup Schedule
+  * @apiDescription Retrieve all current appointment slots from the "appointment_slots" table of the database and their associated information.
+  *
+  * @apiSuccess {Object[]} locationsArray Array of objects corresponding to all current appointment slots.
+  * @apiSuccess {Number} locationsArray.appointment_slot_id Unique ID of the appointment slot.
+  * @apiSuccess {String} locationsArray.appointment_type Name of appointment type ("shopping" or "new bed").
+  * @apiSuccess {String} locationsArray.day Day of appointment slot.
+  * @apiSuccess {String} locationsArray.delivery_method Delivery method of appointment slot ("pickup" or "delivery").
+  * @apiSuccess {String} locationsArray.location_name Name of Bridging location ("Bloomington" or "Roseville").
+  * @apiSuccess {Moment} locationsArray.start_time Time the appointment starts, converted to a Moment.js Object.
+  * @apiSuccess {Moment} locationsArray.end_time Time the appointment ends, converted to a Moment.js Object.
+  * @apiSuccess {Number} locationsArray.num_allowed Maximum number of appointments allowed to be scheduled during the appointment slot.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/default', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
@@ -161,7 +224,7 @@ router.get('/default', function(req, res) {
   * @api {post} /schedule/default Add a New Appointment Slot
   * @apiVersion 0.1.0
   * @apiName PostAppointmentSlot
-  * @apiGroup Appointment Schedule
+  * @apiGroup Schedule
   * @apiDescription Adds a new appointment slot to the "appointment_slots" table in the database.
   *
   * @apiParam {String} appointment_type Mandatory Type of appointment corresponding to an entry in the "appointment_types" table.
@@ -172,7 +235,7 @@ router.get('/default', function(req, res) {
   * @apiParam {Time} end_time Mandatory End time for the new appointment slot.
   * @apiParam {Number} num_allowed Mandatory Number of appointments allowed for the new appointment slot.
   *
-  * @apiSuccess {Number} id Unique ID of the new caseworker.
+  * @apiSuccess {Number} appointment_slot_id Unique ID of the new appointment slot.
   *
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -216,7 +279,27 @@ router.post('/default', function(req, res) {
   }
 });
 
-// update an appointment slot
+/**
+  * @api {post} /schedule/default Update a Current Appointment Slot
+  * @apiVersion 0.1.0
+  * @apiName PutAppointmentSlot
+  * @apiGroup Schedule
+  * @apiDescription Updates a current appointment slot in the "appointment_slots" table of the database.
+  *
+  * @apiParam {Number} id Unique ID of the new appointment slot.
+  * @apiParam {String} appointment_type Mandatory Type of appointment corresponding to an entry in the "appointment_types" table.
+  * @apiParam {String} day Mandatory Day name corresponding to an entry in the "days" table.
+  * @apiParam {String} delivery_method Mandatory Delivery method name corresponding to an entry in the "delivery_methods" table.
+  * @apiParam {String} location Mandatory Location name corresponding to an entry in the "locations" table.
+  * @apiParam {Time} start_time Mandatory Start time for the new appointment slot.
+  * @apiParam {Time} end_time Mandatory End time for the new appointment slot.
+  * @apiParam {Number} num_allowed Mandatory Number of appointments allowed for the new appointment slot.
+  *
+  * @apiSuccess {Number} id Unique ID of the new caseworker.
+  *
+  * @apiErrorExample {json} Post Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.put('/default', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var appointment_slot_id = req.body.appointment_slot_id;
@@ -259,7 +342,7 @@ router.put('/default', function(req, res) {
 
 // delete an appointment slot
 // CURRENTLY Appointment slot cannot be deleted if an appointment with that appointment_slot_id exists in the DB due to foreign key constraint.
-// either need to relax conditions on the appointments table (if this is an option), or build out logic to deal with this.
+// appointment slot will need num_allowed to be zeroed out by the administrator to prevent future appointments from being scheduled if a slot is no longer going to be used
 //
 // router.delete('/:appointment_slot_id', function(req, res) {
 //   if (req.isAuthenticated()) { // user is authenticated
@@ -285,6 +368,5 @@ router.put('/default', function(req, res) {
 //     res.sendStatus(401);
 //   }
 // });
-
 
 module.exports = router;
