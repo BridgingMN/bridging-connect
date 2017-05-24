@@ -41,6 +41,7 @@ angular
         console.log('POSTING new appointment', response);
         return $http.post('/appointments/reserve', {
             client_id: response.data.id,
+            date: appointmentInfo.date,
             appointment_slot_id: appointmentInfo.appointment_slot_id,
             status: 'pending'
         }).then(returnResponse, returnError);
@@ -57,8 +58,11 @@ angular
       }).then(returnResponse, returnError);
     };
 
+    var availableAppointments = [];
+
     return {
       Appointment: Appointment,
+      availableAppointments: availableAppointments,
       getClientReferralForm: getClientReferralForm,
       getUserAppointments: getUserAppointments,
       cancelAppointment: cancelAppointment,
