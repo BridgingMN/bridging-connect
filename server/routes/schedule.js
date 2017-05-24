@@ -172,15 +172,15 @@ router.get('/locations', function(req, res) {
   * @apiGroup Schedule
   * @apiDescription Retrieve all current appointment slots from the "appointment_slots" table of the database and their associated information.
   *
-  * @apiSuccess {Object[]} locationsArray Array of objects corresponding to all current appointment slots.
-  * @apiSuccess {Number} locationsArray.appointment_slot_id Unique ID of the appointment slot.
-  * @apiSuccess {String} locationsArray.appointment_type Name of appointment type ("shopping" or "new bed").
-  * @apiSuccess {String} locationsArray.day Day of appointment slot.
-  * @apiSuccess {String} locationsArray.delivery_method Delivery method of appointment slot ("pickup" or "delivery").
-  * @apiSuccess {String} locationsArray.location_name Name of Bridging location ("Bloomington" or "Roseville").
-  * @apiSuccess {Moment} locationsArray.start_time Time the appointment starts, converted to a Moment.js Object.
-  * @apiSuccess {Moment} locationsArray.end_time Time the appointment ends, converted to a Moment.js Object.
-  * @apiSuccess {Number} locationsArray.num_allowed Maximum number of appointments allowed to be scheduled during the appointment slot.
+  * @apiSuccess {Object[]} defaultScheduleArray Array of objects corresponding to all current appointment slots.
+  * @apiSuccess {Number} defaultScheduleArray.appointment_slot_id Unique ID of the appointment slot.
+  * @apiSuccess {String} defaultScheduleArray.appointment_type Name of appointment type ("shopping" or "new bed").
+  * @apiSuccess {String} defaultScheduleArray.day Day of appointment slot.
+  * @apiSuccess {String} defaultScheduleArray.delivery_method Delivery method of appointment slot ("pickup" or "delivery").
+  * @apiSuccess {String} defaultScheduleArray.location_name Name of Bridging location ("Bloomington" or "Roseville").
+  * @apiSuccess {Moment} defaultScheduleArray.start_time Time the appointment starts, converted to a Moment.js Object.
+  * @apiSuccess {Moment} defaultScheduleArray.end_time Time the appointment ends, converted to a Moment.js Object.
+  * @apiSuccess {Number} defaultScheduleArray.num_allowed Maximum number of appointments allowed to be scheduled during the appointment slot.
   *
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -280,7 +280,7 @@ router.post('/default', function(req, res) {
 });
 
 /**
-  * @api {post} /schedule/default Update a Current Appointment Slot
+  * @api {put} /schedule/default Update a Current Appointment Slot
   * @apiVersion 0.1.0
   * @apiName PutAppointmentSlot
   * @apiGroup Schedule
