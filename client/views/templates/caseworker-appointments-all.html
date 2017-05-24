@@ -11,7 +11,7 @@
     layout="column"
     flex="20"
     ng-if="appointment.info.status != 'canceled'">
-      <div class="appointment-card-header" layout="row" layout-align="space-around center">
+      <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
         <div class="appointment-date">
           <p layout="column" layout-align="center center">
             <span>{{appointment.info.date | date: 'MMM'}}</span>
@@ -71,4 +71,5 @@
       </div>
     </md-content>
   </div>
+  <span flex></span>
 </div>

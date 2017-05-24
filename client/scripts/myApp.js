@@ -1,8 +1,8 @@
 angular
   .module('myApp', ['ngRoute', 'ngMaterial', 'md.data.table'])
-  .config(['$locationProvider', '$routeProvider', config]);
+  .config(['$locationProvider', '$mdThemingProvider', '$routeProvider', config]);
 // -----ROUTES-----
-function config($locationProvider, $routeProvider) {
+function config($locationProvider, $mdThemingProvider, $routeProvider) {
   $locationProvider.hashPrefix('');
   $routeProvider
     .when('/login', {
@@ -20,7 +20,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'UserController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -30,7 +30,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAppointmentsPendingController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -40,7 +40,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAppointmentsAllController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -50,7 +50,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAppointmentReviewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -60,7 +60,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAppointmentsDefaultController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -70,7 +70,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminDefaultAppointmentNewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -80,7 +80,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAppointmentsCustomizeController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -90,7 +90,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAppointmentsExportController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -100,7 +100,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminCaseworkerOverviewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -110,7 +110,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminCaseworkerNewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -120,7 +120,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminCaseworkerEditController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -130,7 +130,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminCaseworkerImportController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -140,7 +140,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAgencyOverviewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -150,7 +150,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAgencyNewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -160,7 +160,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'AdminAgencyEditController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -170,7 +170,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentNewController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -190,7 +190,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentZipcodeController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -200,7 +200,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentScheduleController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -210,7 +210,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentRescheduleController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -220,7 +220,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentFormController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -230,7 +230,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentEditFormController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -240,7 +240,7 @@ function config($locationProvider, $routeProvider) {
       controller: 'CaseworkerAppointmentsAllController',
       controllerAs: 'vm',
       resolve: { // get user from factory
-        getuser : ['UserService', function(UserService){
+        getuser: ['UserService', function(UserService) {
           return UserService.getUser();
         }]
       }
@@ -248,4 +248,77 @@ function config($locationProvider, $routeProvider) {
     .otherwise({
       redirectTo: 'login'
     });
+    $mdThemingProvider.definePalette('accent', {
+  '50': 'fff2ec',
+  '100': 'fedecf',
+  '200': 'fdc8b0',
+  '300': 'fcb290',
+  '400': 'fca278',
+  '500': 'fb9160',
+  '600': 'fa8958',
+  '700': 'fa7e4e',
+  '800': 'f97444',
+  '900': 'f86233',
+  'A100': 'f86233',
+  'A200': 'f86233',
+  'A400': 'ffe0d7',
+  'A700': 'ffccbe',
+  'contrastDefaultColor': 'light',
+  'contrastDarkColors': [
+    '50',
+    'A400',
+    'A700'
+  ],
+  'contrastLightColors': [
+    '100',
+    '200',
+    '300',
+    '400',
+    '500',
+    '600',
+    '700',
+    '800',
+    '900',
+    'A100',
+    'A200'
+  ]
+});
+$mdThemingProvider.definePalette('primary', {
+  '50': 'eaf7f9',
+  '100': 'ccecef',
+  '200': 'aae0e4',
+  '300': '87d3d9',
+  '400': '54c0c9',
+  '500': '54c0c9',
+  '600': '4dbac3',
+  '700': '43b2bc',
+  '800': '3aaab5',
+  '900': '299ca9',
+  'A100': 'eafdff',
+  'A200': 'b7f7ff',
+  'A400': '84f2ff',
+  'A700': '6aefff',
+  'contrastDefaultColor': 'light',
+  'contrastDarkColors': [
+    '50',
+    '100',
+    '600',
+    '700',
+    '800',
+    'A100'
+  ],
+  'contrastLightColors': [
+    '200',
+    '300',
+    '400',
+    '500',
+    '900',
+    'A200',
+    'A400',
+    'A700'
+  ]
+});
+$mdThemingProvider.theme('default')
+    .primaryPalette('primary')
+    .accentPalette('accent');
 }
