@@ -6,12 +6,13 @@
 
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentsAllController', ['$location', '$mdToast', '$mdDialog', 'AppointmentService', 'UserService', function($location, $mdToast, $mdDialog, AppointmentService, UserService) {
+  .controller('CaseworkerAppointmentsAllController', ['$location', '$mdToast', '$mdDialog', 'AppointmentService', 'CONSTANTS', 'UserService', function($location, $mdToast, $mdDialog, AppointmentService, constants, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
   // Binds user data from factory
   vm.user = UserService.userObject;
+  vm.CONSTANTS = constants;
 
   // Stores current appointment filter, by default should show all appointments
   vm.appointmentFilter = '';
@@ -62,7 +63,7 @@ angular
 
   function setAppointmentFilter(filter) {
     console.log(filter);
-    //This function will filter the view to show the desired types of appointments
+    vm.appointmentFilter = filter;
   }
 
   //This function will redirect the caseworker to a view where they can reschedule their appointment
@@ -103,7 +104,12 @@ angular
 
   function cancelAppointment(appointment) {
     AppointmentService.cancelAppointment(appointment.id)
-    .then(showToastSuccess, showToastError);
+    .then(cancelAppointmentSuccess, showToastError);
+  }
+
+  function cancelAppointmentSuccess(response) {
+    getUserAppointments();
+    showToastSuccess(response);
   }
 
   function showToastSuccess (text) {
