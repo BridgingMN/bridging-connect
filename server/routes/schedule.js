@@ -5,7 +5,32 @@ var formatters = require('../modules/formatters.js');
 var formatTimeForPostgres = formatters.formatTimeForPostgres;
 var formatTimeForClient = formatters.formatTimeForClient;
 
-// get appt types
+/**
+  * @api {get} /schedule/types Get Appointment Types
+  * @apiVersion 0.1.0
+  * @apiName GetScheduleTypes
+  * @apiGroup Schedule
+  * @apiDescription Retrieve all appointment types from the "appointment_types" table of the database.
+  *
+  * @apiSuccess {Number} id Unique ID of the new agency.
+  * @apiSuccess {String} name Name of the agency.
+  * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database
+  * @apiSuccess {String} primary_first First name of agency's primary contact.
+  * @apiSuccess {String} primary_last Last name of agency's primary contact.
+  * @apiSuccess {String} primary_job_title Job title of agency's primary contact.
+  * @apiSuccess {String} primary_department Department of agency's primary contact.
+  * @apiSuccess {String} primary_business_phone Business phone number of agency's primary contact.
+  * @apiSuccess {String} primary_business_phone_ext Business phone number extension of agency's primary contact.
+  * @apiSuccess {String} primary_mobile_phone Mobile phone number of agency's primary contact.
+  * @apiSuccess {String} primary_email E-mail address of agency's primary contact.
+  * @apiSuccess {Number} beds_allowed_option_id Unique ID corresponding to the "beds_allowed_options" table.
+  * @apiSuccess {String} beds_allowed_option String corresponding to the "beds_allowed_option_id" row from the "beds_allowed_options" table.
+  * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
+  * @apiSuccess {String} notes Any notes the administrator leaves regarding an agency.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
 router.get('/types', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     pool.connect(function(err, database, done) {
