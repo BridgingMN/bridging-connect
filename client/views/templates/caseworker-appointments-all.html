@@ -13,14 +13,14 @@
       <div class="appointment-card-header" layout="row" layout-align="space-around center">
         <div class="appointment-date">
           <p layout="column" layout-align="center center">
-            <span>{{appointment.info.appointment_date | date: 'MMM'}}</span>
-            <span>{{appointment.info.appointment_date | date: 'dd'}}</span>
+            <span>{{appointment.info.date | date: 'MMM'}}</span>
+            <span>{{appointment.info.date | date: 'dd'}}</span>
           </p>
         </div>
         <div class="md-padding appointment-type-info">
           <p layout="column" layout-align="center center">
-            <span>{{appointment.info.appointment_type}}</span>
-            <span>with {{appointment.info.delivery_type}}</span>
+            <span>{{appointment.info.appointment_type | uppercase}}</span>
+            <span>w/{{appointment.info.delivery_method | uppercase}}</span>
           </p>
         </div>
       </div>
@@ -40,7 +40,10 @@
         </p>
       </div>
       <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
-          <p>Delivered {{appointment.info.delivery_date | date: 'shortDate'}}.</p>
+          <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+            <span ng-if="appoint.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}.</span>
+            <span ng-if="appoint.info.delivery_date == undefined">Delivery date to be determined.</span>
+            </p>
       </div>
       <div class="appointment-card-buttons" layout="column">
           <md-button

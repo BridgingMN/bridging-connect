@@ -6,12 +6,13 @@
 
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentsAllController', ['$location', '$mdToast', '$mdDialog', 'AppointmentService', 'UserService', function($location, $mdToast, $mdDialog, AppointmentService, UserService) {
+  .controller('CaseworkerAppointmentsAllController', ['$location', '$mdToast', '$mdDialog', 'AppointmentService', 'CONSTANTS', 'UserService', function($location, $mdToast, $mdDialog, AppointmentService, constants, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
 
   // Binds user data from factory
   vm.user = UserService.userObject;
+  vm.CONSTANTS = constants;
 
   // Stores current appointment filter, by default should show all appointments
   vm.appointmentFilter = '';
