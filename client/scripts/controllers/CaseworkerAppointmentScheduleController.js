@@ -4,45 +4,29 @@
  */
 angular
   .module('myApp')
-  .controller('CaseworkerAppointmentScheduleController', ['$location', 'UserService', function($location, UserService) {
+  .controller('CaseworkerAppointmentScheduleController', ['$location', '$scope', 'AppointmentService', 'UserService', function($location, $scope, AppointmentService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
+  console.log('UserService.appointment assigned to vm.appointment', UserService.newAppointment);
   vm.appointment = UserService.newAppointment;
 
   //Model for the currently selected date
   vm.selectedDate = new Date();
 
   //placeholder appointments
-  vm.availableAppointments = [{
-    date: new Date(
-      vm.selectedDate.getFullYear(),
-      vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 4),
-    appointment_slot_id: 1,
-    start_time: '9:15 AM'
-  },{
-    date: new Date(
-      vm.selectedDate.getFullYear(),
-      vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 4)
-  },
-  {
-    date: new Date(
-      vm.selectedDate.getFullYear(),
-      vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 5)
-  }];
+  vm.availableAppointments = AppointmentService.availableAppointments;
 
+  var todaysDate = new Date();
   //Limits for the range of dates on the calendar
   vm.minDate = new Date(
-    vm.selectedDate.getFullYear(),
-    vm.selectedDate.getMonth(),
-    vm.selectedDate.getDate() + 3
+    todaysDate.getFullYear(),
+    todaysDate.getMonth(),
+    todaysDate.getDate() + 3
   );
   vm.maxDate = new Date(
-    vm.selectedDate.getFullYear(),
-    vm.selectedDate.getMonth() + 1,
-    vm.selectedDate.getDate()
+    todaysDate.getFullYear(),
+    todaysDate.getMonth() + 3,
+    todaysDate.getDate()
   );
 
   //Model for the available appointment slots
@@ -56,9 +40,16 @@ angular
   vm.selectDate = selectDate;
   vm.reserveAppointment = reserveAppointment;
 
-  getAvailableAppointments(vm.minDate, vm.maxDate);
+  activate();
+
+  function activate() {
+    console.log('UserService at activate', UserService);
+    selectDate(vm.availableAppointments[0].date);
+  }
 
   function availableAppointmentsPredicate (date) {
+    // console.log('Selected date', date, typeof date);
+    // console.log(vm.availableAppointments.some(filterAppointmentsByDate, date));
     return vm.availableAppointments.some(filterAppointmentsByDate, date);
   }
 
@@ -70,8 +61,11 @@ angular
    */
   function selectDate(date) {
     console.log(date);
-    vm.selectedDate = date;
-    vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, date);
+    vm.selectedDate = new Date(date);
+    // console.log('Selected date', vm.selectedDate, typeof vm.selectedDate);
+    vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, vm.selectedDate);
+    console.log('selectDate: available appointments, appointmentslots', vm.availableAppointments, vm.appointmentSlots);
+    // console.log('Appointment slots', vm.appointmentSlots);
     vm.selectedAppointment = vm.appointmentSlots[0];
   }
 
@@ -87,38 +81,7 @@ angular
     $location.path('/caseworker-appointment-form');
   }
 
-  /**
-   * Sends a request to the server to get available appointments.
-   * @function getAvailableAppointments
-   * @param {date} min_date Lowerbound of date range for query
-   * @param {date} max_date Upperbound of date range for query
-   */
-  function getAvailableAppointments(min_date, max_date) {
-    console.log('Getting Appointments', min_date, max_date);
-    UserService.newAppointment.getAvailableAppointments(min_date, max_date)
-      .then(availableAppointmentsSuccess, availableAppointmentsError);
-  }
 
-  /**
-  * Called upon receiving an array of available Appointment objects
-  * Updates the view to reflect available Appointments
-  * Sets the currently selected Appointment to the first appointment in the array
-  * @function availableAppointmentsSuccess
-  * @param {array} response Array of Appointment objects
-  */
-  function availableAppointmentsSuccess(response) {
-    vm.availableAppointments = response;
-    selectDate(vm.availableAppointments[0].date);
-  }
-
-  /**
-  * Handles error response from getAvailableAppointments
-  * @function availableAppointmentsError
-  * @param {object} error Error response.
-  */
-  function availableAppointmentsError(error) {
-    console.error(error);
-  }
 
   /**
   * Filter appointments by date
@@ -128,6 +91,7 @@ angular
   */
   function filterAppointmentsByDate(appointment) {
     var date = this;
+    // console.log('appointment.date', appointment.date, typeof appointment.date, 'date', date, typeof date);
     return compareDates(appointment.date, date);
   }
 
@@ -138,10 +102,11 @@ angular
    * @param {date} date2 Second date
    * @returns {boolean} True if the dates are the same, otherwise false
    */
-  function compareDates(date1, date2) {
-    date1 = moment(date1).format('YYYY-MM-DD');
-    date2 = moment(date2).format('YYYY-MM-DD');
-    return moment(date1).isSame(date2);
+  function compareDates(appointmentDate, date) {
+    //Convert date string from appointment object to a Javascript Date
+    appointmentDate = new Date (appointmentDate);
+    //Return a comparison of the two dates.
+    return appointmentDate.getTime() == date.getTime();
   }
 
 
