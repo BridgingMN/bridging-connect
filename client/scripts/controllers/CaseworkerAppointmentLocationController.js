@@ -24,6 +24,7 @@ angular
     console.log('Selected location', location);
     UserService.newAppointment.location_id = location.location_id;
     UserService.newAppointment.location_name = location.location_name;
+    console.log('New Appointmetn Before Get avail', UserService.newAppointment);
     getAvailableAppointments(vm.minDate, vm.maxDate);
   }
 

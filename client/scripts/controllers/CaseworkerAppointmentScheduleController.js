@@ -7,6 +7,7 @@ angular
   .controller('CaseworkerAppointmentScheduleController', ['$location', '$scope', 'AppointmentService', 'UserService', function($location, $scope, AppointmentService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
+  console.log('UserService.appointment assigned to vm.appointment', UserService.newAppointment);
   vm.appointment = UserService.newAppointment;
 
   //Model for the currently selected date
@@ -42,6 +43,7 @@ angular
   activate();
 
   function activate() {
+    console.log('UserService at activate', UserService);
     selectDate(vm.availableAppointments[0].date);
   }
 
@@ -62,6 +64,7 @@ angular
     vm.selectedDate = new Date(date);
     // console.log('Selected date', vm.selectedDate, typeof vm.selectedDate);
     vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, vm.selectedDate);
+    console.log('selectDate: available appointments, appointmentslots', vm.availableAppointments, vm.appointmentSlots);
     // console.log('Appointment slots', vm.appointmentSlots);
     vm.selectedAppointment = vm.appointmentSlots[0];
   }
@@ -78,8 +81,6 @@ angular
     $location.path('/caseworker-appointment-form');
   }
 
-
-
   /**
   * Filter appointments by date
   * @function filterAppointmentsByDate
@@ -88,7 +89,6 @@ angular
   */
   function filterAppointmentsByDate(appointment) {
     var date = this;
-    // console.log('appointment.date', appointment.date, typeof appointment.date, 'date', date, typeof date);
     return compareDates(appointment.date, date);
   }
 
@@ -105,6 +105,4 @@ angular
     //Return a comparison of the two dates.
     return appointmentDate.getTime() == date.getTime();
   }
-
-
 }]);

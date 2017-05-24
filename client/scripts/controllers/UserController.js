@@ -14,13 +14,17 @@ angular
 
   function newShoppingAppointment() {
     if (!UserService.userObject.user.agency_access_disabled && !UserService.userObject.user.user_access_disabled) {
+      console.log('newAppointment being created');
       UserService.newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
+      console.log(UserService.newAppointment);
     }
   }
 
   function newBedAppointment() {
     if (!UserService.userObject.user.agency_access_disabled && !UserService.userObject.user.user_access_disabled) {
+      console.log('newAppointment being created');
       UserService.newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_BED);
+      console.log(UserService.newAppointment);
     }
   }
 

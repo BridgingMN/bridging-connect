@@ -257,7 +257,7 @@ router.post('/reserve', function(req, res) {
 
 // START ADMIN-ONLY APPOINTMENT ROUTES
 /**
-  * @api {get} /agencies Get All Appointments
+  * @api {get} /appointments/all Get All Appointments
   * @apiVersion 0.1.0
   * @apiName GetAllAppointments
   * @apiGroup Appointments
@@ -316,7 +316,7 @@ router.get('/all', function(req, res) {
   }
 });
 /**
-  * @api {get} /agencies Get All Pending Appointments
+  * @api {get} /appointments/pending Get All Pending Appointments
   * @apiVersion 0.1.0
   * @apiName GetPendingAppointments
   * @apiGroup Appointments
