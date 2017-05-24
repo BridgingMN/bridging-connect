@@ -128,7 +128,7 @@ router.get('/default', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_slots"."num_allowed" ' +
+        database.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "delivery_methods"."delivery_method", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_slots"."num_allowed" ' +
                         'FROM "appointment_slots" ' +
                         'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
                         'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
@@ -178,7 +178,6 @@ router.get('/default', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/default', function(req, res) {
-  console.log('in the post route for creating caseworker', req.body);
   if (req.isAuthenticated()) { // user is authenticated
     var appointment_type = req.body.appointment_type;
     var day = req.body.day;
@@ -203,10 +202,10 @@ router.post('/default', function(req, res) {
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
-              console.log('error making query on /caseworkers POST', queryErr);
+              console.log('error making query on /schedule/default POST', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful insert into "caseworkers"', result);
+              console.log('successful insert into "appointment_slots"', result);
               res.send(result);
             }
         }); // end query
@@ -217,9 +216,75 @@ router.post('/default', function(req, res) {
   }
 });
 
+// update an appointment slot
+router.put('/default', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    var appointment_slot_id = req.body.appointment_slot_id;
+    var appointment_type = req.body.appointment_type;
+    var day = req.body.day;
+    var delivery_method = req.body.delivery_method;
+    var location = req.body.location;
+    var start_time = formatTimeForPostgres(req.body.start_time);
+    var end_time = formatTimeForPostgres(req.body.end_time);
+    var num_allowed = req.body.num_allowed;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query('UPDATE "appointment_slots" SET ("appointment_type_id", "day_id", "delivery_method_id", "location_id", "start_time", "end_time", "num_allowed") = ' +
+                        '((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1), ' +
+                        '(SELECT "id" FROM "days" WHERE "name" = $2), ' +
+                        '(SELECT "id" FROM "delivery_methods" WHERE "delivery_method" = $3), ' +
+                        '(SELECT "id" FROM "locations" WHERE "location" = $4), ' +
+                        '$5, $6, $7) ' +
+                        'WHERE "id" = $8;',
+                        [appointment_type, day, delivery_method, location, start_time, end_time, num_allowed, appointment_slot_id],
+          function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /schedule/default PUT', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful update of "appointment_slots"', result);
+              res.send(result);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+  } else { // user NOT authenticated
+    res.sendStatus(401);
+  }
+});
 
-
-
+// delete an appointment slot
+// CURRENTLY Appointment slot cannot be deleted if an appointment with that appointment_slot_id exists in the DB due to foreign key constraint.
+// either need to relax conditions on the appointments table (if this is an option), or build out logic to deal with this.
+//
+// router.delete('/:appointment_slot_id', function(req, res) {
+//   if (req.isAuthenticated()) { // user is authenticated
+//     var appointment_slot_id = req.params.appointment_slot_id;
+//     pool.connect(function(err, database, done) {
+//       if (err) { // connection error
+//         console.log('error connecting to the database:', err);
+//       } else { // we connected
+//         database.query('DELETE FROM "appointment_slots" WHERE "id" = $1;', [appointment_slot_id],
+//           function(queryErr, result) { // query callback
+//             done();
+//             if (queryErr) {
+//               console.log('error making query:', queryErr);
+//               res.sendStatus(500);
+//             } else {
+//               console.log('sucessful deletion from /schedule/:appointment_slot_id', result);
+//               res.sendStatus(200);
+//             }
+//         }); // end query callback
+//       } // end DB connection if-else
+//     }); // end pool.connect
+//   } else { // user not authenticated
+//     res.sendStatus(401);
+//   }
+// });
 
 
 module.exports = router;
