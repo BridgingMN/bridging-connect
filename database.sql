@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS "overrides" (
   id SERIAL PRIMARY KEY,
   appointment_type_id INTEGER NOT NULL REFERENCES "appointment_types",
   delivery_method_id INTEGER NOT NULL REFERENCES "delivery_methods",
+  appointment_slot_id INTEGER NOT NULL REFERENCES "appointment_slots",
   location_id INTEGER NOT NULL REFERENCES "locations",
   override_date DATE NOT NULL,
   start_time TIME NOT NULL,
