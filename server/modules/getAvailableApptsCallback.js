@@ -119,13 +119,10 @@ function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, ove
     }
 
     for (var i = 0; i < slotsForDate.length; i++) {
-      console.log(slotsForDate)
       var apptSlot = {};
       var isAvailable = checkAvailability(slotsForDate[i], date, existingApptCounts, res);
       if (isAvailable){
-        console.log('************* apptSlot', apptSlot)
         apptSlot.date = formatDate(date);
-        console.log('-------- apptSlot.date', apptSlot.date, typeof apptSlot.date);
         apptSlot.appointment_slot_id = slotsForDate[i].appointment_slot_id;
         apptSlot.num_allowed = slotsForDate[i].num_allowed;
         apptSlot.start_time = formatTime(slotsForDate[i].start_time);
@@ -142,7 +139,6 @@ function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, ove
     }
     date = moment(date).add(1, 'days').format('YYYY-MM-DD');
   }
-  console.log(apptsAvailable);
   res.send(apptsAvailable);
 }
 
