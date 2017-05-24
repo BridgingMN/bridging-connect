@@ -91,7 +91,7 @@ angular
       .title('Cancel Appointment')
       .textContent('Are you sure you want to cancel this ' + appointment.info.appointment_type +
                     ' appointment for your client ' + appointment.client.first + ' ' +
-                     appointment.client.last + ' on ' + appointment.info.date + '?')
+                     appointment.client.last + ' on ' + moment(appointment.info.date).format('dddd, MMMM Do, YYYY') + '?')
       .ariaLabel('Cancel Appointment')
       .ok('Yes, cancel the appointment')
       .cancel('No, do not cancel the appointment');
