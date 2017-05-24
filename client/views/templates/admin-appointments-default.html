@@ -1,5 +1,5 @@
-<div layout="column" ng-cloak class = "md-inline-form"
-      layout-align = "start center" class = "md-padding">
+<div layout="column" ng-init = "vm.getAllDefaults()"
+      layout-align = "start center">
 
   <div>
     <h2 >Default Appointment Schedule</h2>
@@ -14,87 +14,43 @@
     </md-input-continer>
   </div>
 
-  <md-card>
-    <md-card-title>
-      <md-card-title-text layout-align = "start center">
-        <span class="md-headline">Existing Appointment Slot</span>
-        <span class="md-subhead">Once 'SAVE CHANGES' is clicked, changes will
-              take place immediately.</span>
-      </md-card-title-text>
-    </md-card-title>
+  <md-table-container>
+    <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
+    <thead md-head md-order="vm.query.order" md-on-reorder="vm.getAllDefaults">
+      <tr md-row>
+        <th md-column md-order-by ="nameToLower"><span>Location</span></th>
+        <th md-column>Week Day</th>
+        <th md-column>Type</th>
+        <th md-column>Method</th>
+        <th md-column md-numeric>Start Time</th>
+        <th md-column md-numeric>End Time</th>
+        <th md-column md-numeric># Allowed</th>
+        <th md-column>Actions</th>
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="default" md-select-id="name" md-auto-select
+          ng-repeat="default in vm.allDefaults.array | filter : test |
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+        <td md-cell>{{default.location_name}}</td>
+        <td md-cell>{{default.day}}</td>
+        <td md-cell>{{default.appointment_type}}</td>
+        <td md-cell>{{default.delivery_method}}</td>
+        <td md-cell>{{default.start_time}}</td>
+        <td md-cell>{{default.end_time}}</td>
+        <td md-cell>{{default.num_allowed}}</td>
+        <td md-cell>
+            <md-button class="md-raised md-warn"
+            href="#admin-default-edit">Edit Default</md-button>
+            <md-button class="md-raised md-warn"
+                href="#admin-appointments-customize">Override</md-button>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+  </md-table-container>
 
-    <md-card-content layout-padding>
-      <div>
-        <form name = "defaultForm">
-          <div layout-gt-xs="row">
-
-            <md-input-container class="md-block" flex-gt-xs>
-            <label>Location</label>
-            <md-select ng-model="vm.default.location">
-              <md-option ng-repeat="location in vm.locations" ng-value="location.option"
-                          ng-disabled="$index === 1">{{location.option}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-
-          <md-input-container>
-          <label>Week Day</label>
-          <md-select ng-model="vm.default.day">
-            <md-option ng-repeat="day in vm.week" ng-value="day.option"
-                        ng-disabled="$index === 1">{{day.option}}
-            </md-option>
-          </md-select>
-        </md-input-container>
-          </div>
-
-          <div layout-gt-xs="row">
-            <md-input-container class="md-block" flex-gt-xs>
-            <label>Appointment Type</label>
-            <md-select ng-model="vm.default.type">
-              <md-option ng-repeat="type in vm.types" ng-value="type.option"
-                          ng-disabled="$index === 1">{{type.option}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-
-          <md-input-container>
-          <label>Delivery or Pick Up</label>
-          <md-select ng-model="vm.default.delivery_method">
-            <md-option ng-repeat="method in vm.methods" ng-value="method.option"
-                        ng-disabled="$index === 1">{{method.option}}
-            </md-option>
-          </md-select>
-        </md-input-container>
-          </div>
-
-          <div layout-gt-xs="row">
-            <md-input-container class="md-block" flex-gt-xs>
-              <label>Start Time</label>
-              <input type = "time" ng-model="vm.default.start_time">
-            </md-input-container>
-
-            <md-input-container class="md-block" flex-gt-xs>
-              <label>End Time</label>
-              <input type = "time" ng-model="vm.default.end_time">
-            </md-input-container>
-          </div>
-
-          <md-input-container class ="md-block">
-          <label>Number of Appointments Allowed at that time</label>
-          <input type = "number" ng-model="vm.default.num_allowed">
-          </md-input-container>
-
-
-          <div layout = "row">
-            <md-button type="submit"  class="md-raised md-primary">Save Changes</md-button>
-            <a href="#admin-appointments-default"><md-button type="button">Cancel
-                </md-button></a>
-          <md-button type="submit" class="md-raised md-warn"
-              ng-click = "vm.deleteDefault(vm.default.selected[0])">
-              Delete Default</md-button>
-        </div>
-      </form>
-    </div>
-    <md-card-content>
-  </md-card>
+  <md-table-pagination md-limit="vm.query.limit" md-limit-options="[5, 10, 15]"
+        md-page="vm.query.page" md-total="{{vm.allDefaults.array.length}}"
+        md-on-paginate="vm.getAllDefaults" md-page-select></md-table-pagination>
 </div>

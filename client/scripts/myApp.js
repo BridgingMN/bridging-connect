@@ -75,6 +75,16 @@ function config($locationProvider, $routeProvider) {
         }]
       }
     })
+    .when('/admin-default-edit', {
+      templateUrl: '/views/templates/admin-default-edit.html',
+      controller: 'AdminDefaultEditController',
+      controllerAs: 'vm',
+      resolve: { // get user from factory
+        getuser : ['UserService', function(UserService){
+          return UserService.getUser();
+        }]
+      }
+    })
     .when('/admin-appointments-customize', {
       templateUrl: '/views/templates/admin-appointments-customize.html',
       controller: 'AdminAppointmentsCustomizeController',

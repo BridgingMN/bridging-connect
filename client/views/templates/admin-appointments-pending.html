@@ -28,14 +28,14 @@
       <tr md-row md-select="appointment" md-select-id="name" md-auto-select
           ng-repeat="appointment in vm.pendingAppointments.array | filter : test |
           limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
-          <td md-cell>{{appointment.date}}</td>
-          <td md-cell>{{appointment.time}}</td>
-          <td md-cell>{{appointment.type}}</td>
+          <td md-cell>{{appointment.appointment_date | date}}</td>
+          <td md-cell>{{appointment.start_time}}</td>
+          <td md-cell>{{appointment.appointment_type}}</td>
           <td md-cell>{{appointment.name}}</td>
-          <td md-cell>{{appointment.caseworker}}</td>
-          <td md-cell>{{appointment.client}}</td>
+          <td md-cell>{{appointment.user_first}} {{appointment.user_last}}</td>
+          <td md-cell>{{appointment.client_first}} {{appointment.client_last}}</td>
           <td md-cell>{{appointment.status}}</td>
-          <td md-cell>{{appointment.confirmationNumber}}</td>
+          <td md-cell>{{appointment.confirmation_id}}</td>
           <td md-cell><a href="#admin-appointment-review"
               ng-click = "vm.viewAppointment(appointment)">See Details</a></td>
       </tr>
