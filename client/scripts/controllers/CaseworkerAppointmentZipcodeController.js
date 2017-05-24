@@ -19,6 +19,7 @@ angular
     todaysDate.getMonth() + 3,
     todaysDate.getDate()
   );
+
   vm.submitZipCode = submitZipCode;
 
   function submitZipCode(zip_code) {

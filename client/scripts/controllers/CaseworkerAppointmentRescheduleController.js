@@ -13,37 +13,21 @@ angular
   vm.selectedDate = new Date();
 
   //placeholder appointments
-  vm.availableAppointments = [{
-    date: new Date(
-      vm.selectedDate.getFullYear(),
-      vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 4),
-    appointment_slot_id: 1,
-    start_time: '9:15 AM'
-  },{
-    date: new Date(
-      vm.selectedDate.getFullYear(),
-      vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 4)
-  },
-  {
-    date: new Date(
-      vm.selectedDate.getFullYear(),
-      vm.selectedDate.getMonth(),
-      vm.selectedDate.getDate() + 5)
-  }];
+  vm.availableAppointments = AppointmentService.availableAppointments;
 
   //Limits for the range of dates on the calendar
+  var todaysDate = new Date();
   vm.minDate = new Date(
-    vm.selectedDate.getFullYear(),
-    vm.selectedDate.getMonth(),
-    vm.selectedDate.getDate() + 3
+    todaysDate.getFullYear(),
+    todaysDate.getMonth(),
+    todaysDate.getDate() + 3
   );
   vm.maxDate = new Date(
-    vm.selectedDate.getFullYear(),
-    vm.selectedDate.getMonth() + 1,
-    vm.selectedDate.getDate()
+    todaysDate.getFullYear(),
+    todaysDate.getMonth() + 3,
+    todaysDate.getDate()
   );
+
 
   //Model for the available appointment slots
   vm.appointmentSlots = [];
@@ -59,7 +43,7 @@ angular
   activate();
 
   function activate() {
-    getAvailableAppointments(vm.minDate, vm.maxDate);
+    selectDate(vm.availableAppointments[0].date);
   }
 
   function availableAppointmentsPredicate (date) {
@@ -72,12 +56,12 @@ angular
    * @function selectDate
    * @param {date} date The selected date.
    */
-  function selectDate(date) {
-    console.log(date);
-    vm.selectedDate = date;
-    vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, date);
-    vm.selectedAppointment = vm.appointmentSlots[0];
-  }
+   function selectDate(date) {
+     vm.selectedDate = new Date(date);
+     vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, vm.selectedDate);
+     vm.selectedAppointment = vm.appointmentSlots[0];
+   }
+
 
   /**
    * This function should call a method from the Appointment object in the UserService
@@ -110,39 +94,6 @@ angular
   }
 
   /**
-   * Sends a request to the server to get available appointments.
-   * @function getAvailableAppointments
-   * @param {date} min_date Lowerbound of date range for query
-   * @param {date} max_date Upperbound of date range for query
-   */
-  function getAvailableAppointments(min_date, max_date) {
-    console.log('Getting Appointments', min_date, max_date);
-    UserService.newAppointment.getAvailableAppointments(min_date, max_date)
-      .then(availableAppointmentsSuccess, availableAppointmentsError);
-  }
-
-  /**
-  * Called upon receiving an array of available Appointment objects
-  * Updates the view to reflect available Appointments
-  * Sets the currently selected Appointment to the first appointment in the array
-  * @function availableAppointmentsSuccess
-  * @param {array} response Array of Appointment objects
-  */
-  function availableAppointmentsSuccess(response) {
-    vm.availableAppointments = response;
-    selectDate(vm.availableAppointments[0].date);
-  }
-
-  /**
-  * Handles error response from getAvailableAppointments
-  * @function availableAppointmentsError
-  * @param {object} error Error response.
-  */
-  function availableAppointmentsError(error) {
-    console.error(error);
-  }
-
-  /**
   * Filter appointments by date
   * @function filterAppointmentsByDate
   * @param {object} appointment Appointment to be filtered
@@ -160,9 +111,11 @@ angular
    * @param {date} date2 Second date
    * @returns {boolean} True if the dates are the same, otherwise false
    */
-  function compareDates(date1, date2) {
-    date1 = moment(date1).format('YYYY-MM-DD');
-    date2 = moment(date2).format('YYYY-MM-DD');
-    return moment(date1).isSame(date2);
+  function compareDates(appointmentDate, date) {
+    //Convert date string from appointment object to a Javascript Date
+    appointmentDate = new Date (appointmentDate);
+    date = new Date(date);
+    //Return a comparison of the two dates.
+    return appointmentDate.getTime() == date.getTime();
   }
 }]);
