@@ -24,6 +24,12 @@ module.exports = function(grunt) {
                 src: ['style.css'],
                 dest: 'server/public/styles/'
             },
+            assets: {
+              expand: true,
+              cwd:'client/assets',
+              src: ['**/*.*'],
+              dest: 'server/public/assets'
+            },
             moment: {
                 expand: true,
                 cwd: 'node_modules/moment/',

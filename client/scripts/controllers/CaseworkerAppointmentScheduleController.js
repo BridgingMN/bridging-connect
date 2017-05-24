@@ -60,12 +60,8 @@ angular
    * @param {date} date The selected date.
    */
   function selectDate(date) {
-    console.log(date);
     vm.selectedDate = new Date(date);
-    // console.log('Selected date', vm.selectedDate, typeof vm.selectedDate);
     vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, vm.selectedDate);
-    console.log('selectDate: available appointments, appointmentslots', vm.availableAppointments, vm.appointmentSlots);
-    // console.log('Appointment slots', vm.appointmentSlots);
     vm.selectedAppointment = vm.appointmentSlots[0];
   }
 

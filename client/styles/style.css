@@ -1,3 +1,11 @@
+.md-toolbar-tools .logo{
+  max-height: 100%;
+  margin: 8px;
+  margin-left: 0px;
+  position: relative;
+  top: 5px;
+}
+
 .navigation-tabs md-content {
   background-color: inherit;
 }
