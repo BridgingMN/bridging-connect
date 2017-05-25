@@ -18,4 +18,8 @@ angular
     });
   }
 
+  $http.get('appointments/7').then(function(response) {
+    console.log('GOT APPOINTMENT 7:', response.data);
+  });
+
 }]);
