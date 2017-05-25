@@ -423,6 +423,8 @@ router.get('/:appointment_id', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('sucessful GET from /appointments/:appointment_id', result);
+              console.log('result.rows =', result.rows);
+              console.log('result.rows[0] =', result.rows[0]);
               var apptInfo = formatSingleAppointment(result.rows[0]);
               res.send(apptInfo);
             }
