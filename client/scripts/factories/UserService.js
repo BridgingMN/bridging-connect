@@ -11,6 +11,7 @@ angular
   var days = {};
   var types = {};
   var methods = {};
+  var appointment = {};
   var selected = [];
   var query = {
     order: 'name',
@@ -28,6 +29,8 @@ angular
     days: days,
     types: types,
     methods: methods,
+    appointment: appointment,
+    viewDetails: viewDetails,
     agencies: agencies,
     agency: agency,
     getAgencies: getAgencies,
@@ -137,6 +140,17 @@ angular
     $http.get('/caseworkers/' + caseworker_id).then(function(response) {
       caseworker.selected = response.data;
       console.log('Caseworker record back from db: ', caseworker.selected);
+    });
+  }
+
+  //Views details of selected appointment & client info
+  function viewDetails(appointment_id) {
+    console.log('view details clicked ', appointment_id);
+    var id = appointment_id.id;
+    console.log('appointment_id: ', id);
+    $http.get('/appointments/' + id).then(function(response) {
+      appointment.selected = response.data;
+      console.log('Agency record back from db: ', appointment.selected);
     });
   }
 
