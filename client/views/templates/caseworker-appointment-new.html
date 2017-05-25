@@ -1,14 +1,15 @@
-<div class="caseworker-appointment-new" layout="column" layout-align="center center" flex="50">
-  <div class="caseworker-appointment-delivery-type-selection" layout="column">
+<div class="caseworker-appointment-new" layout="column" layout-align="start center" flex>
+  <h3>Appointment Delivery</h3>
+  <div class="caseworker-appointment-delivery-type-selection" layout="column"  flex>
     <p>For this appointment will your client be picking up the furniture or having it delivered?</p>
     <md-button
       class="md-raised md-accent"
-      href="#caseworker-appointment-location">
+      ng-click="vm.selectDeliveryType(vm.CONSTANTS.DELIVERYMETHOD_PICKUP)">
         I will pick up my furniture using a vehicle I provide
     </md-button>
     <md-button
       class="md-raised md-primary"
-      href="#caseworker-appointment-zipcode">
+      ng-click="vm.selectDeliveryType(vm.CONSTANTS.DELIVERYMETHOD_DELIVERY)">
         I will have my furniture delivered by Bridging
     </md-button>
   </div>

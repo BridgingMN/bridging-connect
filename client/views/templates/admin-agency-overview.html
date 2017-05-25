@@ -1,1 +1,39 @@
-<p>{{vm.hello}}</p>
+<div layout="column" flex="100" layout-align = "start center"
+      ng-init = "vm.getAgencies()">
+  <h2>Agencies</h2>
+<div layout = "row" class = "addButton">
+  <md-button class="md-raised md-primary" href="#admin-agency-new">
+      Add New Agency</md-button>
+  <md-input-container>
+    <label>Search</label>
+    <input ng-model = "test">
+  </md-input-continer>
+</div>
+
+  <md-table-container>
+    <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
+    <thead md-head md-order="vm.query.order" md-on-reorder = "vm.getAgencies">
+      <tr md-row>
+        <th md-column md-order-by="nameToLower"><span>Agency</span></th>
+        <th md-column md-numeric md-order-by="vm.agency.bridging_agency_id.value"><span>Agency ID</span></th>
+        <th md-column>Access Disabled</th>
+        <th md-column>View Profile</th>
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="agency" md-select-id="name" md-auto-select
+          ng-repeat="agency in vm.agencies.array | filter : test | limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+        <td md-cell>{{agency.name}}</td>
+        <td md-cell>{{agency.bridging_agency_id}}</td>
+        <td md-cell>{{agency.access_disabled}}</td>
+        <td md-cell><a href="#admin-agency-edit" ng-click = "vm.viewAgency(agency)">
+            See Details</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </md-table-container>
+
+  <md-table-pagination md-limit="vm.query.limit" md-limit-options="[5, 10, 15]"
+        md-page="vm.query.page" md-total="{{vm.agencies.array.length}}"
+        md-on-paginate="vm.getAgencies" md-page-select></md-table-pagination>
+</div>

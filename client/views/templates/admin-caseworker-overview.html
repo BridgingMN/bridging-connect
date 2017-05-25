@@ -1,1 +1,45 @@
-<p>{{vm.hello}}</p>
+<div layout="column" flex="100" layout-align = "start center"
+      ng-init = "vm.getCaseworkers()">
+  <h2>Caseworkers</h2>
+
+<div layout = "row" class = "addButton">
+  <md-button class="md-raised md-primary" href="#admin-caseworker-new">
+      Add New Caseworker</md-button>
+  <md-input-container>
+    <label>Search</label>
+    <input ng-model = "test">
+  </md-input-continer>
+</div>
+
+  <md-table-container>
+    <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
+    <thead md-head md-order="vm.query.order" md-on-reorder="vm.getCaseworkers">
+      <tr md-row>
+        <th md-column md-order-by="nameToLower"><span>Caseworker</span></th>
+        <th md-column md-order-by="vm.caseworker.name"><span>Agency</span></th>
+        <th md-column md-numeric>Agency ID</th>
+        <th md-column md-numeric>Agency Disabled</th>
+        <th md-column md-numeric>Caseworker Disabled</th>
+        <th md-column md-numeric>View Profile</th>
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="caseworker" md-select-id="name" md-auto-select
+          ng-repeat="caseworker in vm.caseworkers.array | filter : test |
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+        <td md-cell>{{caseworker.first}} {{caseworker.last}}</td>
+        <td md-cell>{{caseworker.name}}</td>
+        <td md-cell>{{caseworker.bridging_agency_id}}</td>
+        <td md-cell>{{caseworker.agency_access_disabled}}</td>
+        <td md-cell>{{caseworker.user_access_disabled}}</td>
+        <td md-cell><a href="#admin-caseworker-edit"
+            ng-click = "vm.viewCaseworker(caseworker.user_id)">See Details</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </md-table-container>
+
+  <md-table-pagination md-limit="vm.query.limit" md-limit-options="[5, 10, 15]"
+          md-page="vm.query.page" md-total="{{vm.caseworkers.array.length}}"
+          md-on-paginate="vm.getCaseworkers" md-page-select></md-table-pagination>
+</div>

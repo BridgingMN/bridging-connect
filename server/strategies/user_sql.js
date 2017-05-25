@@ -32,27 +32,27 @@ passport.deserializeUser(function(id, done) {
 
     var user = {};
 
-    client.query("SELECT * FROM users WHERE id = $1", [id], function(err, result) {
-
-      // Handle Errors
-      if(err) {
-        //---console.log('query err ', err);
-        done(err);
+    client.query('SELECT "users"."id", "users"."department", "users"."first", "users"."last", "users"."day_phone", "users"."ext", "users"."email", "users"."notes", "agencies"."id" AS "agency_id", "agencies"."name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_mobile_phone", "agencies"."primary_email", "users"."user_type_id", "agencies"."access_disabled" AS "agency_access_disabled", "users"."access_disabled" AS "user_access_disabled" ' +
+                  'FROM "users" JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
+                  'WHERE "users"."id" = $1;', [id],
+      function(err, result) {
+        // Handle Errors
+        if(err) {
+          //---console.log('query err ', err);
+          done(err);
+          release();
+        }
+        user = result.rows[0];
         release();
-      }
 
-      user = result.rows[0];
-      release();
-
-      if(!user) {
-          // user not found
-          return done(null, false, {message: 'Incorrect credentials.'});
-      } else {
-        // user found
-        //---console.log('User row ', user);
-        done(null, user);
-      }
-
+        if(!user) {
+            // user not found
+            return done(null, false, {message: 'Incorrect credentials.'});
+        } else {
+          // user found
+          //---console.log('User row ', user);
+          done(null, user);
+        }
     });
   });
 });
@@ -60,21 +60,21 @@ passport.deserializeUser(function(id, done) {
 // Does actual work of logging in
 passport.use('local', new localStrategy({
     passReqToCallback: true,
-    usernameField: 'username'
-    }, function(req, username, password, done) {
+    usernameField: 'email'
+  }, function(req, email, password, done) {
 	    pool.connect(function (err, client, release) {
-	    	//---console.log('called local - pg');
+	    	// console.log('called local - pg');
 
-        // assumes the username will be unique, thus returning 1 or 0 results
-        client.query("SELECT * FROM users WHERE username = $1", [username],
+        // assumes the email will be unique, thus returning 1 or 0 results
+        client.query("SELECT * FROM users WHERE email = $1", [email],
           function(err, result) {
             var user = {};
 
-            //---console.log('here');
+            console.log('here');
 
             // Handle Errors
             if (err) {
-              //---console.log('connection err ', err);
+              console.log('connection err ', err);
               done(null, user);
             }
 
@@ -83,18 +83,18 @@ passport.use('local', new localStrategy({
 
             if(result.rows[0] !== undefined) {
               user = result.rows[0];
-              //---console.log('User obj', user);
+              console.log(user.password);
               // Hash and compare
               if(encryptLib.comparePassword(password, user.password)) {
                 // all good!
-                //---console.log('passwords match');
+                console.log('passwords match');
                 done(null, user);
               } else {
-                //---console.log('password does not match');
+                console.log('password does not match');
                 done(null, false, {message: 'Incorrect credentials.'});
               }
             } else {
-              //---console.log('no user');
+              console.log('no user');
               done(null, false);
             }
 

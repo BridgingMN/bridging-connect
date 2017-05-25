@@ -1,51 +1,73 @@
-<div class="caseworker-appointment-referall-form" layout="column" layout-align="center center" flex>
+<div class="caseworker-appointment-referall-form" layout="column" layout-align="start center">
+  <h3>Client Referall Form</h3>
   <div class="caseworker-appointment-info" layout="row" layout-align="center center">
-    <div class="md-padding appointment-type">
-      <span>Shopping w/ Delivery</span>
+    <div class="md-padding">
+      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
+      <span><span class="appointment-type">{{vm.appointment.appointment_type}}</span> w/ <span class="appointment-delivery">{{vm.appointment.delivery_method}}</span></span>
     </div>
     <div class="md-padding appointment-location">
       <i class="material-icons">place</i>
-      <span>Bloomington</span>
+      <span>{{vm.appointment.location_name}}</span>
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
-      <span>5/29/17,
-      9:15 AM</span>
-
+      <span>{{vm.appointment.appointment.date | date: 'shortDate' }},
+      {{vm.appointment.appointment.start_time | uppercase}}</span>
     </div>
   </div>
-  <form class="client-referall-form" layout="column" >
-    <md-input-container>
-      <label>Client First Name</label>
-      <input
-        type="text"
-        placeholder="Client First Name"
-        required>
-    </md-input-container>
-    <md-input-container>
-      <label>Client Last Name</label>
-      <input
-        type="text"
-        placeholder="Client Last Name"
-        required>
-    </md-input-container>
-    <md-input-container>
-      <label>Client Date of Birth</label>
-      <md-datepicker ng-model="vm.clientDateOfBirth"></md-datepicker>
-    </md-input-container>
-    <md-input-container>
-      <label>Select a race/ethnicity</label>
-      <md-select ng-model="vm.clientEthnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-          <md-select-label>Select a race/ethnicity</md-select-label>
-          <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
-      </md-select>
-    </md-input-container>
-    <md-input-container>
-      <label>Street Address</label>
-      <input
-        type="text"
-        placeholder="Address"
-        required>
-    </md-input-container>
-  </form>
+  <md-content>
+    <form class="client-referall-form" layout="column">
+      <md-input-container>
+        <label>Client First Name</label>
+        <input
+          type="text"
+          ng-model="vm.clientReferralForm.first"
+          placeholder="Client First Name"
+          required>
+      </md-input-container>
+      <md-input-container>
+        <label>Client Last Name</label>
+        <input
+          type="text"
+          ng-model="vm.clientReferralForm.last"
+          placeholder="Client Last Name"
+          required>
+      </md-input-container>
+      <md-input-container>
+        <label>Client Date of Birth</label>
+        <md-datepicker ng-model="vm.clientReferralForm.dob"></md-datepicker>
+      </md-input-container>
+      <md-input-container>
+        <label>Select a race/ethnicity</label>
+        <md-select ng-model="vm.clientEthnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+            <md-select-label>Select a race/ethnicity</md-select-label>
+            <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container>
+        <label>Street Address</label>
+        <input
+          type="text"
+          placeholder="Address"
+          ng-model = "vm.clientReferralForm.street"
+          required>
+      </md-input-container>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block">
+          <label>City</label>
+          <input ng-model="vm.clientReferralForm.city">
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>State</label>
+          <md-select ng-model="vm.clientReferralForm.state">
+            <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
+              {{state.abbrev}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+      <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Submit</md-button>
+    </form>
+  </md-content>
 </div>

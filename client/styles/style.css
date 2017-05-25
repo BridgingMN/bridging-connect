@@ -1,0 +1,49 @@
+.md-toolbar-tools .logo{
+  max-height: 100%;
+  margin: 8px;
+  margin-left: 0px;
+  position: relative;
+  top: 5px;
+}
+
+.navigation-tabs md-content {
+  background-color: inherit;
+}
+
+.navigation-tabs ._md-nav-button-text {
+  color: white;
+}
+
+.caseworker-appointment-cards .appointment-card {
+  border: 1px solid black;
+  margin: 1em;
+}
+
+.appointment-card .appointment-card-header {
+  background-color: #54C0C9;
+  color: white;
+}
+
+.appointment-card .appointment-card-delivery-info {
+  background-color: rgb(224, 224, 224);
+  color: rgb(54, 54, 54);
+}
+
+.md-calendar-date .md-calendar-date-selection-indicator {
+  background-color: lightgreen;
+}
+
+.addButton {
+  max-height: 50px;
+}
+
+.appointment-date, .appointment-delivery, .appointment-type {
+  text-transform: capitalize;
+}
+
+#agencyInfo {
+  text-align: center;
+  background-color: LightSteelBlue;
+  border-radius: 25px;
+  width: 75%;
+}

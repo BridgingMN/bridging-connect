@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "agencies" (
   id SERIAL PRIMARY KEY,
   name VARCHAR(120) NOT NULL UNIQUE,
   beds_allowed_option_id INTEGER REFERENCES "beds_allowed_options" DEFAULT 1,
-  bridging_agency_id INTEGER,
+  bridging_agency_id INTEGER NOT NULL,
   street VARCHAR(200),
   city VARCHAR(30),
   state VARCHAR(2),
@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS "agencies" (
   primary_business_phone_ext VARCHAR(10),
   primary_mobile_phone VARCHAR(30),
   primary_email VARCHAR(120),
-  access_disabled BOOLEAN DEFAULT FALSE
+  access_disabled BOOLEAN DEFAULT FALSE,
+  notes TEXT
 );
 
 -- create "Users" table
@@ -47,18 +48,15 @@ CREATE TABLE IF NOT EXISTS "users" (
   email VARCHAR(120) NOT NULL UNIQUE,
   first VARCHAR(40) NOT NULL,
   last VARCHAR(40) NOT NULL,
-  password VARCHAR(120) NOT NULL,
+  password VARCHAR(120),
   day_phone VARCHAR(30),
   ext VARCHAR(10),
-  street VARCHAR(200),
-  city VARCHAR(30),
-  state VARCHAR(2),
-  zip_code VARCHAR(10),
   access_disabled BOOLEAN DEFAULT FALSE,
   department VARCHAR(50),
   token VARCHAR(120),
   token_expiration DATE,
-  last_login_date DATE
+  last_login_date DATE,
+  notes TEXT
 );
 
 -- create "Statuses" table
@@ -93,7 +91,7 @@ CREATE TABLE IF NOT EXISTS "delivery_methods" (
 -- currently options will be Bloomington and Roseville
 CREATE TABLE IF NOT EXISTS "locations" (
   id SERIAL PRIMARY KEY,
-  location VARCHAR(50) NOT NULL UNIQUE
+  location VARCHAR(50) NOT NULL UNIQUE,
   street VARCHAR(200),
   city VARCHAR(30),
   state VARCHAR(2),
@@ -120,6 +118,7 @@ CREATE TABLE IF NOT EXISTS "overrides" (
   id SERIAL PRIMARY KEY,
   appointment_type_id INTEGER NOT NULL REFERENCES "appointment_types",
   delivery_method_id INTEGER NOT NULL REFERENCES "delivery_methods",
+  appointment_slot_id INTEGER NOT NULL REFERENCES "appointment_slots",
   location_id INTEGER NOT NULL REFERENCES "locations",
   override_date DATE NOT NULL,
   start_time TIME NOT NULL,
@@ -164,7 +163,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
   first VARCHAR(20),
   last VARCHAR(20),
   dob DATE,
-  race_ethnicity INTEGER REFERENCES "race_ethnicity",
+  race_ethnicity_id INTEGER REFERENCES "race_ethnicity",
   street VARCHAR(200),
   city VARCHAR(30),
   state VARCHAR(2),
@@ -191,10 +190,10 @@ INSERT INTO "days" ("name") VALUES ('Sunday'), ('Monday'), ('Tuesday'), ('Wednes
 ('Thursday'), ('Friday'), ('Saturday');
 
 -- add data to "Statuses" table
-INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled');
+INSERT INTO "statuses" ("status") VALUES ('confirmed'), ('pending'), ('canceled'), ('denied');
 
 -- add data to "Locations" table
-INSERT INTO "locations" ("location") VALUES ('Bloomington', '201 W 87th St.',
+INSERT INTO "locations" ("location", "street", "city", "state", "zip_code") VALUES ('Bloomington', '201 W 87th St.',
   'Bloomington', 'MN', '55420'), ('Roseville', '1730 Terrace Dr.', 'Roseville',
   'MN', '55113');
 

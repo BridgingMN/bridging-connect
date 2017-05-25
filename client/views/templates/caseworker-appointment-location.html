@@ -1,24 +1,27 @@
-<div class="caseworker-appointment-new" layout="column" layout-align="center center" flex>
+<div class="caseworker-appointment-new" layout="column" layout-align="start center" flex>
+  <h3>Pick Up Location</h3>
   <div class="caseworker-appointment-delivery-type-selection" layout="column">
-    <p>For this appointment will your client be picking up the furniture or having it delivered?</p>
+    <p>At which location would you like to make your appointment?</p>
     <div class="location-options" layout="row" flex>
       <div class="location" layout="column" layout-align="center center" flex>
         <md-button
           class="md-raised md-accent"
-          href="#caseworker-appointment-schedule">
+          ng-click="vm.selectPickUpLocation(vm.CONSTANTS.LOCATION_BLOOMINGTON)">
             Bloomington
         </md-button>
         <p>201 W 87th Street</p>
         <p>Bloomington, MN 55420</p>
+        <a href="#">Map</a>
       </div>
       <div class="location" layout="column" layout-align="center center" flex>
         <md-button
           class="md-raised md-primary"
-          href="#caseworker-appointment-schedule">
+          ng-click="vm.selectPickUpLocation(vm.CONSTANTS.LOCATION_ROSEVILLE)">
             Roseville
         </md-button>
         <p>1730 Terrace Drive</p>
         <p>Roseville, MN 55113</p>
+        <a href="#">Map</a>
       </div>
     </div>
   </div>

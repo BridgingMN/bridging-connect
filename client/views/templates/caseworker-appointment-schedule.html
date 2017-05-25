@@ -1,25 +1,28 @@
-<div class="caseworker-appointment-new" layout="column" layout-align="center center" flex>
+<div class="caseworker-appointment-new" layout="column" layout-align="start center" flex>
+  <h3>Appointment Date and Time</h3>
   <div class="caseworker-appointment-info" layout="row" layout-align="center center">
-    <div class="md-padding appointment-type">
-      <span>Shopping w/ Delivery</span>
+    <div class="md-padding">
+      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
+      <span><span class="appointment-type">{{vm.appointment.appointment_type}}</span> w/ <span class="appointment-delivery">{{vm.appointment.delivery_method}}</span></span>
     </div>
     <div class="md-padding appointment-location">
       <i class="material-icons">place</i>
-      <span>Bloomington</span>
+      <span>{{vm.appointment.location_name}}</span>
     </div>
     <div class="md-padding appointment-date-time">
       <i class="material-icons">today</i>
-      <span>{{vm.myDate |date: 'shortDate'}},
-      {{vm.selectedAppointment}}</span>
-
+      <span>{{vm.selectedDate | date: 'shortDate' }},
+      {{vm.selectedAppointment.start_time | uppercase}}</span>
     </div>
   </div>
   <div class="caseworker-appointment-schedule-inputs" layout="row">
     <div class="appoint-schedule-calendar">
       <md-calendar
-          ng-model="vm.myDate"
+          ng-model="vm.selectedDate"
+          ng-change="vm.selectDate(vm.selectedDate)"
           md-min-date="vm.minDate" md-max-date="vm.maxDate"
-          md-date-filter="vm.onlyMonToThursPredicate">
+          md-date-filter="vm.availableAppointmentsPredicate">
       </md-calendar>
     </div>
     <form class="md-padding appoint-schedule-slot" layout="column" layout-align="center center">
@@ -28,10 +31,10 @@
             <md-radio-button
               ng-value="appointment"
               ng-repeat="appointment in vm.appointmentSlots">
-                {{appointment}}
+                {{appointment.start_time}}
             </md-radio-button>
           </md-radio-group>
-        <md-button class="md-raised md-primary" href="#caseworker-appointment-form">Next</md-button>
+        <md-button class="md-raised md-primary" ng-click="vm.reserveAppointment()">Next</md-button>
     </form>
   </div>
 </div>

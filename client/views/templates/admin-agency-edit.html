@@ -1,1 +1,123 @@
-<p>{{vm.hello}}</p>
+<div layout="column" ng-cloak class="md-inline-form"
+      layout-align = "start center" id = "popupContainer">
+  <h2>Agency Profile</h2>
+
+  <md-content layout-padding>
+    <div>
+      <form name = "newAgencyForm">
+        <div layout-gt-xs = "row">
+          <md-input-container class = "md-block" flex-gt-xs>
+            <label>Agency</label>
+            <input ng-model="vm.agency.selected[0].name" required>
+            <div ng-messages="newAgencyForm.name.$error" role="alert">
+              <div ng-message="required" class="my-message">
+                You must enter an Agency name.</div>
+            </div>
+          </md-input-container>
+
+          <md-input-container>
+           <label>Agency ID</label>
+           <input ng-model="vm.agency.selected[0].bridging_agency_id"
+                  required ng-pattern = "/^[0-9]/">
+           <div ng-messages="newAgencyForm.agency_id.$error" role="alert" multiple>
+             <div ng-message="required" class="my-message">
+               You must enter an Agency ID.</div>
+               <div ng-message = "pattern" class = "my-message">
+                 The Agency ID must be a number.</div>
+           </div>
+         </md-input-container>
+        </div>
+
+          <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Primary Contact First Name</label>
+                <input ng-model="vm.agency.selected[0].primary_first">
+              </md-input-container>
+
+              <md-input-container class="md-block" flex-gt-sm>
+                <label>Primary Contact Last Name</label>
+                <input ng-model="vm.agency.selected[0].primary_last">
+              </md-input-container>
+            </div>
+
+            <div layout-gt-sm="row">
+              <md-input-container class="md-block" flex-gt-sm>
+                <label> Primary Contact Department/Program</label>
+                <input ng-model="vm.agency.selected[0].primary_department">
+              </md-input-container>
+
+              <md-input-container class="md-block" flex-gt-sm>
+                <label> Primary Contact Job Title</label>
+                <input ng-model="vm.agency.selected[0].primary_job_title">
+              </md-input-container>
+            </div>
+
+          <div layout-gt-sm="row">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Primary Contact Business Phone</label>
+              <input ng-model="vm.agency.selected[0].primary_business_phone">
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-xs>
+              <label>Ext.</label>
+              <input ng-model="vm.agency.selected[0].primary_business_phone_ext">
+            </md-input-container>
+
+          </div>
+
+          <div layout-gt-sm="row">
+
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Primary Contact Mobile</label>
+              <input ng-model="vm.agency.selected[0].primary_mobile_phone">
+            </md-input-container>
+
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Primary Contact Email</label>
+              <input ng-model="vm.agency.selected[0].primary_email">
+            </md-input-container>
+          </div>
+
+          <md-input-container class="md-block">
+            <label>Additional Notes</label>
+            <textarea ng-model="vm.agency.selected[0].notes" rows="5"
+              md-select-on-focus></textarea>
+          </md-input-container>
+
+          <p>Can this Agency purchase beds? <span class="radioValue">
+              {{ data.group1 }}</span> </p>
+
+          <md-radio-group ng-model="vm.agency.selected[0].beds_allowed_option">
+
+            <md-radio-button value="yes">Yes</md-radio-button>
+            <md-radio-button value="no"> No </md-radio-button>
+            <md-radio-button value="check">Caseworker needs pre-approval
+              </md-radio-button>
+
+          </md-radio-group>
+
+          <hr />
+
+          <md-input-container class="md-block">
+            <md-checkbox name = "disabled" ng-model = "vm.agency.selected[0].access_disabled">
+              Agency Access Disabled (Caseworkers tied to this Agency cannot
+              schedule appointments if checked)
+            </md-checkbox>
+          </md-input-container>
+
+          <div>
+            <md-button type="submit" class="md-raised md-primary"
+              ng-click = "vm.editAgency(vm.agency.selected[0])">
+              Save Changes</md-button>
+            <a href="#admin-agency-overview"><md-button type="button">
+              Cancel Changes</md-button></a>
+            <md-button type="submit" class="md-raised md-warn"
+              ng-click = "vm.deleteAgency(vm.agency.selected[0])">
+              Delete Agency</md-button>
+          </div>
+
+
+        </form>
+      </div>
+    </md-content>
+</div>

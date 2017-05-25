@@ -13,11 +13,19 @@ var database = require('./modules/database.js');
 // AUTHENTICATION MODULES
 var passport = require('./strategies/user_sql.js');
 var session = require('express-session');
+var isLoggedIn = require('./modules/authentication.js');
 
 // ROUTE MODULES
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var register = require('./routes/register.js');
+var agencies = require('./routes/agencies.js');
+var appointments = require('./routes/appointments.js');
+var caseworkers = require('./routes/caseworkers.js');
+var clients = require('./routes/clients.js');
+var rules = require('./routes/rules.js');
+var schedule = require('./routes/schedule.js');
+var overrides = require('./routes/overrides.js');
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
@@ -42,7 +50,14 @@ app.use(passport.session());
 
 // ROUTES
 app.use('/register', register);
-app.use('/user', user);
+app.use('/user', isLoggedIn, user);
+app.use('/agencies', isLoggedIn, agencies);
+app.use('/appointments', isLoggedIn, appointments);
+app.use('/caseworkers', isLoggedIn, caseworkers);
+app.use('/clients', isLoggedIn, clients);
+app.use('/rules', isLoggedIn, rules);
+app.use('/schedule', isLoggedIn, schedule);
+app.use('/overrides', isLoggedIn, overrides);
 app.use('/*', index);
 
 // LISTEN

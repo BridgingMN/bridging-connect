@@ -5,20 +5,20 @@ angular
   var vm = this; // controller reference
   vm.message = '';
   vm.tempUser = { // temp object used for login purposes
-    username: '',
+    email: '',
     password: ''
   };
-  
+
   // DATA-BINDING FUNCTIONS
   vm.loginUser = function(tempUser) {
-    if (tempUser.username === '' || tempUser.password === '') {
-      vm.message = 'Please enter your username and password!';
-    } else { // username & password not blank - attempt to login with the provided credentials
+    if (tempUser.email === '' || tempUser.password === '') {
+      vm.message = 'Please enter your email and password!';
+    } else { // email & password not blank - attempt to login with the provided credentials
       vm.message = '';
       UserService.loginUser(tempUser).then(function(loginValue) {
-        if (loginValue === 'admin') {
-          UserService.redirectToAdminAppointmentsPending();
-        } else if (loginValue === 'caseworker') {
+        if (loginValue === 1) {
+          UserService.redirectToAdminAppointmentsAll();
+        } else if (loginValue === 2) {
           UserService.redirectToCaseworkerAppointmentsAll();
         } else {
           displayErrorMessage();

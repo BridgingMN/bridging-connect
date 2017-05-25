@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemn server/app.js",
+    "test": "nodemon server/app.js",
     "postinstall": "grunt uglify copy",
     "start": "node server/app.js"
   },
@@ -37,7 +37,9 @@
     "angular-animate": "^1.6.4",
     "angular-aria": "^1.6.4",
     "angular-material": "^1.1.4",
+    "angular-material-data-table": "^0.10.10",
     "angular-route": "^1.6.4",
+    "asyncawait": "^1.0.6",
     "bcrypt": "^0.8.5",
     "body-parser": "^1.13.3",
     "express": "^4.13.1",

@@ -24,6 +24,12 @@ module.exports = function(grunt) {
                 src: ['style.css'],
                 dest: 'server/public/styles/'
             },
+            assets: {
+              expand: true,
+              cwd:'client/assets',
+              src: ['**/*.*'],
+              dest: 'server/public/assets'
+            },
             moment: {
                 expand: true,
                 cwd: 'node_modules/moment/',
@@ -66,6 +72,12 @@ module.exports = function(grunt) {
                 src: ['**.*'],
                 dest: 'server/public/vendors/angular-aria/'
 
+            },
+            angularMaterialDataTable: {
+              expand: true,
+              cwd: 'node_modules/angular-material-data-table/dist',
+              src: ['**.*'],
+              dest: 'server/public/vendors/angular-material-data-table'
             }
         },
         watch: {
@@ -82,12 +94,12 @@ module.exports = function(grunt) {
         },
         apidoc: {
           myapp: {
-            src: "server/",
-            dest: "apidoc/",
+            src: 'server/',
+            dest: 'apidoc/',
             options: {
               debug: false,
-              includeFilters: [ ".*\.js$" ],
-              excludeFilters: [ "node_modules/" ]
+              includeFilters: [ '.*\.js$' ],
+              excludeFilters: [ 'node_modules/' ]
             }
           }
         }
