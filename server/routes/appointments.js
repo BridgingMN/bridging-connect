@@ -398,6 +398,7 @@ router.get('/pending', function(req, res) {
 router.get('/:appointment_id', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var appointment_id = req.params.appointment_id;
+    console.log('getting appointment details for ', appointment_id);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);

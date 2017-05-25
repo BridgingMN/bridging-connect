@@ -146,9 +146,7 @@ angular
   //Views details of selected appointment & client info
   function viewDetails(appointment_id) {
     console.log('view details clicked ', appointment_id);
-    var id = appointment_id.id;
-    console.log('appointment_id: ', id);
-    $http.get('/appointments/' + id).then(function(response) {
+    $http.get('/appointments/' + appointment_id).then(function(response) {
       appointment.selected = response.data;
       console.log('Agency record back from db: ', appointment.selected);
     });

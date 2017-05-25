@@ -8,6 +8,8 @@ angular
   vm.query = UserService.query;
   vm.pendingAppointments = {};
   vm.getPendingAppointments = getPendingAppointments;
+  vm.appointment = UserService.appointment;
+  vm.viewDetails = UserService.viewDetails;
 
   //GETS all appointments from db
   function getPendingAppointments() {
