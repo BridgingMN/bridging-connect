@@ -1,12 +1,14 @@
 <div class="caseworker-home" layout="column">
-  <div class="md-padding caseworker-appointment-view-controls" layout="row">
-    <md-button class="md-raised md-primary"  ng-click="vm.setAppointmentFilter(undefined)">Show All</md-button>
-    <md-button class="md-raised" ng-click="vm.setAppointmentFilter(vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING)">Show Shopping Appointments Only</md-button>
-    <md-button class="md-raised" ng-click="vm.setAppointmentFilter(vm.CONSTANTS.APPOINTMENT_TYPE_BED)">Show Bed Orders Only</md-button>
-  </div>
-  <md-content class="md-padding caseworker-appointment-cards" layout="row" layout-align="space-around" layout-wrap>
+  <md-toolbar class="appointment-filter-buttons md-whiteframe-1dp">
+    <div class="md-toolbar-tools" layout="row" flex="auto">
+      <md-button class="md-raised md-primary"  ng-click="vm.setAppointmentFilter(undefined)">Show All</md-button>
+      <md-button class="md-raised" ng-click="vm.setAppointmentFilter(vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING)">Show Shopping Appointments Only</md-button>
+      <md-button class="md-raised" ng-click="vm.setAppointmentFilter(vm.CONSTANTS.APPOINTMENT_TYPE_BED)">Show Bed Orders Only</md-button>
+    </div>
+  </md-toolbar>
+  <md-content class="caseworker-appointment-cards" layout="row" layout-wrap flex-offset="10">
     <div
-    class="appointment-card"
+    class="appointment-card md-whiteframe-3dp"
     ng-repeat="appointment in vm.caseworkerAppointments | filter: vm.appointmentFilter"
     layout="column"
     flex="20"
@@ -75,5 +77,4 @@
       </div>
     </md-content>
   </div>
-  <span flex></span>
 </div>
