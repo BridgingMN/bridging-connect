@@ -7,6 +7,7 @@ var formatters = require('../modules/formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
 var formatDateForPostgres = formatters.formatDateForPostgres;
+var formatSingleAppointment = formatters.formatSingleAppointment;
 
 /**
   * @api {get} /appointments/existing Get User Appointments
@@ -291,10 +292,11 @@ router.get('/all', function(req, res) {
         console.log('error connecting to the database on /appointments/all GET route:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
+        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "locations"."location" AS "location_name", "appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
                         'FROM "appointments" ' +
                         'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id" ' +
                         'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id" ' +
+                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
                         'JOIN "users" ON "appointments"."user_id" = "users"."id" ' +
                         'JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                         'JOIN "clients" ON "appointments"."client_id" = "clients"."id" ' +
@@ -351,10 +353,11 @@ router.get('/pending', function(req, res) {
         console.log('error connecting to the database on /appointments/pending GET route:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type","appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
+        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type",  "locations"."location" AS "location_name", "appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
                         'FROM "appointments" ' +
                         'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id" ' +
                         'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id" ' +
+                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
                         'JOIN "users" ON "appointments"."user_id" = "users"."id" ' +
                         'JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                         'JOIN "clients" ON "appointments"."client_id" = "clients"."id" ' +
@@ -373,6 +376,58 @@ router.get('/pending', function(req, res) {
           }); // end query callback
         } // end if-else
       }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
+/**
+  * @api {get} /appointments/:appointment_id Get a Specific Appointment
+  * @apiVersion 0.1.0
+  * @apiName GetAppointment
+  * @apiGroup Appointments
+  * @apiDescription Gets specified appointment from the database.
+  *
+  * @apiParam {Number} appointment_id Unique ID of the appointment in the "appointments" table.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  * @apiErrorExample Delete Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
+router.get('/:appointment_id', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    var appointment_id = req.params.appointment_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "appointments"."confirmation_id", "appointments"."created_date", "appointments"."appointment_date", "appointments"."delivery_date", "statuses"."status", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "delivery_methods"."delivery_method", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointments"."user_id", "users"."email" AS "user_email", "users"."first" AS "user_first", "users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone", "users"."ext" AS "user_day_phone_ext", "users"."agency_id", "agencies"."name" AS "agency_name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_job_title", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_email", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "clients"."dob" AS "client_dob", "clients"."street", "clients"."city", "clients"."state", "clients"."zip_code", "race_ethnicity"."race_ethnicity" ' +
+                        'FROM "appointments" ' +
+                        'JOIN "statuses" ON "statuses"."id" = "appointments"."status_id" ' +
+                        'JOIN "users" ON "users"."id" = "appointments"."user_id" ' +
+                        'JOIN "agencies" ON "agencies"."id" = "users"."agency_id" ' +
+                        'JOIN "clients" ON "clients"."id" = "appointments"."client_id" ' +
+                        'JOIN "race_ethnicity" ON "race_ethnicity"."id" = "clients"."race_ethnicity_id" ' +
+                        'JOIN "appointment_slots" ON "appointment_slots"."id" = "appointments"."appointment_slot_id" ' +
+                        'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
+                        'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
+                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
+                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
+                        'WHERE "appointments"."id" = $1;', [appointment_id],
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful GET from /appointments/:appointment_id', result);
+              var apptInfo = formatSingleAppointment(result.rows[0]);
+              res.send(apptInfo);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
   } else { // user not authenticated
     res.sendStatus(401);
   }
