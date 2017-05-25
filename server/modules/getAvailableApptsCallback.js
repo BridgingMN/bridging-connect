@@ -36,8 +36,6 @@ function getApptSlots(appointment_type, delivery_method, location_id, min_date, 
           var apptSlotIds = apptSlots.map(function(apptSlot) {
             return apptSlot.appointment_slot_id;
           });
-          console.log('apptSlots', apptSlots);
-          console.log('apptSlotIds', apptSlotIds);
           return countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res);
         }
       });
@@ -53,7 +51,7 @@ function countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       return connectionError;
     } else {
-      db.query('SELECT "appointments"."appointment_date", COUNT(*)' +
+      db.query('SELECT "appointments"."appointment_date", "appointment_slots"."id" AS "appointment_slot_id", COUNT(*)' +
         'FROM "appointments"' +
         'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
         'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
@@ -64,7 +62,7 @@ function countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res) {
         '(SELECT "id" FROM "statuses" WHERE "status" = $4)' +
         'OR "appointments"."status_id" =' +
         '(SELECT "id" FROM "statuses" WHERE "status" = $5))' +
-        'GROUP BY "appointments"."appointment_date"',
+        'GROUP BY "appointments"."appointment_date", "appointment_slots"."id"',
       [apptSlotIds, min_date, max_date, 'pending', 'confirmed'],
       function(queryError, result){
           done();
@@ -72,7 +70,6 @@ function countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res) {
             console.log(queryError, 'ERROR MAKING QUERY');
           } else {
             var existingApptCounts = result.rows;
-            console.log('existingApptCounts', existingApptCounts);
             return getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCounts, res);
           }
         });
@@ -105,11 +102,9 @@ function getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCo
 }
 
 function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, overrides, res) {
-  console.log('apptSlots to start with', apptSlots);
   var apptsAvailable = [];
   var date = min_date;
   while (date <= max_date) {
-    console.log('DATE', date);
     var slotsForDate = [];
     var overridesForDate = checkForOverrides(date, overrides);
     if(overridesForDate) {
@@ -120,7 +115,7 @@ function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, ove
 
     for (var i = 0; i < slotsForDate.length; i++) {
       var apptSlot = {};
-      var isAvailable = checkAvailability(slotsForDate[i], date, existingApptCounts, res);
+      var isAvailable = checkAvailability(slotsForDate[i], date, existingApptCounts);
       if (isAvailable){
         apptSlot.date = formatDate(date);
         apptSlot.appointment_slot_id = slotsForDate[i].appointment_slot_id;
@@ -165,10 +160,15 @@ function findRelevant(apptSlots, date) {
 // checks to see if an appt slot on a particular date is still available
 // (i.e. not completely filled) and returns true if it is
 function checkAvailability(apptSlot, date, existingApptCounts) {
+  console.log('existingApptCounts', existingApptCounts);
   for (var i = 0; i < existingApptCounts.length; i++) {
     var appt = existingApptCounts[i];
-    console.log('appt date', appt.appointment_date);
-    if (appt.appointment_date == date && appt.appointment_slot_id == apptSlot.id) {
+    console.log('*******IN CHECK AVAILABILITY********');
+    console.log('appt', appt);
+    console.log('appt.appointment_date', appt.appointment_date);
+    console.log('date', date);
+    console.log('appt.appointment_slot_id', apptSlot.appointment_slot_id);
+    if (appt.appointment_slot_id == apptSlot.appointment_slot_id && compareDates(appt.appointment_date, date)) {
       console.log('date match:', appt.appointment_date, date);
       console.log('slot match:', appt.appointment_slot_id, apptSlot.id);
       if (appt.count < apptSlot.num_allowed) {
@@ -179,6 +179,24 @@ function checkAvailability(apptSlot, date, existingApptCounts) {
     }
   }
   return true;
+}
+
+function compareDates(appointmentDate, date) {
+    //Convert date string from appointment object to a Javascript Date
+    console.log('in compareDates');
+    appointmentDate = new Date (appointmentDate);
+    date = new Date(date);
+    // console.log('appointmentDate:', appointmentDate.getDate(), 'date:', date.getDate());
+    // console.log('dates match?', appointmentDate.getDate() == date.getDate(),
+    //   appointmentDate.getMonth() == date.getMonth(),
+    //   appointmentDate.getFullYear() == date.getFullYear());
+    // return (appointmentDate.getDate() == date.getDate()
+    //   && appointmentDate.getMonth() == date.getMonth()
+    //   && appointmentDate.getFullYear() == date.getFullYear());
+    var match = appointmentDate.toISOString().substr(0,10) == date.toISOString().substr(0,10);
+    console.log('is it a match?', match);
+    return (match);
+    //Return a comparison of the two dates.
 }
 
 function checkForOverrides(date, overrides) {
