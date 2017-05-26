@@ -11,7 +11,7 @@ angular
 
   //Model for the clientReferralForm
   vm.clientReferralForm = {
-
+    dob: new Date()
   };
 
   //These are placeholders, these will be properties of the clientReferralForm object
