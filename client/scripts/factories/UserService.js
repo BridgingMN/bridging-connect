@@ -40,6 +40,8 @@ angular
     getMethods: getMethods,
     loginUser: loginUser,
     registerUser: registerUser,
+    sendResetPasswordLink: sendResetPasswordLink,
+    updateUserPassword: updateUserPassword,
     getUser: getUser,
     logout: logout,
     redirectToLogin: redirectToLogin,
@@ -67,6 +69,36 @@ angular
   function registerUser(tempUser) {
     return $http.post('/register', tempUser);
   } // end registerUser()
+
+  // make request to have a password reset link emailed to the user
+  function sendResetPasswordLink(tempUser) {
+    return $http.post('/password/forgotpassword', tempUser)
+      .then(function(response) {
+        if(response.data.email) {
+          console.log('success: ', response.data);
+          // location works with SPA (ng-route)
+          return 'Password Reset Link has been sent to ' + response.data.email + '.';
+        } else {
+          console.log('failure: ', response);
+          return  'Failure';
+        }
+    });
+  }
+
+  // make request with password reset token to update user's password
+  function updateUserPassword(tempUser) {
+    $http.put('/password/resetpassword', tempUser)
+      .then(function(response) {
+        if(response.data.username) {
+          console.log('success: ', response.data);
+          // location works with SPA (ng-route)
+          return 'Password successfully updated.';
+        } else {
+          console.log('failure: ', response);
+          return 'Failure.';
+        }
+    });
+  }
 
   // verify user authentication
   function getUser() {
