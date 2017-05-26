@@ -6,6 +6,7 @@ var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
 var formatters = require('../modules/formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
+var formatTimeForClient = formatters.formatTimeForClient;
 var formatDateForPostgres = formatters.formatDateForPostgres;
 var formatSingleAppointment = formatters.formatSingleAppointment;
 
@@ -292,7 +293,7 @@ router.get('/all', function(req, res) {
         console.log('error connecting to the database on /appointments/all GET route:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "locations"."location" AS "location_name", "appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
+        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "locations"."location" AS "location_name", "delivery_methods"."delivery_method", "appointment_slots"."start_time", "appointment_slots"."end_time","users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
                         'FROM "appointments" ' +
                         'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id" ' +
                         'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id" ' +
@@ -300,6 +301,7 @@ router.get('/all', function(req, res) {
                         'JOIN "users" ON "appointments"."user_id" = "users"."id" ' +
                         'JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                         'JOIN "clients" ON "appointments"."client_id" = "clients"."id" ' +
+                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
                         'JOIN "statuses" ON "appointments"."status_id" = "statuses"."id";',
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
@@ -308,7 +310,12 @@ router.get('/all', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful GET from /appointments/all route:', result.rows);
-              res.send(result.rows);
+              var allAppointmentsArray = result.rows;
+              allAppointmentsArray.forEach(function(appointmentObj) {
+                appointmentObj.start_time = formatTimeForClient(appointmentObj.start_time);
+                appointmentObj.end_time = formatTimeForClient(appointmentObj.end_time);
+              });
+              res.send(allAppointmentsArray);
             }
           }); // end query callback
         } // end if-else
@@ -353,7 +360,7 @@ router.get('/pending', function(req, res) {
         console.log('error connecting to the database on /appointments/pending GET route:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type",  "locations"."location" AS "location_name", "appointment_slots"."start_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
+        database.query('SELECT "appointments"."id", "appointments"."appointment_date", "appointments"."delivery_date", "appointments"."confirmation_id", "appointments"."appointment_slot_id", "appointment_types"."appointment_type",  "locations"."location" AS "location_name", "delivery_methods"."delivery_method", "appointment_slots"."start_time", "appointment_slots"."end_time", "users"."agency_id", "agencies"."name", "appointments"."user_id", "users"."first" AS "user_first", "users"."last" AS "user_last", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "appointments"."status_id", "statuses"."status" ' +
                         'FROM "appointments" ' +
                         'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id" ' +
                         'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id" ' +
@@ -362,6 +369,7 @@ router.get('/pending', function(req, res) {
                         'JOIN "agencies" ON "users"."agency_id" = "agencies"."id" ' +
                         'JOIN "clients" ON "appointments"."client_id" = "clients"."id" ' +
                         'JOIN "statuses" ON "appointments"."status_id" = "statuses"."id" ' +
+                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
                         'WHERE "status_id" = (SELECT "id" FROM "statuses" WHERE "status" = $1);',
                        [status],
           function(queryErr, result) { // query callback
@@ -371,7 +379,12 @@ router.get('/pending', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful GET from /appointments/pending route:', result.rows);
-              res.send(result.rows);
+              var pendingAppointmentsArray = result.rows;
+              pendingAppointmentsArray.forEach(function(appointmentObj) {
+                appointmentObj.start_time = formatTimeForClient(appointmentObj.start_time);
+                appointmentObj.end_time = formatTimeForClient(appointmentObj.end_time);
+              });
+              res.send(pendingAppointmentsArray);
             }
           }); // end query callback
         } // end if-else
