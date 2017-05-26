@@ -14,10 +14,6 @@
     flex="20"
     ng-if="appointment.info.status != 'canceled'">
       <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
-        <div class="appointment-icon">
-          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
-          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
-        </div>
         <div class="md-title appointment-date">
           <p class="" layout="column" layout-align="center center">
             <span>{{appointment.info.date | date: 'MMM'}}</span>
@@ -29,6 +25,10 @@
             <span class="appointment-type">{{appointment.info.appointment_type}}</span>
             <span>with <span class="appointment-delivery">{{appointment.info.delivery_method}}</span></span>
           </p>
+        </div>
+        <div class="appointment-icon">
+          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="fa fa-shopping-cart" aria-hidden="true"></i>
         </div>
       </div>
       <div class="appointment-card-body" layout="column" layout-align="center center">
@@ -48,10 +48,12 @@
       </div>
       <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
           <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+            <i class="fa fa-truck" aria-hidden="true"></i>
             <span ng-if="appoint.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}.</span>
             <span ng-if="appoint.info.delivery_date == undefined">Delivery date to be determined.</span>
           </p>
           <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
+            <i class="fa fa-truck" aria-hidden="true"></i>
             <span>Client Pick Up</span>
           </p>
       </div>

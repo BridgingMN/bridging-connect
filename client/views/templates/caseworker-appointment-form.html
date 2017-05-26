@@ -1,6 +1,6 @@
-<div class="caseworker-appointment-referall-form" layout="column" layout-align="start center">
+<div class="md-padding caseworker-appointment-referall-form" layout="column" layout-align="start center" layout-margin>
   <h3>Client Referall Form</h3>
-  <div class="caseworker-appointment-info" layout="row" layout-align="center center">
+  <div class="md-whiteframe-3dp caseworker-appointment-info" layout="row" layout-align="center center" >
     <div class="md-padding">
       <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
       <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
@@ -17,7 +17,7 @@
     </div>
   </div>
   <md-content>
-    <form class="client-referall-form" layout="column">
+    <form class="client-referall-form" layout="column" flex>
       <md-input-container>
         <label>Client First Name</label>
         <input
