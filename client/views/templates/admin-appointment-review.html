@@ -4,160 +4,11 @@
   <div>
     <h2>Appointment & Client Details</h2>
   </div>
-  <div layout ="row">
-    <!-- <md-content class="md-padding caseworker-appointment-cards" layout="row" layout-align="space-around" layout-wrap>
-      <div
-      class="appointment-card"
-      layout="column"
-      flex="20"
-      ng-if="appointment.info.status != 'canceled'">
-        <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
-          <div class="appointment-icon">
-            <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
-            <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
-          </div>
-          <div class="md-title appointment-date">
-            <p class="" layout="column" layout-align="center center">
-              <span>{{appointment.info.date | date: 'MMM'}}</span>
-              <span>{{appointment.info.date | date: 'dd'}}</span>
-            </p>
-          </div>
-          <div class="md-title md-padding appointment-type-info">
-            <p layout="column" layout-align="center center">
-              <span class="appointment-type">{{appointment.info.appointment_type}}</span>
-              <span>with <span class="appointment-delivery">{{appointment.info.delivery_method}}</span></span>
-            </p>
-          </div>
-        </div>
-        <div class="appointment-card-body" layout="column" layout-align="center center">
-          <p>
-            <i class="material-icons">access_time</i>
-            {{appointment.info.start_time}}
-          </p>
-          <p>
-            <i class="material-icons">person</i>
-            {{appointment.client.first}}
-            {{appointment.client.last}}
-          </p>
-          <p>
-            <i class="material-icons">place</i>
-            {{appointment.info.location_name}}
-          </p>
-        </div>
-        <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
-            <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-              <span ng-if="appoint.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}.</span>
-              <span ng-if="appoint.info.delivery_date == undefined">Delivery date to be determined.</span>
-            </p>
-            <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
-              <span>Client Pick Up</span>
-            </p>
-        </div>
-        <div class="appointment-card-buttons" layout="column">
-            <md-button
-              class="md-raised"
-              ng-click="vm.rescheduleAppointment(appointment)">
-                <i class="material-icons">today</i>
-                Reschedule
-            </md-button>
-            <md-button
-              class="md-raised"
-              ng-click="vm.editAppointmentInfo(appointment)">
-                <i class="material-icons">mode_edit</i>
-                Edit Client Info
-            </md-button>
-            <md-button
-              class="md-raised"
-              ng-click="vm.confirmCancelAppointment(appointment)">
-                <i class="material-icons">clear</i>
-                Cancel Appointment
-            </md-button>
-        </div>
-      </md-content> -->
 
-  <md-card>
-    <md-card-title>
-      <md-card-title-text layout-align = "start center">
-        <span class="md-headline">Appointment Details</span>
-      </md-card-title-text>
-    </md-card-title>
-
-  <md-card-content layout-padding>
-    <div>
-      <form name = "reviewForm">
-        <div layout-gt-xs="row">
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Location</label>
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Date</label>
-          </md-input-container>
-        </div>
-
-        <div layout-gt-xs="row">
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Type</label>
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Delivery or Pick Up</label>
-          </md-input-container>
-        </div>
-
-        <div layout-gt-xs="row">
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Start Time</label>
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>End Time</label>
-          </md-input-container>
-        </div>
-
-        <div layout-gt-xs="row">
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Status</label>
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Confirmation #</label>
-          </md-input-container>
-        </div>
-
-        <div>
-          <label>Delivery Date</label>
-          <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
-        </div>
+  <div layout = "row">
 
 
-        <div layout = "row">
-          <md-button type="submit" class="md-raised md-primary"
-                      ng-click = "vm.confirmApt()">Confirm</md-button>
-          <md-button type="submit" class="md-raised md-warn"
-                      ng-click = "vm.denyApt()">Deny</md-button>
-        </div>
-      </form>
-    </div>
-  <md-card-content>
-  </md-card>
-
-
-
-
-
-
-  <md-card>
-    <md-card-title>
-      <md-card-title-text layout-align = "start center">
-        <span class="md-headline">Client Details</span>
-      </md-card-title-text>
-    </md-card-title>
-
-<md-card-content>
-  <div class="caseworker-appointment-referall-form" layout="column" layout-align="start center">
-
-    <!-- <md-content> -->
+    <md-content>
       <form class="client-referall-form" layout="column">
         <md-input-container>
           <label>Client First Name</label>
@@ -209,20 +60,10 @@
           </md-input-container>
         </div>
         <div layout="row">
-          <div layout = "row">
-            <md-button type="submit" class="md-raised md-primary"
-                        ng-click = "vm.createDefault()">Save Changes</md-button>
-            <a href="#admin-appointments-all"><md-button type="button">
-                  Cancel Changes
-                </md-button></a>
+          <md-button class="md-raised md-primary" ng-click="">Cancel</md-button>
+          <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Update</md-button>
         </div>
       </form>
-    <!-- </md-content> -->
+    </md-content>
   </div>
-  <md-card-content>
-  </md-card>
-
-
-</div>
-</div>
 </div>
