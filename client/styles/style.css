@@ -14,14 +14,23 @@
   color: white;
 }
 
+md-toolbar.appointment-filter-buttons {
+  background-color: white;
+}
+
 .caseworker-appointment-cards .appointment-card {
-  border: 1px solid black;
+  /*border: 1px solid rgba(0,0,0,0.05);*/
   margin: 1em;
 }
 
 .appointment-card .appointment-card-header {
   background-color: #54C0C9;
   color: white;
+}
+
+.appointment-card-header .appointment-date p{
+  padding: 1px   15px;
+  border-right: 1px solid white;
 }
 
 .appointment-card .appointment-card-delivery-info {
@@ -39,6 +48,21 @@
 
 .appointment-date, .appointment-delivery, .appointment-type {
   text-transform: capitalize;
+}
+
+.fa, .material-icons {
+  font-size: 2em;
+}
+
+.material-icons {
+  position: relative;
+  top: 9px;
+  left: -2px;
+}
+
+.appointment-card-header .fa {
+  font-size: 2.5em;
+  padding-right: 10px;
 }
 
 #agencyInfo {
