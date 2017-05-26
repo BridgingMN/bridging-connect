@@ -19,6 +19,7 @@ var isLoggedIn = require('./modules/authentication.js');
 var index = require('./routes/index.js');
 var user = require('./routes/user.js');
 var register = require('./routes/register.js');
+var passwordreset = require('./routes/passwordreset.js');
 var agencies = require('./routes/agencies.js');
 var appointments = require('./routes/appointments.js');
 var caseworkers = require('./routes/caseworkers.js');
@@ -49,6 +50,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // ROUTES
+app.use('/password', passwordreset);
 app.use('/register', register);
 app.use('/user', isLoggedIn, user);
 app.use('/agencies', isLoggedIn, agencies);
