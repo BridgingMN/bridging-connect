@@ -75,7 +75,7 @@
         </div>
       </md-content> -->
 
-  <!-- <md-card>
+  <md-card>
     <md-card-title>
       <md-card-title-text layout-align = "start center">
         <span class="md-headline">Appointment Details</span>
@@ -142,6 +142,11 @@
   <md-card-content>
   </md-card>
 
+
+
+
+
+
   <md-card>
     <md-card-title>
       <md-card-title-text layout-align = "start center">
@@ -149,94 +154,10 @@
       </md-card-title-text>
     </md-card-title>
 
-
-  <md-card-content layout-padding>
-    <div>
-      <form name = "defaultForm">
-        <div layout-gt-xs="row">
-
-          <md-input-container class="md-block" flex-gt-xs>
-          <label>Location</label>
-          <md-select ng-model="vm.default.location">
-            <md-option ng-repeat="location in vm.locations.array"
-                        ng-value="location">{{location}}
-            </md-option>
-          </md-select>
-        </md-input-container>
-
-        <div>
-          <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
-        </div>
-
-        </div>
-
-        <div layout-gt-xs="row">
-          <md-input-container class="md-block" flex-gt-xs>
-          <label>Appointment Type</label>
-          <md-select ng-model="vm.default.appointment_type">
-            <md-option ng-repeat="type in vm.types.array" ng-value="type">
-                {{type}}
-            </md-option>
-          </md-select>
-        </md-input-container>
-
-        <md-input-container>
-        <label>Delivery or Pick Up</label>
-        <md-select ng-model="vm.default.delivery_method">
-          <md-option ng-repeat="method in vm.methods.array" ng-value="method">
-              {{method}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-        </div>
-
-        <div layout-gt-xs="row">
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>Start Time</label>
-            <input type = "time" ng-model="vm.default.start_time">
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-xs>
-            <label>End Time</label>
-            <input type = "time" ng-model="vm.default.end_time">
-          </md-input-container>
-        </div>
-
-        <md-input-container class ="md-block">
-        <label>Number of Appointments Allowed at that time</label>
-        <input type = "number" ng-model="vm.default.num_allowed">
-        </md-input-container>
-
-
-        <div layout = "row">
-          <md-button type="submit" class="md-raised md-primary"
-                      ng-click = "vm.createDefault()">Save Changes</md-button>
-          <a href="#admin-appointments-all"><md-button type="button">
-                Cancel Changes
-              </md-button></a>
-        </div>
-      </form>
-    </div>
-  <md-card-content>
-  </md-card> -->
-
+<md-card-content>
   <div class="caseworker-appointment-referall-form" layout="column" layout-align="start center">
-    <h3>Edit Client Referall Form</h3>
-    <div class="caseworker-appointment-info" layout="row" layout-align="center center">
-      <div class="md-padding appointment-type">
-        <span>{{vm.appointment.appointment_type}} w/ {{vm.appointment.delivery_method}}</span>
-      </div>
-      <div class="md-padding appointment-location">
-        <i class="material-icons">place</i>
-        <span>{{vm.appointment.loc.location}}</span>
-      </div>
-      <div class="md-padding appointment-date-time">
-        <i class="material-icons">today</i>
-        <span>{{vm.appointment.appointment.date | date: "shortDate"}},
-        {{vm.appointment.appointment.start_time}}</span>
-      </div>
-    </div>
-    <md-content>
+
+    <!-- <md-content> -->
       <form class="client-referall-form" layout="column">
         <md-input-container>
           <label>Client First Name</label>
@@ -288,12 +209,18 @@
           </md-input-container>
         </div>
         <div layout="row">
-          <md-button class="md-raised md-primary" ng-click="">Cancel</md-button>
-          <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Update</md-button>
+          <div layout = "row">
+            <md-button type="submit" class="md-raised md-primary"
+                        ng-click = "vm.createDefault()">Save Changes</md-button>
+            <a href="#admin-appointments-all"><md-button type="button">
+                  Cancel Changes
+                </md-button></a>
         </div>
       </form>
-    </md-content>
+    <!-- </md-content> -->
   </div>
+  <md-card-content>
+  </md-card>
 
 
 </div>

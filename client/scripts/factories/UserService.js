@@ -15,7 +15,7 @@ angular
   var selected = [];
   var query = {
     order: 'name',
-    limit: 5,
+    limit: 10,
     page: 1
   };
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
