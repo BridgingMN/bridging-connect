@@ -20,7 +20,7 @@ function config($locationProvider, $mdThemingProvider, $routeProvider) {
        controller: 'PasswordResetController',
        controllerAs: 'vm'
      })
-     .when('/confirmreset/:code', {
+     .when('/updatepassword/:code/:email/:type', {
        templateUrl: '/views/templates/confirm.html',
        controller: 'PasswordResetController',
        controllerAs: 'vm',
