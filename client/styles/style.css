@@ -1,10 +1,11 @@
 .md-toolbar-tools .logo{
-  max-height: 100%;
-  margin: 8px;
+  max-height: 62px;
+  margin: 7px;
   margin-left: 0px;
   position: relative;
-  top: 5px;
+  top: 9px;
 }
+
 
 .navigation-tabs md-content {
   background-color: inherit;
@@ -67,7 +68,7 @@ md-toolbar.appointment-filter-buttons {
 
 #agencyInfo {
   text-align: center;
-  background-color: LightSteelBlue;
+  background-color: #90c9ce;
   border-radius: 25px;
-  width: 75%;
+  width: 50%;
 }

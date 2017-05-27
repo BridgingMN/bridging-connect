@@ -15,7 +15,7 @@ angular
     console.log('EDITING CASEWORKER: ', caseworker);
     $http.put('/caseworkers', caseworker).then(function() {
       $location.path('/admin-caseworker-overview');
-      alert('Your edits to ' + caseworker.first + caseworker.last + ' have been saved.');
+      alert('Your edits to ' + caseworker.first + ' ' + caseworker.last + ' have been saved.');
     });
   }
 

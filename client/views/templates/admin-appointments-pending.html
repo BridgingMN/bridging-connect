@@ -15,6 +15,8 @@
       <tr md-row>
         <th md-column md-date md-order-by="vm.pendingAppointments.date"><span>Date</span></th>
         <th md-column md-numeric md-order-by="vm.pendingAppointments.time"><span>Time</span></th>
+        <th md-column md-numeric>Location</th>
+        <th md-column md-numeric>Delivery or Pickup</th>
         <th md-column md-numeric>Type</th>
         <th md-column md-numeric>Agency</th>
         <th md-column md-numeric>Caseworker</th>
@@ -30,6 +32,8 @@
           limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
           <td md-cell>{{appointment.appointment_date | date}}</td>
           <td md-cell>{{appointment.start_time}}</td>
+          <td md-cell>{{appointment.location_name}}</td>
+          <td md-cell>{{appointment.delivery_method}}</td>
           <td md-cell>{{appointment.appointment_type}}</td>
           <td md-cell>{{appointment.name}}</td>
           <td md-cell>{{appointment.user_first}} {{appointment.user_last}}</td>
@@ -37,7 +41,7 @@
           <td md-cell>{{appointment.status}}</td>
           <td md-cell>{{appointment.confirmation_id}}</td>
           <td md-cell><a href="#admin-appointment-review"
-              ng-click = "vm.viewAppointment(appointment)">See Details</a></td>
+              ng-click = "vm.viewDetails(appointment)">See Details</a></td>
       </tr>
     </tbody>
 
