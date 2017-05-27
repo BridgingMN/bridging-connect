@@ -1,4 +1,4 @@
-<div layout="column" ng-cloak class = "md-inline-form"
+<div layout="column" ng-cloak class = "md-inline-form" ng-init = "vm.init()"
       layout-align = "start center" class = "md-padding">
 
   <div>
@@ -21,7 +21,7 @@
 
             <md-input-container class="md-block" flex-gt-xs>
             <label>Location</label>
-            <md-select ng-model="vm.defaultSlot.location">
+            <md-select ng-model="vm.defaultSlot.selected.location_name">
               <md-option ng-repeat="location in vm.locations" ng-value="location.option"
                           ng-disabled="$index === 1">{{location.option}}
               </md-option>
@@ -61,23 +61,24 @@
           <div layout-gt-xs="row">
             <md-input-container class="md-block" flex-gt-xs>
               <label>Start Time</label>
-              <input type = "time" ng-model="vm.defaultSlot.start_time">
+              <input type = "time" ng-model="vm.defaultSlot.selected.start_time">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-xs>
               <label>End Time</label>
-              <input type = "time" ng-model="vm.defaultSlot.end_time">
+              <input type = "time" ng-model="vm.defaultSlot.selected.end_time">
             </md-input-container>
           </div>
 
           <md-input-container class ="md-block">
           <label>Number of Appointments Allowed at that time</label>
-          <input type = "number" ng-model="vm.defaultSlot.num_allowed">
+          <input type = "number" ng-model="vm.defaultSlot.selected.num_allowed">
           </md-input-container>
 
 
           <div layout = "row">
-            <md-button type="submit"  class="md-raised md-primary">Save Changes</md-button>
+            <md-button type="submit" class="md-raised md-primary"
+                ng-click = "vm.updateDefaultSlot(vm.defaultSlot)">Save Changes</md-button>
             <a href="#admin-appointments-default"><md-button type="button">Cancel
                 </md-button></a>
         </div>

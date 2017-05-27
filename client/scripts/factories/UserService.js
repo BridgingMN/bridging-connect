@@ -198,9 +198,10 @@ angular
   }
 
   //Views details of selected default appointment slot
-  function viewDefaultSlot(appointment) {
-    console.log('view default slot clicked ', appointment.appointment_slot_id);
-    $http.get('/schedule/' + appointment.appointment_slot_id).then(function(response) {
+  function viewDefaultSlot(appointment_slot_id) {
+    $location.path('/admin-default-edit');
+    console.log('view default slot clicked ', appointment_slot_id);
+    $http.get('/schedule/' + appointment_slot_id).then(function(response) {
       defaultSlot.selected = response.data;
       console.log('Default Slot details back from db: ', defaultSlot.selected);
     });

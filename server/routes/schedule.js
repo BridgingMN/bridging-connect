@@ -359,6 +359,7 @@ router.post('/default', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.put('/default', function(req, res) {
+  console.log('update for default slot: ', req.body);
   if (req.isAuthenticated()) { // user is authenticated
     var appointment_slot_id = req.body.appointment_slot_id;
     var appointment_type = req.body.appointment_type;
