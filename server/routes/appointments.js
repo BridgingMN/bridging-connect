@@ -507,6 +507,7 @@ router.put('/update/:appointment_id/:status', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/update/deliverydate', function(req, res) {
+  console.log('Update Delivery Date: ', req.body);
   var appointment_id = req.body.appointment_id;
   var delivery_date = formatDateForPostgres(req.body.delivery_date);
     pool.connect(function(err, database, done) {

@@ -81,9 +81,9 @@
                 ng-click = "vm.denyApt(vm.appointment.selected.apptInfo)">
                 Deny</md-button>
             <md-button class="md-raised md-warn"
-                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED" &&
-                        "vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY"
-                ng-click = "vm.editDeliveryDate(vm.appointment.selected.apptInfo.delivery_date)">
+                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED &&
+                        vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY"
+                ng-click = "vm.editDeliveryDate(vm.appointment.selected.apptInfo)">
                 Edit Delivery Date</md-button>
             <md-button class="md-raised md-warn"
                 ng-click = "vm.cancelApt(vm.appointment.selected.apptInfo)">

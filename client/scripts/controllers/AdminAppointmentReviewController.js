@@ -12,6 +12,7 @@ angular
   vm.confirmApt = confirmApt;
   vm.denyApt = denyApt;
   vm.cancelApt = cancelApt;
+  vm.editDeliveryDate = editDeliveryDate;
 
 //Model for ethnicities drop down
 vm.ethnicities = ['African', 'American Indian or Alaska Native',
@@ -55,6 +56,15 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
     $http.put('/appointments/update', + 'canceled', appointment).then(function() {
       $location.path('/admin-appointments-all');
       alert('The appointment has been cancelled and an email has ' +
+              'been sent to inform the caseworker.');
+    });
+  }
+
+  function editDeliveryDate(appointment) {
+    console.log('Updating Delivery Date to: ', appointment);
+    $http.put('/appointments/update/deliverydate', appointment).then(function() {
+      $location.path('/admin-appointments-all');
+      alert('The delivery date has been updated and an email has ' +
               'been sent to inform the caseworker.');
     });
   }
