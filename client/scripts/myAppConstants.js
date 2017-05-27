@@ -1,6 +1,7 @@
 angular.module('myApp')
   .constant('CONSTANTS', {
     APPOINTMENT_STATUS_CANCELED: 'canceled',
+    APPOINTMENT_STATUS_PENDING: 'pending',
     APPOINTMENT_TYPE_SHOPPING: 'shopping',
     APPOINTMENT_TYPE_BED: 'new bed',
     DELIVERYMETHOD_PICKUP: 'pickup',

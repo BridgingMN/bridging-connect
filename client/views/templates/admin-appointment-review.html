@@ -1,4 +1,4 @@
-<div ng-cloak ng-init = "vm.init()">
+<div ng-cloak>
 
   <md-content >
     <div>
@@ -73,9 +73,11 @@
 
           <md-card-actions layout="row" layout-align="end center">
             <md-button class="md-raised md-primary"
+                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
                 ng-click = "vm.confirmApt(vm.appointment.selected.apptInfo)">
                 Confirm</md-button>
             <md-button class="md-raised md-warn"
+                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
                 ng-click = "vm.denyApt(vm.appointment.selected.apptInfo)">
                 Deny</md-button>
             <md-button class="md-raised md-warn"
