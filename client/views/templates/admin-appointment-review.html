@@ -2,7 +2,7 @@
 
   <md-content >
     <div>
-      <h2>Appointment & Client Details</h2>
+      <h2>{{vm.appointment.selected.apptInfo.status | uppercase}} Appointment & Client Details</h2>
     </div>
   </md-content>
 
@@ -86,6 +86,7 @@
                 ng-click = "vm.editDeliveryDate(vm.appointment.selected.apptInfo)">
                 Edit Delivery Date</md-button>
             <md-button class="md-raised md-warn"
+                ng-if = "vm.appointment.selected.apptInfo.status != vm.CONSTANTS.APPOINTMENT_STATUS_CANCELED"
                 ng-click = "vm.cancelApt(vm.appointment.selected.apptInfo)">
                 Cancel Appointment</md-button>
           </md-card-actions>

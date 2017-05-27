@@ -54,20 +54,22 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
 
 
   function denyApt(appointment) {
-    console.log('Confirming Appointment: ', appointment);
-    $http.put('/appointments/update', + 'denied', appointment).then(function() {
-      $location.path('/admin-appointments-all');
-      alert('The appointment has been denied and an email has ' +
-              'been sent to inform the caseworker.');
+    console.log('Denied Appointment: ', appointment.appointment_id);
+    $http.put('/appointments/update/' + appointment.appointment_id + '/' + 'denied')
+      .then(function() {
+        $location.path('/admin-appointments-all');
+        alert('The appointment has been denied and an email has ' +
+                'been sent to notify the caseworker.');
     });
   }
 
   function cancelApt(appointment) {
-    console.log('Confirming Appointment: ', appointment);
-    $http.put('/appointments/update', + 'canceled', appointment).then(function() {
-      $location.path('/admin-appointments-all');
-      alert('The appointment has been cancelled and an email has ' +
-              'been sent to inform the caseworker.');
+    console.log('Cancelled Appointment: ', appointment.appointment_id);
+    $http.put('/appointments/update/' + appointment.appointment_id + '/' + 'canceled')
+      .then(function() {
+        $location.path('/admin-appointments-all');
+        alert('The appointment has been canceled and an email has ' +
+                'been sent to notify the caseworker.');
     });
   }
 
