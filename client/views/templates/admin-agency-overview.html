@@ -25,7 +25,8 @@
           ng-repeat="agency in vm.agencies.array | filter : test | limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
         <td md-cell>{{agency.name}}</td>
         <td md-cell>{{agency.bridging_agency_id}}</td>
-        <td md-cell>{{agency.access_disabled}}</td>
+        <td md-cell ng-if = "agency.access_disabled == true">Yes</td>
+        <td md-cell ng-if = "agency.access_disabled == false">No</td>    
         <td md-cell><a href="#admin-agency-edit" ng-click = "vm.viewAgency(agency)">
             See Details</a></td>
       </tr>

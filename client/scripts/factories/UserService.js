@@ -14,6 +14,7 @@ angular
   var types = {};
   var methods = {};
   var appointment = {};
+  var defaultSlot = {};
   var selected = [];
   var query = {
     order: 'name',
@@ -42,6 +43,8 @@ angular
     getLocations: getLocations,
     getDays: getDays,
     getTypes: getTypes,
+    defaultSlot: defaultSlot,
+    viewDefaultSlot: viewDefaultSlot,
     getMethods: getMethods,
     loginUser: loginUser,
     registerUser: registerUser,
@@ -190,7 +193,16 @@ angular
     console.log('view details clicked ', appointment_id);
     $http.get('/appointments/' + appointment_id).then(function(response) {
       appointment.selected = response.data;
-      console.log('Agency record back from db: ', appointment.selected);
+      console.log('Apt & Client details back from db: ', appointment.selected);
+    });
+  }
+
+  //Views details of selected default appointment slot
+  function viewDefaultSlot(appointment) {
+    console.log('view default slot clicked ', appointment.appointment_slot_id);
+    $http.get('/schedule/' + appointment.appointment_slot_id).then(function(response) {
+      defaultSlot.selected = response.data;
+      console.log('Default Slot details back from db: ', defaultSlot.selected);
     });
   }
 

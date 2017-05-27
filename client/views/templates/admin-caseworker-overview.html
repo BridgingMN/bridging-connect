@@ -30,8 +30,10 @@
         <td md-cell>{{caseworker.first}} {{caseworker.last}}</td>
         <td md-cell>{{caseworker.name}}</td>
         <td md-cell>{{caseworker.bridging_agency_id}}</td>
-        <td md-cell>{{caseworker.agency_access_disabled}}</td>
-        <td md-cell>{{caseworker.user_access_disabled}}</td>
+        <td md-cell ng-if = "caseworker.agency_access_disabled == true">Yes</td>
+        <td md-cell ng-if = "caseworker.agency_access_disabled == false">No</td>
+        <td md-cell ng-if = "caseworker.user_access_disabled == true">Yes</td>
+        <td md-cell ng-if = "caseworker.user_access_disabled == false">No</td>
         <td md-cell><a href="#admin-caseworker-edit"
             ng-click = "vm.viewCaseworker(caseworker.user_id)">See Details</a></td>
       </tr>

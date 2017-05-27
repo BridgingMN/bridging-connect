@@ -12,5 +12,8 @@ angular
   vm.getTypes = UserService.getTypes;
   vm.methods = UserService.methods;
   vm.getMethods = UserService.getMethods;
+  vm.defaultSlot = UserService.defaultSlot;
+  vm.viewDefaultSlot = UserService.viewDefaultSlot;
+  // vm.updateDefaultSlot = updateDefaultSlot;
 
 }]);

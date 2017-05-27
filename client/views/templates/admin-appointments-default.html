@@ -41,9 +41,8 @@
         <td md-cell>{{default.num_allowed}}</td>
         <td md-cell>
             <md-button class="md-raised md-warn"
-            href="#admin-default-edit">Edit Default</md-button>
-            <!-- <md-button class="md-raised md-warn"
-                href="#admin-appointments-customize">Override</md-button> -->
+            ng-click = "vm.viewDefaultSlot(default)">Edit Default</md-button>
+
           </td>
       </tr>
     </tbody>

@@ -7,9 +7,10 @@ angular
   var vm = this; // controller reference
   vm.selected = UserService.selected;
   vm.query = UserService.query;
+  vm.defaultSlot = UserService.defaultSlot;
+  vm.viewDefaultSlot = UserService.viewDefaultSlot;
   vm.allDefaults = {};
   vm.getAllDefaults = getAllDefaults;
-  console.log('in defaults controller;', vm.allDefaults);
 
 
   //GETS all default appointment slots from db
