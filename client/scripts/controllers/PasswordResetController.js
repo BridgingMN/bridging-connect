@@ -58,9 +58,14 @@ angular
       console.log('sending to server...', vm.tempUser);
       vm.tempUser.code = $routeParams.code;
       UserService.updateUserPassword(vm.tempUser)
-        .then(function (response) {
-          vm.message = response;
-        });
+        .then(
+          function (response) {
+            vm.message = response;
+          },
+          function (response) {
+            vm.message = response;
+          }
+        );
       }
     }
 
