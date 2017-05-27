@@ -53,6 +53,7 @@ router.put('/resetpassword', function (req, res) {
   console.log('updatePassword route', req.body);
   var email = req.body.email;
   var password = encryptLib.encryptPassword(req.body.password);
+  var emailType = req.body.type;
   var token = req.body.code;
   var token_expiration = formatDateForPostgres(new Date());
 
@@ -75,7 +76,7 @@ router.put('/resetpassword', function (req, res) {
           } else {
             console.log('successful update in "caseworkers"', result);
             if (result.rowCount !== 0) {
-              mail.updatedPassword(email, token);
+              mail[emailType](email, token);
               res.send({email: email});
             } else {
               res.sendStatus(500);
