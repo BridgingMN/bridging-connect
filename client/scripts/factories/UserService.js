@@ -2,7 +2,9 @@ angular
   .module('myApp')
   .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
 
-  var userObject = {};
+  var userObject = {
+    user: {}
+  };
 
   var agencies = {};
   var agency = {};
@@ -110,6 +112,11 @@ angular
         redirectToLogin();
       } else {
         userObject.user = response.data;
+        if (userObject.user.user_type_id === 2) {
+          userObject.user.userHomeView = '/caseworker-appointments-all';
+        } else if (userObject.user.user_type_id === 1) {
+          userObject.user.userHomeView = '/admin-appointments-all';
+        }
       }
       console.log(userObject);
     });
