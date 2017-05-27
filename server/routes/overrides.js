@@ -84,28 +84,32 @@ router.post('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var override_date = formatDateForPostgres(req.body.override_date);
     var overridesArray = req.body.overridesArray;
-    overridesArray.forEach(function(overrideInfoObj) { // insert each slot into its own row of the overrides table
-      pool.connect(function(err, database, done) {
-        if (err) { // connection error
-          console.log('error connecting to the database:', err);
-          res.sendStatus(500);
-        } else { // we connected
-          database.query('INSERT INTO "overrides" ("appointment_slot_id", "override_date", "num_allowed") ' +
-                          'VALUES ($1, $2, $3);',
-                          [overrideInfoObj.appointment_slot_id, override_date, overrideInfoObj.num_allowed],
-            function(queryErr, result) { // query callback
-              done(); // release connection to the pool
-              if (queryErr) {
-                console.log('error making query on /overrides POST', queryErr);
-                res.sendStatus(500);
-              } else {
-                console.log('successful insert into "overrides"', result);
-                res.send(result);
-              }
-          }); // end query
-        } // end if-else
-      }); // end pool.connect
-    }); // end overridesArray.forEach
+    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "override_date", "num_allowed") VALUES ';
+    for (var i = 0; i < overridesArray.length; i++) {
+      var overrideInfoObj = overridesArray[i];
+      queryString += '(' + overrideInfoObj.appointment_slot_id + ', \'' + override_date + '\', ' + overrideInfoObj.num_allowed + ')';
+      if (i < overridesArray.length - 1) {
+        queryString += ', ';
+      }
+    queryString += ';';
+    }
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query(queryString, function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /overrides POST', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful insert into "overrides"', result);
+              res.sendStatus(200);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
   } else { // user NOT authenticated
     res.sendStatus(401);
   }
