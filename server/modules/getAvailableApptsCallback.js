@@ -84,7 +84,7 @@ function getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCo
       return connectionError;
     } else {
       db.query('SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed",' +
-      '"overrides"."start_time", "overrides"."end_time",' +
+      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
       '"locations"."location" AS "location_name", "locations"."street",' +
       '"locations"."city", "locations"."state", "appointment_types"."appointment_type",' +
       '"delivery_methods"."delivery_method", "days"."name" AS "day", "overrides"."override_date"' +
@@ -150,17 +150,6 @@ function findRelevant(apptSlots, date) {
   return slotList;
 }
 
-// function checkAndPush(apptSlot, apptsAvailable) {
-//   var apptAvailable;
-//   var isAvailable = checkAvailability(apptSlot, date, existingApptCounts, res);
-//   if (isAvailable) {
-//     apptSlot.date = formatDate(date);
-//     apptSlot.start_time = formatTime(apptSlot.start_time);
-//     apptSlot.end_time = formatTime(apptSlot.end_time);
-//     apptsAvailable.push(apptSlot);
-//   }
-// }
-
 // checks to see if an appt slot on a particular date is still available
 // (i.e. not completely filled) and returns true if it is
 function checkAvailability(apptSlot, date, existingApptCounts) {
@@ -181,22 +170,13 @@ function compareDates(appointmentDate, date) {
     //Convert date string from appointment object to a Javascript Date;
     appointmentDate = new Date (appointmentDate);
     date = new Date(date);
-    // console.log('appointmentDate:', appointmentDate.getDate(), 'date:', date.getDate());
-    // console.log('dates match?', appointmentDate.getDate() == date.getDate(),
-    //   appointmentDate.getMonth() == date.getMonth(),
-    //   appointmentDate.getFullYear() == date.getFullYear());
-    // return (appointmentDate.getDate() == date.getDate()
-    //   && appointmentDate.getMonth() == date.getMonth()
-    //   && appointmentDate.getFullYear() == date.getFullYear());
     var match = appointmentDate.toISOString().substr(0,10) == date.toISOString().substr(0,10);
     return (match);
     //Return a comparison of the two dates.
 }
 
 function checkForOverrides(date, overrides) {
-  console.log('*****OVERRIDES', overrides);
   return overrides.filter(function(row) {
-    console.log('override row', row);
     return compareDates(row.override_date, date);
   });
 }

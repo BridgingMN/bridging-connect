@@ -247,8 +247,8 @@ VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1),
 
 ---- CHECK OVERRIDES ----
 -- Selects any rows from the overrides table that match a particular date range
-SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed", "overrides"."start_time",
-"overrides"."end_time", "locations"."location" AS "location_name", "locations"."street",
+SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed", "appointment_slots"."start_time",
+"appointment_slots"."end_time", "locations"."location" AS "location_name", "locations"."street",
 "locations"."city", "locations"."state", "appointment_types"."appointment_type",
 "delivery_methods"."delivery_method", "days"."name" AS "day", "overrides"."override_date"
 FROM "overrides"

@@ -118,8 +118,6 @@ CREATE TABLE IF NOT EXISTS "overrides" (
   id SERIAL PRIMARY KEY,
   appointment_slot_id INTEGER NOT NULL REFERENCES "appointment_slots",
   override_date DATE NOT NULL,
-  start_time TIME NOT NULL,
-  end_time TIME NOT NULL,
   num_allowed INTEGER
 );
 
