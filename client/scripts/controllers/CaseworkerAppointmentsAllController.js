@@ -90,6 +90,7 @@ angular
     UserService.newAppointment.delivery_method = appointment.info.delivery_method;
     UserService.newAppointment.location_id = appointment.info.location_id;
     UserService.newAppointment.location_name = appointment.info.location_name;
+    UserService.newAppointment.id = appointment.id;
     getAvailableAppointments(vm.minDate, vm.maxDate);
   }
 

@@ -2,25 +2,24 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var mail = require('../modules/mail.js');
+
+//our modules
+var tokens = require('../modules/tokens.js');
 var formatters = require('../modules/formatters.js');
 var formatDateForPostgres = formatters.formatDateForPostgres;
+
 
 // module with bcrypt functions
 var encryptLib = require('../modules/encryption');
 var pool = require('../modules/database.js');
-
-var Chance = require('chance');
-var chance = new Chance();
-
 
 //Create a password reset token and set a new expiration date
 //Then send a password reset link to the user's email
 router.post('/forgotpassword', function (req, res) {
   console.log('forgotpassword route', req.body);
 
-  var token = chance.string({pool: 'abcdefghijklmnopqrstuvwxyz1234567890', length:20});
-  var token_expiration = new Date();
-  token_expiration.setDate(token_expiration.getDate()+4);
+  var token = tokens.generateToken();
+  var token_expiration = tokens.generateExpirationDate(4);
   var email = req.body.email;
 
   console.log('token, exp, email', token, token_expiration, email);
@@ -54,6 +53,7 @@ router.put('/resetpassword', function (req, res) {
   console.log('updatePassword route', req.body);
   var email = req.body.email;
   var password = encryptLib.encryptPassword(req.body.password);
+  var emailType = req.body.type;
   var token = req.body.code;
   var token_expiration = formatDateForPostgres(new Date());
 
@@ -75,8 +75,12 @@ router.put('/resetpassword', function (req, res) {
             res.sendStatus(500);
           } else {
             console.log('successful update in "caseworkers"', result);
-            mail.updatedPassword(email, token);
-            res.send({email: email});
+            if (result.rowCount !== 0) {
+              mail[emailType](email, token);
+              res.send({email: email});
+            } else {
+              res.sendStatus(500);
+            }
           }
       }); // end query
     } // end if-else
