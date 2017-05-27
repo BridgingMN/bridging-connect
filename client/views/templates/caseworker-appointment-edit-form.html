@@ -38,7 +38,7 @@
       </md-input-container>
       <md-input-container>
         <label>Select a race/ethnicity</label>
-        <md-select ng-model="vm.clientEthnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+        <md-select ng-model="vm.clientReferralForm.race_ethnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
             <md-select-label>Select a race/ethnicity</md-select-label>
             <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
         </md-select>

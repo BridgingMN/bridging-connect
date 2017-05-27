@@ -411,6 +411,7 @@ router.get('/pending', function(req, res) {
 router.get('/:appointment_id', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var appointment_id = req.params.appointment_id;
+    console.log('getting appointment details for ', appointment_id);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
@@ -523,6 +524,7 @@ router.put('/update/:appointment_id/:status', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/update/deliverydate', function(req, res) {
+  console.log('Update Delivery Date: ', req.body);
   var appointment_id = req.body.appointment_id;
   var delivery_date = formatDateForPostgres(req.body.delivery_date);
     pool.connect(function(err, database, done) {

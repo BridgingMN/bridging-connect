@@ -70,6 +70,7 @@ function formatTimeForClient(time) {
 function formatSingleAppointment(apptInfoObj) {
   return {
     apptInfo: {
+      appointment_id: apptInfoObj.appointment_id,
       confirmation_id: apptInfoObj.confirmation_id,
       created_date: apptInfoObj.created_date,
       appointment_date: apptInfoObj.appointment_date,
