@@ -1,8 +1,12 @@
 <div ng-controller="UserController as vm">
   <md-toolbar class="md-whiteframe-1dp">
     <div class="md-toolbar-tools">
-      <img class="logo" src="/assets/main-logo-1.png" alt="">
-      <h1>Bridging Scheduling Application</h1>
+      <a ng-href='#{{vm.userObject.user.userHomeView}}'>
+        <img class="logo" src="/assets/main-logo-1.png" alt="">
+      </a>
+      <a ng-href='#{{vm.userObject.user.userHomeView}}'>
+        <h1>Bridging Scheduling Application</h1>
+      </a>
       <span flex></span>
       <section class="navigation-tabs">
         <div ng-cloak ng-if="vm.userObject.user.user_type_id === vm.CONSTANTS.USER_TYPE_CASEWORKER">
