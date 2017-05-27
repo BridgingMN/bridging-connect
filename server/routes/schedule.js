@@ -221,6 +221,64 @@ router.get('/default', function(req, res) {
 });
 
 /**
+  * @api {get} /schedule/default Get Specific Default Appointment Slot
+  * @apiVersion 0.1.0
+  * @apiName GetOneDefaultAppointmentSlot
+  * @apiGroup Schedule
+  * @apiDescription Retrieve a specific appointment slot from the "appointment_slots" table of the database and its associated information.
+  *
+  * @apiParam {Number} appointment_slot_id Unique ID of the appointment slot.
+  *
+  * @apiSuccess {Number} appointment_slot_id Unique ID of the appointment slot.
+  * @apiSuccess {String} appointment_type Name of appointment type ("shopping" or "new bed").
+  * @apiSuccess {String} day Day of appointment slot.
+  * @apiSuccess {String} delivery_method Delivery method of appointment slot ("pickup" or "delivery").
+  * @apiSuccess {String} location_name Name of Bridging location ("Bloomington" or "Roseville").
+  * @apiSuccess {Moment} start_time Time the appointment starts, converted to a Moment.js Object.
+  * @apiSuccess {Moment} end_time Time the appointment ends, converted to a Moment.js Object.
+  * @apiSuccess {Number} num_allowed Maximum number of appointments allowed to be scheduled during the appointment slot.
+  *
+  * @apiErrorExample {json} Get Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
+router.get('/:appointment_slot_id', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    var appointment_slot_id = req.params.appointment_slot_id;
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+      } else { // we connected
+        database.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "delivery_methods"."delivery_method", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointment_slots"."num_allowed" ' +
+                        'FROM "appointment_slots" ' +
+                        'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
+                        'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
+                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
+                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
+                        'WHERE "appointment_slots"."id" = $1;', [appointment_slot_id],
+          function(queryErr, result) { // query callback
+            done();
+            if (queryErr) {
+              console.log('error making query:', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('sucessful get from /schedule/:appointment_slot_id', result.rows);
+              var appointmentSlotObj = '';
+              if (result.rows.length) {
+                appointmentSlotObj = result.rows[0];
+                appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
+                appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
+              }
+              res.send(appointmentSlotObj);
+            }
+        }); // end query callback
+      } // end DB connection if-else
+    }); // end pool.connect
+  } else { // user not authenticated
+    res.sendStatus(401);
+  }
+});
+
+/**
   * @api {post} /schedule/default Add a New Appointment Slot
   * @apiVersion 0.1.0
   * @apiName PostAppointmentSlot
