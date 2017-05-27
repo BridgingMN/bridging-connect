@@ -414,7 +414,7 @@ router.get('/:appointment_id', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "appointments"."confirmation_id", "appointments"."created_date", "appointments"."appointment_date", "appointments"."delivery_date", "statuses"."status", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "delivery_methods"."delivery_method", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointments"."user_id", "users"."email" AS "user_email", "users"."first" AS "user_first", "users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone", "users"."ext" AS "user_day_phone_ext", "users"."agency_id", "agencies"."name" AS "agency_name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_job_title", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_email", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "clients"."dob" AS "client_dob", "clients"."street", "clients"."city", "clients"."state", "clients"."zip_code", "race_ethnicity"."race_ethnicity" ' +
+        database.query('SELECT "appointments"."id" AS "appointment_id", "appointments"."confirmation_id", "appointments"."created_date", "appointments"."appointment_date", "appointments"."delivery_date", "statuses"."status", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "delivery_methods"."delivery_method", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointments"."user_id", "users"."email" AS "user_email", "users"."first" AS "user_first", "users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone", "users"."ext" AS "user_day_phone_ext", "users"."agency_id", "agencies"."name" AS "agency_name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_job_title", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_email", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "clients"."dob" AS "client_dob", "clients"."street", "clients"."city", "clients"."state", "clients"."zip_code", "race_ethnicity"."race_ethnicity" ' +
                         'FROM "appointments" ' +
                         'JOIN "statuses" ON "statuses"."id" = "appointments"."status_id" ' +
                         'JOIN "appointment_slots" ON "appointment_slots"."id" = "appointments"."appointment_slot_id" ' +
@@ -448,7 +448,7 @@ router.get('/:appointment_id', function(req, res) {
 });
 
 /**
-  * @api {put} /appointments/update/:appointment_id/:status Update Appointment
+  * @api {put} /appointments/update/:appointment_id/:status Update Appointment Status
   * @apiVersion 0.1.0
   * @apiName UpdateAppointmentStatus
   * @apiGroup Appointments
@@ -479,6 +479,47 @@ router.put('/update/:appointment_id/:status', function(req, res) {
           done(); // release connection to the pool
           if (queryErr) {
             console.log('error making query on /appointments/update/:appointment_id/:status PUT', queryErr);
+            res.sendStatus(500);
+          } else {
+            console.log('successful update in "appointments"', result);
+            res.sendStatus(200);
+          }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+});
+
+/**
+  * @api {put} /appointments/update/deliverydate Update Appointment Delivery Date
+  * @apiVersion 0.1.0
+  * @apiName UpdateAppointmentDeliveryDate
+  * @apiGroup Appointments
+  * @apiDescription Updates delivery date of an appointment in the database.
+  *
+  * @apiParam {Number} appointment_id Mandatory Unique ID of the appointment being updated.
+  * @apiParam {Date} delivery_date Mandatory Delivery date of the appointment.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  * @apiErrorExample Not found error
+  *    HTTP/1.1 404 Not found
+*/
+router.put('/update/deliverydate', function(req, res) {
+  var appointment_id = req.body.appointment_id;
+  var delivery_date = formatDateForPostgres(req.body.delivery_date);
+    pool.connect(function(err, database, done) {
+    if (err) { // connection error
+      console.log('error connecting to the database:', err);
+      res.sendStatus(500);
+    } else { // we connected
+      database.query('UPDATE "appointments" ' +
+                      'SET "delivery_date" = $2 ' +
+                      'WHERE "id" = $1;',
+                      [appointment_id, delivery_date],
+        function(queryErr, result) { // query callback
+          done(); // release connection to the pool
+          if (queryErr) {
+            console.log('error making query on /appointments/update/deliverydate PUT', queryErr);
             res.sendStatus(500);
           } else {
             console.log('successful update in "appointments"', result);
