@@ -87,9 +87,9 @@ angular
 
   // make request with password reset token to update user's password
   function updateUserPassword(tempUser) {
-    $http.put('/password/resetpassword', tempUser)
+    return $http.put('/password/resetpassword', tempUser)
       .then(function(response) {
-        if(response.data.username) {
+        if(response.data.email) {
           console.log('success: ', response.data);
           // location works with SPA (ng-route)
           return 'Password successfully updated.';
@@ -97,6 +97,9 @@ angular
           console.log('failure: ', response);
           return 'Failure.';
         }
+    },
+    function (error) {
+      return 'Error';
     });
   }
 
