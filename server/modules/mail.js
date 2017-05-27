@@ -14,7 +14,7 @@ var fromBridgingGmail = '"Bridging" bridgingschedulingapplication@gmail.com';
 
 function invite(toEmail, token, token_expiration) {
   console.log('token_expiration', token_expiration);
-  var subject = 'Briding Account Created';
+  var subject = 'Bridging Account Created';
   var activateLink = 'http://localhost:5000/#/confirmreset/' + token;
   var emailBody = 'An account has been created for you on the Bridging scheduling application. To complete activation and setup your password, click the following link: \n\n' + activateLink + ' . \n\n This link will expire on ' + token_expiration.toDateString() + '.';
 
