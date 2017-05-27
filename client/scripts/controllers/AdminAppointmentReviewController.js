@@ -35,6 +35,7 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
 
   function confirmApt(appointment) {
     console.log('Confirming Appointment: ', appointment);
+    if(appointment.delivery_date === null)
     $http.put('/appointments/update/', + 'confirmed', appointment).then(function() {
       $location.path('/admin-appointments-all');
       alert('The appointment has been confirmed and a confirmation email has ' +
