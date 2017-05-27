@@ -3,12 +3,6 @@
   <h2 role="alert" ng-if="vm.message !== ''">{{vm.message}}</h2>
   <form ng-submit="vm.updatePassword()" layout="column">
     <md-input-container>
-      <label>Email</label>
-      <input
-        type="text"
-        ng-model="vm.tempUser.email" />
-    </md-input-container>
-    <md-input-container>
       <label>Password</label>
       <input
         type="password"

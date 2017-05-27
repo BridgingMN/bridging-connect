@@ -52,15 +52,22 @@ angular
     console.log('Code: ', $routeParams.code);
     // Send our password reset request to the server
     // with our username, new password and code
-    if(vm.tempUser.email === '' || vm.tempUser.password === '') {
-      vm.message = 'Please enter a username and password.';
+    if(vm.tempUser.password === '') {
+      vm.message = 'Please enter a password.';
     } else {
       console.log('sending to server...', vm.tempUser);
+      vm.tempUser.email = $routeParams.email;
       vm.tempUser.code = $routeParams.code;
+      vm.tempUser.type = $routeParams.type;
       UserService.updateUserPassword(vm.tempUser)
-        .then(function (response) {
-          vm.message = response;
-        });
+        .then(
+          function (response) {
+            vm.message = response;
+          },
+          function (response) {
+            vm.message = response;
+          }
+        );
       }
     }
 

@@ -71,11 +71,14 @@ angular
    */
   function reserveAppointment() {
     var id = UserService.newAppointment.id;
-    console.log(vm.selectedAppointment);
-    UserService.newAppointment.reserveAppointment(vm.selectedAppointment)
+    console.log('UserService.newAppointment', UserService.newAppointment);
+    console.log('in controller reserveAppointment, logging vm.selectedAppointment', vm.selectedAppointment);
+    UserService.newAppointment.submitAppointment(vm.selectedAppointment);
+    UserService.newAppointment.reserveAppointment()
     .then(
       function (reserveResponse) {
         console.log('Reserve Appointment Success Response', reserveResponse);
+        console.log('id', id);
         AppointmentService.cancelAppointment(id)
         .then(
           function (cancelResponse) {

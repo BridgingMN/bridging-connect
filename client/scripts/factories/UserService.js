@@ -2,7 +2,9 @@ angular
   .module('myApp')
   .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
 
-  var userObject = {};
+  var userObject = {
+    user: {}
+  };
 
   var agencies = {};
   var agency = {};
@@ -11,10 +13,11 @@ angular
   var days = {};
   var types = {};
   var methods = {};
+  var appointment = {};
   var selected = [];
   var query = {
     order: 'name',
-    limit: 5,
+    limit: 10,
     page: 1
   };
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
@@ -28,6 +31,8 @@ angular
     days: days,
     types: types,
     methods: methods,
+    appointment: appointment,
+    viewDetails: viewDetails,
     agencies: agencies,
     agency: agency,
     getAgencies: getAgencies,
@@ -87,9 +92,9 @@ angular
 
   // make request with password reset token to update user's password
   function updateUserPassword(tempUser) {
-    $http.put('/password/resetpassword', tempUser)
+    return $http.put('/password/resetpassword', tempUser)
       .then(function(response) {
-        if(response.data.username) {
+        if(response.data.email) {
           console.log('success: ', response.data);
           // location works with SPA (ng-route)
           return 'Password successfully updated.';
@@ -97,6 +102,9 @@ angular
           console.log('failure: ', response);
           return 'Failure.';
         }
+    },
+    function (error) {
+      return 'Error';
     });
   }
 
@@ -107,6 +115,11 @@ angular
         redirectToLogin();
       } else {
         userObject.user = response.data;
+        if (userObject.user.user_type_id === 2) {
+          userObject.user.userHomeView = '/caseworker-appointments-all';
+        } else if (userObject.user.user_type_id === 1) {
+          userObject.user.userHomeView = '/admin-appointments-all';
+        }
       }
       console.log(userObject);
     });
@@ -169,6 +182,15 @@ angular
     $http.get('/caseworkers/' + caseworker_id).then(function(response) {
       caseworker.selected = response.data;
       console.log('Caseworker record back from db: ', caseworker.selected);
+    });
+  }
+
+  //Views details of selected appointment & client info
+  function viewDetails(appointment_id) {
+    console.log('view details clicked ', appointment_id);
+    $http.get('/appointments/' + appointment_id).then(function(response) {
+      appointment.selected = response.data;
+      console.log('Agency record back from db: ', appointment.selected);
     });
   }
 

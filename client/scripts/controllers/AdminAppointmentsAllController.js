@@ -8,6 +8,8 @@ angular
   vm.query = UserService.query;
   vm.allAppointments = {};
   vm.getAllAppointments = getAllAppointments;
+  vm.appointment = UserService.appointment;
+  vm.viewDetails = UserService.viewDetails;
 
   //GETS all appointments from db
   function getAllAppointments() {
@@ -17,5 +19,5 @@ angular
       console.log(vm.allAppointments.array);
     });
   }
-  
+
 }]);
