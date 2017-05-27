@@ -217,7 +217,6 @@ router.get('/available', function(req, res) {
   * @apiParam {Date} date   Date of appointment
   * @apiParam {Number} client_id   Unique id of client for whom appointment was created
   * @apiParam {Number} appointment_slot_id   Unique id of appointment slot
-  * @apiParam {Date} appointment_date_added   Date on which appointment was created (current date)
   * @apiParam {String} status   Whether appointment is confirmed, canceled, or pending (should pass in pending)
   * @apiSuccess {Number} appointment_id   Unique ID of appointment that has been created
   * @apiSuccessExample Success-Response:

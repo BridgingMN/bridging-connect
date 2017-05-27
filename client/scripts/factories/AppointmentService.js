@@ -50,10 +50,11 @@ angular
 
     Appointment.prototype.reserveAppointment = function () {
       var appointmentInfo = this.appointment;
-      console.log(this);
+      console.log('in reserve appointment, logging this', this);
       return $http.post('/appointments/reserve', {
-        client_id: appointmentInfo.client_id,
+        client_id: this.client_id,
         appointment_slot_id: appointmentInfo.appointment_slot_id,
+        date: appointmentInfo.date,
         status: 'pending'
       }).then(returnResponse, returnError);
     };
