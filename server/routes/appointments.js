@@ -415,7 +415,7 @@ router.get('/:appointment_id', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "appointments"."confirmation_id",' +
+        database.query('SELECT "appointments"."id" AS "appointment_id", "appointments"."confirmation_id",' +
         '"appointments"."created_date", "appointments"."appointment_date",' +
         '"appointments"."delivery_date", "statuses"."status",' +
         '"appointments"."appointment_slot_id", "appointment_types"."appointment_type",' +
