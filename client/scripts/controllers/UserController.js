@@ -6,6 +6,7 @@ angular
 
   vm.CONSTANTS = CONSTANTS;
   vm.userObject = UserService.userObject;
+  console.log('Header userObject', vm.userObject);
 
   // DATA-BINDING FUNCTIONS
   vm.logout = UserService.logout;
