@@ -1,38 +1,62 @@
-<div layout="column" ng-cloak class = "md-inline-form" ng-init = "vm.init()"
-      layout-align = "start center" class = "md-padding">
+<div ng-cloak ng-init = "vm.init()">
 
-  <div>
-    <h2>Appointment & Client Details</h2>
-  </div>
+  <md-content >
+    <div>
+      <h2>Appointment & Client Details</h2>
+    </div>
+  </md-content>
 
-  <div layout = "row">
+    <md-content class="md-padding" layout-xs="column" layout="row">
+    <div flex-xs flex-gt-xs="50" layout="column">
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Appointment</span>
+            <span class="md-subhead">Large</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
 
-
+          <md-card-actions layout="row" layout-align="end center">
+            <md-button class="md-raised md-primary">Confirm</md-button>
+            <md-button class="md-raised md-warn">Deny</md-button>
+            <md-button class="md-raised md-warn">Cancel</md-button>
+          </md-card-actions>
+      </md-card-content>
+      </md-card>
+    </div>
+  </md-content>
+  <div flex-xs flex-gt-xs="50" layout="column">
+    <md-card>
+      <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Client Demographics</span>
+            <span class="md-subhead">Save or Cancel Changes Below</span>
+          </md-card-title-text>
+      </md-card-title>
     <md-content>
       <form class="client-referall-form" layout="column">
         <md-input-container>
           <label>Client First Name</label>
           <input
             type="text"
-            ng-model="vm.clientReferralForm.first"
-            placeholder="Client First Name"
+            ng-model="vm.appointment.selected.clientInfo.first"
             required>
         </md-input-container>
         <md-input-container>
           <label>Client Last Name</label>
           <input
             type="text"
-            ng-model="vm.clientReferralForm.last"
-            placeholder="Client Last Name"
+            ng-model="vm.appointment.selected.clientInfo.last"
             required>
         </md-input-container>
         <md-input-container>
           <label>Client Date of Birth</label>
-          <md-datepicker ng-model="vm.clientReferralForm.dob"></md-datepicker>
+          <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
         </md-input-container>
         <md-input-container>
           <label>Select a race/ethnicity</label>
-          <md-select ng-model="vm.clientEthnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+          <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
               <md-select-label>Select a race/ethnicity</md-select-label>
               <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
           </md-select>
@@ -42,28 +66,32 @@
           <input
             type="text"
             placeholder="Address"
-            ng-model = "vm.clientReferralForm.street"
+            ng-model = "vm.appointment.selected.clientInfo.street"
             required>
         </md-input-container>
         <div layout-gt-sm="row">
           <md-input-container class="md-block">
             <label>City</label>
-            <input ng-model="vm.clientReferralForm.city">
+            <input ng-model="vm.appointment.selected.clientInfo.city">
           </md-input-container>
           <md-input-container class="md-block">
             <label>State</label>
-            <md-select ng-model="vm.clientReferralForm.state">
+            <md-select ng-model="vm.appointment.selected.clientInfo.state">
               <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
                 {{state.abbrev}}
               </md-option>
             </md-select>
           </md-input-container>
         </div>
-        <div layout="row">
-          <md-button class="md-raised md-primary" ng-click="">Cancel</md-button>
-          <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Update</md-button>
-        </div>
+        <md-card-actions layout="row" layout-align = "end center">
+          <md-button type="submit" class="md-raised md-primary"
+            ng-click = "vm.editClient(vm.appointment.selected.clientInfo)">
+            Save Changes</md-button>
+          <a href="#admin-appointments-all"><md-button type="button">
+            Cancel Changes</md-button></a>
+        </md-card-actions>
       </form>
     </md-content>
+  </md-card>
   </div>
 </div>
