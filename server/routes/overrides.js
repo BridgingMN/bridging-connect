@@ -68,7 +68,8 @@ var formatTimeForClient = formatters.formatTimeForClient;
   * @apiGroup Overrides
   * @apiDescription Add a new appointment slot override to the "overrides" table.
   *
-  * @apiParam {Number} appointment_slot_id Unique ID corresponding to an entry in the "appointment_slots" table.
+  * @apiParam {Object[]} overridesArray Array of appointment slot objects to be added to the overrides table.
+  * @apiParam {Number} overridesArray.appointment_slot_id Unique ID corresponding to an entry in the "appointment_slots" table.
   * @apiParam {String} appointment_type Mandatory Type of appointment corresponding to an entry in the "appointment_types" table.
   * @apiParam {String} delivery_method Mandatory Delivery method name corresponding to an entry in the "delivery_methods" table.
   * @apiParam {String} location Mandatory Location name corresponding to an entry in the "locations" table.
@@ -84,6 +85,7 @@ var formatTimeForClient = formatters.formatTimeForClient;
 */
 router.post('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
+    var overridesArray = req.body.overridesArray;
     var appointment_slot_id = req.body.appointment_slot_id;
     var appointment_type = req.body.appointment_type;
     var delivery_method = req.body.delivery_method;
