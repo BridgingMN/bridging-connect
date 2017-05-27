@@ -64,19 +64,18 @@ var formatTimeForClient = formatters.formatTimeForClient;
 /**
   * @api {post} /overrides Add a Schedule Override
   * @apiVersion 0.1.0
-  * @apiName PostOverride
+  * @apiName PostOverrides
   * @apiGroup Overrides
   * @apiDescription Add a new appointment slot override to the "overrides" table.
   *
   * @apiParam {Date} override_date Mandatory Date for which the override will be applied.
-  * @apiSuccess {Object[]} overridesArray Mandatory Array of objects corresponding to all appointment slots to be added to the overrides table.
+  * @apiParam {Object[]} overridesArray Mandatory Array of objects corresponding to all appointment slots to be added to the overrides table.
   * @apiParam {Number} overridesArray.appointment_slot_id Mandatory Unique ID corresponding to an entry in the "appointment_slots" table.
-  * @apiParam {Time} overridesArray.start_time Mandatory Start time for the new appointment slot.
-  * @apiParam {Time} overridesArray.end_time Mandatory End time for the new appointment slot.
   * @apiParam {Number} overridesArray.num_allowed Mandatory Number of appointments allowed for the new appointment slot.
   *
-  * @apiSuccessExample Success-Response:
-  *     HTTP/1.1 200 OK
+  * @apiSuccess {Number[]} overrideIdArray Array of unique ID's associated with each overrides row insert.
+  * @apiSuccess {Number} overrideIdArray.override_id Unique ID associated with override insert.
+  *
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -84,15 +83,15 @@ router.post('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var override_date = formatDateForPostgres(req.body.override_date);
     var overridesArray = req.body.overridesArray;
-    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "override_date", "num_allowed") VALUES ';
+    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "num_allowed") VALUES ';
     for (var i = 0; i < overridesArray.length; i++) {
       var overrideInfoObj = overridesArray[i];
       queryString += '(' + overrideInfoObj.appointment_slot_id + ', \'' + override_date + '\', ' + overrideInfoObj.num_allowed + ')';
       if (i < overridesArray.length - 1) {
         queryString += ', ';
       }
-    queryString += ';';
     }
+    queryString += ' RETURNING "id" AS "override_id", "appointment_slot_id", "override_date", "num_allowed";';
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
@@ -105,7 +104,57 @@ router.post('/', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful insert into "overrides"', result);
-              res.sendStatus(200);
+              res.send(result.rows);
+            }
+        }); // end query
+      } // end if-else
+    }); // end pool.connect
+  } else { // user NOT authenticated
+    res.sendStatus(401);
+  }
+});
+
+/**
+  * @api {put} /overrides Adjust Schedule Overrides
+  * @apiVersion 0.1.0
+  * @apiName PutOverrides
+  * @apiGroup Overrides
+  * @apiDescription Adjust appointment slot overrides for a particular date in "overrides" table.
+  *
+  * @apiSuccess {Object[]} overridesArray Mandatory Array of objects corresponding to all rows in the "overrides" table to be updated.
+  * @apiParam {Number} overridesArray.override_id Mandatory Unique ID corresponding to the row in the "overrides" table to be updated.
+  * @apiParam {Number} overridesArray.num_allowed Mandatory Number of appointments allowed for the override_id.
+  *
+  * @apiSuccessExample Success-Response:
+  *     HTTP/1.1 200 OK
+  * @apiErrorExample {json} Post Error:
+  *    HTTP/1.1 500 Internal Server Error
+*/
+router.put('/', function(req, res) {
+  if (req.isAuthenticated()) { // user is authenticated
+    var overridesArray = req.body.overridesArray;
+    var queryString = 'UPDATE "overrides" SET "num_allowed" = "updates"."num_allowed" FROM (VALUES ';
+    for (var i = 0; i < overridesArray.length; i++) {
+      var overrideInfoObj = overridesArray[i];
+      queryString += '(' + overrideInfoObj.appointment_slot_id + '\', ' + overrideInfoObj.num_allowed + ')';
+      if (i < overridesArray.length - 1) {
+        queryString += ', ';
+      }
+    }
+    queryString += ') AS "updates"("override_id", "num_allowed") WHERE "updates"."override_id" = "overrides"."id" RETURNING "id" AS "override_id", "appointment_slot_id", "override_date", "overrides"."num_allowed";';
+    pool.connect(function(err, database, done) {
+      if (err) { // connection error
+        console.log('error connecting to the database:', err);
+        res.sendStatus(500);
+      } else { // we connected
+        database.query(queryString, function(queryErr, result) { // query callback
+            done(); // release connection to the pool
+            if (queryErr) {
+              console.log('error making query on /overrides POST', queryErr);
+              res.sendStatus(500);
+            } else {
+              console.log('successful insert into "overrides"', result);
+              res.send(result.rows);
             }
         }); // end query
       } // end if-else

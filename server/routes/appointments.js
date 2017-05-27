@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var moment = require('moment');
 var pool = require('../modules/database.js');
 var getAvailableAppts = require('../modules/getAvailableApptsCallback.js');
 var formatters = require('../modules/formatters.js');
