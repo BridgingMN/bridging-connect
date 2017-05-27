@@ -16,6 +16,7 @@
         <th md-column md-date md-order-by="vm.pendingAppointments.date"><span>Date</span></th>
         <th md-column md-numeric md-order-by="vm.pendingAppointments.time"><span>Time</span></th>
         <th md-column md-numeric>Location</th>
+        <th md-column md-numeric>Delivery or Pickup</th>
         <th md-column md-numeric>Type</th>
         <th md-column md-numeric>Agency</th>
         <th md-column md-numeric>Caseworker</th>
@@ -32,6 +33,7 @@
           <td md-cell>{{appointment.appointment_date | date}}</td>
           <td md-cell>{{appointment.start_time}}</td>
           <td md-cell>{{appointment.location_name}}</td>
+          <td md-cell>{{appointment.delivery_method}}</td>
           <td md-cell>{{appointment.appointment_type}}</td>
           <td md-cell>{{appointment.name}}</td>
           <td md-cell>{{appointment.user_first}} {{appointment.user_last}}</td>

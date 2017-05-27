@@ -19,5 +19,5 @@ angular
       console.log(vm.allAppointments.array);
     });
   }
-  
+
 }]);

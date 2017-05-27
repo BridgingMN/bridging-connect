@@ -9,18 +9,78 @@
     <md-content class="md-padding" layout-xs="column" layout="row">
     <div flex-xs flex-gt-xs="50" layout="column">
       <md-card>
-        <md-card-title>
+        <!-- <md-card-title>
           <md-card-title-text>
             <span class="md-headline">Appointment</span>
-            <span class="md-subhead">Large</span>
           </md-card-title-text>
-        </md-card-title>
+        </md-card-title> -->
+
         <md-card-content>
+          <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
+            <div class="md-title appointment-date">
+              <p layout="column" layout-align="center center">
+                <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'MMM'}}</span>
+                <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'dd'}}</span>
+                <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'yyyy'}}</span>
+              </p>
+            </div>
+            <div class="md-title md-padding appointment-type-info">
+              <p layout="column" layout-align="center center">
+                <span class="appointment-type">{{vm.appointment.selected.apptInfo.appointment_type}}</span>
+                <span>with <span class="appointment-delivery">{{vm.appointment.selected.apptInfo.delivery_method}}</span></span>
+              </p>
+            </div>
+            <div class="appointment-icon">
+              <i ng-if="vm.appointment.selected.apptInfo.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+              <i ng-if="vm.appointment.selected.apptInfo.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING" class="fa fa-shopping-cart" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div class="appointment-card-body" layout="column" layout-align="center center">
+            <p>
+              <i class="material-icons">access_time</i>
+              {{vm.appointment.selected.apptInfo.start_time}}
+            </p>
+            <p>
+              <i class="material-icons">person</i>
+              {{vm.appointment.selected.clientInfo.first}}
+              {{vm.appointment.selected.clientInfo.last}}
+              <br>
+              supported by caseworker
+              <br>
+              {{vm.appointment.selected.userInfo.first}}
+              {{vm.appointment.selected.userInfo.last}}
+            </p>
+            <p>
+              <i class="material-icons">place</i>
+              {{vm.appointment.selected.apptInfo.location_name}}
+            </p>
+          </div>
+          <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
+              <p ng-if="vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+                <i class="fa fa-truck" aria-hidden="true"></i>
+                <md-input-container>
+                  <label>Delivery Date</label>
+                  <md-datepicker ng-model="vm.appointment.selected.apptInfo.delivery_date"></md-datepicker>
+                </md-input-container>
+                <!-- <span ng-if="vm.appointment.selected.apptInfo.delivery_date != undefined">Delivered {{vm.appointment.selected.apptInfo.delivery_date | date: 'shortDate'}}.</span>
+                <span ng-if="vm.appointment.selected.apptInfo.delivery_date == undefined">Delivery date to be determined.</span> -->
+              </p>
+              <p ng-if="vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
+                <i class="fa fa-truck" aria-hidden="true"></i>
+                <span>Client Pick Up</span>
+              </p>
+          </div>
 
           <md-card-actions layout="row" layout-align="end center">
-            <md-button class="md-raised md-primary">Confirm</md-button>
-            <md-button class="md-raised md-warn">Deny</md-button>
-            <md-button class="md-raised md-warn">Cancel</md-button>
+            <md-button class="md-raised md-primary"
+                ng-click = "vm.confirmApt(vm.appointment.selected.apptInfo)">
+                Confirm</md-button>
+            <md-button class="md-raised md-warn"
+                ng-click = "vm.denyApt(vm.appointment.selected.apptInfo)">
+                Deny</md-button>
+            <md-button class="md-raised md-warn"
+                ng-click = "vm.cancelApt(vm.appointment.selected.apptInfo)">
+                Cancel</md-button>
           </md-card-actions>
       </md-card-content>
       </md-card>
