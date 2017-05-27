@@ -10,11 +10,14 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-var fromBridgingGmail = '"Bridging" bridgingschedulingapplication@gmail.com'
+var fromBridgingGmail = '"Bridging" bridgingschedulingapplication@gmail.com';
 
-function invite(toEmail, teamName) {
-  var subject = 'Invitation to Join ' + teamName + '!';
-  var emailBody = 'You have been invited to join ' + teamName + ' on Bridging! Please visit www.Bridging.com, create an account, if you haven\'t already, and login to accept your invitation.';
+function invite(toEmail, token, token_expiration) {
+  console.log('token_expiration', token_expiration);
+  var subject = 'Bridging Account Created';
+  var activateLink = 'http://localhost:5000/#/confirmreset/' + token;
+  var emailBody = 'An account has been created for you on the Bridging scheduling application. To complete activation and setup your password, click the following link: \n\n' + activateLink + ' . \n\n This link will expire on ' + token_expiration.toDateString() + '.';
+
   var mailOptions = {
     from: fromBridgingGmail,
     to: toEmail,
@@ -25,7 +28,7 @@ function invite(toEmail, teamName) {
   console.log('attempting to send email invitation:', mailOptions);
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-      return console.log('error sending invitation email', error);
+      return console.log('error sending password reset link email', error);
     }
     console.log('Message %s sent: %s', info.messageId, info.response);
   });
@@ -72,5 +75,6 @@ function updatedPassword(toEmail, resetToken) {
   });
 }
 
+module.exports.invite = invite;
 module.exports.resetPassword = resetPassword;
 module.exports.updatedPassword = updatedPassword;
