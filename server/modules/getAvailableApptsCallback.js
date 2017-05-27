@@ -83,10 +83,21 @@ function getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCo
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       return connectionError;
     } else {
-      db.query('SELECT * FROM "overrides"' +
+      db.query('SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed",' +
+      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
+      '"locations"."location" AS "location_name", "locations"."street",' +
+      '"locations"."city", "locations"."state", "appointment_types"."appointment_type",' +
+      '"delivery_methods"."delivery_method", "days"."name" AS "day", "overrides"."override_date"' +
+      'FROM "overrides"' +
+      'JOIN "appointment_slots" ON "overrides"."appointment_slot_id" = "appointment_slots"."id"' +
+      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+      'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
       'WHERE "override_date" >= $1' +
-      'AND "override_date" <= $2',
-      [min_date, max_date],
+      'AND "override_date" <= $2' +
+      'AND "overrides"."appointment_slot_id" = ANY($3::int[]);',
+      [min_date, max_date, apptSlotIds],
       function(queryError, result){
           done();
           if (queryError) {
@@ -103,32 +114,25 @@ function getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCo
 
 function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, overrides, res) {
   var apptsAvailable = [];
+  var slotsForDate;
   var date = min_date;
   while (date <= max_date) {
-    var slotsForDate = [];
     var overridesForDate = checkForOverrides(date, overrides);
-    if(overridesForDate) {
+    if(overridesForDate.length > 0) {
+      console.log('returned from checkForOverrides:', overridesForDate);
       slotsForDate = overridesForDate;
     } else {
       slotsForDate = findRelevant(apptSlots, date);
     }
 
     for (var i = 0; i < slotsForDate.length; i++) {
-      var apptSlot = {};
+      var apptSlot;
       var isAvailable = checkAvailability(slotsForDate[i], date, existingApptCounts);
       if (isAvailable){
+        apptSlot = shallowCopy(slotsForDate[i]);
         apptSlot.date = formatDate(date);
-        apptSlot.appointment_slot_id = slotsForDate[i].appointment_slot_id;
-        apptSlot.num_allowed = slotsForDate[i].num_allowed;
         apptSlot.start_time = formatTime(slotsForDate[i].start_time);
         apptSlot.end_time = formatTime(slotsForDate[i].end_time);
-        apptSlot.location_name = slotsForDate[i].location_name;
-        apptSlot.street = slotsForDate[i].street;
-        apptSlot.city = slotsForDate[i].city;
-        apptSlot.state = slotsForDate[i].state;
-        apptSlot.appointment_type = slotsForDate[i].appointment_type;
-        apptSlot.delivery_method = slotsForDate[i].delivery_method;
-        apptSlot.day = slotsForDate[i].day;
         apptsAvailable.push(apptSlot);
       }
     }
@@ -146,31 +150,12 @@ function findRelevant(apptSlots, date) {
   return slotList;
 }
 
-// function checkAndPush(apptSlot, apptsAvailable) {
-//   var apptAvailable;
-//   var isAvailable = checkAvailability(apptSlot, date, existingApptCounts, res);
-//   if (isAvailable) {
-//     apptSlot.date = formatDate(date);
-//     apptSlot.start_time = formatTime(apptSlot.start_time);
-//     apptSlot.end_time = formatTime(apptSlot.end_time);
-//     apptsAvailable.push(apptSlot);
-//   }
-// }
-
 // checks to see if an appt slot on a particular date is still available
 // (i.e. not completely filled) and returns true if it is
 function checkAvailability(apptSlot, date, existingApptCounts) {
-  console.log('existingApptCounts', existingApptCounts);
   for (var i = 0; i < existingApptCounts.length; i++) {
     var appt = existingApptCounts[i];
-    console.log('*******IN CHECK AVAILABILITY********');
-    console.log('appt', appt);
-    console.log('appt.appointment_date', appt.appointment_date);
-    console.log('date', date);
-    console.log('appt.appointment_slot_id', apptSlot.appointment_slot_id);
     if (appt.appointment_slot_id == apptSlot.appointment_slot_id && compareDates(appt.appointment_date, date)) {
-      console.log('date match:', appt.appointment_date, date);
-      console.log('slot match:', appt.appointment_slot_id, apptSlot.id);
       if (appt.count < apptSlot.num_allowed) {
         return true;
       } else {
@@ -182,31 +167,32 @@ function checkAvailability(apptSlot, date, existingApptCounts) {
 }
 
 function compareDates(appointmentDate, date) {
-    //Convert date string from appointment object to a Javascript Date
-    console.log('in compareDates');
+    //Convert date string from appointment object to a Javascript Date;
     appointmentDate = new Date (appointmentDate);
     date = new Date(date);
-    // console.log('appointmentDate:', appointmentDate.getDate(), 'date:', date.getDate());
-    // console.log('dates match?', appointmentDate.getDate() == date.getDate(),
-    //   appointmentDate.getMonth() == date.getMonth(),
-    //   appointmentDate.getFullYear() == date.getFullYear());
-    // return (appointmentDate.getDate() == date.getDate()
-    //   && appointmentDate.getMonth() == date.getMonth()
-    //   && appointmentDate.getFullYear() == date.getFullYear());
     var match = appointmentDate.toISOString().substr(0,10) == date.toISOString().substr(0,10);
-    console.log('is it a match?', match);
     return (match);
     //Return a comparison of the two dates.
 }
 
 function checkForOverrides(date, overrides) {
-  if (overrides.length > 0) {
-    return overrides.filter(function(row) {
-      return new Date(row.override_date) == new Date(date);
-    });
-  } else {
-    return false;
-  }
+  return overrides.filter(function(row) {
+    return compareDates(row.override_date, date);
+  });
+}
+
+function shallowCopy(original) {
+    // First create an empty object with
+    // same prototype of our original source
+    var clone = Object.create(Object.getPrototypeOf(original));
+    var i, keys = Object.getOwnPropertyNames(original);
+    for (i = 0; i < keys.length; i ++) {
+      // copy each property into the clone
+        Object.defineProperty(clone, keys[i] ,
+            Object.getOwnPropertyDescriptor(original, keys[i])
+        );
+    }
+    return clone;
 }
 
 module.exports = getAvailableAppts;

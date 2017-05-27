@@ -227,6 +227,7 @@ router.get('/available', function(req, res) {
 */
 router.post('/reserve', function(req, res) {
   var appointment = req.body;
+  console.log('appointment object from client', appointment);
   var appointment_date = formatDateForPostgres(appointment.date);
   var user_id = req.user.id;
   var client_id = appointment.client_id;
@@ -415,7 +416,24 @@ router.get('/:appointment_id', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "appointments"."confirmation_id", "appointments"."created_date", "appointments"."appointment_date", "appointments"."delivery_date", "statuses"."status", "appointments"."appointment_slot_id", "appointment_types"."appointment_type", "days"."name" AS "day", "delivery_methods"."delivery_method", "locations"."location" AS "location_name", "appointment_slots"."start_time", "appointment_slots"."end_time", "appointments"."user_id", "users"."email" AS "user_email", "users"."first" AS "user_first", "users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone", "users"."ext" AS "user_day_phone_ext", "users"."agency_id", "agencies"."name" AS "agency_name", "agencies"."bridging_agency_id", "agencies"."primary_first", "agencies"."primary_last", "agencies"."primary_job_title", "agencies"."primary_business_phone", "agencies"."primary_business_phone_ext", "agencies"."primary_email", "appointments"."client_id", "clients"."first" AS "client_first", "clients"."last" AS "client_last", "clients"."dob" AS "client_dob", "clients"."street", "clients"."city", "clients"."state", "clients"."zip_code", "race_ethnicity"."race_ethnicity" ' +
+        database.query('SELECT "appointments"."confirmation_id",' +
+        '"appointments"."created_date", "appointments"."appointment_date",' +
+        '"appointments"."delivery_date", "statuses"."status",' +
+        '"appointments"."appointment_slot_id", "appointment_types"."appointment_type",' +
+        '"days"."name" AS "day", "delivery_methods"."delivery_method",' +
+        '"locations"."location" AS "location_name", "appointment_slots"."start_time",' +
+        '"appointment_slots"."end_time", "appointments"."user_id",' +
+        '"users"."email" AS "user_email", "users"."first" AS "user_first",' +
+        '"users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone",' +
+        '"users"."ext" AS "user_day_phone_ext", "users"."agency_id",' +
+        '"agencies"."name" AS "agency_name", "agencies"."bridging_agency_id",' +
+        '"agencies"."primary_first", "agencies"."primary_last",' +
+        '"agencies"."primary_job_title", "agencies"."primary_business_phone",' +
+        '"agencies"."primary_business_phone_ext", "agencies"."primary_email",' +
+        '"appointments"."client_id", "clients"."first" AS "client_first",' +
+        '"clients"."last" AS "client_last", "clients"."dob" AS "client_dob",' +
+        '"clients"."street", "clients"."city", "clients"."state",' +
+        '"clients"."zip_code", "race_ethnicity"."race_ethnicity" ' +
                         'FROM "appointments" ' +
                         'JOIN "statuses" ON "statuses"."id" = "appointments"."status_id" ' +
                         'JOIN "appointment_slots" ON "appointment_slots"."id" = "appointments"."appointment_slot_id" ' +
