@@ -67,7 +67,7 @@
               </p>
               <p ng-if="vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
                 <i class="fa fa-truck" aria-hidden="true"></i>
-                <span>Client Pick Up</span>
+                <span>Client Pick Up within 48 Hrs</span>
               </p>
           </div>
 
@@ -81,8 +81,13 @@
                 ng-click = "vm.denyApt(vm.appointment.selected.apptInfo)">
                 Deny</md-button>
             <md-button class="md-raised md-warn"
+                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED" &&
+                        "vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY"
+                ng-click = "vm.editDeliveryDate(vm.appointment.selected.apptInfo.delivery_date)">
+                Edit Delivery Date</md-button>
+            <md-button class="md-raised md-warn"
                 ng-click = "vm.cancelApt(vm.appointment.selected.apptInfo)">
-                Cancel</md-button>
+                Cancel Appointment</md-button>
           </md-card-actions>
       </md-card-content>
       </md-card>
