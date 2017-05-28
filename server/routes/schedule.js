@@ -145,7 +145,7 @@ router.get('/locations', function(req, res) {
               res.sendStatus(500);
             } else {
               var locationsArray = result.rows.map(function(locationsObj) {
-                return locationsObj.location;
+                return locationsObj.location_name;
               });
               res.send(locationsArray);
             }
