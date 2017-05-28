@@ -2,9 +2,16 @@
   <h3>New Override Schedule</h3>
   <div class="md-whiteframe-1dp  admin-new-override-form" layout="row" layout-padding>
     <div class="override-calendar">
+      <md-input-container>
+        <label>Location</label>
+        <md-select ng-model="vm.selectedLocation"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+            <md-select-label>Select a location</md-select-label>
+            <md-option ng-value="location" ng-repeat="location in vm.locations">{{ location.location_name }}</md-option>
+        </md-select>
+      </md-input-container>
       <md-calendar
           ng-model="vm.selectedDate"
-          ng-change="vm.selectDate(vm.selectedDate)"
+          ng-change="vm.selectDate()"
           md-min-date="vm.minDate" md-max-date="vm.maxDate">
       </md-calendar>
     </div>
@@ -15,7 +22,6 @@
         class="appointment-slot-card"
         ng-repeat="slot in vm.appointmentSlots"
         layout="row">
-
       </div>
       <md-button class="md-raised" ng-click="vm.submitOverride">Submit</md-button>
     </div>

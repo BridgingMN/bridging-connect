@@ -4,13 +4,15 @@
  */
 angular
   .module('myApp')
-  .controller('AdminScheduleOverrideNewController', ['$location', '$scope', 'CONSTANTS', 'AppointmentService', 'UserService', function($location, $scope, CONSTANTS,  AppointmentService, UserService) {
+  .controller('AdminScheduleOverrideNewController', ['$location', 'CONSTANTS', 'ScheduleService', 'UserService', function($location, CONSTANTS,  ScheduleService, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this;
   vm.CONSTANTS = CONSTANTS;
 
   //Model for the currently selected date
-  vm.selectedDate = new Date();
+  vm.selectedDate = new Date()
+  vm.locations = [CONSTANTS.LOCATION_BLOOMINGTON, CONSTANTS.LOCATION_ROSEVILLE];
+  vm.selectedLocation = vm.locations[0];
 
   var todaysDate = new Date();
   //Limits for the range of dates on the calendar
@@ -34,19 +36,26 @@ angular
   activate();
 
   function activate() {
-
+    console.log(vm);
   }
 
   /**
-   * Called when the caseworker selects a date on the calendar input
-   * this function should update the view to show available appointments for that day
+   * Called when the admin selects a date on the calendar input
+   * this function should update the view to show appointment slots for that day
    * @function selectDate
    * @param {date} date The selected date.
    */
   function selectDate(date) {
-    vm.selectedDate = new Date(date);
-    vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, vm.selectedDate);
-    vm.selectedAppointment = vm.appointmentSlots[0];
+    ScheduleService.getOverridesForDate(vm.selectedDate, vm.selectedLocation.location_name)
+      .then(getOverridesSuccess, getOverridesFailure);
+  }
+
+  function getOverridesSuccess(response) {
+    vm.appointmentSlots = response;
+  }
+
+  function getOverridesFailure(error) {
+    console.error(error);
   }
 
   /**

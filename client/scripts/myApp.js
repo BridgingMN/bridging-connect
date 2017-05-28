@@ -105,7 +105,7 @@ function config($locationProvider, $mdThemingProvider, $routeProvider) {
         }]
       }
     })
-    .when('admin-schedule-override-new.html', {
+    .when('/admin-schedule-override-new', {
       templateUrl: '/views/templates/admin-schedule-override-new.html',
       controller: 'AdminScheduleOverrideNewController',
       controllerAs: 'vm',
