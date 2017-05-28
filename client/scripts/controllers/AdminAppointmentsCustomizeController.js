@@ -10,7 +10,7 @@ angular
 
   function getAllOverrides() {
     console.log('client request to server for all override slots');
-    $http.get('/overrides').then(function(response) {
+    $http.get('/overrides/all').then(function(response) {
       vm.overrides.array =response.data;
       console.log('All Overrides: ', vm.overrides.array);
     });
