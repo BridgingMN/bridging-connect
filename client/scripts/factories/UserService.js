@@ -213,6 +213,7 @@ angular
   function getLocations() {
     console.log('client sent request to server for all locations');
     $http.get('/schedule/locations').then(function(response) {
+        console.log('back from /schedule/locations:', response.data);
         locations.array = response.data;
         console.log('locations: ', locations.array);
     });
