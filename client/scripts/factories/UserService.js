@@ -202,6 +202,8 @@ angular
     $location.path('/admin-default-edit');
     console.log('view default slot clicked ', appointment_slot_id);
     $http.get('/schedule/' + appointment_slot_id).then(function(response) {
+      response.data.start_time = new Date(response.data.start_time);
+      response.data.end_time = new Date(response.data.end_time);
       defaultSlot.selected = response.data;
       console.log('Default Slot details back from db: ', defaultSlot.selected);
     });

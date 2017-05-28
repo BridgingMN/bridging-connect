@@ -28,9 +28,9 @@ angular
     }
 
     //Updates the Default Appointment Slot
-    function updateDefaultSlot(defaultEdit) {
-      console.log('Updating Slot: ', defaultEdit);
-      $http.put('/schedule/default', defaultEdit).then(function() {
+    function updateDefaultSlot(slot) {
+      console.log('Updating Slot: ', slot);
+      $http.put('/schedule/default', slot).then(function() {
         $location.path('/admin-appointments-default');
         alert('Changes to the default slot have been saved.');
       });
