@@ -83,3 +83,14 @@ md-toolbar.appointment-filter-buttons {
   border-radius: 25px;
   width: 50%;
 }
+
+#aptHeader {
+  background-color: #54C0C9;
+  color: white;
+}
+
+#clientHeader {
+  background-color: #54C0C9;
+  color: white;
+  text-align: center;
+}
