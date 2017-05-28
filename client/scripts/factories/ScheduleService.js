@@ -3,7 +3,9 @@ angular
   .factory('ScheduleService', ['$http', 'CONSTANTS', function ($http, CONSTANTS) {
 
     return {
-      getOverridesForDate: getOverridesForDate
+      getOverridesForDate: getOverridesForDate,
+      postOverrides: postOverrides,
+      putOverrides: putOverrides
     };
 
     function getOverridesForDate(date, location) {
@@ -12,6 +14,23 @@ angular
         location_name: location
       };
       return $http.get('/overrides', {params: params})
+        .then(returnResponse, returnError);
+    }
+
+    function postOverrides(date, overrides) {
+      var params = {
+        override_date: date,
+        overridesArray: overrides
+      };
+      return $http.post('/overrides', params)
+        .then(returnResponse, returnError);
+    }
+
+    function putOverrides(overrides) {
+      var params = {
+        overridesArray: overrides
+      };
+      return $http.put('/overrides', params)
         .then(returnResponse, returnError);
     }
 

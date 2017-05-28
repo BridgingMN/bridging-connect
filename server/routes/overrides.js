@@ -98,7 +98,7 @@ router.post('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var override_date = formatDateForPostgres(req.body.override_date);
     var overridesArray = req.body.overridesArray;
-    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "num_allowed") VALUES ';
+    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "override_date", "num_allowed") VALUES ';
     for (var i = 0; i < overridesArray.length; i++) {
       var overrideInfoObj = overridesArray[i];
       queryString += '(' + overrideInfoObj.appointment_slot_id + ', \'' + override_date + '\', ' + overrideInfoObj.override_num_allowed + ')';
@@ -107,6 +107,7 @@ router.post('/', function(req, res) {
       }
     }
     queryString += ' RETURNING "id" AS "override_id", "appointment_slot_id", "override_date", "num_allowed" AS "override_num_allowed";';
+    console.log('queryString', queryString);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);

@@ -32,6 +32,7 @@ angular
 
   //methods
   vm.selectDate = selectDate;
+  vm.submitOverride = submitOverride;
 
   activate();
 
@@ -51,6 +52,11 @@ angular
   }
 
   function getOverridesSuccess(response) {
+    response.forEach(function (element) {
+      if (element.override_num_allowed == null) {
+        element.override_num_allowed = element.num_allowed;
+      }
+    });
     vm.appointmentSlots = response;
   }
 
@@ -58,12 +64,23 @@ angular
     console.error(error);
   }
 
-  /**
-   * This function should call a method from the Appointment object in the UserService
-   * It reserves the selected appointment slot on the selected date
-   * Then it redirects the caseworker to the Client Referral Form
-   * @function reserveAppointment
-   */
+  function submitOverride() {
+    if (vm.appointmentSlots[0].override_id == null) {
+      ScheduleService.postOverrides(vm.selectedDate, vm.appointmentSlots)
+        .then(submitOverrideSuccess, submitOverrideFailure);
+    } else {
+      ScheduleService.putOverrides(vm.appointmentSlots)
+        .then(submitOverrideSuccess, submitOverrideFailure);
+    }
+  }
+
+  function submitOverrideSuccess(response) {
+    console.log(response);
+  }
+
+  function submitOverrideFailure(error) {
+    console.error(error);
+  }
 
   /**
   * Filter appointments by date
