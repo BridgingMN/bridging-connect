@@ -33,8 +33,8 @@ var formatTimeForClient = formatters.formatTimeForClient;
 */
 router.get('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
-    var location_name = req.params.location_name;
-    var override_date = req.params.override_date;
+    var location_name = req.query.location_name;
+    var override_date = new Date(req.query.override_date);
     var day_id = override_date.getDay() + 1;
     override_date = formatDateForPostgres(override_date);
     pool.connect(function(err, database, done) {

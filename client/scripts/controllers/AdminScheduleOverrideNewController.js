@@ -36,7 +36,7 @@ angular
   activate();
 
   function activate() {
-    console.log(vm);
+    selectDate(vm.selectedDate);
   }
 
   /**

@@ -24,7 +24,7 @@ md-toolbar.appointment-filter-buttons {
   margin: 1em;
 }
 
-.appointment-card .appointment-card-header {
+.appointment-card .appointment-card-header, .appointment-slot-card {
   background-color: #54C0C9;
   color: white;
 }
@@ -64,6 +64,17 @@ md-toolbar.appointment-filter-buttons {
 .appointment-card-header .fa {
   font-size: 2.5em;
   padding-right: 10px;
+}
+
+.appointment-slot-card md-input-container {
+  margin: 0;
+}
+
+.appointment-slot-card md-input-container input{
+  background-color: white;
+  max-width: 30px;
+  margin: 0;
+
 }
 
 #agencyInfo {

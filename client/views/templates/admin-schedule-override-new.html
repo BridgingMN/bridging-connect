@@ -17,13 +17,35 @@
     </div>
     <div
       class="override-appointment-slots"
-      layout="column">
+      layout="column"
+      layout-margin>
       <div
-        class="appointment-slot-card"
-        ng-repeat="slot in vm.appointmentSlots"
-        layout="row">
+        class="md-whiteframe-2dp appointment-slot-card"
+        ng-repeat="appointment in vm.appointmentSlots"
+        layout="row"
+        layout-align="center center">
+        <div class="md-padding">
+          <i ng-if="appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+          <i ng-if="appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING" class="fa fa-shopping-cart" ></i>
+          <span><span class="appointment-type">{{appointment.appointment_type}}</span> w/ <span class="appointment-delivery">{{appointment.delivery_method}}</span></span>
+        </div>
+        <div class="md-padding appointment-location">
+          <i class="fa fa-map-marker" aria-hidden="true"></i>
+          <span>{{appointment.location_name}}</span>
+        </div>
+        <div class="md-padding appointment-time">
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <span class="appointment-start-time">{{appointment.start_time}}</span> to <span class="appoint-end-time">{{appointment.end_time}}</span>
+        </div>
+        <div class="md-padding appointment-slots">
+          <i class="fa fa-hashtag" aria-hidden="true"></i>
+          <md-input-container flex="auto">
+            <input type="number" ng-model="appointment.num_allowed">
+          </md-input-container>
+        </div>
+
       </div>
-      <md-button class="md-raised" ng-click="vm.submitOverride">Submit</md-button>
+      <md-button class="md-accent md-raised" ng-click="vm.submitOverride()">Submit</md-button>
     </div>
   </div>
 </md-content>
