@@ -152,12 +152,13 @@ router.put('/', function(req, res) {
     var queryString = 'UPDATE "overrides" SET "num_allowed" = "updates"."num_allowed" FROM (VALUES ';
     for (var i = 0; i < overridesArray.length; i++) {
       var overrideInfoObj = overridesArray[i];
-      queryString += '(' + overrideInfoObj.appointment_slot_id + '\', ' + overrideInfoObj.override_num_allowed + ')';
+      queryString += '(' + overrideInfoObj.appointment_slot_id + ', ' + overrideInfoObj.override_num_allowed + ')';
       if (i < overridesArray.length - 1) {
         queryString += ', ';
       }
     }
     queryString += ') AS "updates"("override_id", "num_allowed") WHERE "updates"."override_id" = "overrides"."id" RETURNING "id" AS "override_id", "appointment_slot_id", "override_date", "overrides"."num_allowed";';
+    console.log('put queryString', queryString);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
