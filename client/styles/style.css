@@ -39,7 +39,7 @@ md-toolbar.appointment-filter-buttons {
   color: rgb(54, 54, 54);
 }
 
-.md-calendar-date .md-calendar-date-selection-indicator {
+.appointment-schedule-calendar .md-calendar-date .md-calendar-date-selection-indicator {
   background-color: lightgreen;
 }
 
