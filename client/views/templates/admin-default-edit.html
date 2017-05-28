@@ -1,4 +1,4 @@
-<div layout="column" ng-cloak class = "md-inline-form"
+<div layout="column" ng-cloak class = "md-inline-form" ng-init = "vm.init()"
       layout-align = "start center" class = "md-padding">
 
   <div>
@@ -21,18 +21,18 @@
 
             <md-input-container class="md-block" flex-gt-xs>
             <label>Location</label>
-            <md-select ng-model="vm.default.location">
-              <md-option ng-repeat="location in vm.locations" ng-value="location.option"
-                          ng-disabled="$index === 1">{{location.option}}
+            <md-select ng-model="vm.defaultSlot.selected.location_name">
+              <md-option ng-repeat="location in vm.locations.array"
+                        ng-value="location">{{location}}
               </md-option>
             </md-select>
           </md-input-container>
 
           <md-input-container>
           <label>Week Day</label>
-          <md-select ng-model="vm.default.day">
-            <md-option ng-repeat="day in vm.week" ng-value="day.option"
-                        ng-disabled="$index === 1">{{day.option}}
+          <md-select ng-model="vm.defaultSlot.selected.day">
+            <md-option ng-repeat="day in vm.days.array"
+                      ng-value="day">{{day}}
             </md-option>
           </md-select>
         </md-input-container>
@@ -41,18 +41,18 @@
           <div layout-gt-xs="row">
             <md-input-container class="md-block" flex-gt-xs>
             <label>Appointment Type</label>
-            <md-select ng-model="vm.default.type">
-              <md-option ng-repeat="type in vm.types" ng-value="type.option"
-                          ng-disabled="$index === 1">{{type.option}}
+            <md-select ng-model="vm.defaultSlot.selected.appointment_type">
+              <md-option ng-repeat="type in vm.types.array"
+                        ng-value="type">{{type}}
               </md-option>
             </md-select>
           </md-input-container>
 
           <md-input-container>
           <label>Delivery or Pick Up</label>
-          <md-select ng-model="vm.default.delivery_method">
-            <md-option ng-repeat="method in vm.methods" ng-value="method.option"
-                        ng-disabled="$index === 1">{{method.option}}
+          <md-select ng-model="vm.defaultSlot.selected.delivery_method">
+            <md-option ng-repeat="method in vm.methods.array"
+                        ng-value="method">{{method}}
             </md-option>
           </md-select>
         </md-input-container>
@@ -61,28 +61,28 @@
           <div layout-gt-xs="row">
             <md-input-container class="md-block" flex-gt-xs>
               <label>Start Time</label>
-              <input type = "time" ng-model="vm.default.start_time">
+              <input type = "time" ng-model="vm.defaultSlot.selected.start_time">
             </md-input-container>
 
             <md-input-container class="md-block" flex-gt-xs>
               <label>End Time</label>
-              <input type = "time" ng-model="vm.default.end_time">
+              <input type = "time" ng-model="vm.defaultSlot.selected.end_time">
             </md-input-container>
           </div>
 
           <md-input-container class ="md-block">
           <label>Number of Appointments Allowed at that time</label>
-          <input type = "number" ng-model="vm.default.num_allowed">
+          <input type = "number" ng-model="vm.defaultSlot.selected.num_allowed">
           </md-input-container>
 
 
           <div layout = "row">
-            <md-button type="submit"  class="md-raised md-primary">Save Changes</md-button>
-            <a href="#admin-appointments-default"><md-button type="button">Cancel
+            <md-button type="submit" class="md-raised md-primary"
+                ng-click = "vm.updateDefaultSlot(vm.defaultSlot)">
+                Save Changes</md-button>
+            <a href="#admin-appointments-default"><md-button type="button">
+                Cancel Changes
                 </md-button></a>
-          <!-- <md-button type="submit" class="md-raised md-warn"
-              ng-click = "vm.deleteDefault(vm.default.selected[0])">
-              Delete Default</md-button> -->
         </div>
       </form>
     </div>

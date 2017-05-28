@@ -8,7 +8,7 @@ angular
   vm.getAgencies = UserService.getAgencies;
   vm.agency = UserService.agency;
   vm.viewAgency = UserService.viewAgency;
-  vm.selected = UserService.selected;
+  // vm.selected = UserService.selected;
   vm.query = UserService.query;
 
 }]);
