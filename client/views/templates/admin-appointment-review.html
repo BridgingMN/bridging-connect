@@ -1,6 +1,6 @@
 <div ng-cloak>
 
-  <md-content >
+  <md-content layout = "column" layout-align = "start center">
     <div>
       <h2>{{vm.appointment.selected.apptInfo.status | uppercase}} Appointment & Client Details</h2>
     </div>
@@ -96,7 +96,7 @@
   </md-content>
   <div flex-xs flex-gt-xs="50" layout="column">
     <md-card>
-      <md-card-title>
+      <md-card-title layout-align = "start center">
           <md-card-title-text>
             <span class="md-headline">Client Demographics</span>
             <span class="md-subhead">Save or Cancel Changes Below</span>
