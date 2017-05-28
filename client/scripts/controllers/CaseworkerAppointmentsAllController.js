@@ -68,6 +68,9 @@ angular
   }
 
   function getAppointmentsSuccess(appointments) {
+    appointments.forEach(function (element) {
+      element.info.date = new Date(element.info.date);
+    });
     vm.caseworkerAppointments = appointments;
   }
 

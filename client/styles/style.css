@@ -24,7 +24,7 @@ md-toolbar.appointment-filter-buttons {
   margin: 1em;
 }
 
-.appointment-card .appointment-card-header {
+.appointment-card .appointment-card-header, .appointment-slot-card {
   background-color: #54C0C9;
   color: white;
 }
@@ -66,9 +66,31 @@ md-toolbar.appointment-filter-buttons {
   padding-right: 10px;
 }
 
+.appointment-slot-card md-input-container {
+  margin: 0;
+}
+
+.appointment-slot-card md-input-container input{
+  background-color: white;
+  max-width: 30px;
+  margin: 0;
+
+}
+
 #agencyInfo {
   text-align: center;
   background-color: #90c9ce;
   border-radius: 25px;
   width: 50%;
+}
+
+#aptHeader {
+  background-color: #54C0C9;
+  color: white;
+}
+
+#clientHeader {
+  background-color: #54C0C9;
+  color: white;
+  text-align: center;
 }
