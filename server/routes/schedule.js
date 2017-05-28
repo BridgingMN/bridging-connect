@@ -137,7 +137,7 @@ router.get('/locations', function(req, res) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
       } else { // we connected
-        database.query('SELECT "location" FROM "locations";',
+        database.query('SELECT "location" AS "location_name" FROM "locations";',
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
@@ -284,7 +284,7 @@ router.get('/:appointment_slot_id', function(req, res) {
   * @apiParam {String} appointment_type Mandatory Type of appointment corresponding to an entry in the "appointment_types" table.
   * @apiParam {String} day Mandatory Day name corresponding to an entry in the "days" table.
   * @apiParam {String} delivery_method Mandatory Delivery method name corresponding to an entry in the "delivery_methods" table.
-  * @apiParam {String} location Mandatory Location name corresponding to an entry in the "locations" table.
+  * @apiParam {String} location_name Mandatory Location name corresponding to an entry in the "locations" table.
   * @apiParam {Time} start_time Mandatory Start time for the new appointment slot.
   * @apiParam {Time} end_time Mandatory End time for the new appointment slot.
   * @apiParam {Number} num_allowed Mandatory Number of appointments allowed for the new appointment slot.
@@ -345,7 +345,7 @@ router.post('/default', function(req, res) {
   * @apiParam {String} appointment_type Mandatory Type of appointment corresponding to an entry in the "appointment_types" table.
   * @apiParam {String} day Mandatory Day name corresponding to an entry in the "days" table.
   * @apiParam {String} delivery_method Mandatory Delivery method name corresponding to an entry in the "delivery_methods" table.
-  * @apiParam {String} location Mandatory Location name corresponding to an entry in the "locations" table.
+  * @apiParam {String} location_name Mandatory Location name corresponding to an entry in the "locations" table.
   * @apiParam {Time} start_time Mandatory Start time for the new appointment slot.
   * @apiParam {Time} end_time Mandatory End time for the new appointment slot.
   * @apiParam {Number} num_allowed Mandatory Number of appointments allowed for the new appointment slot.
