@@ -13,23 +13,29 @@
     layout="column"
     flex="20"
     ng-if="appointment.info.status != 'canceled'">
-      <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
-        <div class="md-title appointment-date">
-          <p class="" layout="column" layout-align="center center">
-            <span>{{appointment.info.date | date: 'MMM'}}</span>
-            <span>{{appointment.info.date | date: 'dd'}}</span>
-          </p>
+      <div class="color-primary appointment-card-header" layout="column" layout-align="center center">
+        <div layout="row" layout-align="space-around center">
+          <div class="md-title appointment-date">
+            <p class="" layout="column" layout-align="center center">
+              <span>{{appointment.info.date | date: 'MMM'}}</span>
+              <span>{{appointment.info.date | date: 'dd'}}</span>
+            </p>
+          </div>
+          <div class="md-title md-padding appointment-type-info">
+            <p layout="column" layout-align="center center">
+              <span class="appointment-type">{{appointment.info.appointment_type}}</span>
+              <span>with <span class="appointment-delivery">{{appointment.info.delivery_method}}</span></span>
+            </p>
+          </div>
+          <div class="appointment-icon">
+            <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+            <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="fa fa-shopping-cart" aria-hidden="true"></i>
+          </div>
         </div>
-        <div class="md-title md-padding appointment-type-info">
-          <p layout="column" layout-align="center center">
-            <span class="appointment-type">{{appointment.info.appointment_type}}</span>
-            <span>with <span class="appointment-delivery">{{appointment.info.delivery_method}}</span></span>
-          </p>
-        </div>
-        <div class="appointment-icon">
-          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
-          <i ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="fa fa-shopping-cart" aria-hidden="true"></i>
-        </div>
+        <p class="appointment-status">
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+          {{appointment.info.status}}
+        </p>
       </div>
       <div class="appointment-card-body" layout="column" layout-align="center center">
         <p>
