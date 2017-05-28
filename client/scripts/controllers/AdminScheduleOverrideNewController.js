@@ -76,6 +76,7 @@ angular
 
   function submitOverrideSuccess(response) {
     console.log(response);
+    $location.path('/admin-appointments-customize');
   }
 
   function submitOverrideFailure(error) {
