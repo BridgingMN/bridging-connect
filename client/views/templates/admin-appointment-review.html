@@ -98,22 +98,24 @@
             <span class="md-subhead">Save or Cancel Changes Below</span>
           </md-card-title-text>
       </md-card-title>
-    <md-content>
+    <md-content layout-padding>
       <form class="client-referall-form" layout="column">
-        <md-input-container>
+        <div layout-gt-sm = "row">
+        <md-input-container class = "md-block" flex-gt-sm>
           <label>Client First Name</label>
           <input
             type="text"
             ng-model="vm.appointment.selected.clientInfo.first"
             required>
         </md-input-container>
-        <md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
           <label>Client Last Name</label>
           <input
             type="text"
             ng-model="vm.appointment.selected.clientInfo.last"
             required>
         </md-input-container>
+      </div>
         <md-input-container>
           <label>Client Date of Birth</label>
           <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
