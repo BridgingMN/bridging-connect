@@ -93,8 +93,8 @@ router.get('/all', function(req, res) {
 */
 router.get('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
-    var location_name = req.params.location_name;
-    var override_date = req.params.override_date;
+    var location_name = req.query.location_name;
+    var override_date = new Date(req.query.override_date);
     var day_id = override_date.getDay() + 1;
     override_date = formatDateForPostgres(override_date);
     pool.connect(function(err, database, done) {
@@ -158,7 +158,7 @@ router.post('/', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var override_date = formatDateForPostgres(req.body.override_date);
     var overridesArray = req.body.overridesArray;
-    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "num_allowed") VALUES ';
+    var queryString = 'INSERT INTO "overrides" ("appointment_slot_id", "override_date", "num_allowed") VALUES ';
     for (var i = 0; i < overridesArray.length; i++) {
       var overrideInfoObj = overridesArray[i];
       queryString += '(' + overrideInfoObj.appointment_slot_id + ', \'' + override_date + '\', ' + overrideInfoObj.override_num_allowed + ')';
@@ -167,6 +167,7 @@ router.post('/', function(req, res) {
       }
     }
     queryString += ' RETURNING "id" AS "override_id", "appointment_slot_id", "override_date", "num_allowed" AS "override_num_allowed";';
+    console.log('queryString', queryString);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
@@ -211,12 +212,13 @@ router.put('/', function(req, res) {
     var queryString = 'UPDATE "overrides" SET "num_allowed" = "updates"."num_allowed" FROM (VALUES ';
     for (var i = 0; i < overridesArray.length; i++) {
       var overrideInfoObj = overridesArray[i];
-      queryString += '(' + overrideInfoObj.appointment_slot_id + '\', ' + overrideInfoObj.override_num_allowed + ')';
+      queryString += '(' + overrideInfoObj.appointment_slot_id + ', ' + overrideInfoObj.override_num_allowed + ')';
       if (i < overridesArray.length - 1) {
         queryString += ', ';
       }
     }
     queryString += ') AS "updates"("override_id", "num_allowed") WHERE "updates"."override_id" = "overrides"."id" RETURNING "id" AS "override_id", "appointment_slot_id", "override_date", "overrides"."num_allowed";';
+    console.log('put queryString', queryString);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
