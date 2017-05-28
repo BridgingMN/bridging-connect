@@ -16,17 +16,7 @@ angular
     $http.put('/agencies/', agency).then(function() {
       console.log('saves edits', agency);
       $location.path('/admin-agency-overview');
-      $mdDialog.show(
-        $mdDialog.alert()
-          .parent(angular.element($document.querySelector('#popupContainer')))
-          .clickOutsideToClose(true)
-          .title('Saved')
-          .textContent('Your edits to ' + agency.name + ' have been saved.')
-          .ariaLabel('Alert Agency Saved')
-          .ok('Okay!')
-          // .targetEvent(agency)
-      );
-      // alert('Your edits to ' + agency.name + ' have been saved.');
+      alert('Your edits to ' + agency.name + ' have been saved.');
     });
   }
 
