@@ -189,7 +189,7 @@ router.get('/default', function(req, res) {
                         'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
                         'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
                         'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
-                        'ORDER BY "days"."name", "locations"."location", "appointment_slots"."start_time", "delivery_methods"."delivery_method";',
+                        'ORDER BY "days"."id", "locations"."location", "appointment_slots"."start_time", "delivery_methods"."delivery_method";',
           function(queryErr, result) { // query callback
             done();
             if (queryErr) {
@@ -296,10 +296,11 @@ router.get('/:appointment_slot_id', function(req, res) {
 */
 router.post('/default', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
+    console.log('request being made to add a new appt slot:', req.body);
     var appointment_type = req.body.appointment_type;
     var day = req.body.day;
     var delivery_method = req.body.delivery_method;
-    var location = req.body.location;
+    var location_name = req.body.location_name;
     var start_time = formatTimeForPostgres(req.body.start_time);
     var end_time = formatTimeForPostgres(req.body.end_time);
     var num_allowed = req.body.num_allowed;
@@ -315,7 +316,7 @@ router.post('/default', function(req, res) {
                         '(SELECT "id" FROM "locations" WHERE "location" = $4), ' +
                         '$5, $6, $7) ' +
                         'RETURNING "id";',
-                        [appointment_type, day, delivery_method, location, start_time, end_time, num_allowed],
+                        [appointment_type, day, delivery_method, location_name, start_time, end_time, num_allowed],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
