@@ -15,15 +15,18 @@ var formatTimeForClient = formatters.formatTimeForClient;
   * @apiParam {Date} override_date Mandatory Date specifying which overrides are being requested.
   * @apiParam {String} location_name Mandatory Name of Bridging location for which overrides are being requested.
   *
-  * @apiSuccess {Object[]} locationsArray Array of objects corresponding to all current appointment slots.
-  * @apiSuccess {Number} locationsArray.appointment_slot_id Unique ID of the appointment slot.
-  * @apiSuccess {String} locationsArray.appointment_type Name of appointment type ("shopping" or "new bed").
-  * @apiSuccess {String} locationsArray.day Day of appointment slot.
-  * @apiSuccess {String} locationsArray.delivery_method Delivery method of appointment slot ("pickup" or "delivery").
-  * @apiSuccess {String} locationsArray.location_name Name of Bridging location ("Bloomington" or "Roseville").
-  * @apiSuccess {Moment} locationsArray.start_time Time the appointment starts, converted to a Moment.js Object.
-  * @apiSuccess {Moment} locationsArray.end_time Time the appointment ends, converted to a Moment.js Object.
-  * @apiSuccess {Number} locationsArray.num_allowed Maximum number of appointments allowed to be scheduled during the appointment slot.
+  * @apiSuccess {Object[]} overridesArray Array of objects corresponding to all current appointment slots for the given date/location, and any applicable override information.
+  * @apiSuccess {Number} overridesArray.appointment_slot_id Unique ID of the appointment slot.
+  * @apiSuccess {String} overridesArray.appointment_type Name of appointment type ("shopping" or "new bed").
+  * @apiSuccess {String} overridesArray.day Day of appointment slot.
+  * @apiSuccess {String} overridesArray.delivery_method Delivery method of appointment slot ("pickup" or "delivery").
+  * @apiSuccess {String} overridesArray.location_name Name of Bridging location ("Bloomington" or "Roseville").
+  * @apiSuccess {Moment} overridesArray.start_time Time the appointment starts, converted to a Moment.js Object.
+  * @apiSuccess {Moment} overridesArray.end_time Time the appointment ends, converted to a Moment.js Object.
+  * @apiSuccess {Number} overridesArray.num_allowed Maximum number of appointments allowed to be scheduled during the appointment slot based on the default schedule.
+  * @apiSuccess {Number} overridesArray.override_id Unique ID associated with record in the "overrides" table (null if none exists yet).
+  * @apiSuccess {Date} overridesArray.override_date Date from the record in the "overrides" table (null if none exists yet).
+  * @apiSuccess {Number} overrideIdArray.override_num_allowed Override number of appointments allowed for each appointment slot (null if none exists yet). This takes precedence over overridesArray.num_allowed.
   *
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
@@ -85,6 +88,7 @@ router.get('/', function(req, res) {
   * @apiSuccess {Number[]} overrideIdArray Array of unique ID's associated with each overrides row insert.
   * @apiSuccess {Number} overrideIdArray.override_id Unique ID associated with override insert.
   * @apiSuccess {Number} overrideIdArray.appointment_slot_id Unique ID of the appointment slot associated with each override.
+  * @apiSuccess {Date} override_date Date for which the override applies.
   * @apiSuccess {Number} overrideIdArray.override_num_allowed Number of appointments allowed for each overridden appointment slot.
   *
   * @apiErrorExample {json} Post Error:
