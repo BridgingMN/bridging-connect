@@ -1,0 +1,13 @@
+<div class="login-container" layout="column" layout-align="center center" flex>
+  <h1>Update Password</h1>
+  <h2 role="alert" ng-if="vm.message !== ''">{{vm.message}}</h2>
+  <form ng-submit="vm.updatePassword()" layout="column">
+    <md-input-container>
+      <label>Password</label>
+      <input
+        type="password"
+        ng-model="vm.tempUser.password" />
+    </md-input-container>
+    <md-button type="submit" name="submit">updatePassword</md-button>
+  </form>
+</div>

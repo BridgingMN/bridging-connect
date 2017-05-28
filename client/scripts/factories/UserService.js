@@ -2,7 +2,9 @@ angular
   .module('myApp')
   .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
 
-  var userObject = {};
+  var userObject = {
+    user: {}
+  };
 
   var agencies = {};
   var agency = {};
@@ -11,10 +13,12 @@ angular
   var days = {};
   var types = {};
   var methods = {};
-  var selected = [];
+  var appointment = {};
+  var defaultSlot = {};
+  // var selected = [];
   var query = {
     order: 'name',
-    limit: 5,
+    limit: 10,
     page: 1
   };
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
@@ -22,12 +26,14 @@ angular
   return {
     userObject: userObject,
     newAppointment: newAppointment,
-    selected: selected,
+    // selected: selected,
     query: query,
     locations: locations,
     days: days,
     types: types,
     methods: methods,
+    appointment: appointment,
+    viewDetails: viewDetails,
     agencies: agencies,
     agency: agency,
     getAgencies: getAgencies,
@@ -37,9 +43,13 @@ angular
     getLocations: getLocations,
     getDays: getDays,
     getTypes: getTypes,
+    defaultSlot: defaultSlot,
+    viewDefaultSlot: viewDefaultSlot,
     getMethods: getMethods,
     loginUser: loginUser,
     registerUser: registerUser,
+    sendResetPasswordLink: sendResetPasswordLink,
+    updateUserPassword: updateUserPassword,
     getUser: getUser,
     logout: logout,
     redirectToLogin: redirectToLogin,
@@ -68,6 +78,39 @@ angular
     return $http.post('/register', tempUser);
   } // end registerUser()
 
+  // make request to have a password reset link emailed to the user
+  function sendResetPasswordLink(tempUser) {
+    return $http.post('/password/forgotpassword', tempUser)
+      .then(function(response) {
+        if(response.data.email) {
+          console.log('success: ', response.data);
+          // location works with SPA (ng-route)
+          return 'Password Reset Link has been sent to ' + response.data.email + '.';
+        } else {
+          console.log('failure: ', response);
+          return  'Failure';
+        }
+    });
+  }
+
+  // make request with password reset token to update user's password
+  function updateUserPassword(tempUser) {
+    return $http.put('/password/resetpassword', tempUser)
+      .then(function(response) {
+        if(response.data.email) {
+          console.log('success: ', response.data);
+          // location works with SPA (ng-route)
+          return 'Password successfully updated.';
+        } else {
+          console.log('failure: ', response);
+          return 'Failure.';
+        }
+    },
+    function (error) {
+      return 'Error';
+    });
+  }
+
   // verify user authentication
   function getUser() {
     $http.get('/user').then(function(response) {
@@ -75,6 +118,11 @@ angular
         redirectToLogin();
       } else {
         userObject.user = response.data;
+        if (userObject.user.user_type_id === 2) {
+          userObject.user.userHomeView = '/caseworker-appointments-all';
+        } else if (userObject.user.user_type_id === 1) {
+          userObject.user.userHomeView = '/admin-appointments-all';
+        }
       }
       console.log(userObject);
     });
@@ -137,6 +185,27 @@ angular
     $http.get('/caseworkers/' + caseworker_id).then(function(response) {
       caseworker.selected = response.data;
       console.log('Caseworker record back from db: ', caseworker.selected);
+    });
+  }
+
+  //Views details of selected appointment & client info
+  function viewDetails(appointment_id) {
+    console.log('view details clicked ', appointment_id);
+    $http.get('/appointments/' + appointment_id).then(function(response) {
+      appointment.selected = response.data;
+      console.log('Apt & Client details back from db: ', appointment.selected);
+    });
+  }
+
+  //Views details of selected default appointment slot
+  function viewDefaultSlot(appointment_slot_id) {
+    $location.path('/admin-default-edit');
+    console.log('view default slot clicked ', appointment_slot_id);
+    $http.get('/schedule/' + appointment_slot_id).then(function(response) {
+      response.data.start_time = new Date(response.data.start_time);
+      response.data.end_time = new Date(response.data.end_time);
+      defaultSlot.selected = response.data;
+      console.log('Default Slot details back from db: ', defaultSlot.selected);
     });
   }
 

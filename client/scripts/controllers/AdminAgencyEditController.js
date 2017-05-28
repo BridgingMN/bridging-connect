@@ -1,7 +1,7 @@
 angular
   .module('myApp')
   .controller('AdminAgencyEditController', ['$http', '$location', '$mdDialog',
-      '$document', 'UserService',
+      'UserService',
       function($http, $location, $mdDialog, $document, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
@@ -15,18 +15,12 @@ angular
     console.log('Save changes clicked: ', agency);
     $http.put('/agencies/', agency).then(function() {
       console.log('saves edits', agency);
+      alert('Your edits to ' + agency.name + ' have been saved.');
+      // $mdDialog.show(
+      //   $mdDialog.alert()
+      //   .parent
+      // );
       $location.path('/admin-agency-overview');
-      $mdDialog.show(
-        $mdDialog.alert()
-          .parent(angular.element($document.querySelector('#popupContainer')))
-          .clickOutsideToClose(true)
-          .title('Saved')
-          .textContent('Your edits to ' + agency.name + ' have been saved.')
-          .ariaLabel('Alert Agency Saved')
-          .ok('Okay!')
-          // .targetEvent(agency)
-      );
-      // alert('Your edits to ' + agency.name + ' have been saved.');
     });
   }
 
