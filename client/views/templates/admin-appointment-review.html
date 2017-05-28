@@ -9,14 +9,8 @@
     <md-content class="md-padding" layout-xs="column" layout="row">
     <div flex-xs flex-gt-xs="50" layout="column">
       <md-card>
-        <!-- <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Appointment</span>
-          </md-card-title-text>
-        </md-card-title> -->
-
         <md-card-content>
-          <div class="color-primary appointment-card-header" layout="row" layout-align="space-around center">
+          <div id="aptHeader" layout="row" layout-align="space-around center">
             <div class="md-title appointment-date">
               <p layout="column" layout-align="center center">
                 <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'MMM'}}</span>
@@ -44,11 +38,13 @@
               <i class="material-icons">person</i>
               {{vm.appointment.selected.clientInfo.first}}
               {{vm.appointment.selected.clientInfo.last}}
-              <br>
-              supported by caseworker
-              <br>
+                (Client)
+            </p>
+            <p>
+              <i class="material-icons">person</i>
               {{vm.appointment.selected.userInfo.first}}
               {{vm.appointment.selected.userInfo.last}}
+               (Caseworker)
             </p>
             <p>
               <i class="material-icons">place</i>
@@ -93,31 +89,33 @@
       </md-card-content>
       </md-card>
     </div>
-  </md-content>
-  <div flex-xs flex-gt-xs="50" layout="column">
+
+  <div flex-xs flex-gt-xs="50" layout="column" >
     <md-card>
-      <md-card-title layout-align = "start center">
-          <md-card-title-text>
+      <md-card-title >
+          <md-card-title-text id = "clientHeader">
             <span class="md-headline">Client Demographics</span>
             <span class="md-subhead">Save or Cancel Changes Below</span>
           </md-card-title-text>
       </md-card-title>
-    <md-content>
+    <md-content layout-padding>
       <form class="client-referall-form" layout="column">
-        <md-input-container>
+        <div layout-gt-sm = "row">
+        <md-input-container class = "md-block" flex-gt-sm>
           <label>Client First Name</label>
           <input
             type="text"
             ng-model="vm.appointment.selected.clientInfo.first"
             required>
         </md-input-container>
-        <md-input-container>
+        <md-input-container class="md-block" flex-gt-sm>
           <label>Client Last Name</label>
           <input
             type="text"
             ng-model="vm.appointment.selected.clientInfo.last"
             required>
         </md-input-container>
+      </div>
         <md-input-container>
           <label>Client Date of Birth</label>
           <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
@@ -162,4 +160,5 @@
     </md-content>
   </md-card>
   </div>
+</md-content>
 </div>
