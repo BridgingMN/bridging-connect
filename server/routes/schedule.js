@@ -262,13 +262,13 @@ router.get('/:appointment_slot_id', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('sucessful get from /schedule/:appointment_slot_id', result.rows);
-              var appointmentSlotObj = '';
-              if (result.rows.length) {
-                appointmentSlotObj = result.rows[0];
-                appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
-                appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
-              }
-              res.send(appointmentSlotObj);
+              // var appointmentSlotObj = '';
+              // if (result.rows.length) {
+              //   appointmentSlotObj = result.rows[0];
+              //   appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
+              //   appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
+              // }
+              res.send(result.rows[0]);
             }
         }); // end query callback
       } // end DB connection if-else
