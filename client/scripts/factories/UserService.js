@@ -15,7 +15,7 @@ angular
   var methods = {};
   var appointment = {};
   var defaultSlot = {};
-  var selected = [];
+  // var selected = [];
   var query = {
     order: 'name',
     limit: 10,
@@ -26,7 +26,7 @@ angular
   return {
     userObject: userObject,
     newAppointment: newAppointment,
-    selected: selected,
+    // selected: selected,
     query: query,
     locations: locations,
     days: days,

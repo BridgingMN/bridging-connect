@@ -15,10 +15,10 @@
   </div>
 
   <md-table-container>
-    <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
+    <table md-table md-progress="promise">
     <thead md-head md-order="vm.query.order" md-on-reorder="vm.getAllDefaults">
       <tr md-row>
-        <th md-column md-order-by ="nameToLower"><span>Location</span></th>
+        <th md-column><span>Location</span></th>
         <th md-column>Week Day</th>
         <th md-column>Type</th>
         <th md-column>Method</th>
@@ -29,8 +29,7 @@
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row md-select="default" md-select-id="name" md-auto-select
-          ng-repeat="default in vm.allDefaults.array | filter : test |
+      <tr md-row ng-repeat="default in vm.allDefaults.array | filter : test |
           limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
         <td md-cell>{{default.location_name}}</td>
         <td md-cell>{{default.day}}</td>

@@ -5,7 +5,7 @@ angular
 
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.selected = UserService.selected;
+  // vm.selected = UserService.selected;
   vm.query = UserService.query;
   vm.defaultSlot = UserService.defaultSlot;
   vm.viewDefaultSlot = UserService.viewDefaultSlot;

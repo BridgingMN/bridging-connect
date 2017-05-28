@@ -4,12 +4,12 @@ angular
       function($http, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
-  vm.selected = UserService.selected;
+  // vm.selected = UserService.selected;
   vm.query = UserService.query;
-  vm.pendingAppointments = {};
-  vm.getPendingAppointments = getPendingAppointments;
   vm.appointment = UserService.appointment;
   vm.viewDetails = UserService.viewDetails;
+  vm.pendingAppointments = {};
+  vm.getPendingAppointments = getPendingAppointments;
 
   //GETS all appointments from db
   function getPendingAppointments() {
