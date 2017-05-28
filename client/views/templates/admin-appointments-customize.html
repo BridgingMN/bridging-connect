@@ -6,7 +6,7 @@
   </div>
 
   <div layout = "row" class = "addButton">
-    <md-button class="md-raised md-primary" href="#admin-schedule-override-new">
+    <md-button class="md-raised md-primary" href="/#admin-schedule-override-new">
         Add Override Date</md-button>
     <md-input-container>
       <label>Search</label>
@@ -32,7 +32,7 @@
     <tbody md-body>
       <tr md-row ng-repeat="override in vm.overrides.array | filter : test |
           limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
-        <td md-cell>{{override.date}}</td>
+        <td md-cell>{{override.override_date}}</td>
         <td md-cell>{{override.location_name}}</td>
         <td md-cell>{{override.day}}</td>
         <td md-cell>{{override.appointment_type}}</td>
