@@ -265,9 +265,16 @@ router.get('/:appointment_slot_id', function(req, res) {
               var appointmentSlotObj = '';
               if (result.rows.length) {
                 appointmentSlotObj = result.rows[0];
-                appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
-                appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
+                var start_hours = appointmentSlotObj.start_time.substring(0, 2);
+                var start_minutes = appointmentSlotObj.start_time.substring(3, 5);
+                var end_hours = appointmentSlotObj.end_time.substring(0, 2);
+                var end_minutes = appointmentSlotObj.end_time.substring(3, 5);
+                // appointmentSlotObj.start_time = formatTimeForClient(appointmentSlotObj.start_time);
+                // appointmentSlotObj.end_time = formatTimeForClient(appointmentSlotObj.end_time);
+                appointmentSlotObj.start_time = new Date(1970, 0, 1, start_hours, start_minutes, 0, 0);
+                appointmentSlotObj.end_time = new Date(1970, 0, 1, end_hours, end_minutes, 0, 0);
               }
+              console.log('sending back specific appt slot:', appointmentSlotObj);
               res.send(appointmentSlotObj);
             }
         }); // end query callback
