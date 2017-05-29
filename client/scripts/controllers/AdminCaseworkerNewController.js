@@ -1,7 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminCaseworkerNewController', ['$http', '$location', 'UserService',
-      function($http, $location, UserService) {
+  .controller('AdminCaseworkerNewController', ['$http', '$location', '$mdDialog', 'UserService',
+      function($http, $location, $mdDialog, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.agencies = UserService.agencies;
@@ -20,14 +20,24 @@ angular
     console.log('Create Caseworker clicked', vm.caseworker);
     if(vm.caseworker.name === '' || vm.caseworker.first === '' ||
         vm.caseworker.last === '' || vm.caseworker.email === '') {
-          alert('Please complete all required fields.');
+          caseworkerAlertDialog('Incomplete Form', 'Please complete all required fields.');
         } else {
           $http.post('/caseworkers', vm.caseworker).then(function(response) {
             console.log(response);
             $location.path('/admin-caseworker-overview');
-            alert('The new caseworker has been added.');
+            caseworkerAlertDialog('Caseworker Added', 'The new caseworker has been added.');
           });
         }
+  }
+
+  function caseworkerAlertDialog(title, text) {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title(title)
+       .textContent(text)
+       .ok('Okay')
+   );
   }
 
 }]);

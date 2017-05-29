@@ -1,7 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminDefaultEditController', ['$http', '$location', 'UserService',
-      function($http, $location, UserService) {
+  .controller('AdminDefaultEditController', ['$http', '$location', '$mdDialog', 'UserService',
+      function($http, $location, $mdDialog, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.locations = UserService.locations;
@@ -32,8 +32,18 @@ angular
       console.log('Updating Slot: ', slot);
       $http.put('/schedule/default', slot).then(function() {
         $location.path('/admin-appointments-default');
-        alert('Changes to the default slot have been saved.');
+        appointmentAlertDialog('Appointment Slot Updated', 'Changes to the default slot have been saved.');
       });
+    }
+
+    function appointmentAlertDialog(title, text) {
+      $mdDialog.show(
+       $mdDialog.alert()
+         .clickOutsideToClose(true)
+         .title(title)
+         .textContent(text)
+         .ok('Okay')
+     );
     }
 
 }]);
