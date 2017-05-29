@@ -1,4 +1,4 @@
-<div class="caseworker-home" layout="column">
+<div class="caseworker-home" layout="column" ng-init="vm.navBar.updateCurrentNavItem('all')">
   <md-toolbar class="appointment-filter-buttons md-whiteframe-1dp">
     <div class="md-toolbar-tools" layout="row" flex="auto">
       <md-button class="md-raised md-primary"  ng-click="vm.setAppointmentFilter(undefined)">Show All</md-button>

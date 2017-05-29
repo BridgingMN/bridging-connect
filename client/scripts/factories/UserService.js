@@ -21,6 +21,16 @@ angular
     limit: 10,
     page: 1
   };
+
+  var navBar = {
+    currentNavItem: 'all',
+    updateCurrentNavItem: function(name) {
+      console.log('Name', name);
+      this.currentNavItem = name;
+      console.log('currentNavItem', this.currentNavItem);
+    }
+  };
+
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
   return {
@@ -38,6 +48,7 @@ angular
     agency: agency,
     getAgencies: getAgencies,
     caseworker: caseworker,
+    navBar: navBar,
     viewCaseworker: viewCaseworker,
     viewAgency: viewAgency,
     getLocations: getLocations,
@@ -202,8 +213,6 @@ angular
     $location.path('/admin-default-edit');
     console.log('view default slot clicked ', appointment_slot_id);
     $http.get('/schedule/' + appointment_slot_id).then(function(response) {
-      response.data.start_time = new Date(response.data.start_time);
-      response.data.end_time = new Date(response.data.end_time);
       defaultSlot.selected = response.data;
       console.log('Default Slot details back from db: ', defaultSlot.selected);
     });
@@ -213,7 +222,6 @@ angular
   function getLocations() {
     console.log('client sent request to server for all locations');
     $http.get('/schedule/locations').then(function(response) {
-        console.log('back from /schedule/locations:', response.data);
         locations.array = response.data;
         console.log('locations: ', locations.array);
     });
@@ -245,5 +253,4 @@ angular
         console.log('methods: ', methods.array);
     });
   }
-
 }]);

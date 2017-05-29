@@ -678,3 +678,10 @@ insert into appointments (user_id, created_date, appointment_date, status_id, ap
 -- Thu Jun 29 loc 2 new bed
 insert into appointments (user_id, created_date, appointment_date, status_id, appointment_slot_id, client_id, confirmation_id) values (752, '2017-05-16', '2017-06-29', 1, 106, 799, 5800);
 insert into appointments (user_id, created_date, appointment_date, status_id, appointment_slot_id, client_id, confirmation_id) values (734, '2017-05-02', '2017-06-29', 1, 106, 730, 5566);
+
+
+-- Pending appts
+insert into appointments (user_id, created_date, appointment_date, status_id, appointment_slot_id, client_id) values (656, '2017-04-29', '2017-06-05', 2, 60, 249);
+insert into appointments (user_id, created_date, appointment_date, status_id, appointment_slot_id, client_id) values (937, '2017-05-03', '2017-06-05', 2, 59, 967);
+insert into appointments (user_id, created_date, appointment_date, status_id, appointment_slot_id, client_id) values (306, '2017-04-24', '2017-06-05', 2, 60, 911);
+insert into appointments (user_id, created_date, appointment_date, status_id, appointment_slot_id, client_id) values (368, '2017-05-16', '2017-06-05', 2, 61, 289);
