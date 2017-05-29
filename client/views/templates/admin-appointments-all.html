@@ -29,7 +29,8 @@
     <tbody md-body>
       <tr md-row
           ng-repeat="appointment in vm.allAppointments.array | filter : test |
-          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit"
+          ng-class-odd = "'odd'" ng-class-even = "'even'">
         <td md-cell>{{appointment.appointment_date | date}}</td>
         <td md-cell>{{appointment.start_time}}</td>
         <td md-cell>{{appointment.location_name}}</td>

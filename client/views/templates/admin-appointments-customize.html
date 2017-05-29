@@ -31,7 +31,8 @@
     </thead>
     <tbody md-body>
       <tr md-row ng-repeat="override in vm.overrides.array | filter : test |
-          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit"
+          ng-class-odd = "'odd'" ng-class-even = "'even'">
         <td md-cell>{{override.override_date | date}}</td>
         <td md-cell>{{override.location_name}}</td>
         <td md-cell>{{override.day}}</td>

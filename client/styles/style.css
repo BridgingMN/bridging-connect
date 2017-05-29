@@ -110,3 +110,7 @@ md-toolbar.appointment-filter-buttons {
   color: white;
   text-align: center;
 }
+
+.odd {
+  background-color: #F5F5F5 !important;
+}
