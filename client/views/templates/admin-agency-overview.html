@@ -28,7 +28,7 @@
         <td md-cell>{{agency.bridging_agency_id}}</td>
         <td md-cell ng-if = "agency.access_disabled == true">Yes</td>
         <td md-cell ng-if = "agency.access_disabled == false">No</td>
-        <td md-cell><a href="#admin-agency-edit" ng-click = "vm.viewAgency(agency)">
+        <td md-cell><a href="#admin-agency-edit" ng-click = "vm.viewAgency(agency.id)">
             See Details</a></td>
       </tr>
     </tbody>
