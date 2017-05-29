@@ -15,8 +15,13 @@
   color: white;
 }
 
-md-toolbar.appointment-filter-buttons {
+md-toolbar.appointment-filter-buttons, md-toolbar.admin-tools {
   background-color: white;
+}
+
+md-input-container.admin-search {
+  margin: 0;
+  margin-top: 37px;
 }
 
 .caseworker-appointment-cards .appointment-card {
