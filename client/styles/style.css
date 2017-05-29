@@ -29,9 +29,25 @@ md-toolbar.appointment-filter-buttons {
   color: white;
 }
 
+.appointment-card p {
+  margin: 0.1em 0;
+}
+
 .appointment-card-header .appointment-date p{
   padding: 1px   15px;
   border-right: 1px solid white;
+}
+
+.appointment-card-header .appointment-status {
+  margin-bottom: 0.6em;
+}
+
+.appointment-card-header .appointment-status .fa{
+  font-size: 1.5em;
+}
+
+.appointment-card .appointment-card-body p {
+  margin: 0.4em 0;
 }
 
 .appointment-card .appointment-card-delivery-info {
@@ -47,7 +63,7 @@ md-toolbar.appointment-filter-buttons {
   max-height: 50px;
 }
 
-.appointment-date, .appointment-delivery, .appointment-type {
+.appointment-date, .appointment-delivery, .appointment-type, .appointment-status {
   text-transform: capitalize;
 }
 
