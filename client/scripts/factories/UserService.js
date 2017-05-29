@@ -212,6 +212,8 @@ angular
     console.log('view default slot clicked ', appointment_slot_id);
     $http.get('/schedule/' + appointment_slot_id).then(function(response) {
       defaultSlot.selected = response.data;
+      defaultSlot.selected.start_time = new Date(defaultSlot.selected.start_time);
+      defaultSlot.selected.end_time = new Date(defaultSlot.selected.end_time);
       console.log('Default Slot details back from db: ', defaultSlot.selected);
     });
   }
