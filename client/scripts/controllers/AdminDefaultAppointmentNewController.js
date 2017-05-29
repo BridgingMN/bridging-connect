@@ -1,7 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminDefaultAppointmentNewController', ['$http', '$location', 'UserService',
-      function($http, $location, UserService) {
+  .controller('AdminDefaultAppointmentNewController', ['$http', '$location', '$mdDialog', 'UserService',
+      function($http, $location, $mdDialog, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.locations = UserService.locations;
@@ -30,8 +30,18 @@ angular
     console.log('Button to create default clicked: ', vm.default);
     $http.post('/schedule/default', vm.default).then(function() {
       $location.path('/admin-appointments-default');
-      alert('The new DEFAULT Appointment Slot has been added.');
+    appointmentAlertDialog('New Appointment Slot Added', 'The new DEFAULT Appointment Slot has been added.');
     });
+  }
+
+  function appointmentAlertDialog(title, text) {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title(title)
+       .textContent(text)
+       .ok('Okay')
+   );
   }
 
 }]);

@@ -71,6 +71,7 @@ router.get('/', function(req, res) {
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/:agency_id', function(req, res) {
+  console.log('in get one agency by id: ', req.params.agency_id);
   if (req.isAuthenticated()) { // user is authenticated
     var agency_id = req.params.agency_id;
     pool.connect(function(err, database, done) {
@@ -89,8 +90,8 @@ router.get('/:agency_id', function(req, res) {
               console.log('error making query on /agencies/:agency_id GET', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful get from /agencies/:agency_id', result);
-              res.send(result.rows);
+              console.log('successful get from /agencies/:agency_id', result.rows);
+              res.send(result.rows[0]);
             }
           }); // end query callback
         } // end if-else

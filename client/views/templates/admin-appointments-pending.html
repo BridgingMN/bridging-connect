@@ -1,15 +1,12 @@
 <div layout="column" flex layout-align = "start center"
-      ng-init = "vm.getPendingAppointments()">
-    <h2>Pending Appointments</h2>
-
-  <div layout = "row">
-    <md-input-container>
-      <label>Search</label>
-      <input ng-model = "test">
-    </md-input-continer>
-  </div>
-
-  <md-table-container>
+      ng-init = "vm.getPendingAppointments()" layout-margin>
+  <md-table-container class="md-whiteframe-1dp">
+    <div class="md-toolbar-tools" layout = "row" layout-align="end center">
+      <md-input-container class="admin-search" >
+        <label>Search</label>
+        <input type="text" ng-model= "test">
+      </md-input-continer>
+    </div>
     <table md-table md-progress="promise">
     <thead md-head md-order="vm.query.order" md-on-reorder="vm.getPendingAppointments">
       <tr md-row>
@@ -28,7 +25,8 @@
     </thead>
     <tbody md-body>
       <tr md-row ng-repeat="appointment in vm.pendingAppointments.array | filter : test |
-          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit"
+          ng-class-odd = "'odd'" ng-class-even = "'even'">
           <td md-cell>{{appointment.appointment_date | date}}</td>
           <td md-cell>{{appointment.start_time}}</td>
           <td md-cell>{{appointment.location_name}}</td>

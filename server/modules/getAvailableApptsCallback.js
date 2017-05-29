@@ -153,6 +153,9 @@ function findRelevant(apptSlots, date) {
 // checks to see if an appt slot on a particular date is still available
 // (i.e. not completely filled) and returns true if it is
 function checkAvailability(apptSlot, date, existingApptCounts) {
+  if (apptSlot.num_allowed < 1) {
+    return false;
+  }
   for (var i = 0; i < existingApptCounts.length; i++) {
     var appt = existingApptCounts[i];
     if (appt.appointment_slot_id == apptSlot.appointment_slot_id && compareDates(appt.appointment_date, date)) {

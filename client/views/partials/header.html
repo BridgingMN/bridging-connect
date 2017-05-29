@@ -5,13 +5,13 @@
         <img class="logo" src="/assets/main-logo-1.png" alt="">
       </a>
       <a ng-href='#{{vm.userObject.user.userHomeView}}'>
-        <h1>Bridging Scheduling Application</h1>
+        <h1>Connect</h1>
       </a>
       <span flex></span>
       <section class="navigation-tabs">
         <div ng-cloak ng-if="vm.userObject.user.user_type_id === vm.CONSTANTS.USER_TYPE_CASEWORKER">
           <md-content class="">
-            <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+            <md-nav-bar md-selected-nav-item="vm.navBar.currentNavItem" nav-bar-aria-label="navigation links">
               <md-nav-item md-nav-href="#caseworker-appointments-all" name="all">
                 My Appointments
               </md-nav-item>
@@ -29,7 +29,7 @@
 
         <div ng-cloak ng-if="vm.userObject.user.user_type_id === vm.CONSTANTS.USER_TYPE_ADMIN">
           <md-content class="">
-            <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+            <md-nav-bar md-selected-nav-item="vm.navBar.currentNavItem" nav-bar-aria-label="navigation links">
               <md-nav-item md-nav-href="#admin-appointments-all" name="all">
                 All Appointments
               </md-nav-item>

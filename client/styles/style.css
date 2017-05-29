@@ -15,8 +15,13 @@
   color: white;
 }
 
-md-toolbar.appointment-filter-buttons {
+md-toolbar.appointment-filter-buttons, md-toolbar.admin-tools {
   background-color: white;
+}
+
+md-input-container.admin-search {
+  margin: 0;
+  margin-top: 37px;
 }
 
 .caseworker-appointment-cards .appointment-card {
@@ -24,9 +29,13 @@ md-toolbar.appointment-filter-buttons {
   margin: 1em;
 }
 
-.appointment-card .appointment-card-header {
+.appointment-card .appointment-card-header, .appointment-slot-card {
   background-color: #54C0C9;
   color: white;
+}
+
+.appointment-card p {
+  margin: 0.1em 0;
 }
 
 .appointment-card-header .appointment-date p{
@@ -34,12 +43,24 @@ md-toolbar.appointment-filter-buttons {
   border-right: 1px solid white;
 }
 
+.appointment-card-header .appointment-status {
+  margin-bottom: 0.6em;
+}
+
+.appointment-card-header .appointment-status .fa{
+  font-size: 1.5em;
+}
+
+.appointment-card .appointment-card-body p {
+  margin: 0.4em 0;
+}
+
 .appointment-card .appointment-card-delivery-info {
   background-color: rgb(224, 224, 224);
   color: rgb(54, 54, 54);
 }
 
-.md-calendar-date .md-calendar-date-selection-indicator {
+.appointment-schedule-calendar .md-calendar-date .md-calendar-date-selection-indicator {
   background-color: lightgreen;
 }
 
@@ -47,7 +68,7 @@ md-toolbar.appointment-filter-buttons {
   max-height: 50px;
 }
 
-.appointment-date, .appointment-delivery, .appointment-type {
+.appointment-date, .appointment-delivery, .appointment-type, .appointment-status {
   text-transform: capitalize;
 }
 
@@ -66,9 +87,36 @@ md-toolbar.appointment-filter-buttons {
   padding-right: 10px;
 }
 
+.appointment-slot-card md-input-container {
+  margin: 0;
+}
+
+.appointment-slot-card md-input-container input{
+  background-color: white;
+  max-width: 30px;
+  margin: 0;
+
+}
+
 #agencyInfo {
   text-align: center;
   background-color: #90c9ce;
   border-radius: 25px;
   width: 50%;
+}
+
+#aptHeader {
+  background-color: #54C0C9;
+  color: white;
+}
+
+#clientHeader {
+  background-color: #54C0C9;
+  color: white;
+  height: 121px;
+  font-size: 36px;
+}
+
+.odd {
+  background-color: #F5F5F5 !important;
 }

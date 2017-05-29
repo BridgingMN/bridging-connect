@@ -1,20 +1,16 @@
 <div layout="column" ng-init = "vm.getAllOverrides()"
-      layout-align = "start center">
-
-  <div>
-    <h2>Appointment Override Dates</h2>
-  </div>
-
-  <div layout = "row" class = "addButton">
-    <md-button class="md-raised md-primary" href="#admin-schedule-override-new">
-        Add Override Date</md-button>
-    <md-input-container>
-      <label>Search</label>
-      <input ng-model = "test">
-    </md-input-continer>
-  </div>
-
-  <md-table-container>
+      layout-align = "start center" layout-margin>
+  <md-table-container class="md-whiteframe-1dp">
+    <div class="md-toolbar-tools" layout = "row" layout-align="end center">
+      <md-button class="md-raised md-primary" href="/#admin-schedule-override-new">
+          Add Override Date
+      </md-button>
+      <span flex></span>
+      <md-input-container class="admin-search" >
+        <label>Search</label>
+        <input type="text" ng-model= "test">
+      </md-input-continer>
+    </div>
     <table md-table md-progress="promise">
     <thead md-head md-order="vm.query.order" md-on-reorder="vm.getAllOverrides">
       <tr md-row>
@@ -26,13 +22,14 @@
         <th md-column md-numeric>Start Time</th>
         <th md-column md-numeric>End Time</th>
         <th md-column md-numeric># Allowed</th>
-        <th md-column>Actions</th>
+        <!-- <th md-column>Actions</th> -->
       </tr>
     </thead>
     <tbody md-body>
       <tr md-row ng-repeat="override in vm.overrides.array | filter : test |
-          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
-        <td md-cell>{{override.date}}</td>
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit"
+          ng-class-odd = "'odd'" ng-class-even = "'even'">
+        <td md-cell>{{override.override_date | date}}</td>
         <td md-cell>{{override.location_name}}</td>
         <td md-cell>{{override.day}}</td>
         <td md-cell>{{override.appointment_type}}</td>
@@ -40,11 +37,10 @@
         <td md-cell>{{override.start_time}}</td>
         <td md-cell>{{override.end_time}}</td>
         <td md-cell>{{override.num_allowed}}</td>
-        <td md-cell>
+        <!-- <td md-cell>
             <md-button class="md-raised md-warn"
             ng-click = "vm.viewOverride(override.id)">Edit Override</md-button>
-
-          </td>
+          </td> -->
       </tr>
     </tbody>
   </table>

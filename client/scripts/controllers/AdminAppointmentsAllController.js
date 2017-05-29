@@ -10,10 +10,12 @@ angular
   vm.getAllAppointments = getAllAppointments;
   vm.appointment = UserService.appointment;
   vm.viewDetails = UserService.viewDetails;
+  vm.navBar = UserService.navBar;
 
   //GETS all appointments from db
   function getAllAppointments() {
     console.log('client request to server for all appointments');
+    vm.navBar.updateCurrentNavItem('all');
     $http.get('/appointments/all').then(function(response) {
       vm.allAppointments.array = response.data;
       console.log(vm.allAppointments.array);

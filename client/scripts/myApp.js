@@ -105,6 +105,16 @@ function config($locationProvider, $mdThemingProvider, $routeProvider) {
         }]
       }
     })
+    .when('/admin-schedule-override-new', {
+      templateUrl: '/views/templates/admin-schedule-override-new.html',
+      controller: 'AdminScheduleOverrideNewController',
+      controllerAs: 'vm',
+      resolve: { // get user from factory
+        getuser: ['UserService', function(UserService) {
+          return UserService.getUser();
+        }]
+      }
+    })
     .when('/admin-appointments-export', {
       templateUrl: '/views/templates/admin-appointments-export.html',
       controller: 'AdminAppointmentsExportController',
