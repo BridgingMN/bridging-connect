@@ -123,7 +123,6 @@ CREATE TABLE IF NOT EXISTS "overrides" (
 
 -- create "Appts" table
 -- refers to a single appointment that has been made by a caseworker
--- TODO: start confirmation_id at 45001 (will be used as Confirmation#)
 CREATE TABLE IF NOT EXISTS "appointments" (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES "users",
@@ -135,6 +134,8 @@ CREATE TABLE IF NOT EXISTS "appointments" (
   delivery_date DATE,
   confirmation_id SERIAL
 );
+-- Starts confirmation_id at 45001 (will be used as Confirmation#)
+ALTER SEQUENCE appointments_confirmation_id_seq RESTART WITH 45001;
 
 -- create "Zip_codes" table
 CREATE TABLE IF NOT EXISTS "zip_codes" (

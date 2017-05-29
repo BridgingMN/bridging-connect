@@ -5,7 +5,7 @@ angular
   var vm = this; // controller reference
 
   //model for the zipcode input
-  vm.zipCode = 55405;
+  vm.zipCode;
 
   var todaysDate = new Date();
   //Limits for the range of dates on the calendar
