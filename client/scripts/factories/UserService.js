@@ -183,9 +183,7 @@ angular
   //Views details of single selected agency
   function viewAgency(agency_id) {
     console.log('view details clicked ', agency_id);
-    var id = agency_id.id;
-    console.log('agency id: ', id);
-    $http.get('/agencies/' + id).then(function(response) {
+    $http.get('/agencies/' + agency_id).then(function(response) {
       agency.selected = response.data;
       console.log('Agency record back from db: ', agency.selected);
     });
