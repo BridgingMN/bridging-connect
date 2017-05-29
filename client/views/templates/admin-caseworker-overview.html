@@ -24,7 +24,8 @@
     </thead>
     <tbody md-body>
       <tr md-row ng-repeat="caseworker in vm.caseworkers.array | filter : test |
-          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit"
+          ng-class-odd = "'odd'" ng-class-even = "'even'">
         <td md-cell>{{caseworker.first}} {{caseworker.last}}</td>
         <td md-cell>{{caseworker.name}}</td>
         <td md-cell>{{caseworker.bridging_agency_id}}</td>
