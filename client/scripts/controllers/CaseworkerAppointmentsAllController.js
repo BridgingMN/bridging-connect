@@ -14,6 +14,7 @@ angular
   vm.user = UserService.userObject;
   vm.CONSTANTS = constants;
 
+  vm.navBar = UserService.navBar;
 
   var todaysDate = new Date();
   //Limits for the range of dates on the calendar
