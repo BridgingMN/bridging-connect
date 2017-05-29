@@ -113,7 +113,8 @@ md-input-container.admin-search {
 #clientHeader {
   background-color: #54C0C9;
   color: white;
-  text-align: center;
+  height: 121px;
+  font-size: 36px;
 }
 
 .odd {
