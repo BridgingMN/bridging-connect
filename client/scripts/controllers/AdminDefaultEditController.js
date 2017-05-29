@@ -14,7 +14,7 @@ angular
   vm.getMethods = UserService.getMethods;
   vm.defaultSlot = UserService.defaultSlot;
   vm.viewDefaultSlot = UserService.viewDefaultSlot;
-  vm.defaultEdit = {};
+  // vm.defaultEdit = {};
   vm.updateDefaultSlot = updateDefaultSlot;
   vm.init = init;
 
