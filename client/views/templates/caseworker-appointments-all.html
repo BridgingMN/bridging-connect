@@ -49,12 +49,12 @@
       <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
           <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
             <i class="fa fa-truck" aria-hidden="true"></i>
-            <span ng-if="appoint.info.delivery_date != undefined"> Delivered {{appointment.info.delivery_date | date: 'shortDate'}}.</span>
-            <span ng-if="appoint.info.delivery_date == undefined"> Delivery date to be determined.</span>
+            <span ng-if="appoint.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}</span>
+            <span ng-if="appoint.info.delivery_date == undefined">Delivery date TBD</span>
           </p>
           <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
             <i class="fa fa-car" aria-hidden="true"></i>
-            <span> Client Pick Up</span>
+            <span>Client Pick Up</span>
           </p>
       </div>
       <div class="appointment-card-buttons" layout="column">
