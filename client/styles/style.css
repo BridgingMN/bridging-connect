@@ -115,3 +115,7 @@ md-input-container.admin-search {
   color: white;
   text-align: center;
 }
+
+.fa-truck, .fa-car {
+  padding-right: 10px;
+}
