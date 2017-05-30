@@ -16,7 +16,7 @@ angular
     console.log('Save changes clicked: ', agency);
     $http.put('/agencies/', agency).then(function() {
       console.log('saves edits', agency);
-      alert('Your edits to ' + agency.name + ' have been saved.');
+      agencyUpdatedDialog(agency.name);
       // $mdDialog.show(
       //   $mdDialog.alert()
       //   .parent
@@ -32,11 +32,33 @@ angular
       $http.delete('/agencies/' + agency.id).then(function() {
         console.log('Deleted Agency: ', agency.id);
         $location.path('/admin-agency-overview');
-        alert(agency.name + ' has been deleted.');
+        agencyDeletedDialog(agency.name);
         });
     } else {
       $location.path('/admin-agency-edit');
     }
+  }
+
+  function agencyUpdatedDialog(agency) {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title('Agency Updated')
+       .textContent('Your edits to ' + agency + ' have been saved.')
+       .ariaLabel('Agency Updated Alert')
+       .ok('Okay')
+   );
+  }
+
+  function agencyDeletedDialog(agency) {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title('Agency Removed')
+       .textContent(agency + ' has been deleted.')
+       .ariaLabel('Agency Deleted Alert')
+       .ok('Okay')
+   );
   }
 
 }]);

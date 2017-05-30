@@ -92,12 +92,21 @@
 
   <div flex-xs flex-gt-xs="50" layout="column" >
     <md-card>
-      <md-card-title >
+      <md-card-content>
+        <div id="clientHeader" layout="row" layout-align="space-around center">
+          <div>
+            <p layout="column" layout-align="center center">
+              <span>Client Demographics</span>
+            </p>
+          </div>
+        </div>
+
+      <!-- <md-card-title >
           <md-card-title-text id = "clientHeader">
             <span class="md-headline">Client Demographics</span>
             <span class="md-subhead">Save or Cancel Changes Below</span>
           </md-card-title-text>
-      </md-card-title>
+      </md-card-title> -->
     <md-content layout-padding>
       <form class="client-referall-form" layout="column">
         <div layout-gt-sm = "row">
@@ -158,6 +167,7 @@
         </md-card-actions>
       </form>
     </md-content>
+    </md-card-content>
   </md-card>
   </div>
 </md-content>

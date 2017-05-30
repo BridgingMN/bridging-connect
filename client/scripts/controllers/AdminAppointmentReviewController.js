@@ -1,8 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminAppointmentReviewController', ['$http', '$location',
-            'CONSTANTS', 'UserService',
-      function($http, $location, CONSTANTS, UserService) {
+  .controller('AdminAppointmentReviewController', ['$http', '$location', '$mdDialog','CONSTANTS', 'UserService',
+      function($http, $location, $mdDialog, CONSTANTS, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.CONSTANTS = CONSTANTS;
@@ -29,7 +28,7 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
     console.log('Updating client: ', client);
     $http.put('/clients', client).then(function() {
       $location.path('/admin-appointments-all');
-      alert('Your edits to ' + client.first + ' ' + client.last + ' have been saved.');
+      appointmentAlertDialog('Client Updated','Your edits to ' + client.first + ' ' + client.last + ' have been saved.');
     });
   }
 
@@ -39,13 +38,13 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
       .then(function() {
       if(appointment.delivery_date === null) {
         $location.path('/admin-appointments-all');
-        alert('The appointment has been confirmed and a confirmation email has ' +
+        appointmentAlertDialog('Appointment Confirmed', 'The appointment has been confirmed and a confirmation email has ' +
                 'been sent to the caseworker.');
         } else {
           console.log('Updating Delivery Date to: ', appointment);
           $http.put('/appointments/update/deliverydate', appointment).then(function() {
             $location.path('/admin-appointments-all');
-            alert('The appointment has been confirmed with a delivery date ' +
+            appointmentAlertDialog('Appointment Confirmed', 'The appointment has been confirmed with a delivery date ' +
                     'and an email has been sent to inform the caseworker.');
                   });
                 }
@@ -58,7 +57,7 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
     $http.put('/appointments/update/' + appointment.appointment_id + '/' + 'denied')
       .then(function() {
         $location.path('/admin-appointments-all');
-        alert('The appointment has been denied and an email has ' +
+        appointmentAlertDialog('Appointment Denied', 'The appointment has been denied and an email has ' +
                 'been sent to notify the caseworker.');
     });
   }
@@ -68,8 +67,7 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
     $http.put('/appointments/update/' + appointment.appointment_id + '/' + 'canceled')
       .then(function() {
         $location.path('/admin-appointments-all');
-        alert('The appointment has been canceled and an email has ' +
-                'been sent to notify the caseworker.');
+        appointmentCanceledDialog();
     });
   }
 
@@ -77,9 +75,41 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
     console.log('Updating Delivery Date to: ', appointment);
     $http.put('/appointments/update/deliverydate', appointment).then(function() {
       $location.path('/admin-appointments-all');
-      alert('The delivery date has been updated and an email has ' +
-              'been sent to inform the caseworker.');
+      deliveryDateEditDialog();
     });
   }
 
+  function appointmentAlertDialog(title, text) {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title(title)
+       .textContent(text)
+       .ok('Okay')
+   );
+  }
+
+  function appointmentCanceledDialog() {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title('Appointment Canceled')
+       .textContent('The appointment has been canceled and an email has ' +
+               'been sent to notify the caseworker.')
+       .ariaLabel('Appointment Canceled')
+       .ok('Okay')
+   );
+  }
+
+  function deliveryDateEditDialog() {
+    $mdDialog.show(
+     $mdDialog.alert()
+       .clickOutsideToClose(true)
+       .title('Delivery Date Updated')
+       .textContent('The delivery date has been updated and an email has ' +
+               'been sent to inform the caseworker.')
+       .ariaLabel('Delivery Date Updated')
+       .ok('Okay')
+   );
+  }
 }]);
