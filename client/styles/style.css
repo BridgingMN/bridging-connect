@@ -58,6 +58,7 @@ md-input-container.admin-search {
 .appointment-card .appointment-card-delivery-info {
   background-color: rgb(224, 224, 224);
   color: rgb(54, 54, 54);
+  height: 80px;
 }
 
 .appointment-schedule-calendar .md-calendar-date .md-calendar-date-selection-indicator {
@@ -87,6 +88,10 @@ md-input-container.admin-search {
   padding-right: 10px;
 }
 
+.appointment-card-delivery-details {
+  width: 100%;
+}
+
 .appointment-slot-card md-input-container {
   margin: 0;
 }
@@ -114,8 +119,4 @@ md-input-container.admin-search {
   background-color: #54C0C9;
   color: white;
   text-align: center;
-}
-
-.fa-truck, .fa-car {
-  padding-right: 10px;
 }
