@@ -4,9 +4,6 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
-//CONFIGURATION
-var config = require('./modules/config.js');
-
 // DATABASE MODULE
 var database = require('./modules/database.js');
 
