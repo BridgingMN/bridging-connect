@@ -128,7 +128,7 @@ angular
 
   function cancelAppointmentSuccess(response) {
     getUserAppointments();
-    showToastSuccess(response);
+    showToastSuccess('APPOINTMENT CANCELED');
   }
 
   function showToastSuccess (text) {
