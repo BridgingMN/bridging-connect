@@ -6,7 +6,8 @@
       <md-button class="md-raised" ng-click="vm.setAppointmentFilter(vm.CONSTANTS.APPOINTMENT_TYPE_BED)">Show Bed Orders Only</md-button>
     </div>
   </md-toolbar>
-  <md-content class="caseworker-appointment-cards" layout="row" layout-wrap flex-offset="10">
+  <div>
+  <md-content class="caseworker-appointment-cards" layout="row" layout-align="center center" layout-wrap>
     <div
     class="appointment-card md-whiteframe-3dp"
     ng-repeat="appointment in vm.caseworkerAppointments | filter: vm.appointmentFilter"
@@ -33,11 +34,13 @@
           </div>
         </div>
         <p class="appointment-status">
-          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+          <i ng-if="appointment.info.status == 'confirmed'" class="fa fa-calendar-check-o" aria-hidden="true"></i>
+          <i ng-if="appointment.info.status == 'pending'" class="fa fa-calendar-o" class="fa fa-shopping-cart" aria-hidden="true"></i>
           {{appointment.info.status}}
         </p>
       </div>
-      <div class="appointment-card-body" layout="column" layout-align="center center">
+      <div layout="row" layout-align="center center">
+      <div class="appointment-card-body" layout="column" layout-align="center start">
         <p>
           <i class="material-icons">access_time</i>
           {{appointment.info.start_time}}
@@ -52,16 +55,31 @@
           {{appointment.info.location_name}}
         </p>
       </div>
+    </div>
       <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
-          <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+        <div class="appointment-card-delivery-details" layout="row" layout-align="start center" ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+          <div flex="25">
             <i class="fa fa-truck" aria-hidden="true"></i>
-            <span ng-if="appoint.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}</span>
-            <span ng-if="appoint.info.delivery_date == undefined">Delivery date TBD</span>
-          </p>
-          <p ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
+          </div>
+          <div flex="75">
+            <span ng-if="appointment.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}</span>
+            <span ng-if="appointment.info.delivery_date == undefined">Delivery date TBD</span>
+          </div>
+        </div>
+        <div layout="row" ng-if="appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
+          <div flex="25">
             <i class="fa fa-car" aria-hidden="true"></i>
-            <span>Client Pick Up</span>
-          </p>
+          </div>
+          <div flex="75">
+            <span>Pick up</span>
+            <span ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED">
+              between 9 am and 3 pm
+            </span>
+            <span ng-if="appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+              within 48 hours after appointment
+            </span>
+          </div>
+        </div>
       </div>
       <div class="appointment-card-buttons" layout="column">
           <md-button
@@ -87,5 +105,6 @@
           </md-button>
       </div>
     </md-content>
+  </div>
   </div>
 </div>
