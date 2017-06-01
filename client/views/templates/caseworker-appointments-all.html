@@ -6,7 +6,8 @@
       <md-button class="md-raised" ng-click="vm.setAppointmentFilter(vm.CONSTANTS.APPOINTMENT_TYPE_BED)">Show Bed Orders Only</md-button>
     </div>
   </md-toolbar>
-  <md-content class="caseworker-appointment-cards" layout="row" layout-wrap flex-offset="10">
+  <div>
+  <md-content class="caseworker-appointment-cards" layout="row" layout-align="center center" layout-wrap>
     <div
     class="appointment-card md-whiteframe-3dp"
     ng-repeat="appointment in vm.caseworkerAppointments | filter: vm.appointmentFilter"
@@ -104,5 +105,6 @@
           </md-button>
       </div>
     </md-content>
+  </div>
   </div>
 </div>
