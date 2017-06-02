@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon server/app.js",
+    "test": "node -r dotenv/config server/app.js",
     "postinstall": "grunt uglify copy",
     "start": "node server/app.js"
   },
@@ -43,6 +43,7 @@
     "bcrypt": "^0.8.5",
     "body-parser": "^1.13.3",
     "chance": "^1.0.9",
+    "dotenv": "^4.0.0",
     "express": "^4.13.1",
     "express-session": "^1.13.0",
     "grunt": "^1.0.1",
