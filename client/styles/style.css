@@ -1,9 +1,19 @@
+.app-title {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size: 28px;
+  text-transform: uppercase;
+}
+
 .md-toolbar-tools .logo{
-  max-height: 100%;
-  margin: 8px;
+  max-height: 62px;
+  margin: 7px;
   margin-left: 0px;
   position: relative;
-  top: 5px;
+  top: 9px;
+}
+
+.main-logo {
+  max-height: 300px;
 }
 
 .navigation-tabs md-content {
@@ -14,22 +24,54 @@
   color: white;
 }
 
-.caseworker-appointment-cards .appointment-card {
-  border: 1px solid black;
-  margin: 1em;
+md-toolbar.appointment-filter-buttons, md-toolbar.admin-tools {
+  background-color: white;
 }
 
-.appointment-card .appointment-card-header {
+md-input-container.admin-search {
+  margin: 0;
+  margin-top: 37px;
+}
+
+.caseworker-appointment-cards .appointment-card {
+  /*border: 1px solid rgba(0,0,0,0.05);*/
+  margin: 1em;
+  min-width: 280px;
+}
+
+.appointment-card .appointment-card-header, .appointment-slot-card {
   background-color: #54C0C9;
   color: white;
+}
+
+.appointment-card p {
+  margin: 0.1em 0;
+}
+
+.appointment-card-header .appointment-date p{
+  padding: 1px   15px;
+  border-right: 1px solid white;
+}
+
+.appointment-card-header .appointment-status {
+  margin-bottom: 0.6em;
+}
+
+.appointment-card-header .appointment-status .fa{
+  font-size: 1.5em;
+}
+
+.appointment-card .appointment-card-body p {
+  margin: 0.4em 0;
 }
 
 .appointment-card .appointment-card-delivery-info {
   background-color: rgb(224, 224, 224);
   color: rgb(54, 54, 54);
+  height: 80px;
 }
 
-.md-calendar-date .md-calendar-date-selection-indicator {
+.appointment-schedule-calendar .md-calendar-date .md-calendar-date-selection-indicator {
   background-color: lightgreen;
 }
 
@@ -37,13 +79,59 @@
   max-height: 50px;
 }
 
-.appointment-date, .appointment-delivery, .appointment-type {
+.appointment-date, .appointment-delivery, .appointment-type, .appointment-status {
   text-transform: capitalize;
+}
+
+.fa, .material-icons {
+  font-size: 2em;
+}
+
+.material-icons {
+  position: relative;
+  top: 9px;
+  left: -2px;
+}
+
+.appointment-card-header .fa {
+  font-size: 2.5em;
+  padding-right: 10px;
+}
+
+.appointment-card-delivery-details {
+  width: 100%;
+}
+
+.appointment-slot-card md-input-container {
+  margin: 0;
+}
+
+.appointment-slot-card md-input-container input{
+  background-color: white;
+  max-width: 30px;
+  margin: 0;
+
 }
 
 #agencyInfo {
   text-align: center;
-  background-color: LightSteelBlue;
+  background-color: #90c9ce;
   border-radius: 25px;
-  width: 75%;
+  width: 50%;
+}
+
+#aptHeader {
+  background-color: #54C0C9;
+  color: white;
+}
+
+#clientHeader {
+  background-color: #54C0C9;
+  color: white;
+  height: 121px;
+  font-size: 36px;
+}
+
+.odd {
+  background-color: #F5F5F5 !important;
 }

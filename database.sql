@@ -116,19 +116,13 @@ CREATE TABLE IF NOT EXISTS "appointment_slots" (
 -- stores one-off changes to default schedule
 CREATE TABLE IF NOT EXISTS "overrides" (
   id SERIAL PRIMARY KEY,
-  appointment_type_id INTEGER NOT NULL REFERENCES "appointment_types",
-  delivery_method_id INTEGER NOT NULL REFERENCES "delivery_methods",
   appointment_slot_id INTEGER NOT NULL REFERENCES "appointment_slots",
-  location_id INTEGER NOT NULL REFERENCES "locations",
   override_date DATE NOT NULL,
-  start_time TIME NOT NULL,
-  end_time TIME NOT NULL,
   num_allowed INTEGER
 );
 
 -- create "Appts" table
 -- refers to a single appointment that has been made by a caseworker
--- TODO: start confirmation_id at 45001 (will be used as Confirmation#)
 CREATE TABLE IF NOT EXISTS "appointments" (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES "users",
@@ -140,6 +134,8 @@ CREATE TABLE IF NOT EXISTS "appointments" (
   delivery_date DATE,
   confirmation_id SERIAL
 );
+-- Starts confirmation_id at 45001 (will be used as Confirmation#)
+ALTER SEQUENCE appointments_confirmation_id_seq RESTART WITH 45001;
 
 -- create "Zip_codes" table
 CREATE TABLE IF NOT EXISTS "zip_codes" (

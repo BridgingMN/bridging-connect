@@ -1,7 +1,7 @@
 angular
   .module('myApp')
-  .controller('AdminCaseworkerEditController', ['$http', '$location', 'UserService',
-      function($http, $location, UserService) {
+  .controller('AdminCaseworkerEditController', ['$http', '$location', '$mdDialog', 'UserService',
+      function($http, $location, $mdDialog, UserService) {
   // DATA-BINDING VARIABLES
   var vm = this; // controller reference
   vm.caseworker = UserService.caseworker;
@@ -15,7 +15,7 @@ angular
     console.log('EDITING CASEWORKER: ', caseworker);
     $http.put('/caseworkers', caseworker).then(function() {
       $location.path('/admin-caseworker-overview');
-      alert('Your edits to ' + caseworker.first + caseworker.last + ' have been saved.');
+      caseworkerAlertDialog('Caseworker Updated', 'Your edits to ' + caseworker.first + ' ' + caseworker.last + ' have been saved.');
     });
   }
 
@@ -27,11 +27,21 @@ angular
         $http.delete('/caseworkers/' + caseworker.user_id).then(function() {
           console.log('Deleted caseworker: ', caseworker.id);
           $location.path('/admin-caseworker-overview');
-          alert(caseworker.first + ' ' + caseworker.last + ' has been deleted.');
+          caseworkerAlertDialog('Caseworker Deleted', caseworker.first + ' ' + caseworker.last + ' has been deleted.');
           });
       } else {
         $location.path('/admin-caseworker-edit');
       }
+    }
+
+    function caseworkerAlertDialog(title, text) {
+      $mdDialog.show(
+       $mdDialog.alert()
+         .clickOutsideToClose(true)
+         .title(title)
+         .textContent(text)
+         .ok('Okay')
+     );
     }
 
 }]);

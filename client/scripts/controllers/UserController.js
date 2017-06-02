@@ -6,11 +6,14 @@ angular
 
   vm.CONSTANTS = CONSTANTS;
   vm.userObject = UserService.userObject;
+  console.log('Header userObject', vm.userObject);
 
   // DATA-BINDING FUNCTIONS
   vm.logout = UserService.logout;
   vm.newShoppingAppointment = newShoppingAppointment;
   vm.newBedAppointment = newBedAppointment;
+
+  vm.navBar = UserService.navBar;
 
   function newShoppingAppointment() {
     if (!UserService.userObject.user.agency_access_disabled && !UserService.userObject.user.user_access_disabled) {

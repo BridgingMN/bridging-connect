@@ -11,7 +11,7 @@ angular
 
   //Model for the clientReferralForm
   vm.clientReferralForm = {
-
+    dob: new Date()
   };
 
   //These are placeholders, these will be properties of the clientReferralForm object
@@ -37,6 +37,7 @@ angular
 
   function appointmentCreateSuccess(response) {
     console.log(response)
+    UserService.navBar.updateCurrentNavItem('/caseworker-appointments-all');
     $location.path('/caseworker-appointments-all');
   }
 

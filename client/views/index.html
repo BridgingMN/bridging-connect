@@ -4,6 +4,7 @@
         <title>Bridging</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- STYLESHEETS -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://use.fontawesome.com/c0f88dee2c.js"></script>
         <link rel="stylesheet" href="vendors/angular-material/angular-material.css">
@@ -22,11 +23,11 @@
         <!-- APP CONFIG -->
         <script type="text/javascript" src="/scripts/client.min.js"></script>
     </head>
-    <body layout="column" flex>
+    <body layout="column">
 
       <header ng-include="'/views/partials/header.html'"></header>
 
-      <main ng-view layout="column" class="md-padding" flex></main>
+      <main ng-view layout="column" class="" flex></main>
 
       <!--REMOVE BEFORE PUSHING TO HEROKU-->
       <script src="//localhost:35729/livereload.js"></script>

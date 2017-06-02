@@ -1,20 +1,19 @@
 <div layout="column" flex = "100" layout-align = "start center"
-      ng-init = "vm.getAllAppointments()">
-    <h2>All Appointments</h2>
-
-<div layout = "row">
-  <md-input-container>
-    <label>Search</label>
-    <input ng-model = "test">
-  </md-input-continer>
-</div>
-
-  <md-table-container>
-    <table md-table md-row-select multiple ng-model="vm.selected" md-progress="promise">
+      ng-init = "vm.getAllAppointments()" layout-margin>
+  <md-table-container class="md-whiteframe-1dp">
+    <div class="md-toolbar-tools" layout = "row" layout-align="end center">
+      <md-input-container class="admin-search" >
+        <label>Search</label>
+        <input type="text" ng-model= "test">
+      </md-input-continer>
+    </div>
+    <table md-table md-progress="promise">
     <thead md-head md-order="vm.query.order" md-on-reorder="vm.getAllAppointments">
       <tr md-row>
-        <th md-column md-date md-order-by="vm.allAppointments.date"><span>Date</span></th>
-        <th md-column md-numeric md-order-by="vm.allAppointments.time"><span>Time</span></th>
+        <th md-column md-date><span>Date</span></th>
+        <th md-column md-numeric><span>Time</span></th>
+        <th md-column md-numeric>Location</th>
+        <th md-column md-numeric>Delivery or Pickup</th>
         <th md-column md-numeric>Type</th>
         <th md-column md-numeric>Agency</th>
         <th md-column md-numeric>Caseworker</th>
@@ -25,11 +24,14 @@
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row md-select="appointment" md-select-id="name" md-auto-select
+      <tr md-row
           ng-repeat="appointment in vm.allAppointments.array | filter : test |
-          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit">
+          limitTo: vm.query.limit: (vm.query.page -1) * vm.query.limit"
+          ng-class-odd = "'odd'" ng-class-even = "'even'">
         <td md-cell>{{appointment.appointment_date | date}}</td>
         <td md-cell>{{appointment.start_time}}</td>
+        <td md-cell>{{appointment.location_name}}</td>
+        <td md-cell>{{appointment.delivery_method}}</td>
         <td md-cell>{{appointment.appointment_type}}</td>
         <td md-cell>{{appointment.name}}</td>
         <td md-cell>{{appointment.user_first}} {{appointment.user_last}}</td>
@@ -37,7 +39,7 @@
         <td md-cell>{{appointment.status}}</td>
         <td md-cell>{{appointment.confirmation_id}}</td>
         <td md-cell><a href="#admin-appointment-review"
-            ng-click = "vm.viewAppointment(appointment)">See Details</a></td>
+            ng-click = "vm.viewDetails(appointment.id)">See Details</a></td>
       </tr>
     </tbody>
   </table>

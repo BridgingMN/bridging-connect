@@ -247,9 +247,19 @@ VALUES ((SELECT "id" FROM "appointment_types" WHERE "appointment_type" = $1),
 
 ---- CHECK OVERRIDES ----
 -- Selects any rows from the overrides table that match a particular date range
-SELECT *
+SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed", "appointment_slots"."start_time",
+"appointment_slots"."end_time", "locations"."location" AS "location_name", "locations"."street",
+"locations"."city", "locations"."state", "appointment_types"."appointment_type",
+"delivery_methods"."delivery_method", "days"."name" AS "day", "overrides"."override_date"
 FROM "overrides"
-WHERE "override_date" >= '5/20/17'
-AND "override_date" <= '6/21/17';
+JOIN "appointment_slots" ON "overrides"."appointment_slot_id" = "appointment_slots"."id"
+JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"
+JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"
+JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"
+JOIN "days" ON "appointment_slots"."day_id" = "days"."id"
+WHERE "override_date" >= $1
+AND "override_date" <= $2
+AND "overrides"."appointment_slot_id" = ANY($3::int[]);
 -- $1: min_date
 -- $2: max_date
+-- $3: array of appointment slots

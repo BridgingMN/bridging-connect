@@ -1,5 +1,7 @@
 <div class="login-container" layout="column" layout-align="center center" flex>
-  <h1>Login</h1>
+  <div layout="column" layout-align="center center">
+    <img class="main-logo" src="/assets/main-logo-1.png" alt="">
+  </div>
   <h2 role="alert" ng-if="vm.message !== ''">{{vm.message}}</h2>
   <form ng-submit="vm.loginUser(vm.tempUser)" layout="column">
     <md-input-container>
@@ -14,7 +16,9 @@
         type="password"
         ng-model="vm.tempUser.password" />
     </md-input-container>
-    <md-button type="submit" name="submit">Log In</md-button>
+    <div layout="row" layout-align="center center">
+      <md-button class="md-primary md-raised" type="submit" name="submit">Log In</md-button>
+      <a href="#forgotpassword"><md-button class="md-raised" type="button">Forgot Password</md-button></a>
+    </div>
   </form>
-  <a href="#register"><md-button type="button">Register</md-button></a>
 </div>

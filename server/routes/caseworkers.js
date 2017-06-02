@@ -1,6 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../modules/database.js');
+var tokens = require('../modules/tokens.js');
+var mail = require('../modules/mail.js');
+var formatters = require('../modules/formatters.js');
+var formatDateForPostgres = formatters.formatDateForPostgres;
 
 /**
   * @api {get} /caseworkers Get All Caseworkers
@@ -139,16 +143,18 @@ router.post('/', function(req, res) {
     var access_disabled = req.body.access_disabled || false;
     var notes = req.body.notes || null;
     var user_type = 'caseworker';
+    var token = tokens.generateToken();
+    var token_expiration = tokens.generateExpirationDate(15);
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
         res.sendStatus(500);
       } else { // we connected
-        database.query('INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id") ' +
+        database.query('INSERT INTO "users" ("agency_id", "first", "last", "day_phone", "ext", "email", "access_disabled", "notes", "user_type_id", "token", "token_expiration") ' +
                         'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, ' +
-                        '(SELECT "id" FROM "user_types" WHERE "user_type" = $9)) ' +
-                        'RETURNING "id";',
-                        [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type],
+                        '(SELECT "id" FROM "user_types" WHERE "user_type" = $9), $10, $11) ' +
+                        'RETURNING "id", "first", "last", "day_phone", "ext", "email", "access_disabled";',
+                        [agency_id, first, last, day_phone, ext, email, access_disabled, notes, user_type, token, formatDateForPostgres(token_expiration)],
           function(queryErr, result) { // query callback
             done(); // release connection to the pool
             if (queryErr) {
@@ -156,7 +162,8 @@ router.post('/', function(req, res) {
               res.sendStatus(500);
             } else {
               console.log('successful insert into "caseworkers"', result);
-              res.send(result);
+              mail.invite(result.rows[0], token, token_expiration);
+              res.send(result.rows[0]);
             }
         }); // end query
       } // end if-else

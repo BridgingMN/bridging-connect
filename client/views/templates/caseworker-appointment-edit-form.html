@@ -1,6 +1,6 @@
-<div class="caseworker-appointment-referall-form" layout="column" layout-align="start center">
-  <h3>Edit Client Referall Form</h3>
-  <div class="caseworker-appointment-info" layout="row" layout-align="center center">
+<div class="md-padding caseworker-appointment-referall-form" layout="column" layout-align="start center">
+  <h3>Edit Client Referral Form</h3>
+  <div class="md-whiteframe-3dp caseworker-appointment-info" layout="row" layout-align="center center">
     <div class="md-padding appointment-type">
       <span>{{vm.appointment.appointment_type}} w/ {{vm.appointment.delivery_method}}</span>
     </div>
@@ -38,7 +38,7 @@
       </md-input-container>
       <md-input-container>
         <label>Select a race/ethnicity</label>
-        <md-select ng-model="vm.clientEthnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+        <md-select ng-model="vm.clientReferralForm.race_ethnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
             <md-select-label>Select a race/ethnicity</md-select-label>
             <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
         </md-select>
