@@ -1,12 +1,11 @@
 var nodemailer = require('nodemailer');
-var email = require('./config.js');
 var path = require('path');
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: email.address,
-    pass: email.pw
+    user: process.env.address,
+    pass: process.env.pw
   }
 });
 
@@ -17,7 +16,7 @@ function invite(caseworkerObject, token, token_expiration) {
   console.log('token_expiration', token_expiration);
   var toEmail = caseworkerObject.email;
   var subject = 'Bridging Account Created';
-  var activateLink = 'http://localhost:5000/#/updatepassword/' + token + '/' + toEmail + '/activate';
+  var activateLink = process.env.HOSTING_URL + '/#/updatepassword/' + token + '/' + toEmail + '/activate';
   var emailBody = 'An account has been created for you on the Bridging scheduling application. To complete activation and setup your password, click the following link: \n\n' + activateLink + ' . \n\n This link will expire on ' + token_expiration.toDateString() + '.';
   var emailHTML = '<p>An account has been created for you on the Bridging scheduling application. <strong> Please verify the information below is accurate and activate your account using the link provided.</strong></p>'+
   '<table>' +
@@ -46,7 +45,7 @@ function invite(caseworkerObject, token, token_expiration) {
 
 function resetPassword(toEmail, resetToken) {
   var subject = 'Reset Bridging.org Password';
-  var passwordResetLink = 'http://localhost:5000/#/updatepassword/' + resetToken + '/' + toEmail + '/updatedPassword' ;
+  var passwordResetLink = process.env.HOSTING_URL + '/#/updatepassword/' + resetToken + '/' + toEmail + '/updatedPassword' ;
   var emailBody = 'A password reset has been initiated for your account. To reset your password, click the following link:\n\n' + passwordResetLink + '\n\n If you did not initiate this password reset you may ignore this e-mail.';
 
   var mailOptions = {

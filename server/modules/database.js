@@ -1,8 +1,7 @@
 var pg = require('pg');
-var dbConfig = require('./config.js');
 var pool;
 var config = {
-  user: dbConfig.PG_USERNAME, // env var: PGUSER
+  user:process.env.PG_USERNAME, // env var: PGUSER
   database: 'bridging', // env var: PGDATABASE
   password: '', // env var: PGPASSWORD
   port: 5432, // env var: PGPORT
