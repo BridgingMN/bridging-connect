@@ -36,7 +36,7 @@ One Paragraph of project description goes here
 
 ### 1.4 View all agencies
 
-![Agencies](Agencies.png)
+![Agencies](screenshots/Agencies.png)
 
 ### 1.4.1 Add a new agency
 
@@ -44,7 +44,7 @@ One Paragraph of project description goes here
 
 ### 1.5 View Default Schedule
 
-![Default Schedule](DefaultSchedule.png)
+![Default Schedule](screenshots/DefaultSchedule.png)
 
 ### 1.5.1 Add new Default Slot
 
@@ -54,11 +54,11 @@ One Paragraph of project description goes here
 
 ### 1.6.1 Add New Override by Date
 
-![Override By Date](OverrideByDate.png)
+![Override By Date](screenshots/OverrideByDate.png)
 
 ### Caseworker Login
 
-![Login](Login.png)
+![Login](screenshots/Login.png)
 
 ## Getting Started
 
