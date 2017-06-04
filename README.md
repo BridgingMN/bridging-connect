@@ -1,6 +1,8 @@
 # [Bridging MN Appointment Scheduling Application](https://bridging-connect.herokuapp.com)
 
-One Paragraph of project description goes here
+Bridging Connect is a custom-built appointment management application for Bridging, a nonprofit furniture bank in the Twin Cities metro area. Bridging makes 4500 appointments every year with individuals in need of furniture and basic household goods. The appointments are made for these individuals by social service caseworkers, over 1600 of whom are currently registered in Bridging’s system.
+
+Bridging Connect is built to smoothly facilitate the scheduling of shopping appointments, pickups and deliveries at Bridging’s Bloomington and Roseville locations. It includes an interface for caseworkers to schedule appointments for their clients, as well as an administrator interface for managing user accounts and appointment availability.
 
 ## Application Features
 
@@ -144,7 +146,7 @@ grunt
 npm start
 ```
 
-4. Open in the browser.
+5. Open in the browser.
 
 ```
 localhost:8000
@@ -185,6 +187,5 @@ Add additional notes about how to deploy this on a live system
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Bridging for the inspirational work they do helping furnish homes for thousands of people in need.
-* Prime Digital Academy Instructors for ongoing support.
+* Thanks to Bridging for the inspirational work they do helping furnish homes for thousands of people in need.
+* Thanks to Prime Digital Acadedmy Instructors Scott Bromander, Chris Black, and Luke Schlangen for support during this project.
