@@ -149,7 +149,7 @@ npm start
 5. Open in the browser.
 
 ```
-localhost:8000
+localhost:5000
 ```
 
 ## Built With
