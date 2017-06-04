@@ -2,6 +2,64 @@
 
 One Paragraph of project description goes here
 
+## Application Features
+
+### Administrator Login
+
+![Login](Login.png)
+
+### 1.1 View all appointments
+
+### 1.1.1 Search based on any parameters the appointment
+
+### 1.1.2 View Details of each appointment
+
+### 1.1.3 Edit Appointment or Client Information
+
+### 1.1.4 Confirm, Cancel or Deny Appointment
+
+### 1.2 View all pending appointments
+
+### 1.2.1 Search based on any parameters the appointment
+
+### 1.2.2 View Details of each appointment
+
+### 1.2.3 Edit Appointment or Client Information
+
+### 1.2.4 Confirm, Cancel or Deny Appointment
+
+### 1.3 View all caseworkers
+
+### 1.3.1 Add a new caseworker
+
+### 1.3.2 Edit or Delete caseworker
+
+### 1.4 View all agencies
+
+![Agencies](Agencies.png)
+
+### 1.4.1 Add a new agency
+
+### 1.4.2 Edit or Delete agency
+
+### 1.5 View Default Schedule
+
+![Default Schedule](DefaultSchedule.png)
+
+### 1.5.1 Add new Default Slot
+
+### 1.5.2 Edit Default Slot
+
+### 1.6 View Schedule Overrides
+
+### 1.6.1 Add New Override by Date
+
+![Override By Date](OverrideByDate.png)
+
+### Caseworker Login
+
+![Login](Login.png)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
