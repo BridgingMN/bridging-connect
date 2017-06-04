@@ -6,9 +6,9 @@ One Paragraph of project description goes here
 
 ### Administrator Login
 
-![Login](Login.png)
+![Login](screenshots/Login.png)
 
-### 1.1 View all appointments
+### 1.1.0 View all appointments
 
 ### 1.1.1 Search based on any parameters the appointment
 
@@ -18,7 +18,7 @@ One Paragraph of project description goes here
 
 ### 1.1.4 Confirm, Cancel or Deny Appointment
 
-### 1.2 View all pending appointments
+### 1.2.0 View all pending appointments
 
 ### 1.2.1 Search based on any parameters the appointment
 
@@ -28,7 +28,7 @@ One Paragraph of project description goes here
 
 ### 1.2.4 Confirm, Cancel or Deny Appointment
 
-### 1.3 View all caseworkers
+### 1.3.0 View all caseworkers
 
 ### 1.3.1 Add a new caseworker
 
@@ -42,7 +42,7 @@ One Paragraph of project description goes here
 
 ### 1.4.2 Edit or Delete agency
 
-### 1.5 View Default Schedule
+### 1.5.0 View Default Schedule
 
 ![Default Schedule](screenshots/DefaultSchedule.png)
 
@@ -50,7 +50,7 @@ One Paragraph of project description goes here
 
 ### 1.5.2 Edit Default Slot
 
-### 1.6 View Schedule Overrides
+### 1.6.0 View Schedule Overrides
 
 ### 1.6.1 Add New Override by Date
 
@@ -59,6 +59,32 @@ One Paragraph of project description goes here
 ### Caseworker Login
 
 ![Login](screenshots/Login.png)
+
+### 2.1.0 View All Appointments
+
+### 2.1.1 Cancel or Reschedule Appointments
+
+### 2.1.2 Edit Client Referral Form
+
+### 2.2.0 Create New Appointment for furniture
+
+### 2.2.1 Caseworker selects delivery or pick up
+
+### 2.2.2 Delivery option directs you to warehouse location based on Zipcode
+
+### 2.2.3 Caseworker selects preferred appointment Date and time
+
+### 2.2.3 Caseworker completes Client Referral Form
+
+### 2.3.0 Create New Appointment for New Bed Only
+
+### 2.3.1 Caseworker selects delivery or pick up
+
+### 2.3.2 Delivery option directs you to warehouse location based on Zipcode
+
+### 2.3.3 Caseworker selects preferred appointment Date and time
+
+### 2.3.3 Caseworker completes Client Referral Form
 
 ## Getting Started
 
