@@ -101,8 +101,7 @@ angular
     //Convert date string from appointment object to a Javascript Date
     appointmentDate = new Date (appointmentDate);
     //Return a comparison of the two dates.
-    // console.log(appointmentDate.getTime(), date.getTime());
-    // console.log(typeof appointmentDate.getTime(),typeof date.getTime());
-    return appointmentDate.getTime() == date.getTime();
+    var match = appointmentDate.toISOString().substr(0,10) === date.toISOString().substr(0,10);
+    return (match);
   }
 }]);
