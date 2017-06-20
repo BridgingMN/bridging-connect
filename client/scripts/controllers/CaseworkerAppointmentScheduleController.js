@@ -49,8 +49,8 @@ angular
   }
 
   function availableAppointmentsPredicate (date) {
-    // console.log('Selected date', date, typeof date);
-    // console.log(vm.availableAppointments.some(filterAppointmentsByDate, date));
+    console.log('Selected date', date, typeof date);
+    console.log(vm.availableAppointments.some(filterAppointmentsByDate, date));
     return vm.availableAppointments.some(filterAppointmentsByDate, date);
   }
 
@@ -86,6 +86,7 @@ angular
   */
   function filterAppointmentsByDate(appointment) {
     var date = this;
+    console.log(appointment.date, date);
     return compareDates(appointment.date, date);
   }
 
@@ -100,6 +101,7 @@ angular
     //Convert date string from appointment object to a Javascript Date
     appointmentDate = new Date (appointmentDate);
     //Return a comparison of the two dates.
-    return appointmentDate.getTime() == date.getTime();
+    var match = appointmentDate.toISOString().substr(0,10) === date.toISOString().substr(0,10);
+    return (match);
   }
 }]);
