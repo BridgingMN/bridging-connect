@@ -9,37 +9,38 @@ function getAvailableAppts(appointment_type, delivery_method, location_id, min_d
 }
 
 function getApptSlots(appointment_type, delivery_method, location_id, min_date, max_date, res) {
-  pool.connect(function(connectionError, db, done) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-      return connectionError;
-    } else {
-      db.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
-      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-      '"locations"."location" AS "location_name", "locations"."street", "locations"."city",' +
-      '"locations"."state", "appointment_types"."appointment_type",' +
-      '"delivery_methods"."delivery_method", "days"."name" AS "day" FROM "appointment_slots"' +
-      'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
-      'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
-      'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
-      'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-      'WHERE "appointment_types"."appointment_type" = $1' +
-      'AND "delivery_methods"."delivery_method" = $2' +
-      'AND "locations"."id" = $3',
-      [appointment_type, delivery_method, location_id],
-      function(queryError, result){
-        done();
-        if (queryError) {
-          console.log(queryError, 'ERROR MAKING QUERY');
-        } else {
-          var apptSlots = result.rows;
-          var apptSlotIds = apptSlots.map(function(apptSlot) {
-            return apptSlot.appointment_slot_id;
-          });
-          return countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res);
-        }
-      });
-    }
+  pool.connect().then(function(client) {
+    client.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
+    '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
+    '"locations"."location" AS "location_name", "locations"."street", "locations"."city",' +
+    '"locations"."state", "appointment_types"."appointment_type",' +
+    '"delivery_methods"."delivery_method", "days"."name" AS "day" FROM "appointment_slots"' +
+    'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
+    'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
+    'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
+    'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
+    'WHERE "appointment_types"."appointment_type" = $1' +
+    'AND "delivery_methods"."delivery_method" = $2' +
+    'AND "locations"."id" = $3',
+    [appointment_type, delivery_method, location_id])
+    .then(function(result) {
+        var apptSlots = result.rows;
+        var apptSlotIds = apptSlots.map(function(apptSlot) {
+          return apptSlot.appointment_slot_id;
+        });
+        var objectToPass = {
+          apptSlotIds: apptSlotIds,
+          apptSlots: apptSlots,
+          min_date: min_date,
+          max_date: max_date,
+          res: res
+        };
+        return countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res);
+    })
+    .catch(function(e) {
+      client.release();
+      console.error('query error', e.message, e.stack);
+    });
   });
 }
 
