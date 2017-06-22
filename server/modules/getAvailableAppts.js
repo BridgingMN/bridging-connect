@@ -3,7 +3,7 @@ var moment = require('moment');
 var Promise = require('bluebird');
 
 // DATABASE MODULE
-var pool = require('../modules/database.js'); // has been promisified with Bluebird
+var pool = require('../modules/database.js'); // pg pool that has been promisified with Bluebird
 
 // CUSTOM MODULES
 var formatters = require('./formatters.js');
@@ -64,11 +64,12 @@ function getAvailableAppointments(appointmentType, deliveryMethod, locationId, m
 function getAppointmentSlots(appointmentType, deliveryMethod, locationId) {
   return pool.connect().then(function(client) {
     return client.query(
-      'SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
-      '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
-      '"locations"."location" AS "location_name", "locations"."street", "locations"."city",' +
-      '"locations"."state", "appointment_types"."appointment_type",' +
-      '"delivery_methods"."delivery_method", "days"."name" AS "day" FROM "appointment_slots"' +
+      'SELECT "appointment_slots"."id" AS "appointment_slot_id",' +
+      '"appointment_slots"."num_allowed", "appointment_slots"."start_time",' +
+      '"appointment_slots"."end_time", "locations"."location" AS "location_name",' +
+      '"locations"."street", "locations"."city", "locations"."state",' +
+      '"appointment_types"."appointment_type", "delivery_methods"."delivery_method",' +
+      '"days"."name" AS "day" FROM "appointment_slots"' +
       'JOIN "locations" ON "appointment_slots"."location_id" = "locations"."id"' +
       'JOIN "delivery_methods" ON "appointment_slots"."delivery_method_id" = "delivery_methods"."id"' +
       'JOIN "appointment_types" ON "appointment_slots"."appointment_type_id" = "appointment_types"."id"' +
@@ -100,7 +101,8 @@ function getAppointmentSlots(appointmentType, deliveryMethod, locationId) {
 function countExistingAppointments(appointmentSlotIds, minDate, maxDate) {
   return pool.connect().then(function(client) {
     return client.query(
-      'SELECT "appointments"."appointment_date", "appointment_slots"."id" AS "appointment_slot_id", COUNT(*)' +
+      'SELECT "appointments"."appointment_date", "appointment_slots"."id"' +
+      'AS "appointment_slot_id", COUNT(*)' +
       'FROM "appointments"' +
       'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
       'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
