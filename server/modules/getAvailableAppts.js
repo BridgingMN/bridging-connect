@@ -25,27 +25,26 @@ function getAvailableAppointments(appointmentType, deliveryMethod, locationId, m
   var appointmentSlots, appointmentSlotIds, existingAppointmentCounts, appointmentOverrides;
 
   return new Promise(function(resolve, reject) {
-    // Retrieve array of relevant appointment slots
-    getAppointmentSlots(appointmentType, deliveryMethod, locationId)
+    // Retrieve relevant appointment slots (from a repeating weekly schedule, no date)
+    return getAppointmentSlots(appointmentType, deliveryMethod, locationId)
 
-    .then(function(result){
-      appointmentSlots = result;
-      appointmentSlotIds = createArrayFromProperty(appointmentSlots, 'appointment_slot_id');
+    .then(function(slots){
+      appointmentSlots = slots;
 
-      return Promise.all([
-        countExistingAppointments(appointmentSlotIds, minDate, maxDate),
-        getOverrides(appointmentSlotIds, minDate, maxDate)
-      ]);
+      // Get appointment overrides and counts of already-made appointments
+      return getConstraints(appointmentSlots, minDate, maxDate);
     })
 
-    .then(function([counts, overrides]){
-      existingAppointmentCounts = counts;
+    .then(function([overrides, counts]){
       appointmentOverrides = overrides;
-      return fillOutDateRange(minDate, maxDate, appointmentSlots, existingAppointmentCounts, appointmentOverrides);
+      existingAppointmentCounts = counts;
+
+      // Produce an array of objects representing available appointments on specific dates
+      return fillOutDateRange(appointmentSlots, minDate, maxDate, appointmentOverrides, existingAppointmentCounts);
     })
 
-    .then(function(result){
-      resolve(result);
+    .then(function(availableAppointments){
+      resolve(availableAppointments);
     })
 
     .catch(function(error){
@@ -165,50 +164,120 @@ function getOverrides(appointmentSlotIds, minDate, maxDate) {
 }
 
 // HELPER FUNCTIONS
+/**
+  * Takes appointment slots and finds out how full they are & what appointment overrides exist
+  * @param {Array<object>} appointmentSlots - array of appointment objects
+  * @param {String} minDate - inclusive lower bound of date range, formatted as 'YYYY-MM-DD'
+  * @param {String} maxDate - inclusive upper bound of date range, formatted as 'YYYY-MM-DD'
+  * @returns {Array<array>} - array with two subarrays (appointment counts & overrides)
+*/
+function getConstraints(appointmentSlots, minDate, maxDate) {
+  appointmentSlotIds = createArrayFromProperty(appointmentSlots, 'appointment_slot_id');
+
+  return Promise.all([
+    getOverrides(appointmentSlotIds, minDate, maxDate),
+    countExistingAppointments(appointmentSlotIds, minDate, maxDate)
+  ]);
+}
 
 /**
   * Generic function to take an array of objects and return a simpler array that
-    contains only the values for one property of the object
+    contains only the values for one property of the objects
   * @param {Array<object>} objectArray - an array of objects with at least one shared property
   * @param {String} key - the key for a shared property of the objects
   * @returns {Array} - an array of values corresponding to the key parameter
 */
 function createArrayFromProperty(objectArray, key) {
-  var newArray = objectArray.map(function(object) {
+  return objectArray.map(function(object) {
     return object[key];
   });
-  return newArray;
 }
 
-function fillOutDateRange(minDate, maxDate, appointmentSlots, existingAppointmentCounts, overrides) {
-  var appointmentsAvailable = [];
+/**
+  * Produces an array of appointments (with dates & info) that are available for
+    scheduling within a given date range
+    (i.e. ones for slots that have not yet reached their maximum number allowed)
+  * @param {Array<object>} appointmentSlots - array of appointment objects
+  * @param {String} minDate - inclusive lower bound of date range, formatted as 'YYYY-MM-DD'
+  * @param {String} maxDate - inclusive upper bound of date range, formatted as 'YYYY-MM-DD'
+  * @param {Array<object>} appointmentOverrides - array of appointment override objects
+  * @param {Array<object>} existingAppointmentCounts - array with counts of already-made appointments
+    for a given slot/date
+  * @returns {Array<object>} - array of objects representing available appointments
+*/
+function fillOutDateRange(appointmentSlots, minDate, maxDate, appointmentOverrides, existingAppointmentCounts) {
+  var availableAppointments = [];
   var slotsForDate;
   var date = minDate;
   while (date <= maxDate) {
-    var overridesForDate = checkForOverrides(date, overrides);
-    if(overridesForDate.length > 0) {
-      console.log('returned from checkForOverrides:', overridesForDate);
-      slotsForDate = overridesForDate;
-    } else {
-      slotsForDate = findRelevant(appointmentSlots, date);
-    }
+    slotsForDate = findSlotsForDate(date, appointmentOverrides, appointmentSlots);
 
     for (var i = 0; i < slotsForDate.length; i++) {
-      var appointmentSlot;
-      var isAvailable = checkAvailability(slotsForDate[i], date, existingAppointmentCounts);
+      var appointmentSlot = slotsForDate[i];
+      var isAvailable = checkAvailability(appointmentSlot, date, existingAppointmentCounts);
       if (isAvailable){
-        appointmentSlot = shallowCopy(slotsForDate[i]);
-        appointmentSlot.date = formatDate(date);
-        appointmentSlot.start_time = formatTime(slotsForDate[i].start_time);
-        appointmentSlot.end_time = formatTime(slotsForDate[i].end_time);
-        appointmentsAvailable.push(appointmentSlot);
+        availableAppointments.push(copyAndEdit(appointmentSlot, date));
       }
     }
+    // Increment date up by one day
     date = moment(date).add(1, 'days').format('YYYY-MM-DD');
   }
-  return appointmentsAvailable;
+  return availableAppointments;
 }
 
+/**
+  * Finds the appointment slots for a particular date by checking for overrides and,
+    if there are none, finding the appointment slots that have the right day of the week
+  * @param {String} date - a date to be checked, formatted as 'YYYY-MM-DD'
+  * @param {Array<object>} appointmentOverrides - array of appointment override objects
+  * @param {Array<object>} appointmentSlots - array of appointment objects
+  * @returns {Array<object>} - an array of appointment slots for this date
+*/
+function findSlotsForDate(date, appointmentOverrides, appointmentSlots) {
+  var overridesForDate = checkForOverrides(date, appointmentOverrides);
+  if(overridesForDate.length > 0) {
+    slotsForDate = overridesForDate;
+  } else {
+    slotsForDate = findRelevant(appointmentSlots, date);
+  }
+
+  return slotsForDate;
+}
+
+/**
+  * Checks to see if appointment overrides have been made for a given date
+  * @param {String} date - a date formatted as 'YYYY-MM-DD'
+  * @param {Array<object>} appointmentOverrides - array of appointment override objects
+  * @returns {Array<object>} - an array of appointment override objects (may be empty)
+*/
+function checkForOverrides(date, appointmentOverrides) {
+  return appointmentOverrides.filter(function(row) {
+    return compareDates(row.override_date, date);
+  });
+}
+
+/**
+  * Converts date string from appointment object to a JavaScript Date and
+    returns a comparison of the two dates (true if they match; false if they don't)
+  * @param {String} appointmentDate - appointment date from existing appointments table
+  * @param {String} date - a date to be checked against, formatted as 'YYYY-MM-DD'
+  * @returns {Boolean} - whether or not dates match
+*/
+function compareDates(appointmentDate, date) {
+    appointmentDate = new Date (appointmentDate);
+    date = new Date(date);
+    var match = appointmentDate.toISOString().substr(0,10) == date.toISOString().substr(0,10);
+    return match;
+}
+
+/**
+  * Takes an array of appointment slots, which are drawn from a weekly repeating
+    schedule and therefore are attached to a day of the week, and finds the ones
+    that match the day of the week for a specific date
+  * @param {String} date - a date formatted as 'YYYY-MM-DD'
+  * @param {Array<object>} appointmentSlots - array of appointment objects
+  * @returns {Array<object>} - an array of appointment slots for this date
+*/
 function findRelevant(appointmentSlots, date) {
   var momentOfDate = moment(date);
   var day = momentOfDate.format('dddd');
@@ -218,8 +287,14 @@ function findRelevant(appointmentSlots, date) {
   return slotList;
 }
 
-// checks to see if an appointment slot on a particular date is still available
-// (i.e. not completely filled) and returns true if it is
+/**
+  * Checks to see if an appointment slot on a particular date is still available
+    (i.e. not completely filled) and returns true if it is, false if it isn't
+  * @param {Object} appointmentSlot - appointment slot object (from repeating schedule)
+  * @param {String} date - a date formatted as 'YYYY-MM-DD'
+  * @param {Array<object>} existingAppointmentCounts - array with counts of already-made appointments
+  * @returns {Boolean} - whether appointment is still available
+*/
 function checkAvailability(appointmentSlot, date, existingAppointmentCounts) {
   if (appointmentSlot.num_allowed < 1) {
     return false;
@@ -240,24 +315,28 @@ function checkAvailability(appointmentSlot, date, existingAppointmentCounts) {
   return true;
 }
 
-function compareDates(appointmentDate, date) {
-    //Convert date string from appointment object to a Javascript Date;
-    appointmentDate = new Date (appointmentDate);
-    date = new Date(date);
-    var match = appointmentDate.toISOString().substr(0,10) == date.toISOString().substr(0,10);
-    return (match);
-    //Return a comparison of the two dates.
+/**
+  * Copies appointment slot object, adds date property, and formats start &
+    end time for ease of use on client side
+  * @param {Object} appointmentSlot - appointment slot object (from repeating schedule)
+  * @param {String} date - date to be added to appointment, formatted as 'YYYY-MM-DD'
+  * @returns {Object} - appoinment object ready to be pushed to availableAppointments array
+*/
+function copyAndEdit(appointmentSlot, date) {
+  appointment = shallowCopy(appointmentSlot);
+
+  appointment.date = formatDate(date);
+  appointment.start_time = formatTime(appointment.start_time);
+  appointment.end_time = formatTime(appointment.end_time);
+
+  return appointment;
 }
 
-function checkForOverrides(date, overrides) {
-  return overrides.filter(function(row) {
-    return compareDates(row.override_date, date);
-  });
-}
-
+/** Generic function to make a shallow copy of an array (borrowed from Soulserv.net)
+  * @param {Array} original - an array to be copied
+  * @returns {Array} - a shallow copy of the array
+*/
 function shallowCopy(original) {
-    // First create an empty object with
-    // same prototype of our original source
     var clone = Object.create(Object.getPrototypeOf(original));
     var i, keys = Object.getOwnPropertyNames(original);
     for (i = 0; i < keys.length; i ++) {
