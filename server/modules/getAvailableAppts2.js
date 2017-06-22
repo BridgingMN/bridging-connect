@@ -1,44 +1,25 @@
 var moment = require('moment');
 var pool = require('../modules/database.js');
 var Promise = require('bluebird');
+var pg = Promise.promisifyAll(require('pg'));
 var formatters = require('./formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
 
-function getAvailableAppts(appointmentType, deliveryMethod, locationId, minDate, maxDate) {
-  var apptSlots, apptSlotIds, existingApptCounts, overrides;
-
-  return new Promise(function(resolve, reject) {
-    getApptSlots(appointmentType, deliveryMethod, locationId)
-    .then(function(result){
-      apptSlots = result.rows;
-      apptSlotIds = apptSlots.map(function(apptSlot) {
-        return apptSlot.appointment_slot_id;
-      });
-
-      return Promise.all([
-        countExistingAppts(apptSlotIds, minDate, maxDate),
-        getOverrides(minDate, maxDate, apptSlotIds)
-      ]);
-    })
-    .then(function(result){
-      existingApptCounts = result[0].rows;
-      overrides = result[1].rows;
-      return fillOutDateRange(minDate, maxDate, apptSlots, existingApptCounts, overrides);
-    })
-    .then(function(result){
-      resolve(result);
-    })
-    .catch(function(error){
-      reject(error);
+function getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date, res) {
+  getApptSlots(appointment_type, delivery_method, location_id, min_date, max_date, res)
+  .then(function(result){
+    var apptSlots = result.rows;
+    var apptSlotIds = apptSlots.map(function(apptSlot) {
+      return apptSlot.appointment_slot_id;
     });
+    countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res);
   });
 }
 
-function getApptSlots(appointmentType, deliveryMethod, locationId) {
+function getApptSlots(appointment_type, delivery_method, location_id, min_date, max_date, res) {
   return pool.connect().then(function(client, done) {
-    return client.query(
-      'SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
+      return client.query('SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
       '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
       '"locations"."location" AS "location_name", "locations"."street", "locations"."city",' +
       '"locations"."state", "appointment_types"."appointment_type",' +
@@ -50,37 +31,51 @@ function getApptSlots(appointmentType, deliveryMethod, locationId) {
       'WHERE "appointment_types"."appointment_type" = $1' +
       'AND "delivery_methods"."delivery_method" = $2' +
       'AND "locations"."id" = $3',
-      [appointmentType, deliveryMethod, locationId]
-    );
+      [appointment_type, delivery_method, location_id]);
   });
 }
 
-// apptSlotIds is an array of appointment_slot_ids
-// minDate & maxDate are dates that act as inclusive bounds of the date range to be searched
-function countExistingAppts(apptSlotIds, minDate, maxDate) {
-  return pool.connect().then(function(client, done) {
-    return client.query(
-      'SELECT "appointments"."appointment_date", "appointment_slots"."id" AS "appointment_slot_id", COUNT(*)' +
-      'FROM "appointments"' +
-      'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
-      'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
-      'WHERE "appointments"."appointment_slot_id" = ANY($1::int[])' +
-      'AND "appointments"."appointment_date" >= $2' +
-      'AND "appointments"."appointment_date" <= $3' +
-      'AND ("appointments"."status_id" =' +
-      '(SELECT "id" FROM "statuses" WHERE "status" = $4)' +
-      'OR "appointments"."status_id" =' +
-      '(SELECT "id" FROM "statuses" WHERE "status" = $5))' +
-      'GROUP BY "appointments"."appointment_date", "appointment_slots"."id"',
-      [apptSlotIds, minDate, maxDate, 'pending', 'confirmed']
-    );
-  });
+// apptSlots is an array of appointment_slot_ids
+// min_date & max_date are dates that act as inclusive bounds of the date range to be searched
+function countExistingAppts(apptSlotIds, apptSlots, min_date, max_date, res) {
+  return pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      return connectionError;
+    } else {
+      db.query('SELECT "appointments"."appointment_date", "appointment_slots"."id" AS "appointment_slot_id", COUNT(*)' +
+        'FROM "appointments"' +
+        'JOIN "appointment_slots" ON "appointments"."appointment_slot_id" = "appointment_slots"."id"' +
+        'JOIN "days" ON "appointment_slots"."day_id" = "days"."id"' +
+        'WHERE "appointments"."appointment_slot_id" = ANY($1::int[])' +
+        'AND "appointments"."appointment_date" >= $2' +
+        'AND "appointments"."appointment_date" <= $3' +
+        'AND ("appointments"."status_id" =' +
+        '(SELECT "id" FROM "statuses" WHERE "status" = $4)' +
+        'OR "appointments"."status_id" =' +
+        '(SELECT "id" FROM "statuses" WHERE "status" = $5))' +
+        'GROUP BY "appointments"."appointment_date", "appointment_slots"."id"',
+      [apptSlotIds, min_date, max_date, 'pending', 'confirmed'],
+      function(queryError, result){
+          done();
+          if (queryError) {
+            console.log(queryError, 'ERROR MAKING QUERY');
+          } else {
+            var existingApptCounts = result.rows;
+            return getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCounts, res);
+          }
+        });
+      }
+    });
 }
 
-function getOverrides(minDate, maxDate, apptSlotIds) {
-  return pool.connect().then(function(client, done) {
-    return client.query(
-      'SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed",' +
+function getOverrides(min_date, max_date, apptSlotIds, apptSlots, existingApptCounts, res) {
+  return pool.connect(function(connectionError, db, done) {
+    if (connectionError) {
+      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+      return connectionError;
+    } else {
+      db.query('SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed",' +
       '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
       '"locations"."location" AS "location_name", "locations"."street",' +
       '"locations"."city", "locations"."state", "appointment_types"."appointment_type",' +
@@ -94,16 +89,26 @@ function getOverrides(minDate, maxDate, apptSlotIds) {
       'WHERE "override_date" >= $1' +
       'AND "override_date" <= $2' +
       'AND "overrides"."appointment_slot_id" = ANY($3::int[]);',
-      [minDate, maxDate, apptSlotIds]
-    );
+      [min_date, max_date, apptSlotIds],
+      function(queryError, result){
+          done();
+          if (queryError) {
+            console.log(queryError, 'ERROR MAKING QUERY');
+          } else {
+            var overrides = result.rows;
+            console.log('overrides',overrides);
+            return fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, overrides, res);
+          }
+        });
+      }
   });
 }
 
-function fillOutDateRange(minDate, maxDate, apptSlots, existingApptCounts, overrides) {
+function fillOutDateRange(min_date, max_date, apptSlots, existingApptCounts, overrides, res) {
   var apptsAvailable = [];
   var slotsForDate;
-  var date = minDate;
-  while (date <= maxDate) {
+  var date = min_date;
+  while (date <= max_date) {
     var overridesForDate = checkForOverrides(date, overrides);
     if(overridesForDate.length > 0) {
       console.log('returned from checkForOverrides:', overridesForDate);
@@ -125,7 +130,7 @@ function fillOutDateRange(minDate, maxDate, apptSlots, existingApptCounts, overr
     }
     date = moment(date).add(1, 'days').format('YYYY-MM-DD');
   }
-  return apptsAvailable;
+  res.send(apptsAvailable);
 }
 
 function findRelevant(apptSlots, date) {

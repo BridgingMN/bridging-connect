@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var pool = require('../modules/database.js');
+var Promise = require('bluebird');
 var getAvailableAppts = require('../modules/getAvailableAppts.js');
 var formatters = require('../modules/formatters.js');
 var formatDate = formatters.formatDate;
@@ -203,7 +204,16 @@ router.get('/available', function(req, res) {
   var delivery_method = params.delivery_method;
   var location_id = params.location_id;
 
-  getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date, res);
+  return new Promise(function() {
+    getAvailableAppts(appointment_type, delivery_method, location_id, min_date, max_date)
+    .then(function(result) {
+      res.send(result);
+    })
+    .catch(function(error) {
+      console.log(error);
+      res.sendStatus(500);
+    });
+  });
 });
 
 /**
