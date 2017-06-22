@@ -1,42 +1,69 @@
+// VENDOR MODULES
 var moment = require('moment');
-var pool = require('../modules/database.js');
 var Promise = require('bluebird');
+
+// DATABASE MODULE
+var pool = require('../modules/database.js'); // has been promisified with Bluebird
+
+// CUSTOM MODULES
 var formatters = require('./formatters.js');
 var formatDate = formatters.formatDate;
 var formatTime = formatters.formatTime;
 
-function getAvailableAppts(appointmentType, deliveryMethod, locationId, minDate, maxDate) {
-  var apptSlots, apptSlotIds, existingApptCounts, overrides;
+// MAIN FUNCTION
+/**
+  * Gets appointment objects that match the parameters and still have available spots left
+  * @param {String} appointmentType - the type of appointment
+  * @param {String} deliveryMethod - the method by which items will be delivered
+  * @param {Number} locationId - ID of location of appointment in DB
+  * @param {String} minDate - inclusive lower bound of date range, formatted as 'YYYY-MM-DD'
+  * @param {String} maxDate - inclusive upper bound of date range, formatted as 'YYYY-MM-DD'
+  * @returns {Array<object>} - array of appointment objects corresponding to appointment
+    slots that are not yet full
+*/
+function getAvailableAppointments(appointmentType, deliveryMethod, locationId, minDate, maxDate) {
+  var appointmentSlots, appointmentSlotIds, existingAppointmentCounts, appointmentOverrides;
 
   return new Promise(function(resolve, reject) {
-    getApptSlots(appointmentType, deliveryMethod, locationId)
+    // Retrieve array of relevant appointment slots
+    getAppointmentSlots(appointmentType, deliveryMethod, locationId)
+
     .then(function(result){
-      apptSlots = result.rows;
-      apptSlotIds = apptSlots.map(function(apptSlot) {
-        return apptSlot.appointment_slot_id;
-      });
+      appointmentSlots = result;
+      appointmentSlotIds = createArrayFromProperty(appointmentSlots, 'appointment_slot_id');
 
       return Promise.all([
-        countExistingAppts(apptSlotIds, minDate, maxDate),
-        getOverrides(minDate, maxDate, apptSlotIds)
+        countExistingAppointments(appointmentSlotIds, minDate, maxDate),
+        getOverrides(appointmentSlotIds, minDate, maxDate)
       ]);
     })
-    .then(function(result){
-      existingApptCounts = result[0].rows;
-      overrides = result[1].rows;
-      return fillOutDateRange(minDate, maxDate, apptSlots, existingApptCounts, overrides);
+
+    .then(function([counts, overrides]){
+      existingAppointmentCounts = counts;
+      appointmentOverrides = overrides;
+      return fillOutDateRange(minDate, maxDate, appointmentSlots, existingAppointmentCounts, appointmentOverrides);
     })
+
     .then(function(result){
       resolve(result);
     })
+
     .catch(function(error){
       reject(error);
     });
   });
 }
 
-function getApptSlots(appointmentType, deliveryMethod, locationId) {
-  return pool.connect().then(function(client, done) {
+// QUERY FUNCTIONS
+/**
+  * Finds appointment slots in database that match the provided parameters
+  * @param {String} appointmentType - the type of appointment
+  * @param {String} deliveryMethod - the method by which items will be delivered
+  * @param {Number} locationId - ID of location of appointment in DB
+  * @returns {Array<object>} - array of appointment slot objects from DB
+*/
+function getAppointmentSlots(appointmentType, deliveryMethod, locationId) {
+  return pool.connect().then(function(client) {
     return client.query(
       'SELECT "appointment_slots"."id" AS "appointment_slot_id", "appointment_slots"."num_allowed",' +
       '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
@@ -51,14 +78,28 @@ function getApptSlots(appointmentType, deliveryMethod, locationId) {
       'AND "delivery_methods"."delivery_method" = $2' +
       'AND "locations"."id" = $3',
       [appointmentType, deliveryMethod, locationId]
-    );
+    )
+    .then(function(result) {
+      client.release();
+      return result.rows;
+    })
+    .catch(function(error) {
+      client.release();
+      console.error('query error', error.message, error.stack);
+    });
   });
 }
 
-// apptSlotIds is an array of appointment_slot_ids
-// minDate & maxDate are dates that act as inclusive bounds of the date range to be searched
-function countExistingAppts(apptSlotIds, minDate, maxDate) {
-  return pool.connect().then(function(client, done) {
+/**
+  * Retrieves counts of appointments that have already been made for each
+    of a given set of appointment slots within a given date range
+  * @param {Number[]} appointmentSlotIds - IDs corresponding to appointment slots in DB
+  * @param {String} minDate - inclusive lower bound of date range, formatted as 'YYYY-MM-DD'
+  * @param {String} maxDate - inclusive upper bound of date range, formatted as 'YYYY-MM-DD'
+  * @returns {Array<object>} - array of objects with count, date, and appointment slot id
+*/
+function countExistingAppointments(appointmentSlotIds, minDate, maxDate) {
+  return pool.connect().then(function(client) {
     return client.query(
       'SELECT "appointments"."appointment_date", "appointment_slots"."id" AS "appointment_slot_id", COUNT(*)' +
       'FROM "appointments"' +
@@ -72,13 +113,29 @@ function countExistingAppts(apptSlotIds, minDate, maxDate) {
       'OR "appointments"."status_id" =' +
       '(SELECT "id" FROM "statuses" WHERE "status" = $5))' +
       'GROUP BY "appointments"."appointment_date", "appointment_slots"."id"',
-      [apptSlotIds, minDate, maxDate, 'pending', 'confirmed']
-    );
+      [appointmentSlotIds, minDate, maxDate, 'pending', 'confirmed']
+    )
+    .then(function(result){
+      client.release();
+      return result.rows;
+    })
+    .catch(function(error) {
+      client.release();
+      console.error('query error', error.message, error.stack);
+    });
   });
 }
 
-function getOverrides(minDate, maxDate, apptSlotIds) {
-  return pool.connect().then(function(client, done) {
+/**
+  * Retrieves entries in overrides table of DB that would change the number of
+    appointments allowed for a specific appointment slot on a specific day
+  * @param {Array<number>} appointmentSlotIds - IDs corresponding to appointment slots in DB
+  * @param {String} minDate - inclusive lower bound of date range, formatted as 'YYYY-MM-DD'
+  * @param {String} maxDate - inclusive upper bound of date range, formatted as 'YYYY-MM-DD'
+  * @returns {Array<object>} - array of appointment slot objects
+*/
+function getOverrides(appointmentSlotIds, minDate, maxDate) {
+  return pool.connect().then(function(client) {
     return client.query(
       'SELECT "overrides"."appointment_slot_id", "overrides"."num_allowed",' +
       '"appointment_slots"."start_time", "appointment_slots"."end_time",' +
@@ -94,13 +151,37 @@ function getOverrides(minDate, maxDate, apptSlotIds) {
       'WHERE "override_date" >= $1' +
       'AND "override_date" <= $2' +
       'AND "overrides"."appointment_slot_id" = ANY($3::int[]);',
-      [minDate, maxDate, apptSlotIds]
-    );
+      [minDate, maxDate, appointmentSlotIds]
+    )
+    .then(function(result){
+      client.release();
+      return result.rows;
+    })
+    .catch(function(error) {
+      client.release();
+      console.error('query error', error.message, error.stack);
+    });
   });
 }
 
-function fillOutDateRange(minDate, maxDate, apptSlots, existingApptCounts, overrides) {
-  var apptsAvailable = [];
+// HELPER FUNCTIONS
+
+/**
+  * Generic function to take an array of objects and return a simpler array that
+    contains only the values for one property of the object
+  * @param {Array<object>} objectArray - an array of objects with at least one shared property
+  * @param {String} key - the key for a shared property of the objects
+  * @returns {Array} - an array of values corresponding to the key parameter
+*/
+function createArrayFromProperty(objectArray, key) {
+  var newArray = objectArray.map(function(object) {
+    return object[key];
+  });
+  return newArray;
+}
+
+function fillOutDateRange(minDate, maxDate, appointmentSlots, existingAppointmentCounts, overrides) {
+  var appointmentsAvailable = [];
   var slotsForDate;
   var date = minDate;
   while (date <= maxDate) {
@@ -109,44 +190,47 @@ function fillOutDateRange(minDate, maxDate, apptSlots, existingApptCounts, overr
       console.log('returned from checkForOverrides:', overridesForDate);
       slotsForDate = overridesForDate;
     } else {
-      slotsForDate = findRelevant(apptSlots, date);
+      slotsForDate = findRelevant(appointmentSlots, date);
     }
 
     for (var i = 0; i < slotsForDate.length; i++) {
-      var apptSlot;
-      var isAvailable = checkAvailability(slotsForDate[i], date, existingApptCounts);
+      var appointmentSlot;
+      var isAvailable = checkAvailability(slotsForDate[i], date, existingAppointmentCounts);
       if (isAvailable){
-        apptSlot = shallowCopy(slotsForDate[i]);
-        apptSlot.date = formatDate(date);
-        apptSlot.start_time = formatTime(slotsForDate[i].start_time);
-        apptSlot.end_time = formatTime(slotsForDate[i].end_time);
-        apptsAvailable.push(apptSlot);
+        appointmentSlot = shallowCopy(slotsForDate[i]);
+        appointmentSlot.date = formatDate(date);
+        appointmentSlot.start_time = formatTime(slotsForDate[i].start_time);
+        appointmentSlot.end_time = formatTime(slotsForDate[i].end_time);
+        appointmentsAvailable.push(appointmentSlot);
       }
     }
     date = moment(date).add(1, 'days').format('YYYY-MM-DD');
   }
-  return apptsAvailable;
+  return appointmentsAvailable;
 }
 
-function findRelevant(apptSlots, date) {
+function findRelevant(appointmentSlots, date) {
   var momentOfDate = moment(date);
   var day = momentOfDate.format('dddd');
-  var slotList = apptSlots.filter(function(apptSlot) {
-    return apptSlot.day === day;
+  var slotList = appointmentSlots.filter(function(appointmentSlot) {
+    return appointmentSlot.day === day;
   });
   return slotList;
 }
 
-// checks to see if an appt slot on a particular date is still available
+// checks to see if an appointment slot on a particular date is still available
 // (i.e. not completely filled) and returns true if it is
-function checkAvailability(apptSlot, date, existingApptCounts) {
-  if (apptSlot.num_allowed < 1) {
+function checkAvailability(appointmentSlot, date, existingAppointmentCounts) {
+  if (appointmentSlot.num_allowed < 1) {
     return false;
   }
-  for (var i = 0; i < existingApptCounts.length; i++) {
-    var appt = existingApptCounts[i];
-    if (appt.appointment_slot_id == apptSlot.appointment_slot_id && compareDates(appt.appointment_date, date)) {
-      if (appt.count < apptSlot.num_allowed) {
+  for (var i = 0; i < existingAppointmentCounts.length; i++) {
+    var appointment = existingAppointmentCounts[i];
+    if (
+      appointment.appointment_slot_id == appointmentSlot.appointment_slot_id
+      && compareDates(appointment.appointment_date, date)
+    ) {
+      if (appointment.count < appointmentSlot.num_allowed) {
         return true;
       } else {
         return false;
@@ -185,4 +269,4 @@ function shallowCopy(original) {
     return clone;
 }
 
-module.exports = getAvailableAppts;
+module.exports = getAvailableAppointments;
