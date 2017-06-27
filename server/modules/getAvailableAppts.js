@@ -22,6 +22,10 @@ var formatTime = formatters.formatTime;
     slots that are not yet full
 */
 function getAvailableAppointments(appointmentType, deliveryMethod, locationId, minDate, maxDate) {
+  if (!maxDate) {
+    maxDate = minDate;
+  }
+
   var appointmentSlots, appointmentSlotIds, existingAppointmentCounts, appointmentOverrides;
 
   return new Promise(function(resolve, reject) {

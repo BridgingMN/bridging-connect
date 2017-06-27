@@ -243,7 +243,7 @@ router.post('/reserve', function(req, res) {
   var created_date = new Date();
   var status = appointment.status;
 
-  postAppointment(appointment, appointment_date, user_id, client_id,
+  postAppointment(appointment_date, user_id, client_id,
     appointment_slot_id, created_date, status)
   .then(function(result, error) {
     if (error) {
@@ -255,7 +255,7 @@ router.post('/reserve', function(req, res) {
   });
 });
 
-function postAppointment(appointment, appointment_date, user_id, client_id,
+function postAppointment(appointment_date, user_id, client_id,
   appointment_slot_id, created_date, status) {
 
   return pool.connect().then(function(client) {
