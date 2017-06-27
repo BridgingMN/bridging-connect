@@ -243,28 +243,38 @@ router.post('/reserve', function(req, res) {
   var created_date = new Date();
   var status = appointment.status;
 
-  pool.connect(function(connectionError, db, done) {
-    if (connectionError) {
-      console.log('ERROR CONNECTING TO DATABASE');
+  postAppointment(appointment, appointment_date, user_id, client_id,
+    appointment_slot_id, created_date, status)
+  .then(function(result, error) {
+    if (error) {
+      console.log(error);
       res.sendStatus(500);
     } else {
-      db.query('INSERT INTO "appointments" ("appointment_slot_id", "user_id", \
-       "client_id", "created_date", "appointment_date", "status_id")  \
-      VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
-      WHERE "status" = $6)) RETURNING "id"',
-      [appointment_slot_id, user_id, client_id, created_date, appointment_date, status],
-      function(queryError, result){
-        done();
-        if (queryError) {
-          console.log('ERROR MAKING QUERY', queryError);
-          res.sendStatus(500);
-        } else {
-          res.send(result.rows[0]);
-        }
-      });
+      res.send(result);
     }
   });
 });
+
+function postAppointment(appointment, appointment_date, user_id, client_id,
+  appointment_slot_id, created_date, status) {
+
+  return pool.connect().then(function(client) {
+    return client.query('INSERT INTO "appointments" ("appointment_slot_id", "user_id", \
+     "client_id", "created_date", "appointment_date", "status_id")  \
+    VALUES ($1, $2, $3, $4, $5, (SELECT "id" FROM "statuses" \
+    WHERE "status" = $6)) RETURNING "id"',
+    [appointment_slot_id, user_id, client_id, created_date, appointment_date, status])
+    .then(function(result) {
+      client.release();
+      return result.rows[0];
+    })
+    .catch(function(error) {
+      client.release();
+      console.error('query error', error.message, error.stack);
+      return error;
+    });
+  });
+}
 
 // START ADMIN-ONLY APPOINTMENT ROUTES
 /**
@@ -600,4 +610,7 @@ router.delete('/:appointment_id', function(req, res) {
 
 // END ADMIN-ONLY APPOINTMENT ROUTES
 
-module.exports = router;
+module.exports = {
+  router: router,
+  postAppointment: postAppointment
+};
