@@ -31,42 +31,48 @@ var pool = require('../modules/database.js');
   *    HTTP/1.1 500 Internal Server Error
 */
 router.post('/', function(req, res) {
-    var client = req.body;
+  var client = req.body;
 
-    console.log('client from other side', client);
-    var first = client.first;
-    var last = client.last;
-    var dob = formatDateForPostgres(client.dob);
-    var race_ethnicity = client.race_ethnicity;
-    var street = client.street;
-    var city = client.city;
-    var state = client.state;
-    var zip_code = client.zip_code;
+  console.log('client from other side', client);
+  var first = client.first;
+  var last = client.last;
+  var dob = formatDateForPostgres(client.dob);
+  var race_ethnicity = client.race_ethnicity;
+  var street = client.street;
+  var city = client.city;
+  var state = client.state;
+  var zip_code = client.zip_code;
 
-    console.log(first, last, dob, race_ethnicity, street, city, state, zip_code);
-    pool.connect(function(connectionError, db, done) {
-      if (connectionError) {
-        console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
-        res.sendStatus(500);
-      } else {
-        db.query('INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
-        'VALUES ($1, $2, $3, ' +
-        '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-        '$5, $6, $7, $8) RETURNING "id"',
-        [first, last, dob, race_ethnicity, street, city, state, zip_code],
-        function(queryError, result){
-          done();
-          if (queryError) {
-            console.log('ERROR MAKING QUERY');
-            res.sendStatus(500);
-          } else {
-            console.log('result:', result.rows[0]);
-            res.send(result.rows[0]);
-          }
-        });
-      }
-    });
+  postClient(first, last, dob, race_ethnicity, street, city, state, zip_code)
+  .then(function(result, error) {
+    if (error) {
+      console.log(error);
+      res.sendStatus(500);
+    } else {
+      res.send(result);
+    }
+  });
 });
+
+function postClient(first, last, dob, race_ethnicity, street, city, state, zip_code) {
+
+  return pool.connect().then(function(client) {
+    return client.query('INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code") ' +
+    'VALUES ($1, $2, $3, ' +
+    '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
+    '$5, $6, $7, $8) RETURNING "id"',
+    [first, last, dob, race_ethnicity, street, city, state, zip_code])
+    .then(function(result) {
+      client.release();
+      return result.rows[0];
+    })
+    .catch(function(error) {
+      client.release();
+      console.error('query error', error.message, error.stack);
+      return error;
+    });
+  });
+}
 
 /**
   * @api {post} /clients/:client_id Get All Info for a Client
@@ -177,4 +183,7 @@ router.put('/', function(req, res) {
   });
 });
 
-module.exports = router;
+module.exports = {
+  router: router,
+  postClient: postClient
+};
