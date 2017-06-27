@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, './public')));
 
 // PASSPORT SESSION CONFIGURATION
 app.use(session({
-   secret: 'secret',
+   secret: process.env.SECRET || 'secret',
    key: 'user',
    resave: 'true',
    saveUninitialized: false,

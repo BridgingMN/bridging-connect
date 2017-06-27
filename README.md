@@ -32,17 +32,21 @@ Bridging Connect is built to smoothly facilitate the scheduling of shopping appo
 
 ### 1.3.0 View all caseworkers
 
-### 1.3.1 Add a new caseworker
+### 1.3.1 Search Caseworkers by any parameter listed in the table
 
-### 1.3.2 Edit or Delete caseworker
+### 1.3.2 Add a new caseworker
 
-### 1.4 View all agencies
+### 1.3.3 Edit or Delete caseworker
+
+### 1.4.0 View all agencies
 
 ![Agencies](screenshots/Agencies.png)
 
-### 1.4.1 Add a new agency
+### 1.4.1 Search Agency by any parameter listed in the table
 
-### 1.4.2 Edit or Delete agency
+### 1.4.2 Add a new agency
+
+### 1.4.3 Edit or Delete agency
 
 ### 1.5.0 View Default Schedule
 
@@ -76,7 +80,7 @@ Bridging Connect is built to smoothly facilitate the scheduling of shopping appo
 
 ### 2.2.3 Caseworker selects preferred appointment Date and time
 
-### 2.2.3 Caseworker completes Client Referral Form
+### 2.2.4 Caseworker completes Client Referral Form
 
 ### 2.3.0 Create New Appointment for New Bed Only
 
@@ -86,7 +90,7 @@ Bridging Connect is built to smoothly facilitate the scheduling of shopping appo
 
 ### 2.3.3 Caseworker selects preferred appointment Date and time
 
-### 2.3.3 Caseworker completes Client Referral Form
+### 2.3.4 Caseworker completes Client Referral Form
 
 ## Getting Started
 
@@ -94,19 +98,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You will need to have the following software installed.
+You will need to have the following software installed:
 
-```
-![Node.js](https://nodejs.org/en/)
-```
 
-```
-![PostgreSql](https://launchschool.com/blog/how-to-install-postgresql-on-a-mac)
-```
+* [Node.js](https://nodejs.org/en/)
 
-```
-![Postico](https://eggerapps.at/postico/)
-```
+* [PostgreSql](https://launchschool.com/blog/how-to-install-postgresql-on-a-mac)
+
+* [Postico](https://eggerapps.at/postico/)
+
 
 ### Installing
 
@@ -142,10 +142,10 @@ grunt
 npm start
 ```
 
-4. Open in the browser.
+5. Open in the browser.
 
 ```
-localhost:8000
+localhost:5000
 ```
 
 ## Built With
@@ -184,4 +184,4 @@ Add additional notes about how to deploy this on a live system
 ## Acknowledgments
 
 * Thanks to Bridging for the inspirational work they do helping furnish homes for thousands of people in need.
-* Thanks to Scott Bromander, Chris Black, and Luke Schlangen for support during this project.
+* Thanks to Prime Digital Acadedmy Instructors Scott Bromander, Chris Black, and Luke Schlangen for support during this project.
