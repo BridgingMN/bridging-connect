@@ -25,6 +25,9 @@ var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
 
+// TEST MODULES
+var inserts = require('./modules/insertTestData.js').inserts;
+
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
 
@@ -58,6 +61,9 @@ app.use('/rules', isLoggedIn, rules);
 app.use('/schedule', isLoggedIn, schedule);
 app.use('/overrides', isLoggedIn, overrides);
 app.use('/*', index);
+
+inserts.dummyCaseworkers(1);
+inserts.dummyAppointments(100);
 
 // LISTEN
 app.listen(app.get('port'), function(){

@@ -8,8 +8,8 @@ var firstNames = [
   'Megan', 'Niamh', 'Eilidh', 'Eva', 'Abbie', 'Skye', 'Aimee', 'Mia', 'Ruby', 'Anna', 'Sarah', 'Rachel', 'Caitlin', 'Lauren', 'Freya', 'Keira', 'Lily', 'Leah', 'Holly', 'Millie',
   'Charlotte', 'Abigail', 'Molly', 'Kayla', 'Zoe', 'Eve', 'Iona', 'Cara', 'Ella', 'Evie', 'Nicole', 'Morgan', 'Jenna', 'Madison', 'Kayleigh', 'Summer', 'Paige', 'Daisy', 'Taylor', 'Amelia',
   'Zara', 'Beth', 'Amber', 'Robyn', 'Georgia', 'Shannon', 'Sophia', 'Courtney', 'Jennifer', 'Abby', 'Neve', 'Carly', 'Casey', 'Elizabeth', 'Kaitlyn', 'Poppy', 'Melissa', 'Jasmine', 'Bethany', 'Abi',
-  'Gemma', 'Laura', 'Mya', 'Kara', 'Orla', 'Elise', 'Hayley', 'Kelsey', 'Charley', 'Imogen', 'Kirsty', 'Rachael', 'Heather', 'Chelsea', 'Layla',
-  'Samantha', 'Julia', 'Maya', 'Natalie', 'Alice', 'Libby', 'Rhianna', 'Rosie', 'Nic', 'Dan', 'Betsy'
+  'Gemma', 'Laura', 'Mya', 'Kara', 'Orla', 'Elise', 'Hayley', 'Kelsey', 'Charley', 'Imogen', 'Kirsty', 'Rachael', 'Heather', 'Chelsea', 'Layla', 'Marginalia', 'Camembert', 'Trimothy', 'Liza',
+  'Samantha', 'Julia', 'Maya', 'Natalie', 'Alice', 'Libby', 'Rhianna', 'Rosie', 'Nic', 'Dan', 'Betsy', 'Daemon', 'Phinster', 'Joey Jack', 'Hollywreath', 'Chortel', 'Skinny', 'Capricorn', 'Charlemagne'
 ];
 
 var lastNames = [
@@ -25,7 +25,7 @@ var lastNames = [
   'Stephens', 'Gardner', 'Payne', 'Kelley', 'Dunn', 'Pierce', 'Arnold', 'Tran', 'Spencer', 'Peters', 'Hawkins', 'Grant', 'Hansen', 'Castro', 'Hoffman', 'Hart', 'Elliott', 'Cunningham', 'Knight', 'Bradley',
   'Carroll', 'Hudson', 'Duncan', 'Armstrong', 'Berry', 'Andrews', 'Johnston', 'Ray', 'Lane', 'Riley', 'Carpenter', 'Perkins', 'Aguilar', 'Silva', 'Richards', 'Willis', 'Matthews', 'Chapman', 'Lawrence', 'Garza',
   'Vargas', 'Watkins', 'Wheeler', 'Larson', 'Carlson', 'Harper', 'George', 'Greene', 'Burke', 'Guzman', 'Morrison', 'Munoz', 'Jacobs', 'Obrien', 'Lawson', 'Franklin', 'Lynch', 'Bishop', 'Carr', 'Salazar',
-  'Austin', 'Mendez', 'Gilbert', 'Jensen', 'Williamson', 'Montgomery', 'Harvey', 'Oliver', 'Howell', 'Springfield', 'Zera', 'Rowley'
+  'Austin', 'Mendez', 'Gilbert', 'Jensen', 'Williamson', 'Montgomery', 'Harvey', 'Oliver', 'Howell', 'Springfield', 'Zera', 'Rowley', 'Robbins', 'Veltron', 'Schuffleman', 'Cartwheel', 'Minnelli', 'Binghamton'
 ];
 
 var streets = [
@@ -97,11 +97,17 @@ var dobs = [
   '1967-11-08', '1935-09-14', '1978-10-10', '1970-10-16', '1982-11-21', '1982-07-14', '1932-03-18', '1931-11-06', '1952-05-21', '1997-03-11'
 ];
 
+var domains = [
+  'tepidmail.com', 'warmmail.com', 'toastymail.com', 'snugmail.com', 'temperatemail.com', 'roomtemperaturemail.com', 'verywarmmail.com', 'sizzlingmail.com', 'balmymail.com', 'summerymail.com', 'tropicalmail.com', 'scorchingmail.com', 'broilingmail.com', 'blisteringmail.com', 'swelteringmail.com',
+  'torridmail.com', 'humidmail.com', 'muggymail.com', 'lukewarmmail.com'
+];
+
 module.exports = {
   firstNames: firstNames,
   lastNames: lastNames,
   streets: streets,
   houseNumbers: houseNumbers,
   cityZips: cityZips,
-  dobs: dobs
+  dobs: dobs,
+  domains: domains
 };

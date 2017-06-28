@@ -10,6 +10,8 @@ var config = {
   idleTimeoutMillis: 15000, // 15s // how long a client is allowed to remain idle before being closed
 };
 
+console.log(config);
+
 if(!pool) { // is there a connection pool? if not, initialize one
   pool = new pg.Pool(config);
 }
