@@ -1,10 +1,11 @@
 var Promise = require('bluebird');
-var pg = require('pg');
+var pg = Promise.promisifyAll(require('pg'));
 var pool;
 var config = {
-  user:process.env.PG_USERNAME, // env var: PGUSER
-  database: 'bridging', // env var: PGDATABASE
-  password: '', // env var: PGPASSWORD
+  host: process.env.DATABASE_HOST || 'localhost',
+  user: process.env.DATABASE_USER, // env var: PGUSER
+  database: process.env.DATABASE_NAME || 'bridging', // env var: PGDATABASE
+  password: process.env.DATABASE_PW || '', // env var: PGPASSWORD
   port: 5432, // env var: PGPORT
   max: 20, // max number of clients in the pool
   idleTimeoutMillis: 15000, // 15s // how long a client is allowed to remain idle before being closed
