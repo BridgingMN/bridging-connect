@@ -62,9 +62,6 @@ app.use('/schedule', isLoggedIn, schedule);
 app.use('/overrides', isLoggedIn, overrides);
 app.use('/*', index);
 
-inserts.dummyCaseworkers(1);
-inserts.dummyAppointments(100);
-
 // LISTEN
 app.listen(app.get('port'), function(){
    console.log('listening on port:', app.get('port'));
