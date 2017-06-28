@@ -41,27 +41,37 @@ var pool = require('../modules/database.js');
 router.get('/zip/:zip_code', function(req, res) {
   var zip_code = req.params.zip_code.toString();
   console.log(zip_code);
-  pool.connect(function(connectionError, db, done) {
-    if (connectionError) {
-      console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
+
+  getLocationForZip(zip_code)
+  .then(function(result, error) {
+    if (error) {
+      console.log(error);
       res.sendStatus(500);
     } else {
-      db.query('SELECT "locations"."location", "locations"."id", "locations"."street", "locations"."city", "locations"."state" ' +
-      'FROM "locations" JOIN "zip_codes" ON "locations"."id" = "zip_codes"."location_id" ' +
-      'WHERE "zip_codes"."zip_code" = $1',
-      [zip_code],
-      function(queryError, result){
-        done();
-        if (queryError) {
-          console.log(queryError, 'ERROR MAKING QUERY');
-          res.sendStatus(500);
-        } else {
-          console.log(result);
-          res.send(result.rows);
-        }
-      });
+      res.send(result);
     }
   });
 });
+
+function getLocationForZip(zip_code) {
+
+  return pool.connect().then(function(client) {
+    return client.query('SELECT "locations"."location", "locations"."id", "locations"."street", "locations"."city", "locations"."state" ' +
+    'FROM "locations" JOIN "zip_codes" ON "locations"."id" = "zip_codes"."location_id" ' +
+    'WHERE "zip_codes"."zip_code" = $1',
+    [zip_code])
+
+    .then(function(result) {
+      client.release();
+      return result.rows;
+    })
+
+    .catch(function(error) {
+      client.release();
+      console.error('query error', error.message, error.stack);
+      return error;
+    });
+  });
+}
 
 module.exports = router;
