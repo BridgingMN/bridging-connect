@@ -24,6 +24,7 @@ var clients = require('./routes/clients.js');
 var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
+var dataExport = require('./routes/dataExport.js');
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
@@ -57,6 +58,7 @@ app.use('/clients', isLoggedIn, clients);
 app.use('/rules', isLoggedIn, rules);
 app.use('/schedule', isLoggedIn, schedule);
 app.use('/overrides', isLoggedIn, overrides);
+app.use('/dataExport', isLoggedIn, dataExport);
 app.use('/*', index);
 
 // LISTEN

@@ -63,6 +63,7 @@ angular
     updateUserPassword: updateUserPassword,
     getUser: getUser,
     logout: logout,
+    appointmentCSV: appointmentCSV,
     redirectToLogin: redirectToLogin,
     redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
     redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
@@ -251,6 +252,15 @@ angular
     $http.get('/schedule/deliverymethods').then(function(response) {
         methods.array = response.data;
         console.log('methods: ', methods.array);
+    });
+  }
+
+  // GET csv info from the DB
+  function appointmentCSV() {
+    console.log('getting appointments CSV from the DB');
+    $http.get('/export').then(function(response) {
+      var appointmentData = response;
+      console.log('appointment data returned from the database:', appointmentData);
     });
   }
 }]);

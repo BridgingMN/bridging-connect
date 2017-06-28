@@ -308,7 +308,6 @@ router.get('/all', function(req, res) {
               console.log('error making query on /appointments/all GET route:', queryErr);
               res.sendStatus(500);
             } else {
-              console.log('successful GET from /appointments/all route:', result.rows);
               var allAppointmentsArray = result.rows;
               allAppointmentsArray.forEach(function(appointmentObj) {
                 appointmentObj.start_time = formatTimeForClient(appointmentObj.start_time);
