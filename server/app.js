@@ -10,7 +10,8 @@ var database = require('./modules/database.js');
 // AUTHENTICATION MODULES
 var passport = require('./strategies/user_sql.js');
 var session = require('express-session');
-var isLoggedIn = require('./modules/authentication.js');
+var isLoggedIn = require('./modules/authentication.js').isLoggedIn;
+var isAdmin = require('./modules/authentication.js').isAdmin;
 
 // ROUTE MODULES
 var index = require('./routes/index.js');
@@ -24,6 +25,7 @@ var clients = require('./routes/clients.js').router;
 var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
+var install = require('./routes/installDummies.js');
 
 // TEST MODULES
 var inserts = require('./modules/insertTestData.js').inserts;
@@ -53,13 +55,14 @@ app.use(passport.session());
 app.use('/password', passwordreset);
 app.use('/register', register);
 app.use('/user', isLoggedIn, user);
-app.use('/agencies', isLoggedIn, agencies);
+app.use('/agencies', isAdmin, agencies);
 app.use('/appointments', isLoggedIn, appointments);
-app.use('/caseworkers', isLoggedIn, caseworkers);
+app.use('/caseworkers', isAdmin, caseworkers);
 app.use('/clients', isLoggedIn, clients);
 app.use('/rules', isLoggedIn, rules);
-app.use('/schedule', isLoggedIn, schedule);
-app.use('/overrides', isLoggedIn, overrides);
+app.use('/schedule', isAdmin, schedule);
+app.use('/overrides', isAdmin, overrides);
+app.use('/install', isAdmin, install);
 app.use('/*', index);
 
 // LISTEN
