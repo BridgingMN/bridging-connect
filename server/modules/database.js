@@ -1,5 +1,5 @@
 var Promise = require('bluebird');
-var pg = Promise.promisifyAll(require('pg'));
+var pg = require('pg');
 var pool;
 var config = {
   user:process.env.PG_USERNAME, // env var: PGUSER
