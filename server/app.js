@@ -64,10 +64,10 @@ app.use('/appointments', isLoggedIn, appointments);
 app.use('/caseworkers', isAdmin, caseworkers);
 app.use('/clients', isLoggedIn, clients);
 app.use('/rules', isLoggedIn, rules);
-app.use('/schedule', isLoggedIn, schedule);
-app.use('/overrides', isLoggedIn, overrides);
+app.use('/schedule', isAdmin, schedule);
+app.use('/overrides', isAdmin, overrides);
 app.use('/install', isAdmin, install);
-app.use('/dataExport', isLoggedIn, dataExport);
+app.use('/dataExport', isAdmin, dataExport);
 app.use('/*', index);
 
 // LISTEN
