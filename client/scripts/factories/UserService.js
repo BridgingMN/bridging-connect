@@ -33,6 +33,9 @@ angular
 
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
+  // TESTING
+  appointmentCSV();
+
   return {
     userObject: userObject,
     newAppointment: newAppointment,
@@ -63,6 +66,7 @@ angular
     updateUserPassword: updateUserPassword,
     getUser: getUser,
     logout: logout,
+    appointmentCSV: appointmentCSV,
     redirectToLogin: redirectToLogin,
     redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
     redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
@@ -251,6 +255,19 @@ angular
     $http.get('/schedule/deliverymethods').then(function(response) {
         methods.array = response.data;
         console.log('methods: ', methods.array);
+    });
+  }
+
+  // GET csv info from the DB
+  function appointmentCSV() {
+    console.log('getting appointments CSV from the DB');
+    $http.get('/dataExport').then(function(response) {
+      var appointmentData = response;
+      console.log('appointment data returned from the database:', appointmentData);
+      // fs.writeFile('file.csv', csv, function(err) {
+      //   if (err) throw err;
+      //   console.log('file saved');
+      // });
     });
   }
 }]);
