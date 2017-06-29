@@ -49,7 +49,6 @@ angular
   }
 
   function availableAppointmentsPredicate (date) {
-    console.log('Selected date', date, typeof date);
     return vm.availableAppointments.some(filterAppointmentsByDate, date);
   }
 
