@@ -25,6 +25,7 @@ var clients = require('./routes/clients.js').router;
 var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
+var dataExport = require('./routes/dataExport.js');
 var install = require('./routes/installDummies.js');
 
 // TEST MODULES
@@ -63,6 +64,7 @@ app.use('/rules', isLoggedIn, rules);
 app.use('/schedule', isAdmin, schedule);
 app.use('/overrides', isAdmin, overrides);
 app.use('/install', isAdmin, install);
+app.use('/dataExport', isAdmin, dataExport);
 app.use('/*', index);
 
 // LISTEN
