@@ -33,6 +33,9 @@ angular
 
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
+  // TESTING
+  appointmentCSV();
+
   return {
     userObject: userObject,
     newAppointment: newAppointment,
@@ -258,7 +261,7 @@ angular
   // GET csv info from the DB
   function appointmentCSV() {
     console.log('getting appointments CSV from the DB');
-    $http.get('/export').then(function(response) {
+    $http.get('/dataExport').then(function(response) {
       var appointmentData = response;
       console.log('appointment data returned from the database:', appointmentData);
     });
