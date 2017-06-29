@@ -85,7 +85,6 @@ angular
   */
   function filterAppointmentsByDate(appointment) {
     var date = this;
-    console.log(appointment.date, date);
     return compareDates(appointment.date, date);
   }
 
