@@ -1,0 +1,29 @@
+<div layout="row">
+  <div layout-md="column" flex="5"></div>
+  <div layout="column" flex="90">
+    <div class="importFileContainer">
+      <h1>Export Appointment Information</h1>
+      <md-radio-group ng-model="exportOption" ng-change="toggleEnableDates(exportOption)">
+          <md-container layout="row" class="exportDatesContainer">
+            <md-input-container layout="column">
+                <label for="officeFromDate">From:</label>
+                <md-datepicker ng-model="officeFromDate" ng-disabled="officeDatesEnabledValue" md-current-view="year" md-placeholder="Enter date" required></md-datepicker>
+                <div ng-messages="officeFromDate.$error">
+                  <div ng-message="required">A date is required!</div>
+                </div>
+            </md-input-container>
+            <md-input-container layout="column">
+                <label for="officeToDate">To:</label>
+                <md-datepicker ng-model="officeToDate" ng-disabled="officeDatesEnabledValue" md-current-view="year" md-placeholder="Enter date" required></md-datepicker>
+                <div ng-messages="officeToDate.$error">
+                  <div ng-message="required">A date is required!</div>
+                </div>
+            </md-input-container>
+        </md-container>
+      </md-radio-group>
+      <md-input-container layout="row" layout-align="start start">
+        <md-button class="themed-Btn" ng-click="exportInformation(exportOption)">Export</md-button><br>
+      </md-input-container>
+    </div>
+  </div>
+</div>
