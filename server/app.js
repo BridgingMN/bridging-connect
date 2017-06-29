@@ -25,14 +25,11 @@ var clients = require('./routes/clients.js').router;
 var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
-<<<<<<< HEAD
 var dataExport = require('./routes/dataExport.js');
-=======
 var install = require('./routes/installDummies.js');
 
 // TEST MODULES
 var inserts = require('./modules/insertTestData.js').inserts;
->>>>>>> develop
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
