@@ -264,6 +264,10 @@ angular
     $http.get('/dataExport').then(function(response) {
       var appointmentData = response;
       console.log('appointment data returned from the database:', appointmentData);
+      // fs.writeFile('file.csv', csv, function(err) {
+      //   if (err) throw err;
+      //   console.log('file saved');
+      // });
     });
   }
 }]);
