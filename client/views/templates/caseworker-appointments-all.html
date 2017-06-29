@@ -13,7 +13,7 @@
     ng-repeat="appointment in vm.caseworkerAppointments | filter: vm.appointmentFilter"
     layout="column"
     flex="20"
-    ng-if="appointment.info.status != 'canceled'">
+    ng-if="vm.showAppointment(appointment)">
       <div class="color-primary appointment-card-header" layout="column" layout-align="center center">
         <div layout="row" layout-align="space-around center">
           <div class="md-title appointment-date">

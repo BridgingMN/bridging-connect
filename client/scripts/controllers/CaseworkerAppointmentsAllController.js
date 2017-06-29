@@ -40,6 +40,7 @@ angular
   vm.confirmCancelAppointment = confirmCancelAppointment;
   vm.showAppointmentDetails = showAppointmentDetails;
   vm.createNewAppointment = createNewAppointment;
+  vm.showAppointment = showAppointment;
 
 
   //This is a placeholder, in production appointsments will be an array property on the user object.
@@ -69,6 +70,7 @@ angular
   }
 
   function getAppointmentsSuccess(appointments) {
+    console.log('in getAppointmentsSuccess, appointments:', appointments);
     appointments.forEach(function (element) {
       element.info.date = new Date(element.info.date);
     });
@@ -188,5 +190,15 @@ angular
   */
   function availableAppointmentsError(error) {
     console.error(error);
+  }
+
+  function showAppointment(appointment) {
+    var showAppointment;
+    if (appointment.info.status == 'confirmed' || appointment.info.status == 'pending') {
+      showAppointment = true;
+    } else {
+      showAppointment = false;
+    }
+    return showAppointment;
   }
 }]);
