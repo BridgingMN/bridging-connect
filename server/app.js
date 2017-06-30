@@ -4,9 +4,6 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
-// DATABASE MODULE
-var database = require('./modules/database.js');
-
 // AUTHENTICATION MODULES
 var passport = require('./strategies/user_sql.js');
 var session = require('express-session');

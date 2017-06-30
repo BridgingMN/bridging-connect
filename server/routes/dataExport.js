@@ -18,11 +18,12 @@ router.get('/', function(req, res) {
             console.log('error making query on /export route', queryError);
             res.sendStatus(500);
           } else {
-            var appointmentsArray = result.rows;
-            if (appointmentsArray.length) {
-              appointmentsArray = json2csv({data: appointmentsArray});
+            var appointments = result.rows;
+            if (appointments.length) {
+              appointments = json2csv({data: appointments});
+              res.attachment('appointments.csv');
             }
-            res.send(appointmentsArray);
+            res.send(appointments);
           }
         });
     }

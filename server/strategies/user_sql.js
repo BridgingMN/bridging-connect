@@ -64,7 +64,9 @@ passport.use('local', new localStrategy({
   }, function(req, email, password, done) {
 	    pool.connect(function (err, client, release) {
 	    	// console.log('called local - pg');
-
+        if (err) {
+          console.log("Error in usersql", err);
+        }
         // assumes the email will be unique, thus returning 1 or 0 results
         client.query("SELECT * FROM users WHERE email = $1", [email],
           function(err, result) {
