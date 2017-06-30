@@ -31,6 +31,9 @@ var install = require('./routes/installDummies.js');
 // TEST MODULES
 var inserts = require('./modules/insertTestData.js').inserts;
 
+// CLEANUP MODULES
+var scheduledDeleter = require('./modules/deleteOldData');
+
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
 
