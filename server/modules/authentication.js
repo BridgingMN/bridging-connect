@@ -25,7 +25,14 @@ function isAdmin(req, res, next) {
   return res.redirect('/');
 }
 
+//username is not case sensitive
+function usernameToLowerCase(req, res, next){
+         req.body.username = req.body.username.toLowerCase();
+         next();
+     }
+
 module.exports = {
   isLoggedIn: isLoggedIn,
-  isAdmin: isAdmin
+  isAdmin: isAdmin,
+  usernameToLowerCase: usernameToLowerCase
 };
