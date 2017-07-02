@@ -5,6 +5,7 @@ var tokens = require('../modules/tokens.js');
 var mail = require('../modules/mail.js');
 var formatters = require('../modules/formatters.js');
 var formatDateForPostgres = formatters.formatDateForPostgres;
+var usernameToLowerCase = require('../modules/authentication').usernameToLowerCase;
 
 /**
   * @api {get} /caseworkers Get All Caseworkers
@@ -131,8 +132,7 @@ router.get('/:caseworker_id', function(req, res) {
   * @apiErrorExample {json} Post Error:
   *    HTTP/1.1 500 Internal Server Error
 */
-router.post('/', function(req, res) {
-  console.log('in the post route for creating caseworker', req.body);
+router.post('/', usernameToLowerCase, function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var agency_id = req.body.agency_id;
     var first = req.body.first;

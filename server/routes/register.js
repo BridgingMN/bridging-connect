@@ -15,7 +15,6 @@ router.get('/', function(req, res, next) {
 
 // Handles POST request with new user data
 router.post('/', usernameToLowerCase, function(req, res, next) {
-
   var saveUser = {
     email: req.body.email,
     password: encryptLib.encryptPassword(req.body.password)
