@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var path = require('path');
+var usernameToLowerCase = require('../modules/authentication').usernameToLowerCase;
 
 // Handles login form POST from index.html
-router.post('/',
+router.post('/', usernameToLowerCase,
     passport.authenticate('local', {
         successRedirect: '/user',
         failureRedirect: '/'
