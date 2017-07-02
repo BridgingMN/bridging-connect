@@ -196,7 +196,7 @@ router.post('/', usernameToLowerCase, function(req, res) {
   * @apiErrorExample Update Error:
   *    HTTP/1.1 500 Internal Server Error
 */
-router.put('/', function(req, res) {
+router.put('/', usernameToLowerCase, function(req, res) {
   console.log(req.body);
   if (req.isAuthenticated()) { // user is authenticated
     var user_id = req.body.user_id;
