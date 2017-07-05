@@ -1,6 +1,6 @@
 angular
   .module('myApp')
-  .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
+  .factory('UserService', ['$http', '$location', '$window', 'CONSTANTS', 'AppointmentService', function($http, $location, $window, CONSTANTS, AppointmentService){
 
   var userObject = {
     user: {}
@@ -33,9 +33,6 @@ angular
 
   var newAppointment = new AppointmentService.Appointment(CONSTANTS.APPOINTMENT_TYPE_SHOPPING);
 
-  // TESTING
-  appointmentCSV();
-
   return {
     userObject: userObject,
     newAppointment: newAppointment,
@@ -67,6 +64,7 @@ angular
     getUser: getUser,
     logout: logout,
     appointmentCSV: appointmentCSV,
+    formatDate: formatDate,
     redirectToLogin: redirectToLogin,
     redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
     redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
@@ -259,15 +257,23 @@ angular
   }
 
   // GET csv info from the DB
-  function appointmentCSV() {
+  function appointmentCSV(startDate, endDate) {
     console.log('getting appointments CSV from the DB');
-    $http.get('/dataExport').then(function(response) {
-      var appointmentData = response;
+    startDate = formatDate(startDate);
+    endDate = formatDate(endDate);
+    $http.get('/dataExport/' + startDate + '/' + endDate).then(function(response) {
+      var appointmentData = response.data;
       console.log('appointment data returned from the database:', appointmentData);
-      // fs.writeFile('file.csv', csv, function(err) {
-      //   if (err) throw err;
-      //   console.log('file saved');
-      // });
+      $window.open('/dataExport/' + startDate + '/' + endDate);
     });
+  }
+
+  // Formats date to DB format
+  function formatDate(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1; //Months are zero based
+    var year = date.getFullYear();
+    var formattedDate = year + "-" + month + "-" + day;
+    return formattedDate;
   }
 }]);
