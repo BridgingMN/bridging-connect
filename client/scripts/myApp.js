@@ -195,6 +195,16 @@ function config($locationProvider, $mdThemingProvider, $routeProvider) {
         }]
       }
     })
+    .when('/admin-data-export', {
+      templateUrl: '/views/templates/admin-data-export.html',
+      controller: 'AdminDataExportController',
+      controllerAs: 'vm',
+      resolve: { // get user from factory
+        getuser: ['UserService', function(UserService) {
+          return UserService.getUser();
+        }]
+      }
+    })
     .when('/caseworker-appointment-new', {
       templateUrl: '/views/templates/caseworker-appointment-new.html',
       controller: 'CaseworkerAppointmentNewController',

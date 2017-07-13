@@ -1,6 +1,6 @@
 angular
   .module('myApp')
-  .factory('UserService', ['$http', '$location', 'CONSTANTS', 'AppointmentService', function($http, $location, CONSTANTS, AppointmentService){
+  .factory('UserService', ['$http', '$location', '$window', 'CONSTANTS', 'AppointmentService', function($http, $location, $window, CONSTANTS, AppointmentService){
 
   var userObject = {
     user: {}
@@ -63,6 +63,8 @@ angular
     updateUserPassword: updateUserPassword,
     getUser: getUser,
     logout: logout,
+    appointmentCSV: appointmentCSV,
+    formatDate: formatDate,
     redirectToLogin: redirectToLogin,
     redirectToAdminAppointmentsAll: redirectToAdminAppointmentsAll,
     redirectToCaseworkerAppointmentsAll: redirectToCaseworkerAppointmentsAll
@@ -252,5 +254,26 @@ angular
         methods.array = response.data;
         console.log('methods: ', methods.array);
     });
+  }
+
+  // GET csv info from the DB
+  function appointmentCSV(startDate, endDate) {
+    console.log('getting appointments CSV from the DB');
+    startDate = formatDate(startDate);
+    endDate = formatDate(endDate);
+    $http.get('/dataExport/' + startDate + '/' + endDate).then(function(response) {
+      var appointmentData = response.data;
+      console.log('appointment data returned from the database:', appointmentData);
+      $window.open('/dataExport/' + startDate + '/' + endDate);
+    });
+  }
+
+  // Formats date to DB format
+  function formatDate(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1; //Months are zero based
+    var year = date.getFullYear();
+    var formattedDate = year + "-" + month + "-" + day;
+    return formattedDate;
   }
 }]);

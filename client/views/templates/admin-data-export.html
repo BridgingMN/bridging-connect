@@ -1,0 +1,27 @@
+<div layout="row">
+  <div layout-md="column" flex="5"></div>
+  <div layout="column" flex="90">
+    <div class="importFileContainer">
+      <h1>Export Appointment Information</h1>
+        <md-container layout="row" class="exportDatesContainer">
+          <md-input-container layout="column">
+              <label for="fromDate">From:</label>
+              <md-datepicker ng-model="vm.fromDate" ng-disabled="officeDatesEnabledValue" md-current-view="year" md-placeholder="Enter date" required></md-datepicker>
+              <div ng-messages="fromDate.$error">
+                <div ng-message="required">A date is required!</div>
+              </div>
+          </md-input-container>
+          <md-input-container layout="column">
+              <label for="toDate">To:</label>
+              <md-datepicker ng-model="vm.toDate" ng-disabled="officeDatesEnabledValue" md-current-view="year" md-placeholder="Enter date" required></md-datepicker>
+              <div ng-messages="toDate.$error">
+                <div ng-message="required">A date is required!</div>
+              </div>
+          </md-input-container>
+      </md-container>
+      <md-input-container layout="row" layout-align="start start">
+        <md-button ng-click="vm.appointmentCSV(vm.fromDate, vm.toDate)">Export</md-button><br>
+      </md-input-container>
+    </div>
+  </div>
+</div>

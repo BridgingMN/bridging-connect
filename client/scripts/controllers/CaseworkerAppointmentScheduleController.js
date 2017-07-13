@@ -40,8 +40,7 @@ angular
   vm.availableAppointmentsPredicate = availableAppointmentsPredicate;
   vm.selectDate = selectDate;
   vm.reserveAppointment = reserveAppointment;
-
-  activate();
+  vm.activate = activate;
 
   function activate() {
     console.log('UserService at activate', UserService);
@@ -49,8 +48,6 @@ angular
   }
 
   function availableAppointmentsPredicate (date) {
-    console.log('Selected date', date, typeof date);
-    console.log(vm.availableAppointments.some(filterAppointmentsByDate, date));
     return vm.availableAppointments.some(filterAppointmentsByDate, date);
   }
 
@@ -62,6 +59,7 @@ angular
    */
   function selectDate(date) {
     vm.selectedDate = new Date(date);
+    console.log('selected date:', vm.selectedDate);
     vm.appointmentSlots = vm.availableAppointments.filter(filterAppointmentsByDate, vm.selectedDate);
     vm.selectedAppointment = vm.appointmentSlots[0];
   }
@@ -86,7 +84,6 @@ angular
   */
   function filterAppointmentsByDate(appointment) {
     var date = this;
-    console.log(appointment.date, date);
     return compareDates(appointment.date, date);
   }
 
