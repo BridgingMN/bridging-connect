@@ -4,9 +4,6 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 
-// DATABASE MODULE
-var database = require('./modules/database.js');
-
 // AUTHENTICATION MODULES
 var passport = require('./strategies/user_sql.js');
 var session = require('express-session');
@@ -25,10 +22,14 @@ var clients = require('./routes/clients.js').router;
 var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
+var dataExport = require('./routes/dataExport.js');
 var install = require('./routes/installDummies.js');
 
 // TEST MODULES
 var inserts = require('./modules/insertTestData.js').inserts;
+
+// CLEANUP MODULES
+var scheduledDeleter = require('./modules/deleteOldData');
 
 // APP CONFIGURATION
 app.set('port', (process.env.PORT || 5000));
@@ -63,6 +64,7 @@ app.use('/rules', isLoggedIn, rules);
 app.use('/schedule', isAdmin, schedule);
 app.use('/overrides', isAdmin, overrides);
 app.use('/install', isAdmin, install);
+app.use('/dataExport', isAdmin, dataExport);
 app.use('/*', index);
 
 // LISTEN

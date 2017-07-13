@@ -58,7 +58,7 @@
           <div layout-gt-sm="row">
             <md-input-container class="md-block" flex-gt-sm>
               <label>Email</label>
-              <input ng-model="vm.caseworker.selected[0].email" required>
+              <input type="email" ng-model="vm.caseworker.selected[0].email" required>
               <div ng-messages="newCaseworkerForm.email.$error" role="alert">
                 <div ng-message="required" class="my-message">
                   Cannot leave email blank.</div>
