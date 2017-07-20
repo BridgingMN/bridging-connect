@@ -153,7 +153,6 @@ CREATE TABLE IF NOT EXISTS "race_ethnicity" (
 );
 
 -- create "clients" table
--- TODO: finish "clients" table
 CREATE TABLE IF NOT EXISTS "clients" (
   id SERIAL PRIMARY KEY,
   first VARCHAR(20) NOT NULL,
@@ -184,7 +183,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
   how_long_homeless VARCHAR(25),
   what_brought_client_to_bridging VARCHAR(255) NOT NULL,
   will_bring_interpreter BOOLEAN NOT NULL,
-  will_bring_assistant_due_to_mental_health_or_physical_limitations BOOLEAN NOT NULL,
+  will_bring_assistant_due_to_mental_health_or_physical_limits BOOLEAN NOT NULL,
   client_understands_furniture_is_used BOOLEAN NOT NULL,
   client_understands_furniture_must_be_moved_within_48hrs BOOLEAN NOT NULL,
   agency_billing_id VARCHAR(100),
@@ -209,7 +208,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
   new_twin_full_bed_frame VARCHAR(25) NOT NULL,
   new_queen_king_bed_frame VARCHAR(25) NOT NULL,
   client_approves_speaking_with_staff BOOLEAN NOT NULL,
-  if_yes_client_email_or_phone VARCHAR(50),
+  if_yes_client_email_or_phone VARCHAR(50)
 );
 
 

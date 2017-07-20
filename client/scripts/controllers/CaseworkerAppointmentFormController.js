@@ -36,7 +36,7 @@ angular
   }
 
   function appointmentCreateSuccess(response) {
-    console.log(response)
+    console.log(response);
     UserService.navBar.updateCurrentNavItem('/caseworker-appointments-all');
     $location.path('/caseworker-appointments-all');
   }
