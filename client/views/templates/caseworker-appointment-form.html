@@ -58,7 +58,15 @@
           </md-select>
         </md-input-container>
       </div>
-      <!-- @TODO County Client Lives In Pull-down Required (NEW DEL, NEW PU, PU, DEL) -->
+      <!-- County Client Lives In Pull-down Required (NEW DEL, NEW PU, PU, DEL) -->
+      <md-input-container class="md-block">
+        <label>County Client Lives In</label>
+        <md-select ng-model="vm.clientReferralForm.county" required>
+          <md-option ng-repeat="county in vm.counties" value="{{county.description}}">
+            {{county.description}}
+          </md-option>
+        </md-select>
+      </md-input-container>
       <!-- @TODO Building-Client access code text(, PU, DEL) -->
       <md-input-container class="md-block">
         <label>Building-Client access code</label>
