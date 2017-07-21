@@ -46,6 +46,36 @@ angular
           'Wright', 'Yellow Medicine', 'Not Listed']
           .map(function (county) { return { description: county }; });
 
+  //Model for Marital Status drop down
+  vm.statuses = ['Married', 'Single, Separated, Widowed, or Divorced', ]
+                .map(function (marital) { return { description: marital }; });
+
+  //Model for Marital Status drop down
+  vm.sexes = ['Female', 'Male']
+              .map(function (sex) { return { description: sex }; });
+
+  //Model for Yearly Income drop down
+  vm.incomes = ['Under $5,000', '$5,000 - $9,999', '$10,000 - $14,999',
+              '$15,000 - $20,000', 'Over $20,000']
+              .map(function(income) { return { description: income}; });
+
+  //Model for Length of Homelessness drop down
+  vm.homeless = ['Less than 1 Month', '1-3 Months', '4-12 Months',
+              'Over 12 Months', 'Was not homeless']
+              .map(function(length) { return { description: length}; });
+
+  //Model for What Brought client to Bridging drop down
+  vm.bridging = ['Disability', 'Domestic Violence', 'Foreclosure/Loss of Home',
+              'Immigration', 'Job Loss', 'Leaving Prison', 'Medical Bills',
+              'Mental Health', 'Natural Disaster', 'Persistent Low Income',
+              'Substance Abuse', 'Bed Bug Infestation']
+              .map(function(reason) { return { description: reason}; });
+
+  //Model for Who is Paying drop downs
+  vm.bank = ['Referring Agency', 'Client or Other Paying Referring Agency',
+              'Client Paying Bridging', 'Other Paying Bridging']
+              .map(function(payer) { return { description: payer}; });
+
   //Methods
   vm.submitClientForm = submitClientForm;
 
