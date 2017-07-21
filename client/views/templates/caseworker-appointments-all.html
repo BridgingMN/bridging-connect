@@ -92,13 +92,6 @@
           <md-button
             class="md-raised"
             ng-disabled="appointment.info.date.getTime() <= vm.minDate.getTime()"
-            ng-click="vm.editAppointmentInfo(appointment)">
-              <i class="material-icons">mode_edit</i>
-              Edit Client Info
-          </md-button>
-          <md-button
-            class="md-raised"
-            ng-disabled="appointment.info.date.getTime() <= vm.minDate.getTime()"
             ng-click="vm.confirmCancelAppointment(appointment)">
               <i class="material-icons">clear</i>
               Cancel Appointment
