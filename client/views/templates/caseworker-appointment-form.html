@@ -17,46 +17,48 @@
     </div>
   </div>
   <md-content>
-    <form class="client-referall-form" layout="column" flex>
-      <md-input-container>
+    <form class="client-referall-form" flex>
+      <md-input-container class="md-block">
         <label>Client First Name</label>
         <input
           type="text"
           ng-model="vm.clientReferralForm.first"
           required>
       </md-input-container>
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Last Name</label>
         <input
           type="text"
           ng-model="vm.clientReferralForm.last"
           required>
       </md-input-container>
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Date of Birth</label>
         <md-datepicker ng-model="vm.clientReferralForm.dob" required></md-datepicker>
       </md-input-container>
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Street Address (Include Apartment #)</label>
         <input
           type="text"
           ng-model = "vm.clientReferralForm.street"
           required>
       </md-input-container>
-      <div layout-gt-sm="row">
-        <md-input-container class="md-block">
-          <label>Client City</label>
-          <input type="text" ng-model="vm.clientReferralForm.city" required>
-        </md-input-container>
-        <md-input-container class="md-block">
-          <label>Client State</label>
-          <md-select ng-model="vm.clientReferralForm.state" required>
-            <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
-              {{state.abbrev}}
-            </md-option>
-          </md-select>
-        </md-input-container>
-      </div>
+      <md-input-container class="md-block">
+        <label>Client City</label>
+        <input type="text" ng-model="vm.clientReferralForm.city" required>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Client State</label>
+        <md-select ng-model="vm.clientReferralForm.state" required>
+          <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
+            {{state.abbrev}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Client Zip Code</label>
+        <input type="text" ng-model="vm.clientReferralForm.zip_code" required>
+      </md-input-container>
       <!-- County Client Lives In Pull-down Required (NEW DEL, NEW PU, PU, DEL) -->
       <md-input-container class="md-block">
         <label>County Client Lives In</label>
@@ -97,7 +99,7 @@
           <md-radio-button value = "No">No</md-radio-button>
         </md-radio-group>
       </md-input-container>
-      <md-input-container>
+      <md-input-container class="md-block">
         <label>Client Ethnicity</label>
         <md-select ng-model="vm.clientEthnicity" required> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
             <md-select-label>Select a race/ethnicity</md-select-label>
@@ -161,7 +163,9 @@
       <md-input-container class="md-block"
         ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
           <p>Completed Client Checklist</p>
-          <md-checkbox ng-model="vm.clientReferralForm.completed_client_checklist" required></md-checkbox>
+          <md-checkbox ng-model="vm.clientReferralForm.completed_client_checklist"
+              required>
+            </md-checkbox>
       </md-input-container>
       <!-- Client Yearly Income pull-down req (NEW DEL, NEW PU, PU, DEL) -->
       <md-input-container class="md-block">
@@ -232,8 +236,8 @@
       <!-- If there is an ID number used by your agency for billing purposes,
       enter it here: text (NEW DEL, NEW PU, PU, DEL) -->
       <md-input-container class="md-block">
-        <label>If there is an ID number used by your agency for billing purposes,
-        enter it here:</label>
+        <label>If there's an ID number used by your agency for billing purposes,
+        enter here:</label>
         <input type="text" ng-model="vm.clientReferralForm.agency_billing_id">
       </md-input-container>
       <!-- Who is paying for the appointment? Choice list req (, PU, DEL) -->
@@ -296,10 +300,12 @@
       7+ = 3 beds)? Boolean req (, PU, DEL) -->
       <md-input-container class="md-block"
           ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-        <label>USED Beds Needed (GENERAL GUIDELINES - Household size of 1-4 = 1 bed, 5-6 = 2 beds,
-        7+ = 3 beds)?</label>
+
+        <label>USED Beds Needed?</label>
         <input ng-model="vm.clientReferralForm.num_used_beds_needed"
                 required type = "number" required>
+        <p>GENERAL GUIDELINES:</p>
+        <p>Household size of 1-4 people = 1 bed, 5-6 people = 2 beds, 7+ people = 3 beds</p>
       </md-input-container>
       <!-- NEW beds and frames needed? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
       <md-input-container class="md-block">
