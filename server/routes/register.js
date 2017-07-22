@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var path = require('path');
+var usernameToLowerCase = require('../modules/authentication').usernameToLowerCase;
 
 // module with bcrypt functions
 var encryptLib = require('../modules/encryption');
@@ -13,8 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 // Handles POST request with new user data
-router.post('/', function(req, res, next) {
-
+router.post('/', usernameToLowerCase, function(req, res, next) {
   var saveUser = {
     email: req.body.email,
     password: encryptLib.encryptPassword(req.body.password)

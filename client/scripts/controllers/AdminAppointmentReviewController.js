@@ -37,13 +37,13 @@ vm.states = ('AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA ' +
     $http.put('/appointments/update/' + appointment.appointment_id + '/' + 'confirmed')
       .then(function() {
       if(appointment.delivery_date === null) {
-        $location.path('/admin-appointments-all');
+        $location.path('/admin-appointments-pending');
         appointmentAlertDialog('Appointment Confirmed', 'The appointment has been confirmed and a confirmation email has ' +
                 'been sent to the caseworker.');
         } else {
           console.log('Updating Delivery Date to: ', appointment);
           $http.put('/appointments/update/deliverydate', appointment).then(function() {
-            $location.path('/admin-appointments-all');
+            $location.path('/admin-appointments-pending');
             appointmentAlertDialog('Appointment Confirmed', 'The appointment has been confirmed with a delivery date ' +
                     'and an email has been sent to inform the caseworker.');
                   });
