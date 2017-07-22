@@ -1,406 +1,415 @@
-<div class="md-padding caseworker-appointment-referall-form" layout="column" layout-align="start center" layout-margin>
-  <h3>Client Referral Form</h3>
-  <div class="md-whiteframe-3dp caseworker-appointment-info" layout="row" layout-align="center center" >
-    <div class="md-padding">
-      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
-      <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
-      <span><span class="appointment-type">{{vm.appointment.appointment_type}}</span> w/ <span class="appointment-delivery">{{vm.appointment.delivery_method}}</span></span>
-    </div>
-    <div class="md-padding appointment-location">
-      <i class="material-icons">place</i>
-      <span>{{vm.appointment.location_name}}</span>
-    </div>
-    <div class="md-padding appointment-date-time">
-      <i class="material-icons">today</i>
-      <span>{{vm.appointment.appointment.date | date: 'shortDate' }},
-      {{vm.appointment.appointment.start_time | uppercase}}</span>
+<div class="md-padding caseworker-appointment-referall-form">
+  <div layout = "row" layout-align = "center">
+    <h3>Client Referral Form</h3>
+  </div>
+  <div layout = "row" layout-padding layout-align = "center">
+    <div class="md-whiteframe-3dp" layout = "row" layout-align = "center center" flex = "50">
+      <div class="md-padding">
+        <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+        <i ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING"class="material-icons">shopping_cart</i>
+        <span><span class="appointment-type">{{vm.appointment.appointment_type}}</span> w/ <span class="appointment-delivery">{{vm.appointment.delivery_method}}</span></span>
+      </div>
+      <div class="md-padding appointment-location">
+        <i class="material-icons">place</i>
+        <span>{{vm.appointment.location_name}}</span>
+      </div>
+      <div class="md-padding appointment-date-time">
+        <i class="material-icons">today</i>
+        <span>{{vm.appointment.appointment.date | date: 'shortDate' }},
+        {{vm.appointment.appointment.start_time | uppercase}}</span>
+      </div>
     </div>
   </div>
-  <md-content>
-    <form class="client-referall-form" flex>
-      <md-input-container class="md-block">
-        <label>Client First Name</label>
-        <input
-          type="text"
-          ng-model="vm.clientReferralForm.first"
-          required>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client Last Name</label>
-        <input
-          type="text"
-          ng-model="vm.clientReferralForm.last"
-          required>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client Date of Birth</label>
-        <md-datepicker ng-model="vm.clientReferralForm.dob" required></md-datepicker>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client Street Address (Include Apartment #)</label>
-        <input
-          type="text"
-          ng-model = "vm.clientReferralForm.street"
-          required>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client City</label>
-        <input type="text" ng-model="vm.clientReferralForm.city" required>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client State</label>
-        <md-select ng-model="vm.clientReferralForm.state" required>
-          <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
-            {{state.abbrev}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client Zip Code</label>
-        <input type="text" ng-model="vm.clientReferralForm.zip_code" required>
-      </md-input-container>
-      <!-- County Client Lives In Pull-down Required (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>County Client Lives In</label>
-        <md-select ng-model="vm.clientReferralForm.county" required>
-          <md-option ng-repeat="county in vm.counties" value="{{county.description}}">
-            {{county.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- Building-Client access code text(, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-        <label>Building-Client access code</label>
-        <input type="text" ng-model="vm.clientReferralForm.building_access_code">
-      </md-input-container>
-      <!-- Client Primary Phone Number text req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Client Primary Phone Number</label>
-        <input type="text" ng-model="vm.clientReferralForm.primary_phone" required>
-      </md-input-container>
-      <!-- Client Alternate Phone Number text (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Client Alternate Phone Number</label>
-        <input type="text" ng-model="vm.clientReferralForm.alternate_phone">
-      </md-input-container>
-      <!-- Client email address text req (, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-        <label>Client email address</label>
-        <input ng-model="vm.clientReferralForm.email" required type = "email"
-                required>
-      </md-input-container>
-      <!-- Has client accessed Bridging services in the past? Boolean req  (NEW DEL, NEW PU, PU, DEL)-->
-      <md-input-container class="md-block">
-        <p>Has client accessed Bridging services in the past?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.used_bridging_services_previously">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <md-input-container class="md-block">
-        <label>Client Ethnicity</label>
-        <md-select ng-model="vm.clientEthnicity" required> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-            <md-select-label>Select a race/ethnicity</md-select-label>
-            <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
-        </md-select>
-      </md-input-container>
-      <!-- Client Marital Status Pull-down required (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Client Marital Status</label>
-        <md-select ng-model="vm.clientReferralForm.marital_status" required>
-          <md-option ng-repeat="status in vm.statuses" value="{{status.description}}">
-            {{status.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- Client Sex pull-down req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Client Sex</label>
-        <md-select ng-model="vm.clientReferralForm.sex" required>
-          <md-option ng-repeat="sex in vm.sexes" value="{{sex.description}}">
-            {{sex.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- Client Age text req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Client Age</label>
-        <input ng-model="vm.clientReferralForm.age"
-                required type = "number" required>
-      </md-input-container>
-      <!-- Household Size text req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Household Size</label>
-        <input ng-model="vm.clientReferralForm.household_size"
-                required type = "number" required>
-      </md-input-container>
-      <!-- Age of ALL others in household text (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Age of ALL others in household</label>
-        <input type="text" ng-model="vm.clientReferralForm.age_of_others_in_household">
-      </md-input-container>
-      <!-- How many children in the household are 17 and under? text req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>How many children in the household are 17 and under?</label>
-        <input ng-model="vm.clientReferralForm.num_children_17andUnder"
-                required type = "number" required>
-      </md-input-container>
-      <!-- Number of Bedrooms text req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Number of Bedrooms</label>
-        <input ng-model="vm.clientReferralForm.num_bedrooms"
-                required type = "number" required>
-      </md-input-container>
-      <!-- Home Vist Completed Date req (, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-          <label>Home Visit Completed Date</label>
-          <md-datepicker ng-model="vm.clientReferralForm.home_visit_completed" required></md-datepicker>
-      </md-input-container>
-      <!-- Completed Client Checklist Boolean req (, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-          <p>Completed Client Checklist</p>
-          <md-checkbox ng-model="vm.clientReferralForm.completed_client_checklist"
+  <br>
+  <div layout = "row" layout-padding layout-align = "center">
+    <div flex = "50" class="md-whiteframe-1dp">
+      <md-content >
+        <form class="client-referall-form">
+          <md-input-container class="md-block">
+            <label>Client First Name</label>
+            <input
+              type="text"
+              ng-model="vm.clientReferralForm.first"
               required>
-            </md-checkbox>
-      </md-input-container>
-      <!-- Client Yearly Income pull-down req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Client Yearly Income</label>
-        <md-select ng-model="vm.clientReferralForm.yearly_income" required>
-          <md-option ng-repeat="income in vm.incomes" value="{{income.description}}">
-            {{income.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- Was the client homeless? Bool req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <p>Was the client homeless?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.was_client_homeless">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- For how long was the client homeless? choice list req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.was_client_homeless === 'Yes'">
-        <label>For how long was the client homeless?</label>
-        <md-select ng-model="vm.clientReferralForm.how_long_homeless" required>
-          <md-option ng-repeat="length in vm.homeless" value="{{length.description}}">
-            {{length.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- What brought the client to Bridging? pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>What brought the client to Bridging?</label>
-        <md-select ng-model="vm.clientReferralForm.what_brought_client_to_bridging" required>
-          <md-option ng-repeat="reason in vm.bridging" value="{{reason.description}}">
-            {{reason.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- Will bring an interpreter? boolean req (, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-        <p>Will bring an interpreter?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.will_bring_interpreter">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- Will bring assistant required due to mental health or physical limitations? Boolean req (, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-        <p>Will bring assistant required due to mental health or physical limitations?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.will_bring_assistant_due_to_mental_health_or_physical_limits">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- Does your client understand that the furniture is used? Boolean req (, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-          <p>Does your client understand that the furniture is used?</p>
-          <md-checkbox ng-model="vm.clientReferralForm.client_understands_furniture_is_used" required></md-checkbox>
-      </md-input-container>
-      <!-- Does your client understand that the furniture must be moved within 48hrs? boolean req (, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-          <p>Does your client understand that the furniture must be moved within 48hrs?</p>
-          <md-checkbox ng-model="vm.clientReferralForm.client_understands_furniture_must_be_moved_within_48hrs" required></md-checkbox>
-      </md-input-container>
-      <!-- If there is an ID number used by your agency for billing purposes,
-      enter it here: text (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>If there's an ID number used by your agency for billing purposes,
-        enter here:</label>
-        <input type="text" ng-model="vm.clientReferralForm.agency_billing_id">
-      </md-input-container>
-      <!-- Who is paying for the appointment? Choice list req (, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-        <label>Who is paying for the appointment?</label>
-        <md-select ng-model="vm.clientReferralForm.who_paying_for_appointment" required>
-          <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
-            {{payer.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- @TODO CTPAppointment Boolean Hidden (, DEL) -->
-      <!-- If OTHER, who is paying for the appointment? text (, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING &&
-          vm.clientReferralForm.who_paying_for_appointment === 'Other Paying Bridging'">
-        <label>If OTHER, who is paying for the appointment?</label>
-        <input type="text" ng-model="vm.clientReferralForm.if_other_who_paying_appointment">
-      </md-input-container>
-      <!-- Who is paying for delivery? choice list req (NEW DEL, DEL) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-        <label>Who is paying for delivery?</label>
-        <md-select ng-model="vm.clientReferralForm.who_paying_for_delivery" required>
-          <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
-            {{payer.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- @TODO CTPDelivery Boolean hidden (NEW DEL, DEL) -->
-      <!-- If OTHER, who is paying for delivery? text (NEW DEL, DEL) -->
-      <md-input-container class="md-block"
-          ng-if="vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY &&
-          vm.clientReferralForm.who_paying_for_delivery === 'Other Paying Bridging'">
-          <label>If OTHER, who is paying for delivery?</label>
-        <input type="text" ng-model="vm.clientReferralForm.if_other_who_paying_delivery">
-      </md-input-container>
-      <!-- What floor does the client live on? Text req (NEW DEL, DEL) -->
-      <md-input-container class="md-block"
-          ng-if="vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-        <label>What floor does the client live on</label>
-        <input type="text" ng-model="vm.clientReferralForm.what_floor_does_client_live_on">
-      </md-input-container>
-      <!-- Is there an elevator in the building? boolean req (NEW DEL, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-        <p>Is there an elevator in the building?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.elevator_in_building">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- Additional Notes Text (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <label>Additional Notes</label>
-        <input type="text" ng-model="vm.clientReferralForm.additional_notes">
-      </md-input-container>
-      <!-- USED Beds Needed (GENERAL GUIDELINES - Household size of 1-4 = 1 bed, 5-6 = 2 beds,
-      7+ = 3 beds)? Boolean req (, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client Last Name</label>
+            <input
+              type="text"
+              ng-model="vm.clientReferralForm.last"
+              required>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client Date of Birth</label>
+            <md-datepicker ng-model="vm.clientReferralForm.dob" required></md-datepicker>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client Street Address (Include Apartment #)</label>
+            <input
+              type="text"
+              ng-model = "vm.clientReferralForm.street"
+              required>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client City</label>
+            <input type="text" ng-model="vm.clientReferralForm.city" required>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client State</label>
+            <md-select ng-model="vm.clientReferralForm.state" required>
+              <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
+                {{state.abbrev}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client Zip Code</label>
+            <input type="text" ng-model="vm.clientReferralForm.zip_code" required>
+          </md-input-container>
+          <!-- County Client Lives In Pull-down Required (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>County Client Lives In</label>
+            <md-select ng-model="vm.clientReferralForm.county" required>
+              <md-option ng-repeat="county in vm.counties" value="{{county.description}}">
+                {{county.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- Building-Client access code text(, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+            <label>Building-Client access code</label>
+            <input type="text" ng-model="vm.clientReferralForm.building_access_code">
+          </md-input-container>
+          <!-- Client Primary Phone Number text req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Client Primary Phone Number</label>
+            <input type="text" ng-model="vm.clientReferralForm.primary_phone" required>
+          </md-input-container>
+          <!-- Client Alternate Phone Number text (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Client Alternate Phone Number</label>
+            <input type="text" ng-model="vm.clientReferralForm.alternate_phone">
+          </md-input-container>
+          <!-- Client email address text req (, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+            <label>Client email address</label>
+            <input ng-model="vm.clientReferralForm.email" required type = "email"
+                    required>
+          </md-input-container>
+          <!-- Has client accessed Bridging services in the past? Boolean req  (NEW DEL, NEW PU, PU, DEL)-->
+          <md-input-container class="md-block">
+            <p>Has client accessed Bridging services in the past?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.used_bridging_services_previously">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Client Ethnicity</label>
+            <md-select ng-model="vm.clientEthnicity" required> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+                <md-select-label>Select a race/ethnicity</md-select-label>
+                <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
+            </md-select>
+          </md-input-container>
+          <!-- Client Marital Status Pull-down required (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Client Marital Status</label>
+            <md-select ng-model="vm.clientReferralForm.marital_status" required>
+              <md-option ng-repeat="status in vm.statuses" value="{{status.description}}">
+                {{status.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- Client Sex pull-down req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Client Sex</label>
+            <md-select ng-model="vm.clientReferralForm.sex" required>
+              <md-option ng-repeat="sex in vm.sexes" value="{{sex.description}}">
+                {{sex.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- Client Age text req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Client Age</label>
+            <input ng-model="vm.clientReferralForm.age"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- Household Size text req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Household Size</label>
+            <input ng-model="vm.clientReferralForm.household_size"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- Age of ALL others in household text (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Age of ALL others in household</label>
+            <input type="text" ng-model="vm.clientReferralForm.age_of_others_in_household">
+          </md-input-container>
+          <!-- How many children in the household are 17 and under? text req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>How many children in the household are 17 and under?</label>
+            <input ng-model="vm.clientReferralForm.num_children_17andUnder"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- Number of Bedrooms text req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Number of Bedrooms</label>
+            <input ng-model="vm.clientReferralForm.num_bedrooms"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- Home Vist Completed Date req (, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+              <label>Home Visit Completed Date</label>
+              <md-datepicker ng-model="vm.clientReferralForm.home_visit_completed" required></md-datepicker>
+          </md-input-container>
+          <!-- Completed Client Checklist Boolean req (, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+              <p>Completed Client Checklist</p>
+              <md-checkbox ng-model="vm.clientReferralForm.completed_client_checklist"
+                  required>
+                </md-checkbox>
+          </md-input-container>
+          <!-- Client Yearly Income pull-down req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Client Yearly Income</label>
+            <md-select ng-model="vm.clientReferralForm.yearly_income" required>
+              <md-option ng-repeat="income in vm.incomes" value="{{income.description}}">
+                {{income.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- Was the client homeless? Bool req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <p>Was the client homeless?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.was_client_homeless">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- For how long was the client homeless? choice list req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.was_client_homeless === 'Yes'">
+            <label>For how long was the client homeless?</label>
+            <md-select ng-model="vm.clientReferralForm.how_long_homeless" required>
+              <md-option ng-repeat="length in vm.homeless" value="{{length.description}}">
+                {{length.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- What brought the client to Bridging? pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>What brought the client to Bridging?</label>
+            <md-select ng-model="vm.clientReferralForm.what_brought_client_to_bridging" required>
+              <md-option ng-repeat="reason in vm.bridging" value="{{reason.description}}">
+                {{reason.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- Will bring an interpreter? boolean req (, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+            <p>Will bring an interpreter?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.will_bring_interpreter">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- Will bring assistant required due to mental health or physical limitations? Boolean req (, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+            <p>Will bring assistant required due to mental health or physical limitations?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.will_bring_assistant_due_to_mental_health_or_physical_limits">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- Does your client understand that the furniture is used? Boolean req (, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+              <p>Does your client understand that the furniture is used?</p>
+              <md-checkbox ng-model="vm.clientReferralForm.client_understands_furniture_is_used" required></md-checkbox>
+          </md-input-container>
+          <!-- Does your client understand that the furniture must be moved within 48hrs? boolean req (, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+              <p>Does your client understand that the furniture must be moved within 48hrs?</p>
+              <md-checkbox ng-model="vm.clientReferralForm.client_understands_furniture_must_be_moved_within_48hrs" required></md-checkbox>
+          </md-input-container>
+          <!-- If there is an ID number used by your agency for billing purposes,
+          enter it here: text (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>If there's an ID number used by your agency for billing purposes,
+            enter here:</label>
+            <input type="text" ng-model="vm.clientReferralForm.agency_billing_id">
+          </md-input-container>
+          <!-- Who is paying for the appointment? Choice list req (, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+            <label>Who is paying for the appointment?</label>
+            <md-select ng-model="vm.clientReferralForm.who_paying_for_appointment" required>
+              <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
+                {{payer.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- @TODO CTPAppointment Boolean Hidden (, DEL) -->
+          <!-- If OTHER, who is paying for the appointment? text (, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING &&
+              vm.clientReferralForm.who_paying_for_appointment === 'Other Paying Bridging'">
+            <label>If OTHER, who is paying for the appointment?</label>
+            <input type="text" ng-model="vm.clientReferralForm.if_other_who_paying_appointment">
+          </md-input-container>
+          <!-- Who is paying for delivery? choice list req (NEW DEL, DEL) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+            <label>Who is paying for delivery?</label>
+            <md-select ng-model="vm.clientReferralForm.who_paying_for_delivery" required>
+              <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
+                {{payer.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- @TODO CTPDelivery Boolean hidden (NEW DEL, DEL) -->
+          <!-- If OTHER, who is paying for delivery? text (NEW DEL, DEL) -->
+          <md-input-container class="md-block"
+              ng-if="vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY &&
+              vm.clientReferralForm.who_paying_for_delivery === 'Other Paying Bridging'">
+              <label>If OTHER, who is paying for delivery?</label>
+            <input type="text" ng-model="vm.clientReferralForm.if_other_who_paying_delivery">
+          </md-input-container>
+          <!-- What floor does the client live on? Text req (NEW DEL, DEL) -->
+          <md-input-container class="md-block"
+              ng-if="vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+            <label>What floor does the client live on</label>
+            <input type="text" ng-model="vm.clientReferralForm.what_floor_does_client_live_on">
+          </md-input-container>
+          <!-- Is there an elevator in the building? boolean req (NEW DEL, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+            <p>Is there an elevator in the building?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.elevator_in_building">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- Additional Notes Text (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <label>Additional Notes</label>
+            <input type="text" ng-model="vm.clientReferralForm.additional_notes">
+          </md-input-container>
+          <!-- USED Beds Needed (GENERAL GUIDELINES - Household size of 1-4 = 1 bed, 5-6 = 2 beds,
+          7+ = 3 beds)? Boolean req (, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
 
-        <label>USED Beds Needed?</label>
-        <input ng-model="vm.clientReferralForm.num_used_beds_needed"
-                required type = "number" required>
-        <p>GENERAL GUIDELINES:</p>
-        <p>Household size of 1-4 people = 1 bed, 5-6 people = 2 beds, 7+ people = 3 beds</p>
-      </md-input-container>
-      <!-- NEW beds and frames needed? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block">
-        <p>NEW beds and frames needed?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.new_beds_and_frames_needed">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- Who is paying for NEW Beds and Frames? choice list req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
-        <label>Who is paying for NEW Beds and Frames?</label>
-        <md-select ng-model="vm.clientReferralForm.who_paying_for_new_beds_and_frames" required>
-          <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
-            {{payer.description}}
-          </md-option>
-        </md-select>
-      </md-input-container>
-      <!-- @TODO CTPNEWItems Boolean Hidden (NEW DEL, DEL) -->
-      <!-- If OTHER who is paying for NEW items? text (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes' &&
-        vm.clientReferralForm.who_paying_for_new_beds_and_frames === 'Other Paying Bridging'">
-        <label>If OTHER who is paying for NEW items?</label>
-        <input type="text" ng-model="vm.clientReferralForm.if_other_who_paying_new_items">
-      </md-input-container>
-      <!-- (Prices included sales tax) If AGENCY is paying, is Agency tax
-      exempt? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.who_paying_for_appointment === 'Referring Agency' ||
-          vm.clientReferralForm.who_paying_for_delivery === 'Referring Agency' ||
-          vm.clientReferralForm.who_paying_for_new_beds_and_frames === 'Referring Agency'">
-        <p>(Prices included sales tax) If AGENCY is paying, is Agency tax
-        exempt?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.agency_tax_exempt">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- NEW Twin Mattress and Box Spring pull-down req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-        ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
-        <label>NEW Twin Mattress and Box Spring</label>
-        <input ng-model="vm.clientReferralForm.new_twin_mattress_and_box_spring"
-                required type = "number" required>
-      </md-input-container>
-      <!-- NEW Full Mattress and Box Spring pull down req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
-        <label>NEW Full Mattress and Box Spring</label>
-        <input ng-model="vm.clientReferralForm.new_full_mattress_and_box_spring"
-                required type = "number" required>
-      </md-input-container>
-      <!-- NEW Queen Mattress and Box Spring pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
-        <label>NEW Queen Mattress and Box Spring</label>
-        <input ng-model="vm.clientReferralForm.new_queen_mattress_and_box_spring"
-                required type = "number" required>
-      </md-input-container>
-      <!-- NEW Twin/Full Bed Frame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
-        <label>NEW Twin/Full Bed Frame</label>
-        <input ng-model="vm.clientReferralForm.new_twin_full_bed_frame"
-                required type = "number" required>
-      </md-input-container>
-      <!-- NEW Queen/King Bed FRame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
-        <label>NEW Queen/King Bed Frame</label>
-        <input ng-model="vm.clientReferralForm.new_queen_king_bed_frame"
-                required type = "number" required>
-      </md-input-container>
-      <!-- Client approves speaking with a staff member about their Bridging
-      experience? Boolean req (NEW DEL, NEW PU) -->
-      <md-input-container class="md-block"
-        ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED">
-        <p>Client approves speaking with a staff member about their Bridging
-        experience?</p>
-        <md-radio-group ng-model = "vm.clientReferralForm.client_approves_speaking_with_staff">
-          <md-radio-button value = "Yes">Yes</md-radio-button>
-          <md-radio-button value = "No">No</md-radio-button>
-        </md-radio-group>
-      </md-input-container>
-      <!-- If yes, client's email or phone number. text (NEW DEL, NEW PU) -->
-      <md-input-container class="md-block"
-          ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED &&
-            vm.clientReferralForm.client_approves_speaking_with_staff === 'Yes'">
-        <label>If yes, client's email or phone number</label>
-        <input type="text" ng-model="vm.clientReferralForm.if_yes_client_email_or_phone">
-      </md-input-container>
+            <label>USED Beds Needed?</label>
+            <input ng-model="vm.clientReferralForm.num_used_beds_needed"
+                    required type = "number" required>
+            <p>GENERAL GUIDELINES:</p>
+            <p>Household size of 1-4 people = 1 bed, 5-6 people = 2 beds, 7+ people = 3 beds</p>
+          </md-input-container>
+          <!-- NEW beds and frames needed? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block">
+            <p>NEW beds and frames needed?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.new_beds_and_frames_needed">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- Who is paying for NEW Beds and Frames? choice list req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
+            <label>Who is paying for NEW Beds and Frames?</label>
+            <md-select ng-model="vm.clientReferralForm.who_paying_for_new_beds_and_frames" required>
+              <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
+                {{payer.description}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <!-- @TODO CTPNEWItems Boolean Hidden (NEW DEL, DEL) -->
+          <!-- If OTHER who is paying for NEW items? text (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes' &&
+            vm.clientReferralForm.who_paying_for_new_beds_and_frames === 'Other Paying Bridging'">
+            <label>If OTHER who is paying for NEW items?</label>
+            <input type="text" ng-model="vm.clientReferralForm.if_other_who_paying_new_items">
+          </md-input-container>
+          <!-- (Prices included sales tax) If AGENCY is paying, is Agency tax
+          exempt? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.who_paying_for_appointment === 'Referring Agency' ||
+              vm.clientReferralForm.who_paying_for_delivery === 'Referring Agency' ||
+              vm.clientReferralForm.who_paying_for_new_beds_and_frames === 'Referring Agency'">
+            <p>(Prices included sales tax) If AGENCY is paying, is Agency tax
+            exempt?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.agency_tax_exempt">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- NEW Twin Mattress and Box Spring pull-down req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+            ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
+            <label>NEW Twin Mattress and Box Spring</label>
+            <input ng-model="vm.clientReferralForm.new_twin_mattress_and_box_spring"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- NEW Full Mattress and Box Spring pull down req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
+            <label>NEW Full Mattress and Box Spring</label>
+            <input ng-model="vm.clientReferralForm.new_full_mattress_and_box_spring"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- NEW Queen Mattress and Box Spring pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
+            <label>NEW Queen Mattress and Box Spring</label>
+            <input ng-model="vm.clientReferralForm.new_queen_mattress_and_box_spring"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- NEW Twin/Full Bed Frame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
+            <label>NEW Twin/Full Bed Frame</label>
+            <input ng-model="vm.clientReferralForm.new_twin_full_bed_frame"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- NEW Queen/King Bed FRame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.clientReferralForm.new_beds_and_frames_needed === 'Yes'">
+            <label>NEW Queen/King Bed Frame</label>
+            <input ng-model="vm.clientReferralForm.new_queen_king_bed_frame"
+                    required type = "number" required>
+          </md-input-container>
+          <!-- Client approves speaking with a staff member about their Bridging
+          experience? Boolean req (NEW DEL, NEW PU) -->
+          <md-input-container class="md-block"
+            ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED">
+            <p>Client approves speaking with a staff member about their Bridging
+            experience?</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.client_approves_speaking_with_staff">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
+          </md-input-container>
+          <!-- If yes, client's email or phone number. text (NEW DEL, NEW PU) -->
+          <md-input-container class="md-block"
+              ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED &&
+                vm.clientReferralForm.client_approves_speaking_with_staff === 'Yes'">
+            <label>If yes, client's email or phone number</label>
+            <input type="text" ng-model="vm.clientReferralForm.if_yes_client_email_or_phone">
+          </md-input-container>
 
-      <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Submit</md-button>
-    </form>
-  </md-content>
+          <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Submit</md-button>
+        </form>
+      </md-content>
+    </div>
+  </div>
 </div>
