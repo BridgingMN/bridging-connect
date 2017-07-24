@@ -10,11 +10,6 @@ function config($locationProvider, $mdThemingProvider, $routeProvider) {
       controller: 'LoginController',
       controllerAs: 'vm'
     })
-    .when('/register', {
-      templateUrl: '/views/templates/register.html',
-      controller: 'RegisterController',
-      controllerAs: 'vm'
-    })
     .when('/forgotpassword', {
        templateUrl: '/views/templates/forgot.html',
        controller: 'PasswordResetController',
