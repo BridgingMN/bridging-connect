@@ -196,7 +196,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
   what_floor_does_client_live_on VARCHAR(2),
   elevator_in_building BOOLEAN,
   additional_notes VARCHAR(255),
-  num_used_beds_needed INTEGER,
+  used_beds_needed BOOLEAN,
   new_beds_and_frames_needed BOOLEAN NOT NULL,
   who_paying_for_new_beds_and_frames VARCHAR(75),
   ctpnewitems BOOLEAN,
