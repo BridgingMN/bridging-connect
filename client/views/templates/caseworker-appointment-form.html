@@ -307,10 +307,11 @@
           7+ = 3 beds)? Boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
               ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-
             <label>USED Beds Needed?</label>
-            <input ng-model="vm.clientReferralForm.num_used_beds_needed"
-                    required type = "number" required>
+            <md-radio-group ng-model = "vm.clientReferralForm.used_beds_needed">
+              <md-radio-button value = "Yes">Yes</md-radio-button>
+              <md-radio-button value = "No">No</md-radio-button>
+            </md-radio-group>
             <p>GENERAL GUIDELINES:</p>
             <p>Household size of 1-4 people = 1 bed, 5-6 people = 2 beds, 7+ people = 3 beds</p>
           </md-input-container>
