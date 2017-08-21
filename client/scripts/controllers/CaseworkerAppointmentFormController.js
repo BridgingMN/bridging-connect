@@ -1,4 +1,4 @@
-angular
+  angular
   .module('myApp')
   .controller('CaseworkerAppointmentFormController', ['$location', 'CONSTANTS', 'UserService', function($location, CONSTANTS, UserService) {
   // DATA-BINDING VARIABLES
