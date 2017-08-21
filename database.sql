@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS "clients" (
   age INTEGER NOT NULL,
   household_size INTEGER NOT NULL,
   age_of_others_in_household VARCHAR(100),
-  num_children_17andUnder INTEGER NOT NULL,
+  num_children_17_and_under INTEGER NOT NULL,
   num_bedrooms INTEGER NOT NULL,
   home_visit_completed DATE,
   completed_client_checklist BOOLEAN,
