@@ -8,7 +8,7 @@ Bridging Connect is built to smoothly facilitate the scheduling of shopping appo
 
 ### Administrator Login
 
-![Login](screenshots/Login.png)
+![Login](screenshots/login.png)
 
 ### 1.1.0 View all appointments
 
@@ -64,9 +64,11 @@ Bridging Connect is built to smoothly facilitate the scheduling of shopping appo
 
 ### Caseworker Login
 
-![Login](screenshots/Login.png)
+![Login](screenshots/login.png)
 
 ### 2.1.0 View All Appointments
+
+![Caseworker Home](screenshots/caseworker-home.png)
 
 ### 2.1.1 Cancel or Reschedule Appointments
 
