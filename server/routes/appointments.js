@@ -247,9 +247,10 @@ router.post('/reserve', function(req, res) {
     appointment_slot_id, created_date, status)
   .then(function(result, error) {
     if (error) {
-      console.log(error);
+      console.log('Error in posting appointment:', error);
       res.sendStatus(500);
     } else {
+      console.log('Success in posting appointment, result:', error);
       res.send(result);
     }
   });
