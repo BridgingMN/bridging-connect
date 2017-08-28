@@ -98,7 +98,6 @@ function getClientIds(rows) {
     var clientId = rows[i].client_id;
     clientIds.push(clientId);
   }
-  console.log('clientIds', clientIds);
   return clientIds;
 }
 

@@ -11,11 +11,8 @@ var request = require('request');
 
 // script to add a certain number of entries to appointments table
 function insertDummyAppointments(numEntries) {
-  console.log('in insert dummy appts');
-  console.log('getting appt data');
   getApptData()
   .then(function(pulledData) {
-    console.log('creating appts');
     for (var i = 0; i < numEntries; i++) {
       createAppointment(pulledData, stockData);
     }
@@ -208,66 +205,14 @@ function Client(pulledData, stockData) {
 }
 
 // adds client to DB
-// takes an array of stock first names, array of stock last names, array of stock street
-// names, array of objects with city property & zip property
 // returns id of created client
 function createClient(pulledData, stockData) {
-  var firstName = pickRandomFrom(stockData.firstNames);
-  var lastName = pickRandomFrom(stockData.lastNames);
-  var houseNumber = pickRandomFrom(stockData.houseNumbers);
-  var street = pickRandomFrom(stockData.streets);
-  var address = houseNumber + ' ' + street;
-  var cityZip = pickRandomFrom(stockData.cityZips);
-  var city = cityZip.city;
-  var zip = cityZip.zip;
-  var county = getCountyForCity(city);
-  var state = 'MN';
-  var dob = pickRandomFrom(stockData.dobs);
-  var accessCode = setBuildingAccessCode();
-
-  var raceEthnicity = pickRandomFrom(pulledData.raceEthnicities).race_ethnicity;
-
-  var phone = generatePhoneNumber();
-  var altPhone = setAlternatePhoneNumber();
-  var email = generateEmail(firstName, lastName);
-  var usedBridgingPreviously = setUsedBridgingPreviously();
-  var maritalStatus = maritalStatus();
-  var sex = setSex();
-  var age = setAge();
-  var householdSize = setHouseholdSize();
-  var numChildren17AndUnder = setNumChildren17AndUnder(householdSize);
-  var numBedrooms = setNumBedrooms(householdSize);
-  var homeVisitDate = setHomeVisitDate();
-  var completedClientChecklist = true;
-  var yearlyIncome = setYearlyIncome();
-  var wasHomeless = setWasHomeless();
-  if (wasHomeless) {
-  var howLongHomeless = setHowLongHomeless();
-  }
-  var whatBroughtClientToBridging = setWhatBroughtClientToBridging();
-  var willBringInterpreter = setWillBringInterpreter();
-  var clientUnderstandsFurnitureIsUsed = true;
-  var clientUnderstandsFurnitureMustBeMoved = true;
-  var whoPayingForAppointment = setWhoPayingForAppointment();
-  var ifOtherWhoPaying = setIfOtherWhoPaying();
-  var elevatorInBuilding = setBoolean(.15);
-  var usedBedsNeeded = setBoolean(.20);
-
-  var newBedsNeeded = setNewBedsNeeded();
-  var whoPayingForNewBeds = setWhoPayingForNewBeds(newBedsNeeded);
- 
-
-  // new_twin_mattress_and_box_spring INTEGER,
-  // new_full_mattress_and_box_spring INTEGER,
-  // new_queen_mattress_and_box_spring INTEGER,
-  // new_twin_full_bed_frame INTEGER,
-  // new_queen_king_bed_frame INTEGER,
-
-  return postClient(firstName, lastName, dob, raceEthnicity, address, city, state, zip)
-  .then(function(result){
+  var client = new Client(pulledData, stockData);
+  return postClient(client)
+  .then(function(result) {
     return result;
   })
-  .catch(function(error){
+  .catch(function(error) {
     console.log(error);
   });
 }
@@ -278,8 +223,6 @@ function getRaceEthnicities() {
 }
 
 function getCountyForCity(thisCity) {
-  console.log(thisCity);
-  console.log(stockData.cityCounties);
   for (var i = 0; i < stockData.cityCounties.length; i++) {
     if (stockData.cityCounties[i].city === thisCity) {
       return stockData.cityCounties[i].county;
@@ -300,7 +243,7 @@ function setBoolean(chanceOfTrue) {
 
 function convertBoolToYesNo(bool) {
   if (bool) {
-    return 'Yes';  
+    return 'Yes';
   } else {
     return 'No';
   }
@@ -308,13 +251,6 @@ function convertBoolToYesNo(bool) {
 
 // building_access_code VARCHAR(10),
 function setBuildingAccessCode() {
-  // var accessCode = null;
-  // var rand = Math.random();
-  // if (rand < 0.1) {
-  //   accessCode = (Math.floor(1000 + Math.random() * 9000)).toString();
-  // }
-  // return accessCode;
-
   return (Math.floor(1000 + Math.random() * 9000)).toString();
 }
 
@@ -333,16 +269,6 @@ function setAlternatePhoneNumber() {
   }
   return altPhone;
 }
-
-// email VARCHAR(120),
-// function setClientEmail(firstName, lastName) {
-//   var email = null;
-//   var rand = Math.random();
-//   if (rand < .66) {
-//     email = generateEmail(firstName, lastName);
-//   }
-//   return email;
-// }
 
 // used_bridging_services_previously BOOLEAN NOT NULL,
 function setUsedBridgingPreviously() {
@@ -392,9 +318,6 @@ function setHouseholdSize() {
   var householdSize = Math.floor(Math.random() * 8) + 1;
   return householdSize;
 }
-
-// age_of_others_in_household VARCHAR(100),
-
 // num_children_17_and_under INTEGER NOT NULL,
 function setNumChildren17AndUnder(householdSize) {
   var numAdults = Math.ceil(Math.random() * householdSize);
@@ -413,8 +336,6 @@ function setHomeVisitDate() {
   oneWeekAgo.setDate(today.getDate() - 7);
   return formatDateForPostgres(oneWeekAgo);
 }
-
-// completed_client_checklist BOOLEAN,
 
 // yearly_income VARCHAR(25) NOT NULL,
 function setYearlyIncome() {
@@ -471,22 +392,6 @@ function setWillBringInterpreter() {
   return willBringInterpreter;
 }
 
-// will_bring_assistant_due_to_mental_health_or_physical_limits BOOLEAN,
-function setWillBringAssistant() {
-  var willBringAssistant;
-  var rand = Math.random();
-  if (rand < .9) {
-    willBringAssistant = false;
-  } else {
-    willBringAssistant = true;
-  }
-  return willBringAssistant;
-}
-// client_understands_furniture_is_used BOOLEAN,
-// client_understands_furniture_must_be_moved_within_48hrs BOOLEAN,
-
-// agency_billing_id VARCHAR(100),
-
 // who_paying_for_appointment VARCHAR(255),
 function setWhoPayingForAppointment() {
   var whoPayingOptions = ['Referring Agency', 'Client or Other Paying Referring Agency',
@@ -495,30 +400,9 @@ function setWhoPayingForAppointment() {
 }
 
 // if_other_who_paying_appointment VARCHAR(75),
-function setIfOtherWhoPaying(whoPayingForAppointment) {
-  return pickRandomFrom(['The client\'s family', 'Referring agency will give money to client', 
+function setIfOtherWhoPaying() {
+  return pickRandomFrom(['The client\'s family', 'Referring agency will give money to client',
       'Still need to figure this out', 'Client may pay but maybe agency will']);
-}
-
-// NOT INCLUDED:
-// ctpappointment BOOLEAN,
-// who_paying_for_delivery VARCHAR(255),
-// ctpdelivery BOOLEAN,
-// if_other_who_paying_delivery VARCHAR(75),
-// what_floor_does_client_live_on VARCHAR(2),
-
-// INCLUDED
-// elevator_in_building BOOLEAN,
-
-// NOT INCLUDED
-// additional_notes VARCHAR(255),
-
-// INCLUDED
-// used_beds_needed BOOLEAN,
-
-// new_beds_and_frames_needed BOOLEAN NOT NULL,
-function setNewBedsNeeded() {
-  return setBoolean(.25);
 }
 
 // who_paying_for_new_beds_and_frames VARCHAR(75),
@@ -529,20 +413,7 @@ function setWhoPayingForNewBeds() {
   return whoPaying;
 }
 
-// ctpnewitems BOOLEAN,
-// if_other_who_paying_new_items VARCHAR(125),
-// agency_tax_exempt BOOLEAN,
-
-// new_twin_mattress_and_box_spring INTEGER,
-// new_full_mattress_and_box_spring INTEGER,
-// new_queen_mattress_and_box_spring INTEGER,
-// new_twin_full_bed_frame INTEGER,
-// new_queen_king_bed_frame INTEGER,
-// client_approves_speaking_with_staff BOOLEAN,
-// if_yes_client_email_or_phone VARCHAR(50)
-
 function createAppointment(pulledData, stockData) {
-  console.log('in create appointment');
   var clientId;
 
   var userId = pickRandomFrom(pulledData.userIds).id;
@@ -555,10 +426,7 @@ function createAppointment(pulledData, stockData) {
 
   var status = pickStatus();
 
-  console.log('userId:', userId, 'appointmentType:', appointmentType, 'locationId:', locationId,
-  'deliveryMethod:', deliveryMethod, 'createdDate:', createdDate, 'status:', status);
-
-  return createClient2(pulledData, stockData)
+  return createClient(pulledData, stockData)
   .then(function(result) {
     clientId = result.id;
     return pickRandomApptSlotId(appointmentType, deliveryMethod, locationId);
@@ -570,21 +438,6 @@ function createAppointment(pulledData, stockData) {
     console.log(error);
   });
 }
-
-function createClient2(pulledData, stockData) {
-  console.log('in create client 2');
-  var client = new Client(pulledData, stockData);
-  console.log('client created:', client);
-  return postClient(client)
-  .then(function(result) {
-    console.log(result);
-    return result;
-  })
-  .catch(function(error) {
-    console.log(error);
-  });
-}
-
 
 // gets array of ids of all users whose user type is caseworker from DB
 function getCaseworkerIds() {
@@ -608,7 +461,6 @@ function getArrayFromQuery(queryString) {
     return client.query(queryString)
     .then(function(result) {
       client.release();
-      // console.log(result.rows);
       return result.rows;
     })
     .catch(function(error) {

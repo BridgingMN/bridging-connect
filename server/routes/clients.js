@@ -160,12 +160,10 @@ router.get('/:client_id', function(req, res) {
 */
 router.put('/', function(req, res) {
   var client = req.body;
-  console.log('client from other side', client);
   var client_id = client.client_id;
   var first = client.first;
   var last = client.last;
   var dob = formatDateForPostgres(client.dob);
-  console.log('new dob', dob);
   var race_ethnicity = client.race_ethnicity;
   var street = client.street;
   var city = client.city;
