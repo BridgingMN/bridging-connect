@@ -7,6 +7,7 @@ var pool = require('../modules/database.js');
 var getAvailableAppts = require('../modules/getAvailableAppts.js');
 var Promise = require('bluebird');
 var stockData = require('../data/dummyData.js');
+var request = require('request');
 
 // script to add a certain number of entries to appointments table
 function insertDummyAppointments(numEntries) {
@@ -132,28 +133,86 @@ function generateRandomDate(startDaysFromToday, endDaysFromToday) {
   return date;
 }
 
+function setStreetAddress(stockData) {
+  var houseNumber = pickRandomFrom(stockData.houseNumbers);
+  var streetName = pickRandomFrom(stockData.streets);
+  var streetAddress = houseNumber + ' ' + streetName;
+  return streetAddress;
+}
+
+function Client(pulledData, stockData) {
+  this.dob = pickRandomFrom(stockData.dobs);
+  this.first = pickRandomFrom(stockData.firstNames);
+  this.last = pickRandomFrom(stockData.lastNames);
+  this.street = setStreetAddress(stockData);
+
+  var cityZip = pickRandomFrom(stockData.cityZips);
+  this.city = cityZip.city;
+  this.state = 'MN';
+  this.zip_code = cityZip.zip;
+  this.county = getCountyForCity(this.city);
+
+  if (Math.random < 0.1) {
+    this.building_access_code = setBuildingAccessCode();
+  }
+
+  this.primary_phone = generatePhoneNumber();
+  if (Math.random < 0.25) {
+    this.alternate_phone = generatePhoneNumber();
+  }
+  this.email = generateEmail(this.first, this.last);
+  this.used_bridging_services_previously = convertBoolToYesNo(setUsedBridgingPreviously());
+  this.race_ethnicity = pickRandomFrom(pulledData.raceEthnicities).race_ethnicity;
+  this.marital_status = setMaritalStatus();
+  this.sex = setSex();
+  this.age = setAge(this.dob);
+  this.household_size = setHouseholdSize();
+  this.num_children_17_and_under = setNumChildren17AndUnder(this.household_size);
+  this.num_bedrooms = setNumBedrooms(this.household_size);
+  this.home_visit_completed = setHomeVisitDate();
+  this.completed_client_checklist = true;
+  this.yearly_income = setYearlyIncome();
+  this.was_client_homeless = convertBoolToYesNo(setWasHomeless());
+  if (this.was_client_homeless === 'Yes') {
+    this.how_long_homeless = setHowLongHomeless();
+  }
+  this.what_brought_client_to_bridging = setWhatBroughtClientToBridging();
+  this.will_bring_interpreter = setBoolean(.25);
+  this.client_understands_furniture_is_used = true;
+  this.client_understands_furniture_must_be_moved_within_48hrs = true;
+  this.will_bring_assistant_due_to_mental_health_or_physical_limits = convertBoolToYesNo(setBoolean(.10));
+  this.who_paying_for_appointment = setWhoPayingForAppointment();
+  if (this.who_paying_for_appointment ==='Other Paying Bridging') {
+    this.if_other_who_paying_appointment = setIfOtherWhoPaying();
+  }
+  this.elevator_in_building = setBoolean(.15);
+  this.used_beds_needed = convertBoolToYesNo(setBoolean(.20));
+  this.additional_notes = 'This is dummy data for testing purposes';
+
+  if (this.used_beds_needed === 'No') {
+    if (Math.random() < 0.25) {
+      this.new_beds_and_frames_needed = 'Yes';
+      this.who_paying_for_new_beds_and_frames = setWhoPayingForNewBeds();
+      this.new_twin_mattress_and_box_spring = Math.round(Math.random());
+      this.new_full_mattress_and_box_spring = Math.round(Math.random());
+      this.new_queen_mattress_and_box_spring = Math.round(Math.random());
+      this.new_twin_full_bed_frame = Math.round(Math.random());
+      this.new_queen_king_bed_frame = Math.round(Math.random());
+    } else {
+      this.new_beds_and_frames_needed = 'No';
+    }
+  }
+}
+
 // adds client to DB
-// takes an array of stock first names, array of stock last names, array of stock street
-// names, array of objects with city property & zip property
 // returns id of created client
 function createClient(pulledData, stockData) {
-  var firstName = pickRandomFrom(stockData.firstNames);
-  var lastName = pickRandomFrom(stockData.lastNames);
-  var houseNumber = pickRandomFrom(stockData.houseNumbers);
-  var street = pickRandomFrom(stockData.streets);
-  var address = houseNumber + ' ' + street;
-  var cityZip = pickRandomFrom(stockData.cityZips);
-  var city = cityZip.city;
-  var zip = cityZip.zip;
-  var state = 'MN';
-  var dob = pickRandomFrom(stockData.dobs);
-
-  var raceEthnicity = pickRandomFrom(pulledData.raceEthnicities).race_ethnicity;
-  return postClient(firstName, lastName, dob, raceEthnicity, address, city, state, zip)
-  .then(function(result){
+  var client = new Client(pulledData, stockData);
+  return postClient(client)
+  .then(function(result) {
     return result;
   })
-  .catch(function(error){
+  .catch(function(error) {
     console.log(error);
   });
 }
@@ -161,6 +220,197 @@ function createClient(pulledData, stockData) {
 function getRaceEthnicities() {
   var queryString = 'SELECT "race_ethnicity" FROM "race_ethnicity"';
   return getArrayFromQuery(queryString);
+}
+
+function getCountyForCity(thisCity) {
+  for (var i = 0; i < stockData.cityCounties.length; i++) {
+    if (stockData.cityCounties[i].city === thisCity) {
+      return stockData.cityCounties[i].county;
+    }
+  }
+}
+
+function setBoolean(chanceOfTrue) {
+  var rand = Math.random();
+  var bool;
+  if (rand < chanceOfTrue) {
+    bool = true;
+  } else {
+    bool = false;
+  }
+  return bool;
+}
+
+function convertBoolToYesNo(bool) {
+  if (bool) {
+    return 'Yes';
+  } else {
+    return 'No';
+  }
+}
+
+// building_access_code VARCHAR(10),
+function setBuildingAccessCode() {
+  return (Math.floor(1000 + Math.random() * 9000)).toString();
+}
+
+// primary_phone VARCHAR(25) NOT NULL,
+function generatePhoneNumber() {
+  var phoneNumber = (Math.floor(100000000 + Math.random() * 900000000)).toString();
+  return phoneNumber
+}
+
+// alternate_phone VARCHAR(25),
+function setAlternatePhoneNumber() {
+  var altPhone = null;
+  var rand = Math.random();
+  if (rand < .25) {
+    altPhone = generatePhoneNumber();
+  }
+  return altPhone;
+}
+
+// used_bridging_services_previously BOOLEAN NOT NULL,
+function setUsedBridgingPreviously() {
+  var usedBridgingPreviously;
+  var rand = Math.random();
+  if (rand < .02) {
+    usedBridgingPreviously = true;
+  } else {
+    usedBridgingPreviously = false;
+  }
+  return usedBridgingPreviously;
+}
+
+// marital_status VARCHAR(50) NOT NULL,
+function setMaritalStatus() {
+  var maritalStatus;
+  var rand = Math.random();
+  if (rand < 0.5) {
+    maritalStatus = 'Married';
+  } else {
+    maritalStatus = 'Single, Separated, Widowed, or Divorced';
+  }
+  return maritalStatus;
+}
+
+// sex VARCHAR(10) NOT NULL,
+function setSex() {
+  var sex;
+  if (Math.random() < 0.5) {
+    sex = 'Male';
+  } else {
+    sex = 'Female';
+  }
+  return sex;
+}
+
+// age INTEGER NOT NULL,
+function setAge(dob) {
+  var birthdate = new Date(dob);
+  var ageDifMs = Date.now() - birthdate.getTime();
+  var ageDate = new Date(ageDifMs); // miliseconds from epoch
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
+// household_size INTEGER NOT NULL,
+function setHouseholdSize() {
+  var householdSize = Math.floor(Math.random() * 8) + 1;
+  return householdSize;
+}
+// num_children_17_and_under INTEGER NOT NULL,
+function setNumChildren17AndUnder(householdSize) {
+  var numAdults = Math.ceil(Math.random() * householdSize);
+  return householdSize - numAdults;
+}
+
+// num_bedrooms INTEGER NOT NULL,
+function setNumBedrooms(householdSize) {
+  return Math.ceil(householdSize/2);
+}
+
+// home_visit_completed DATE,
+function setHomeVisitDate() {
+  var today = new Date();
+  var oneWeekAgo = new Date();
+  oneWeekAgo.setDate(today.getDate() - 7);
+  return formatDateForPostgres(oneWeekAgo);
+}
+
+// yearly_income VARCHAR(25) NOT NULL,
+function setYearlyIncome() {
+  var yearlyIncome;
+  var rand = Math.random();
+  if (rand < 0.25) {
+    yearlyIncome = 'Under $5,000'
+  } else if (rand < 0.5) {
+    yearlyIncome = '$5,000 - $9,999';
+  } else if (rand < 0.75) {
+    yearlyIncome = '$10,000 = $14,999';
+  } else {
+    yearlyIncome = 'Over $20,000';
+  }
+  return yearlyIncome;
+}
+
+// was_client_homeless BOOLEAN NOT NULL,
+function setWasHomeless() {
+  var wasHomeless;
+  var rand = Math.random();
+  if (rand < .66) {
+    wasHomeless = false;
+  } else {
+    wasHomeless = true;
+  }
+}
+
+// how_long_homeless VARCHAR(25),
+function setHowLongHomeless() {
+  var howLongOptions = ['Less than 1 Month', '1-3 Months', '4-12 Months',
+    'Over 12 Months', 'Was not homeless'];
+  return pickRandomFrom(howLongOptions);
+}
+
+// what_brought_client_to_bridging VARCHAR(255) NOT NULL,
+function setWhatBroughtClientToBridging() {
+  var whatBroughtClientToBridgingOptions = ['Disability', 'Domestic Violence',
+  'Foreclosure/Loss of Home', 'Immigration', 'Job Loss', 'Leaving Prison', 'Medical Bills',
+  'Mental Health', 'Natural Disaster', 'Persistent Low Income', 'Substance Abuse',
+  'Bed Bug Infestation'];
+  return pickRandomFrom(whatBroughtClientToBridgingOptions);
+}
+
+// will_bring_interpreter BOOLEAN,
+function setWillBringInterpreter() {
+  var willBringInterpreter;
+  var rand = Math.random();
+  if (rand < .75) {
+    willBringInterpreter = false;
+  } else {
+    willBringInterpreter = true;
+  }
+  return willBringInterpreter;
+}
+
+// who_paying_for_appointment VARCHAR(255),
+function setWhoPayingForAppointment() {
+  var whoPayingOptions = ['Referring Agency', 'Client or Other Paying Referring Agency',
+      'Client Paying Bridging', 'Other Paying Bridging'];
+  return pickRandomFrom(whoPayingOptions);
+}
+
+// if_other_who_paying_appointment VARCHAR(75),
+function setIfOtherWhoPaying() {
+  return pickRandomFrom(['The client\'s family', 'Referring agency will give money to client',
+      'Still need to figure this out', 'Client may pay but maybe agency will']);
+}
+
+// who_paying_for_new_beds_and_frames VARCHAR(75),
+function setWhoPayingForNewBeds() {
+  var whoPayingOptions = ['Referring Agency', 'Client or Other Paying Referring Agency',
+      'Client Paying Bridging'];
+  var whoPaying = pickRandomFrom(whoPayingOptions);
+  return whoPaying;
 }
 
 function createAppointment(pulledData, stockData) {
@@ -176,9 +426,6 @@ function createAppointment(pulledData, stockData) {
 
   var status = pickStatus();
 
-  console.log('userId:', userId, 'appointmentType:', appointmentType, 'locationId:', locationId,
-  'deliveryMethod:', deliveryMethod, 'createdDate:', createdDate, 'status:', status);
-
   return createClient(pulledData, stockData)
   .then(function(result) {
     clientId = result.id;
@@ -191,7 +438,6 @@ function createAppointment(pulledData, stockData) {
     console.log(error);
   });
 }
-
 
 // gets array of ids of all users whose user type is caseworker from DB
 function getCaseworkerIds() {
@@ -215,7 +461,6 @@ function getArrayFromQuery(queryString) {
     return client.query(queryString)
     .then(function(result) {
       client.release();
-      // console.log(result.rows);
       return result.rows;
     })
     .catch(function(error) {
