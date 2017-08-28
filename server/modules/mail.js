@@ -2,12 +2,14 @@ var nodemailer = require('nodemailer');
 var path = require('path');
 // create reusable transporter object using the default SMTP transport
 var transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: 'Mailgun',
   auth: {
     user: process.env.NODEMAILER_ADDRESS,
     pass: process.env.NODEMAILER_PW
   }
 });
+
+console.log(process.env.NODEMAILER_ADDRESS, process.env.NODEMAILER_PW);
 
 var fromBridgingGmail = '"Bridging" bridgingschedulingapplication@gmail.com';
 
