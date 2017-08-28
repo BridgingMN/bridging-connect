@@ -3,6 +3,7 @@ var router = express.Router();
 var insertTestData = require('../modules/insertTestData.js').inserts;
 
 router.get('/appointments/:numEntries', function(req, res) {
+  console.log('hit dummy appts route');
   var numEntries = parseInt(req.params.numEntries);
   insertTestData.dummyAppointments(numEntries);
 });

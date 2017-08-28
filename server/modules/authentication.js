@@ -16,12 +16,11 @@ function isAdmin(req, res, next) {
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) {
     if (req.user.user_type_id === ADMIN_ID) {
-      console.log('CA-CAWWW!');
       return next();
     }
   }
   // if they aren't redirect them to the home page
-  console.log('sorry, charlie');
+  console.log('user not logged in as admin');
   return res.redirect('/');
 }
 

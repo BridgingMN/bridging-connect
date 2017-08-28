@@ -66,7 +66,7 @@ function resetPassword(toEmail, resetToken) {
 
 function updatedPassword(toEmail) {
   var subject = 'Your Bridging Password Has Been Updated';
-  var emailBody = 'Your password for the Bridging Scheduling Application has been update. If you did not initiate this password change you should contact an administrator.';
+  var emailBody = 'Your password for the Bridging Scheduling Application has been updated. If you did not initiate this password change you should contact an administrator.';
 
   var mailOptions = {
     from: fromBridgingGmail,
