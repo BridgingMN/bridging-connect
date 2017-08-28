@@ -9,8 +9,6 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-console.log(process.env.NODEMAILER_ADDRESS, process.env.NODEMAILER_PW);
-
 var fromBridgingGmail = '"Bridging" bridgingschedulingapplication@gmail.com';
 
 function invite(caseworkerObject, token, token_expiration) {
