@@ -24,7 +24,9 @@
   <div layout = "row" layout-padding layout-align = "center">
     <div flex = "50" class="md-whiteframe-1dp">
       <md-content >
-        <form class="client-referall-form">
+        <form class="client-referall-form" name="clientform" ng-submit="vm.submitClientForm()">
+        <!--Note: Because of differences in the way Angular Material styles inputs vs radio-groups, 
+        asterisks denoting that the radio button questions are required have been added manually-->
           <md-input-container class="md-block">
             <label>Client First Name</label>
             <input
@@ -100,7 +102,7 @@
           </md-input-container>
           <!-- Has client accessed Bridging services in the past? Boolean req  (NEW DEL, NEW PU, PU, DEL)-->
           <md-input-container class="md-block">
-            <p>Has client accessed Bridging services in the past?</p>
+            <p>Has client accessed Bridging services in the past? *</p>
             <md-radio-group ng-model = "vm.clientReferralForm.used_bridging_services_previously" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
@@ -169,7 +171,7 @@
           <!-- Completed Client Checklist Boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
             ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-              <p>Completed Client Checklist</p>
+              <p>Completed Client Checklist *</p>
               <md-checkbox ng-model="vm.clientReferralForm.completed_client_checklist"
                   required>
                 </md-checkbox>
@@ -185,8 +187,8 @@
           </md-input-container>
           <!-- Was the client homeless? Bool req (NEW DEL, NEW PU, PU, DEL) -->
           <md-input-container class="md-block">
-            <p>Was the client homeless?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.was_client_homeless">
+            <p>Was the client homeless? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.was_client_homeless" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -213,8 +215,8 @@
           <!-- Will bring an interpreter? boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
               ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <p>Will bring an interpreter?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.will_bring_interpreter">
+            <p>Will bring an interpreter? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.will_bring_interpreter" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -222,8 +224,8 @@
           <!-- Will bring assistant required due to mental health or physical limitations? Boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
               ng-if = "vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <p>Will bring assistant required due to mental health or physical limitations?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.will_bring_assistant_due_to_mental_health_or_physical_limits">
+            <p>Will bring assistant required due to mental health or physical limitations? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.will_bring_assistant_due_to_mental_health_or_physical_limits" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -231,13 +233,13 @@
           <!-- Does your client understand that the furniture is used? Boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
             ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-              <p>Does your client understand that the furniture is used?</p>
+              <p>Does your client understand that the furniture is used? *</p>
               <md-checkbox ng-model="vm.clientReferralForm.client_understands_furniture_is_used" required></md-checkbox>
           </md-input-container>
           <!-- Does your client understand that the furniture must be moved within 48hrs? boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
             ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-              <p>Does your client understand that the furniture must be moved within 48hrs?</p>
+              <p>Does your client understand that the furniture must be moved within 48 hrs? *</p>
               <md-checkbox ng-model="vm.clientReferralForm.client_understands_furniture_must_be_moved_within_48hrs" required></md-checkbox>
           </md-input-container>
           <!-- If there is an ID number used by your agency for billing purposes,
@@ -292,8 +294,8 @@
           <!-- Is there an elevator in the building? boolean req (NEW DEL, DEL) -->
           <md-input-container class="md-block"
               ng-if = "vm.appointment.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-            <p>Is there an elevator in the building?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.elevator_in_building">
+            <p>Is there an elevator in the building? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.elevator_in_building" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -307,8 +309,8 @@
           7+ = 3 beds)? Boolean req (, PU, DEL) -->
           <md-input-container class="md-block"
               ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <p>USED Beds Needed?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.used_beds_needed">
+            <p>USED Beds Needed? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.used_beds_needed" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -317,8 +319,8 @@
           </md-input-container>
           <!-- NEW beds and frames needed? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
           <md-input-container class="md-block">
-            <p>NEW beds and frames needed?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.new_beds_and_frames_needed">
+            <p>NEW beds and frames needed? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.new_beds_and_frames_needed" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -348,8 +350,8 @@
               vm.clientReferralForm.who_paying_for_delivery === 'Referring Agency' ||
               vm.clientReferralForm.who_paying_for_new_beds_and_frames === 'Referring Agency'">
             <p>(Prices included sales tax) If AGENCY is paying, is Agency tax
-            exempt?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.agency_tax_exempt">
+            exempt? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.agency_tax_exempt" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -394,8 +396,8 @@
           <md-input-container class="md-block"
             ng-if="vm.appointment.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED">
             <p>Client approves speaking with a staff member about their Bridging
-            experience?</p>
-            <md-radio-group ng-model = "vm.clientReferralForm.client_approves_speaking_with_staff">
+            experience? *</p>
+            <md-radio-group ng-model = "vm.clientReferralForm.client_approves_speaking_with_staff" required>
               <md-radio-button value = "Yes">Yes</md-radio-button>
               <md-radio-button value = "No">No</md-radio-button>
             </md-radio-group>
@@ -408,7 +410,8 @@
             <input type="text" ng-model="vm.clientReferralForm.if_yes_client_email_or_phone">
           </md-input-container>
 
-          <md-button class="md-raised md-primary" ng-click="vm.submitClientForm()">Submit</md-button>
+          <md-button class="md-raised md-primary" type="submit" ng-disabled="clientform.$invalid">Submit</md-button>
+          <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">Please fill out all required questions. Required questions are marked with an asterisk (*).</p>
         </form>
       </md-content>
     </div>
