@@ -32,66 +32,7 @@ var pool = require('../modules/database.js');
 */
 router.post('/', function(req, res) {
   var client = req.body;
-<<<<<<< HEAD
   postClient(client)
-=======
-
-  console.log('client from other side', client);
-  var first = client.first;
-  var last = client.last;
-  var dob = formatDateForPostgres(client.dob);
-  var race_ethnicity = client.race_ethnicity;
-  var street = client.street;
-  var city = client.city;
-  var state = client.state;
-  var zip_code = client.zip_code;
-  var county = client.county;
-  var building_access_code = client.building_access_code;
-  var primary_phone = client.primary_phone;
-  var alternate_phone = client.alternate_phone;
-  var email = client.email;
-  var used_bridging_services_previously = client.used_bridging_services_previously;
-  var marital_status = client.marital_status;
-  var sex = client.sex;
-  var age = client.age;
-  var household_size = client.household_size;
-  var age_of_others_in_household = client.age_of_others_in_household;
-  var num_children_17_and_under = client.num_children_17_and_under;
-  var num_bedrooms = client.num_bedrooms;
-  var home_visit_completed = formatDateForPostgres(client.home_visit_completed);
-  var completed_client_checklist = client.completed_client_checklist;
-  var yearly_income = client.yearly_income;
-  var was_client_homeless = client.was_client_homeless;
-  var how_long_homeless = client.how_long_homeless;
-  var what_brought_client_to_bridging = client.what_brought_client_to_bridging;
-  var will_bring_interpreter = client.will_bring_interpreter;
-  var will_bring_assistant_due_to_mental_health_or_physical_limits = client.will_bring_assistant_due_to_mental_health_or_physical_limits;
-  var client_understands_furniture_is_used = client.client_understands_furniture_is_used;
-  var client_understands_furniture_must_be_moved_within_48hrs = client. client_understands_furniture_must_be_moved_within_48hrs;
-  var agency_billing_id = client.agency_billing_id;
-  var who_paying_for_appointment = client.who_paying_for_appointment;
-  var if_other_who_paying_appointment = client.if_other_who_paying_appointment;
-  var who_paying_for_delivery = client.who_paying_for_delivery;
-  var if_other_who_paying_delivery = client.if_other_who_paying_delivery;
-  var what_floor_does_client_live_on = client.what_floor_does_client_live_on;
-  var elevator_in_building = client.elevator_in_building;
-  var additional_notes = client.additional_notes;
-  var used_beds_needed = client.used_beds_needed;
-  var new_beds_and_frames_needed = client.new_beds_and_frames_needed;
-  var who_paying_for_new_beds_and_frames = client.who_paying_for_new_beds_and_frames;
-  var if_other_who_paying_new_items = client.if_other_who_paying_new_items;
-  var agency_tax_exempt = client.agency_tax_exempt;
-  var new_twin_mattress_and_box_spring = client.new_twin_mattress_and_box_spring;
-  var new_full_mattress_and_box_spring = client.new_full_mattress_and_box_spring;
-  var new_queen_mattress_and_box_spring = client.new_queen_mattress_and_box_spring;
-  var new_twin_full_bed_frame = client.new_twin_full_bed_frame;
-  var new_queen_king_bed_frame = client.new_queen_king_bed_frame;
-  var client_approves_speaking_with_staff = client.client_approves_speaking_with_staff;
-  var if_yes_client_email_or_phone = client.if_yes_client_email_or_phone;
-
-
-  postClient(first, last, dob, race_ethnicity, street, city, state, zip_code, county, building_access_code, primary_phone, alternate_phone, email, used_bridging_services_previously, marital_status, sex, age, household_size, age_of_others_in_household, num_children_17_and_under, num_bedrooms, home_visit_completed, completed_client_checklist, yearly_income, was_client_homeless, how_long_homeless, what_brought_client_to_bridging, will_bring_interpreter, will_bring_assistant_due_to_mental_health_or_physical_limits, client_understands_furniture_is_used, client_understands_furniture_must_be_moved_within_48hrs, agency_billing_id, who_paying_for_appointment, if_other_who_paying_appointment, who_paying_for_delivery, if_other_who_paying_delivery, what_floor_does_client_live_on, elevator_in_building, additional_notes, used_beds_needed, new_beds_and_frames_needed, who_paying_for_new_beds_and_frames, if_other_who_paying_new_items, agency_tax_exempt, new_twin_mattress_and_box_spring, new_full_mattress_and_box_spring, new_queen_mattress_and_box_spring, new_twin_full_bed_frame, new_queen_king_bed_frame, client_approves_speaking_with_staff, if_yes_client_email_or_phone)
->>>>>>> 429b57ac505eceff574900302d419035c616f8ed
   .then(function(result, error) {
     if (error) {
       console.log(error);
@@ -102,7 +43,6 @@ router.post('/', function(req, res) {
   });
 });
 
-<<<<<<< HEAD
 function postClient(client) {
   cleanClient(client);
   return saveClient(client);
@@ -134,16 +74,6 @@ function saveClient(client) {
       client.new_twin_mattress_and_box_spring, client.new_full_mattress_and_box_spring,
       client.new_queen_mattress_and_box_spring, client.new_twin_full_bed_frame, client.new_queen_king_bed_frame,
       client.client_approves_speaking_with_staff, client.if_yes_client_email_or_phone])
-=======
-function postClient(first, last, dob, race_ethnicity, street, city, state, zip_code, county, building_access_code, primary_phone, alternate_phone, email, used_bridging_services_previously, marital_status, sex, age, household_size, age_of_others_in_household, num_children_17_and_under, num_bedrooms, home_visit_completed, completed_client_checklist, yearly_income, was_client_homeless, how_long_homeless, what_brought_client_to_bridging, will_bring_interpreter, will_bring_assistant_due_to_mental_health_or_physical_limits, client_understands_furniture_is_used, client_understands_furniture_must_be_moved_within_48hrs, agency_billing_id, who_paying_for_appointment, if_other_who_paying_appointment, who_paying_for_delivery, if_other_who_paying_delivery, what_floor_does_client_live_on, elevator_in_building, additional_notes, used_beds_needed, new_beds_and_frames_needed, who_paying_for_new_beds_and_frames, if_other_who_paying_new_items, agency_tax_exempt, new_twin_mattress_and_box_spring, new_full_mattress_and_box_spring, new_queen_mattress_and_box_spring, new_twin_full_bed_frame, new_queen_king_bed_frame, client_approves_speaking_with_staff, if_yes_client_email_or_phone) {
-
-  return pool.connect().then(function(client) {
-    return client.query('INSERT INTO "clients" ("first", "last", "dob", "race_ethnicity_id", "street", "city", "state", "zip_code", "county", "building_access_code", "primary_phone", "alternate_phone", "email", "used_bridging_services_previously", "marital_status", "sex", "age", "household_size", "age_of_others_in_household", "num_children_17_and_under", "num_bedrooms", "home_visit_completed", "completed_client_checklist", "yearly_income", "was_client_homeless", "how_long_homeless", "what_brought_client_to_bridging", "will_bring_interpreter", "will_bring_assistant_due_to_mental_health_or_physical_limits", "client_understands_furniture_is_used", "client_understands_furniture_must_be_moved_within_48hrs", "agency_billing_id", "who_paying_for_appointment", "if_other_who_paying_appointment", "who_paying_for_delivery", "if_other_who_paying_delivery", "what_floor_does_client_live_on", "elevator_in_building", "additional_notes", "used_beds_needed", "new_beds_and_frames_needed", "who_paying_for_new_beds_and_frames", "if_other_who_paying_new_items", "agency_tax_exempt", "new_twin_mattress_and_box_spring", "new_full_mattress_and_box_spring", "new_queen_mattress_and_box_spring", "new_twin_full_bed_frame", "new_queen_king_bed_frame", "client_approves_speaking_with_staff", "if_yes_client_email_or_phone") ' +
-    'VALUES ($1, $2, $3, ' +
-    '(SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-    '$5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47, $48, $49, $50, $51) RETURNING "id"',
-    [first, last, dob, race_ethnicity, street, city, state, zip_code, county, building_access_code, primary_phone, alternate_phone, email, used_bridging_services_previously, marital_status, sex, age, household_size, age_of_others_in_household, num_children_17_and_under, num_bedrooms, home_visit_completed, completed_client_checklist, yearly_income, was_client_homeless, how_long_homeless, what_brought_client_to_bridging, will_bring_interpreter, will_bring_assistant_due_to_mental_health_or_physical_limits, client_understands_furniture_is_used, client_understands_furniture_must_be_moved_within_48hrs, agency_billing_id, who_paying_for_appointment, if_other_who_paying_appointment, who_paying_for_delivery, if_other_who_paying_delivery, what_floor_does_client_live_on, elevator_in_building, additional_notes, used_beds_needed, new_beds_and_frames_needed, who_paying_for_new_beds_and_frames, if_other_who_paying_new_items, agency_tax_exempt, new_twin_mattress_and_box_spring, new_full_mattress_and_box_spring, new_queen_mattress_and_box_spring, new_twin_full_bed_frame, new_queen_king_bed_frame, client_approves_speaking_with_staff, if_yes_client_email_or_phone])
->>>>>>> 429b57ac505eceff574900302d419035c616f8ed
     .then(function(result) {
       db.release();
       return result.rows[0];

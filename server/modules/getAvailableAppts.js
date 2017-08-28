@@ -30,10 +30,6 @@ function getAvailableAppointments(appointmentType, deliveryMethod, locationId, m
 
     .then(function(slots){
       appointmentSlots = slots;
-<<<<<<< HEAD
-
-=======
->>>>>>> 429b57ac505eceff574900302d419035c616f8ed
 
       // Get appointment overrides and counts of already-made appointments
       return getConstraints(appointmentSlots, minDate, maxDate);
