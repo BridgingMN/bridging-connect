@@ -30,14 +30,12 @@ function getAvailableAppointments(appointmentType, deliveryMethod, locationId, m
 
     .then(function(slots){
       appointmentSlots = slots;
-      console.log('appointment slots gotten')
 
       // Get appointment overrides and counts of already-made appointments
       return getConstraints(appointmentSlots, minDate, maxDate);
     })
 
     .then(function([overrides, counts]){
-      console.log('constraints gotten');
       appointmentOverrides = overrides;
       existingAppointmentCounts = counts;
 
@@ -46,7 +44,6 @@ function getAvailableAppointments(appointmentType, deliveryMethod, locationId, m
     })
 
     .then(function(availableAppointments){
-      console.log('date range gotten');
       resolve(availableAppointments);
     })
 
