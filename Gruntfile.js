@@ -3,6 +3,9 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             build: {
+                options: {
+                    sourceMap: true
+                },
                 src: ['client/scripts/*.js',
                     'client/scripts/**/*.js'
                 ],
