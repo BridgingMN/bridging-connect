@@ -2,14 +2,14 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
-            build: {
+            my_target: {
                 options: {
-                    sourceMap: true
+                    sourceMap: true,
                 },
-                src: ['client/scripts/*.js',
-                    'client/scripts/**/*.js'
-                ],
-                dest: 'server/public/scripts/client.min.js'
+                files: {
+                    'server/public/scripts/client.min.js': ['client/scripts/*.js',
+                    'client/scripts/**/*.js']
+                }
             }
         },
         copy: {
