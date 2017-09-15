@@ -108,7 +108,8 @@
           </md-card-title-text>
       </md-card-title> -->
     <md-content layout-padding>
-      <form class="client-referall-form" layout="column">
+      <!--BEGIN CLIENT FORM-->
+      <form class="client-referall-form" layout="column" name="clientform" ng-submit="vm.editClient(vm.appointment.selected.clientInfo)">
         <div layout-gt-sm = "row">
         <md-input-container class = "md-block" flex-gt-sm>
           <label>Client First Name</label>
@@ -130,11 +131,18 @@
           <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
         </md-input-container>
         <md-input-container>
-          <label>Select a race/ethnicity</label>
-          <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-              <md-select-label>Select a race/ethnicity</md-select-label>
-              <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
-          </md-select>
+        <md-input-container class="md-block">
+            <label>Client Street Address (Include Apartment #)</label>
+            <input
+              type="text"
+              ng-model = "vm.appointment.selected.clientInfo.street"
+              required>
+          </md-input-container>
+        <label>Select a race/ethnicity</label>
+        <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+            <md-select-label>Select a race/ethnicity</md-select-label>
+            <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
+        </md-select>
         </md-input-container>
         <md-input-container>
           <label>Street Address</label>
@@ -146,26 +154,31 @@
         </md-input-container>
         <div layout-gt-sm="row">
           <md-input-container class="md-block">
-            <label>City</label>
-            <input ng-model="vm.appointment.selected.clientInfo.city">
+            <label>Client City</label>
+            <input type="text" ng-model="vm.appointment.selected.clientInfo.city" required>
           </md-input-container>
           <md-input-container class="md-block">
-            <label>State</label>
-            <md-select ng-model="vm.appointment.selected.clientInfo.state">
+            <label>Client State</label>
+            <md-select ng-model="vm.appointment.selected.clientInfo.state" required>
               <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
                 {{state.abbrev}}
               </md-option>
             </md-select>
           </md-input-container>
+          <md-input-container class="md-block">
+              <label>Client Zip Code</label>
+              <input type="text" ng-model="vm.appointment.selected.clientInfo.zip_code" required>
+            </md-input-container>
         </div>
         <md-card-actions layout="row" layout-align = "end center">
-          <md-button type="submit" class="md-raised md-primary"
-            ng-click = "vm.editClient(vm.appointment.selected.clientInfo)">
+          <md-button type="submit" class="md-raised md-primary" ng-disabled="clientform.$invalid">
             Save Changes</md-button>
           <a href="#admin-appointments-all"><md-button type="button">
             Cancel Changes</md-button></a>
+          <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">Please fill out all required questions. Required questions are marked with an asterisk (*).</p>
         </md-card-actions>
       </form>
+     
     </md-content>
     </md-card-content>
   </md-card>
