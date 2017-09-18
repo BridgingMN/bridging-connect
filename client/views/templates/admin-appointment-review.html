@@ -1,187 +1,259 @@
 <div ng-cloak>
 
-  <md-content layout = "column" layout-align = "start center">
+  <md-content layout="column" layout-align="start center">
     <div>
-      <h2>{{vm.appointment.selected.apptInfo.status | uppercase}} Appointment & Client Details</h2>
+      <h2>{{vm.appointment.selected.info.status | uppercase}} Appointment & Client Details</h2>
     </div>
   </md-content>
-
-    <md-content class="md-padding" layout-xs="column" layout="row">
+  <div layout="row" layout-align="start center">
+  <md-content class="md-padding" flex-gt-xs="60" flex-offset-gt-xs="20" layout="column">
     <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card>
-        <md-card-content>
+      <md-card md-whiteframe-3dp>
           <div id="aptHeader" layout="row" layout-align="space-around center">
-            <div class="md-title appointment-date">
-              <p layout="column" layout-align="center center">
-                <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'MMM'}}</span>
-                <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'dd'}}</span>
-                <span>{{vm.appointment.selected.apptInfo.appointment_date | date: 'yyyy'}}</span>
-              </p>
+              <div class="md-title appointment-date">
+                <p layout="column" layout-align="center center">
+                  <span>{{vm.appointment.selected.info.appointment_date | date: 'MMM'}}</span>
+                  <span>{{vm.appointment.selected.info.appointment_date | date: 'dd'}}</span>
+                  <span>{{vm.appointment.selected.info.appointment_date | date: 'yyyy'}}</span>
+                </p>
+              </div>
+              <div class="md-title md-padding appointment-type-info">
+                <p>
+                  <span class="appointment-type">{{vm.appointment.selected.info.appointment_type}}</span>
+                  <span>with <span class="appointment-delivery">{{vm.appointment.selected.info.delivery_method}}</span></span>
+                </p>
+              </div>
+              <div class="appointment-icon">
+                <i ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+                <i ng-if="vm.appointment.selected.info.appointment_type == 'shopping'" class="fa fa-shopping-cart" aria-hidden="true"></i>
+              </div>
             </div>
-            <div class="md-title md-padding appointment-type-info">
-              <p layout="column" layout-align="center center">
-                <span class="appointment-type">{{vm.appointment.selected.apptInfo.appointment_type}}</span>
-                <span>with <span class="appointment-delivery">{{vm.appointment.selected.apptInfo.delivery_method}}</span></span>
-              </p>
-            </div>
-            <div class="appointment-icon">
-              <i ng-if="vm.appointment.selected.apptInfo.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
-              <i ng-if="vm.appointment.selected.apptInfo.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING" class="fa fa-shopping-cart" aria-hidden="true"></i>
-            </div>
-          </div>
+        <md-card-content>
           <div class="appointment-card-body" layout="column" layout-align="center center">
+            <div layout-align="center start">
             <p>
-              <i class="material-icons">access_time</i>
-              {{vm.appointment.selected.apptInfo.start_time}}
+              <i class="material-icons">access_time</i> {{vm.appointment.selected.info.start_time}}
             </p>
             <p>
-              <i class="material-icons">person</i>
-              {{vm.appointment.selected.clientInfo.first}}
-              {{vm.appointment.selected.clientInfo.last}}
-                (Client)
+              <i class="material-icons">person</i> {{vm.appointment.selected.clientInfo.first}} {{vm.appointment.selected.clientInfo.last}}
+              (Client)
             </p>
             <p>
-              <i class="material-icons">person</i>
-              {{vm.appointment.selected.userInfo.first}}
-              {{vm.appointment.selected.userInfo.last}}
-               (Caseworker)
+              <i class="material-icons">person</i> {{vm.appointment.selected.info.user_first}} {{vm.appointment.selected.info.user_last}}
+              (Caseworker)
             </p>
             <p>
-              <i class="material-icons">place</i>
-              {{vm.appointment.selected.apptInfo.location_name}}
+              <i class="material-icons">place</i> {{vm.appointment.selected.info.location_name}}
+            </p>
+
+          <div class="appointment-card-delivery-info">
+            <p ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+              <i class="fa fa-truck" aria-hidden="true"></i>
+              <md-input-container>
+                <label>Delivery Date</label>
+                <md-datepicker ng-model="vm.appointment.selected.info.delivery_date"></md-datepicker>
+              </md-input-container>
+              <!-- <span ng-if="vm.appointment.selected.info.delivery_date != undefined">Delivered {{vm.appointment.selected.info.delivery_date | date: 'shortDate'}}.</span>
+                <span ng-if="vm.appointment.selected.info.delivery_date == undefined">Delivery date to be determined.</span> -->
+            </p>
+            <p ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
+              <i class="fa fa-truck" aria-hidden="true"></i>
+              <span>Client Pick Up within 48 Hrs of Appointment</span>
             </p>
           </div>
-          <div class="md-padding appointment-card-delivery-info" layout="column" layout-align="center center">
-              <p ng-if="vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-                <i class="fa fa-truck" aria-hidden="true"></i>
-                <md-input-container>
-                  <label>Delivery Date</label>
-                  <md-datepicker ng-model="vm.appointment.selected.apptInfo.delivery_date"></md-datepicker>
-                </md-input-container>
-                <!-- <span ng-if="vm.appointment.selected.apptInfo.delivery_date != undefined">Delivered {{vm.appointment.selected.apptInfo.delivery_date | date: 'shortDate'}}.</span>
-                <span ng-if="vm.appointment.selected.apptInfo.delivery_date == undefined">Delivery date to be determined.</span> -->
-              </p>
-              <p ng-if="vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
-                <i class="fa fa-truck" aria-hidden="true"></i>
-                <span>Client Pick Up within 48 Hrs of Appointment</span>
-              </p>
-          </div>
+        </div>
+      </div>
 
           <md-card-actions layout="row" layout-align="end center">
-            <md-button class="md-raised md-primary"
-                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
-                ng-click = "vm.confirmApt(vm.appointment.selected.apptInfo)">
-                Confirm</md-button>
-            <md-button class="md-raised md-warn"
-                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
-                ng-click = "vm.denyApt(vm.appointment.selected.apptInfo)">
-                Deny</md-button>
-            <md-button class="md-raised md-warn"
-                ng-if = "vm.appointment.selected.apptInfo.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED &&
-                        vm.appointment.selected.apptInfo.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY"
-                ng-click = "vm.editDeliveryDate(vm.appointment.selected.apptInfo)">
-                Edit Delivery Date</md-button>
-            <md-button class="md-raised md-warn"
-                ng-if = "vm.appointment.selected.apptInfo.status != vm.CONSTANTS.APPOINTMENT_STATUS_CANCELED"
-                ng-click = "vm.cancelApt(vm.appointment.selected.apptInfo)">
-                Cancel Appointment</md-button>
+            <md-button class="md-raised md-primary" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
+              ng-click="vm.confirmApt(vm.appointment.selected.info)">
+              Confirm</md-button>
+            <md-button class="md-raised md-warn" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
+              ng-click="vm.denyApt(vm.appointment.selected.info)">
+              Deny</md-button>
+            <md-button class="md-raised" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED &&
+                        vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY" ng-click="vm.editDeliveryDate(vm.appointment.selected.info)">
+              Edit Delivery Date</md-button>
+            <md-button class="md-raised md-warn" ng-if="vm.appointment.selected.info.status != vm.CONSTANTS.APPOINTMENT_STATUS_CANCELED"
+              ng-click="vm.cancelApt(vm.appointment.selected.info)">
+              Cancel Appointment</md-button>
           </md-card-actions>
-      </md-card-content>
+        </md-card-content>
       </md-card>
     </div>
 
-  <div flex-xs flex-gt-xs="50" layout="column" >
-    <md-card>
-      <md-card-content>
-        <div id="clientHeader" layout="row" layout-align="space-around center">
-          <div>
-            <p layout="column" layout-align="center center">
-              <span>Client Demographics</span>
-            </p>
-          </div>
-        </div>
+    <div flex-xs flex-gt-xs="50" layout="column">
+      <md-card md-whiteframe-3dp>
+          <div class="md-title" id="clientHeader" layout="row" layout-align="space-around center">
+              <div>
+                <p>Client Details</p>
+              </div>
+            </div>
+        <md-card-content>
 
-      <!-- <md-card-title >
-          <md-card-title-text id = "clientHeader">
-            <span class="md-headline">Client Demographics</span>
-            <span class="md-subhead">Save or Cancel Changes Below</span>
-          </md-card-title-text>
-      </md-card-title> -->
-    <md-content layout-padding>
-      <!--BEGIN CLIENT FORM-->
-      <form class="client-referall-form" layout="column" name="clientform" ng-submit="vm.editClient(vm.appointment.selected.clientInfo)">
-        <div layout-gt-sm = "row">
-        <md-input-container class = "md-block" flex-gt-sm>
-          <label>Client First Name</label>
-          <input
-            type="text"
-            ng-model="vm.appointment.selected.clientInfo.first"
-            required>
-        </md-input-container>
-        <md-input-container class="md-block" flex-gt-sm>
-          <label>Client Last Name</label>
-          <input
-            type="text"
-            ng-model="vm.appointment.selected.clientInfo.last"
-            required>
-        </md-input-container>
-      </div>
-        <md-input-container>
-          <label>Client Date of Birth</label>
-          <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
-        </md-input-container>
-        <md-input-container>
-        <md-input-container class="md-block">
-            <label>Client Street Address (Include Apartment #)</label>
-            <input
-              type="text"
-              ng-model = "vm.appointment.selected.clientInfo.street"
-              required>
-          </md-input-container>
-        <label>Select a race/ethnicity</label>
-        <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-            <md-select-label>Select a race/ethnicity</md-select-label>
-            <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
-        </md-select>
-        </md-input-container>
-        <md-input-container>
-          <label>Street Address</label>
-          <input
-            type="text"
-            placeholder="Address"
-            ng-model = "vm.appointment.selected.clientInfo.street"
-            required>
-        </md-input-container>
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block">
-            <label>Client City</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.city" required>
-          </md-input-container>
-          <md-input-container class="md-block">
-            <label>Client State</label>
-            <md-select ng-model="vm.appointment.selected.clientInfo.state" required>
-              <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
-                {{state.abbrev}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-          <md-input-container class="md-block">
-              <label>Client Zip Code</label>
-              <input type="text" ng-model="vm.appointment.selected.clientInfo.zip_code" required>
-            </md-input-container>
-        </div>
-        <md-card-actions layout="row" layout-align = "end center">
-          <md-button type="submit" class="md-raised md-primary" ng-disabled="clientform.$invalid">
-            Save Changes</md-button>
-          <a href="#admin-appointments-all"><md-button type="button">
-            Cancel Changes</md-button></a>
-          <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">Please fill out all required questions. Required questions are marked with an asterisk (*).</p>
-        </md-card-actions>
-      </form>
-     
-    </md-content>
-    </md-card-content>
-  </md-card>
-  </div>
-</md-content>
+          <md-content class="formAsCard" layout-padding>
+            <!--BEGIN CLIENT FORM-->
+            <form class="client-referall-form" layout="column" name="clientform" ng-submit="vm.editClient(vm.appointment.selected.clientInfo)">
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Client First Name</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.first" required>
+                </md-input-container>
+                <md-input-container class="md-block" flex-gt-sm>
+                  <label>Client Last Name</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.last" required>
+                </md-input-container>
+              </div>
+              <md-input-container>
+                <label>Client Date of Birth</label>
+                <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
+              </md-input-container>
+
+              <md-input-container class="md-block">
+                <label>Client Street Address (Include Apartment #)</label>
+                <input type="text" ng-model="vm.appointment.selected.clientInfo.street" required>
+              </md-input-container>
+              <div layout-gt-sm="row">
+                <md-input-container class="md-block">
+                  <label>Client City</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.city" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Client State</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.state" required>
+                    <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
+                      {{state.abbrev}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Client Zip Code</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.zip_code" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>County Client Lives In</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.county" required>
+                    <md-option ng-repeat="county in vm.counties" value="{{county.description}}">
+                      {{county.description}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
+              <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                <label>Building-Client access code</label>
+                <input type="text" ng-model="vm.appointment.selected.info.building_access_code">
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Client Primary Phone Number</label>
+                <input type="text" ng-model="vm.appointment.selected.clientInfo.primary_phone" required>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Client Alternate Phone Number</label>
+                <input type="text" ng-model="vm.appointment.selected.clientInfo.alternate_phone">
+              </md-input-container>
+              <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.appointment_type == 'shopping'">
+                <label>Client email address</label>
+                <input ng-model="vm.appointment.selected.info.email" required type="email" required>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <p>Has client accessed Bridging services in the past? *</p>
+                <md-radio-group ng-model="vm.appointment.selected.clientInfo.used_bridging_services_previously" required>
+                  <md-radio-button value="true">Yes</md-radio-button>
+                  <md-radio-button value="false">No</md-radio-button>
+                </md-radio-group>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Client Ethnicity</label>
+                <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity" required>
+                  <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+                  <md-select-label>Select a race/ethnicity</md-select-label>
+                  <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
+                </md-select>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Client Sex</label>
+                <md-select ng-model="vm.appointment.selected.clientInfo.sex" required>
+                  <md-option ng-repeat="sex in vm.sexes" value="{{sex.description}}">
+                    {{sex.description}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Client Age</label>
+                <input ng-model="vm.appointment.selected.clientInfo.age" required type="number" required>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Household Size</label>
+                <input ng-model="vm.appointment.selected.clientInfo.household_size" required type="number" required>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Age of ALL others in household</label>
+                <input type="text" ng-model="vm.appointment.selected.clientInfo.age_of_others_in_household">
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>How many children in the household are 17 and under?</label>
+                <input ng-model="vm.appointment.selected.clientInfo.num_children_17_and_under" required type="number" required>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Number of Bedrooms</label>
+                <input ng-model="vm.appointment.selected.clientInfo.num_bedrooms" required type="number" required>
+              </md-input-container>
+              <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                <label>Home Visit Completed Date</label>
+                <md-datepicker ng-model="vm.appointment.selected.clientInfo.home_visit_completed" required></md-datepicker>
+              </md-input-container>
+              <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                <p>Completed Client Checklist *</p>
+                <md-checkbox ng-model="vm.appointment.selected.clientInfo.completed_client_checklist" required>
+                </md-checkbox>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Client Yearly Income</label>
+                <md-select ng-model="vm.appointment.selected.clientInfo.yearly_income" required>
+                  <md-option ng-repeat="income in vm.incomes" value="{{income.description}}">
+                    {{income.description}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <p>Was the client homeless? *</p>
+                <md-radio-group ng-model="vm.appointment.selected.clientInfo.was_client_homeless" required>
+                  <md-radio-button value="Yes">Yes</md-radio-button>
+                  <md-radio-button value="No">No</md-radio-button>
+                </md-radio-group>
+              </md-input-container>
+              <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.was_client_homeless === 'Yes'">
+                <label>For how long was the client homeless?</label>
+                <md-select ng-model="vm.appointment.selected.clientInfo.how_long_homeless" required>
+                  <md-option ng-repeat="length in vm.homeless" value="{{length.description}}">
+                    {{length.description}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <!-- What brought the client to Bridging? pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+              <md-input-container class="md-block">
+                <label>What brought the client to Bridging?</label>
+                <md-select ng-model="vm.appointment.selected.clientInfo.what_brought_client_to_bridging" required>
+                  <md-option ng-repeat="reason in vm.bridging" value="{{reason.description}}">
+                    {{reason.description}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <md-card-actions layout="row" layout-align="end center">
+                <md-button type="submit" class="md-raised md-primary" ng-disabled="clientform.$invalid">
+                  Save Changes</md-button>
+                <a href="#admin-appointments-all">
+                  <md-button type="button">
+                    Cancel Changes</md-button>
+                </a>
+                <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">Please fill out all required questions. Required questions are marked with an asterisk (*).</p>
+              </md-card-actions>
+            </form>
+
+          </md-content>
+        </md-card-content>
+      </md-card>
+    </div>
+  </md-content>
+</div>
 </div>

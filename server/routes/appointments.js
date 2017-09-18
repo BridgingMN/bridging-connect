@@ -470,12 +470,12 @@ router.get('/:appointment_id', function(req, res) {
         db.release();
         appointment.clientInfo = result.rows[0];
         appointment = formatSingleAppointment(appointment);
-        return appointment;
+        res.send(appointment);
       })
       .catch(function(error){
         db.release();
         console.error('query error', error.message, error.stack);
-        return error;
+        res.sendStatus(500);
       });
     });
   }
