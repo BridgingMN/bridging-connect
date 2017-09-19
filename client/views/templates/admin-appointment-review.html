@@ -6,450 +6,427 @@
     </div>
   </md-content>
   <div layout="row" layout-align="start center">
-  <md-content class="md-padding" flex-gt-xs="60" flex-offset-gt-xs="20" layout="column">
-    <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-whiteframe-3dp>
+    <md-content class="md-padding" flex-gt-xs="60" flex-offset-gt-xs="20" layout="column">
+      <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card md-whiteframe-3dp>
           <div id="aptHeader" layout="row" layout-align="space-around center">
-              <div class="md-title appointment-date">
-                <p layout="column" layout-align="center center">
-                  <span>{{vm.appointment.selected.info.appointment_date | date: 'MMM'}}</span>
-                  <span>{{vm.appointment.selected.info.appointment_date | date: 'dd'}}</span>
-                  <span>{{vm.appointment.selected.info.appointment_date | date: 'yyyy'}}</span>
-                </p>
-              </div>
-              <div class="md-title md-padding appointment-type-info-admin">
+            <div class="md-title appointment-date">
+              <p layout="column" layout-align="center center">
+                <span>{{vm.appointment.selected.info.appointment_date | date: 'MMM'}}</span>
+                <span>{{vm.appointment.selected.info.appointment_date | date: 'dd'}}</span>
+                <span>{{vm.appointment.selected.info.appointment_date | date: 'yyyy'}}</span>
+              </p>
+            </div>
+            <div class="md-title md-padding appointment-type-info-admin">
+              <p>
+                <span class="appointment-type">{{vm.appointment.selected.info.appointment_type}}</span>
+                <span>with <span class="appointment-delivery">{{vm.appointment.selected.info.delivery_method}}</span></span>
+              </p>
+            </div>
+            <div class="appointment-icon">
+              <i ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
+              <i ng-if="vm.appointment.selected.info.appointment_type == 'shopping'" class="fa fa-shopping-cart" aria-hidden="true"></i>
+            </div>
+          </div>
+          <md-card-content>
+            <div class="appointment-card-body" layout="column" layout-align="center center">
+              <div layout-align="center start">
                 <p>
-                  <span class="appointment-type">{{vm.appointment.selected.info.appointment_type}}</span>
-                  <span>with <span class="appointment-delivery">{{vm.appointment.selected.info.delivery_method}}</span></span>
+                  <i class="material-icons">access_time</i> {{vm.appointment.selected.info.start_time}}
                 </p>
-              </div>
-              <div class="appointment-icon">
-                <i ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED" class="fa fa-bed" aria-hidden="true"></i>
-                <i ng-if="vm.appointment.selected.info.appointment_type == 'shopping'" class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <p>
+                  <i class="material-icons">person</i> {{vm.appointment.selected.clientInfo.first}} {{vm.appointment.selected.clientInfo.last}}
+                  (Client)
+                </p>
+                <p>
+                  <i class="material-icons">person</i> {{vm.appointment.selected.info.user_first}} {{vm.appointment.selected.info.user_last}}
+                  (Caseworker)
+                </p>
+                <p>
+                  <i class="material-icons">place</i> {{vm.appointment.selected.info.location_name}}
+                </p>
+
+                <div class="appointment-card-delivery-info">
+                  <p ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <md-input-container>
+                      <label>Delivery Date</label>
+                      <md-datepicker ng-model="vm.appointment.selected.info.delivery_date"></md-datepicker>
+                    </md-input-container>
+                    <!-- <span ng-if="vm.appointment.selected.info.delivery_date != undefined">Delivered {{vm.appointment.selected.info.delivery_date | date: 'shortDate'}}.</span>
+                <span ng-if="vm.appointment.selected.info.delivery_date == undefined">Delivery date to be determined.</span> -->
+                  </p>
+                  <p ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
+                    <i class="fa fa-truck" aria-hidden="true"></i>
+                    <span>Client Pick Up within 48 Hrs of Appointment</span>
+                  </p>
+                </div>
               </div>
             </div>
-        <md-card-content>
-          <div class="appointment-card-body" layout="column" layout-align="center center">
-            <div layout-align="center start">
-            <p>
-              <i class="material-icons">access_time</i> {{vm.appointment.selected.info.start_time}}
-            </p>
-            <p>
-              <i class="material-icons">person</i> {{vm.appointment.selected.clientInfo.first}} {{vm.appointment.selected.clientInfo.last}}
-              (Client)
-            </p>
-            <p>
-              <i class="material-icons">person</i> {{vm.appointment.selected.info.user_first}} {{vm.appointment.selected.info.user_last}}
-              (Caseworker)
-            </p>
-            <p>
-              <i class="material-icons">place</i> {{vm.appointment.selected.info.location_name}}
-            </p>
 
-          <div class="appointment-card-delivery-info">
-            <p ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-              <i class="fa fa-truck" aria-hidden="true"></i>
-              <md-input-container>
-                <label>Delivery Date</label>
-                <md-datepicker ng-model="vm.appointment.selected.info.delivery_date"></md-datepicker>
-              </md-input-container>
-              <!-- <span ng-if="vm.appointment.selected.info.delivery_date != undefined">Delivered {{vm.appointment.selected.info.delivery_date | date: 'shortDate'}}.</span>
-                <span ng-if="vm.appointment.selected.info.delivery_date == undefined">Delivery date to be determined.</span> -->
-            </p>
-            <p ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_PICKUP">
-              <i class="fa fa-truck" aria-hidden="true"></i>
-              <span>Client Pick Up within 48 Hrs of Appointment</span>
-            </p>
-          </div>
-        </div>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button class="md-raised md-primary" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
+                ng-click="vm.confirmApt(vm.appointment.selected.info)">
+                Confirm</md-button>
+              <md-button class="md-raised md-warn" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
+                ng-click="vm.denyApt(vm.appointment.selected.info)">
+                Deny</md-button>
+              <md-button class="md-raised" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED &&
+                        vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY" ng-click="vm.editDeliveryDate(vm.appointment.selected.info)">
+                Edit Delivery Date</md-button>
+              <md-button class="md-raised md-warn" ng-if="vm.appointment.selected.info.status != vm.CONSTANTS.APPOINTMENT_STATUS_CANCELED"
+                ng-click="vm.cancelApt(vm.appointment.selected.info)">
+                Cancel Appointment</md-button>
+            </md-card-actions>
+          </md-card-content>
+        </md-card>
       </div>
 
-          <md-card-actions layout="row" layout-align="end center">
-            <md-button class="md-raised md-primary" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
-              ng-click="vm.confirmApt(vm.appointment.selected.info)">
-              Confirm</md-button>
-            <md-button class="md-raised md-warn" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_PENDING"
-              ng-click="vm.denyApt(vm.appointment.selected.info)">
-              Deny</md-button>
-            <md-button class="md-raised" ng-if="vm.appointment.selected.info.status == vm.CONSTANTS.APPOINTMENT_STATUS_CONFIRMED &&
-                        vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY" ng-click="vm.editDeliveryDate(vm.appointment.selected.info)">
-              Edit Delivery Date</md-button>
-            <md-button class="md-raised md-warn" ng-if="vm.appointment.selected.info.status != vm.CONSTANTS.APPOINTMENT_STATUS_CANCELED"
-              ng-click="vm.cancelApt(vm.appointment.selected.info)">
-              Cancel Appointment</md-button>
-          </md-card-actions>
-        </md-card-content>
-      </md-card>
-    </div>
-
-    <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-whiteframe-3dp>
+      <div flex-xs flex-gt-xs="50" layout="column">
+        <md-card md-whiteframe-3dp>
           <div class="md-title" id="clientHeader" layout="row" layout-align="space-around center">
-              <div>
-                <p>Client Details</p>
-              </div>
+            <div>
+              <p>Client Details</p>
             </div>
-        <md-card-content>
+          </div>
+          <md-card-content>
 
-          <md-content class="formAsCard" layout-padding>
-            <!--BEGIN CLIENT FORM-->
-            <form class="client-referall-form" layout="column" name="clientform" ng-submit="vm.editClient(vm.appointment.selected.clientInfo)">
-              <div layout-gt-sm="row">
-                <md-input-container class="md-block" flex-gt-sm>
-                  <label>Client First Name</label>
-                  <input type="text" ng-model="vm.appointment.selected.clientInfo.first" required>
+            <md-content class="formAsCard" layout-padding>
+              <!--BEGIN CLIENT FORM-->
+              <form class="client-referall-form" layout="column" name="clientform" ng-submit="vm.editClient(vm.appointment.selected.clientInfo)">
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Client First Name</label>
+                    <input type="text" ng-model="vm.appointment.selected.clientInfo.first" required>
+                  </md-input-container>
+                  <md-input-container class="md-block" flex-gt-sm>
+                    <label>Client Last Name</label>
+                    <input type="text" ng-model="vm.appointment.selected.clientInfo.last" required>
+                  </md-input-container>
+                </div>
+                <md-input-container>
+                  <label>Client Date of Birth</label>
+                  <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-sm>
-                  <label>Client Last Name</label>
-                  <input type="text" ng-model="vm.appointment.selected.clientInfo.last" required>
-                </md-input-container>
-              </div>
-              <md-input-container>
-                <label>Client Date of Birth</label>
-                <md-datepicker ng-model="vm.appointment.selected.clientInfo.dob"></md-datepicker>
-              </md-input-container>
 
-              <md-input-container class="md-block">
-                <label>Client Street Address (Include Apartment #)</label>
-                <input type="text" ng-model="vm.appointment.selected.clientInfo.street" required>
-              </md-input-container>
-              <div layout-gt-sm="row">
                 <md-input-container class="md-block">
-                  <label>Client City</label>
-                  <input type="text" ng-model="vm.appointment.selected.clientInfo.city" required>
+                  <label>Client Street Address (Include Apartment #)</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.street" required>
+                </md-input-container>
+                <div layout-gt-sm="row">
+                  <md-input-container class="md-block">
+                    <label>Client City</label>
+                    <input type="text" ng-model="vm.appointment.selected.clientInfo.city" required>
+                  </md-input-container>
+                  <md-input-container class="md-block">
+                    <label>Client State</label>
+                    <md-select ng-model="vm.appointment.selected.clientInfo.state" required>
+                      <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
+                        {{state.abbrev}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                  <md-input-container class="md-block">
+                    <label>Client Zip Code</label>
+                    <input type="text" ng-model="vm.appointment.selected.clientInfo.zip_code" required>
+                  </md-input-container>
+                  <md-input-container class="md-block">
+                    <label>County Client Lives In</label>
+                    <md-select ng-model="vm.appointment.selected.clientInfo.county" required>
+                      <md-option ng-repeat="county in vm.counties" value="{{county.description}}">
+                        {{county.description}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                  <label>Building-Client access code</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.building_access_code">
                 </md-input-container>
                 <md-input-container class="md-block">
-                  <label>Client State</label>
-                  <md-select ng-model="vm.appointment.selected.clientInfo.state" required>
-                    <md-option ng-repeat="state in vm.states" value="{{state.abbrev}}">
-                      {{state.abbrev}}
+                  <label>Client Primary Phone Number</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.primary_phone" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Client Alternate Phone Number</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.alternate_phone">
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                  <label>Client email address</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.email" required type="email" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <p>Has client accessed Bridging services in the past? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.used_bridging_services_previously" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Client Ethnicity</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity" required>
+                    <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+                    <md-select-label>Select a race/ethnicity</md-select-label>
+                    <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Client Sex</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.sex" required>
+                    <md-option ng-repeat="sex in vm.sexes" value="{{sex.description}}">
+                      {{sex.description}}
                     </md-option>
                   </md-select>
                 </md-input-container>
                 <md-input-container class="md-block">
-                  <label>Client Zip Code</label>
-                  <input type="text" ng-model="vm.appointment.selected.clientInfo.zip_code" required>
+                  <label>Client Age</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.age" required type="number" required>
                 </md-input-container>
                 <md-input-container class="md-block">
-                  <label>County Client Lives In</label>
-                  <md-select ng-model="vm.appointment.selected.clientInfo.county" required>
-                    <md-option ng-repeat="county in vm.counties" value="{{county.description}}">
-                      {{county.description}}
+                  <label>Household Size</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.household_size" required type="number" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Age of ALL others in household</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.age_of_others_in_household">
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>How many children in the household are 17 and under?</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.num_children_17_and_under" required type="number" required>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Number of Bedrooms</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.num_bedrooms" required type="number" required>
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                  <label>Home Visit Completed Date</label>
+                  <md-datepicker ng-model="vm.appointment.selected.clientInfo.home_visit_completed" required></md-datepicker>
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
+                  <p>Completed Client Checklist *</p>
+                  <md-checkbox ng-model="vm.appointment.selected.clientInfo.completed_client_checklist" required>
+                  </md-checkbox>
+                </md-input-container>
+                <md-input-container class="md-block">
+                  <label>Client Yearly Income</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.yearly_income" required>
+                    <md-option ng-repeat="income in vm.incomes" value="{{income.description}}">
+                      {{income.description}}
                     </md-option>
                   </md-select>
                 </md-input-container>
-              </div>
-              <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
-                <label>Building-Client access code</label>
-                <input type="text" ng-model="vm.appointment.selected.info.building_access_code">
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Client Primary Phone Number</label>
-                <input type="text" ng-model="vm.appointment.selected.clientInfo.primary_phone" required>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Client Alternate Phone Number</label>
-                <input type="text" ng-model="vm.appointment.selected.clientInfo.alternate_phone">
-              </md-input-container>
-              <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.appointment_type == 'shopping'">
-                <label>Client email address</label>
-                <input ng-model="vm.appointment.selected.info.email" required type="email" required>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <p>Has client accessed Bridging services in the past? *</p>
-                <md-radio-group ng-model="vm.appointment.selected.clientInfo.used_bridging_services_previously" required>
-                  <md-radio-button value="true">Yes</md-radio-button>
-                  <md-radio-button value="false">No</md-radio-button>
-                </md-radio-group>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Client Ethnicity</label>
-                <md-select ng-model="vm.appointment.selected.clientInfo.race_ethnicity" required>
-                  <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
-                  <md-select-label>Select a race/ethnicity</md-select-label>
-                  <md-option ng-value="ethnicity.description" ng-repeat="ethnicity in vm.ethnicities">{{ ethnicity.description }}</md-option>
-                </md-select>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Client Sex</label>
-                <md-select ng-model="vm.appointment.selected.clientInfo.sex" required>
-                  <md-option ng-repeat="sex in vm.sexes" value="{{sex.description}}">
-                    {{sex.description}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Client Age</label>
-                <input ng-model="vm.appointment.selected.clientInfo.age" required type="number" required>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Household Size</label>
-                <input ng-model="vm.appointment.selected.clientInfo.household_size" required type="number" required>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Age of ALL others in household</label>
-                <input type="text" ng-model="vm.appointment.selected.clientInfo.age_of_others_in_household">
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>How many children in the household are 17 and under?</label>
-                <input ng-model="vm.appointment.selected.clientInfo.num_children_17_and_under" required type="number" required>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Number of Bedrooms</label>
-                <input ng-model="vm.appointment.selected.clientInfo.num_bedrooms" required type="number" required>
-              </md-input-container>
-              <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
-                <label>Home Visit Completed Date</label>
-                <md-datepicker ng-model="vm.appointment.selected.clientInfo.home_visit_completed" required></md-datepicker>
-              </md-input-container>
-              <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == 'shopping'">
-                <p>Completed Client Checklist *</p>
-                <md-checkbox ng-model="vm.appointment.selected.clientInfo.completed_client_checklist" required>
-                </md-checkbox>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <label>Client Yearly Income</label>
-                <md-select ng-model="vm.appointment.selected.clientInfo.yearly_income" required>
-                  <md-option ng-repeat="income in vm.incomes" value="{{income.description}}">
-                    {{income.description}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <md-input-container class="md-block">
-                <p>Was the client homeless? *</p>
-                <md-radio-group ng-model="vm.appointment.selected.clientInfo.was_client_homeless" required>
-                  <md-radio-button value="Yes">Yes</md-radio-button>
-                  <md-radio-button value="No">No</md-radio-button>
-                </md-radio-group>
-              </md-input-container>
-              <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.was_client_homeless === 'Yes'">
-                <label>For how long was the client homeless?</label>
-                <md-select ng-model="vm.appointment.selected.clientInfo.how_long_homeless" required>
-                  <md-option ng-repeat="length in vm.homeless" value="{{length.description}}">
-                    {{length.description}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <!-- What brought the client to Bridging? pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-              <md-input-container class="md-block">
-                <label>What brought the client to Bridging?</label>
-                <md-select ng-model="vm.appointment.selected.clientInfo.what_brought_client_to_bridging" required>
-                  <md-option ng-repeat="reason in vm.bridging" value="{{reason.description}}">
-                    {{reason.description}}
-                  </md-option>
-                </md-select>
-              </md-input-container>
-              <md-input-container class="md-block"
-              ng-if = "vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <p>Will bring an interpreter? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.will_bring_interpreter" required>
-              <md-radio-button value = "Yes">Yes</md-radio-button>
-              <md-radio-button value = "No">No</md-radio-button>
-            </md-radio-group>
-          </md-input-container>
-          <!-- Will bring assistant required due to mental health or physical limitations? Boolean req (, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <p>Will bring assistant required due to mental health or physical limitations? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.will_bring_assistant_due_to_mental_health_or_physical_limits" required>
-              <md-radio-button value = "true">Yes</md-radio-button>
-              <md-radio-button value = "false">No</md-radio-button>
-            </md-radio-group>
-          </md-input-container>
-          <!-- Does your client understand that the furniture is used? Boolean req (, PU, DEL) -->
-          <md-input-container class="md-block"
-            ng-if="vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-              <p>Does your client understand that the furniture is used? *</p>
-              <md-checkbox ng-model="vm.appointment.selected.clientInfo.client_understands_furniture_is_used" required></md-checkbox>
-          </md-input-container>
-          <!-- Does your client understand that the furniture must be moved within 48hrs? boolean req (, PU, DEL) -->
-          <md-input-container class="md-block"
-            ng-if="vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-              <p>Does your client understand that the furniture must be moved within 48 hrs? *</p>
-              <md-checkbox ng-model="vm.appointment.selected.clientInfo.client_understands_furniture_must_be_moved_within_48hrs" required></md-checkbox>
-          </md-input-container>
-          <!-- If there is an ID number used by your agency for billing purposes,
+                <md-input-container class="md-block">
+                  <p>Was the client homeless? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.was_client_homeless" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.was_client_homeless === true">
+                  <label>For how long was the client homeless?</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.how_long_homeless" required>
+                    <md-option ng-repeat="length in vm.homeless" value="{{length.description}}">
+                      {{length.description}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <!-- What brought the client to Bridging? pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block">
+                  <label>What brought the client to Bridging?</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.what_brought_client_to_bridging" required>
+                    <md-option ng-repeat="reason in vm.bridging" value="{{reason.description}}">
+                      {{reason.description}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+                  <p>Will bring an interpreter? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.will_bring_interpreter" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <!-- Will bring assistant required due to mental health or physical limitations? Boolean req (, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+                  <p>Will bring assistant required due to mental health or physical limitations? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.will_bring_assistant_due_to_mental_health_or_physical_limits"
+                    required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <!-- Does your client understand that the furniture is used? Boolean req (, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+                  <p>Does your client understand that the furniture is used? *</p>
+                  <md-checkbox ng-model="vm.appointment.selected.clientInfo.client_understands_furniture_is_used" required></md-checkbox>
+                </md-input-container>
+                <!-- Does your client understand that the furniture must be moved within 48hrs? boolean req (, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+                  <p>Does your client understand that the furniture must be moved within 48 hrs? *</p>
+                  <md-checkbox ng-model="vm.appointment.selected.clientInfo.client_understands_furniture_must_be_moved_within_48hrs" required></md-checkbox>
+                </md-input-container>
+                <!-- If there is an ID number used by your agency for billing purposes,
           enter it here: text (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block">
-            <label>If there's an ID number used by your agency for billing purposes,
+                <md-input-container class="md-block">
+                  <label>If there's an ID number used by your agency for billing purposes,
             enter here:</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.agency_billing_id">
-          </md-input-container>
-          <!-- Who is paying for the appointment? Choice list req (, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if="vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <label>Who is paying for the appointment?</label>
-            <md-select ng-model="vm.appointment.selected.clientInfo.who_paying_for_appointment" required>
-              <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
-                {{payer.description}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-          <!-- @TODO CTPAppointment Boolean Hidden (, DEL) -->
-          <!-- If OTHER, who is paying for the appointment? text (, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if="vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING &&
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.agency_billing_id">
+                </md-input-container>
+                <!-- Who is paying for the appointment? Choice list req (, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+                  <label>Who is paying for the appointment?</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.who_paying_for_appointment" required>
+                    <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
+                      {{payer.description}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <!-- @TODO CTPAppointment Boolean Hidden (, DEL) -->
+                <!-- If OTHER, who is paying for the appointment? text (, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING &&
               vm.appointment.selected.clientInfo.who_paying_for_appointment === 'Other Paying Bridging'">
-            <label>If OTHER, who is paying for the appointment?</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.if_other_who_paying_appointment">
-          </md-input-container>
-          <!-- Who is paying for delivery? choice list req (NEW DEL, DEL) -->
-          <md-input-container class="md-block"
-            ng-if="vm.appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-            <label>Who is paying for delivery?</label>
-            <md-select ng-model="vm.appointment.selected.clientInfo.who_paying_for_delivery" required>
-              <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
-                {{payer.description}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-          <!-- @TODO CTPDelivery Boolean hidden (NEW DEL, DEL) -->
-          <!-- If OTHER, who is paying for delivery? text (NEW DEL, DEL) -->
-          <md-input-container class="md-block"
-              ng-if="vm.appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY &&
+                  <label>If OTHER, who is paying for the appointment?</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.if_other_who_paying_appointment">
+                </md-input-container>
+                <!-- Who is paying for delivery? choice list req (NEW DEL, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+                  <label>Who is paying for delivery?</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.who_paying_for_delivery" required>
+                    <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
+                      {{payer.description}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <!-- @TODO CTPDelivery Boolean hidden (NEW DEL, DEL) -->
+                <!-- If OTHER, who is paying for delivery? text (NEW DEL, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY &&
               vm.appointment.selected.clientInfo.who_paying_for_delivery === 'Other Paying Bridging'">
-              <label>If OTHER, who is paying for delivery?</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.if_other_who_paying_delivery">
-          </md-input-container>
-          <!-- What floor does the client live on? Text req (NEW DEL, DEL) -->
-          <md-input-container class="md-block"
-              ng-if="vm.appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-            <label>What floor does the client live on</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.what_floor_does_client_live_on">
-          </md-input-container>
-          <!-- Is there an elevator in the building? boolean req (NEW DEL, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
-            <p>Is there an elevator in the building? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.elevator_in_building" required>
-              <md-radio-button value = "Yes">Yes</md-radio-button>
-              <md-radio-button value = "No">No</md-radio-button>
-            </md-radio-group>
-          </md-input-container>
-          <!-- Additional Notes Text (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block">
-            <label>Additional Notes</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.additional_notes">
-          </md-input-container>
-          <!-- USED Beds Needed (GENERAL GUIDELINES - Household size of 1-4 = 1 bed, 5-6 = 2 beds,
+                  <label>If OTHER, who is paying for delivery?</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.if_other_who_paying_delivery">
+                </md-input-container>
+                <!-- What floor does the client live on? Text req (NEW DEL, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+                  <label>What floor does the client live on?</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.what_floor_does_client_live_on">
+                </md-input-container>
+                <!-- Is there an elevator in the building? boolean req (NEW DEL, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.delivery_method == vm.CONSTANTS.DELIVERYMETHOD_DELIVERY">
+                  <p>Is there an elevator in the building? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.elevator_in_building" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <!-- Additional Notes Text (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block">
+                  <label>Additional Notes</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.additional_notes">
+                </md-input-container>
+                <!-- USED Beds Needed (GENERAL GUIDELINES - Household size of 1-4 = 1 bed, 5-6 = 2 beds,
           7+ = 3 beds)? Boolean req (, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if="vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
-            <p>USED Beds Needed? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.used_beds_needed" required>
-              <md-radio-button value = "Yes">Yes</md-radio-button>
-              <md-radio-button value = "No">No</md-radio-button>
-            </md-radio-group>
-            <p>GENERAL GUIDELINES:</p>
-            <p>Household size of 1-4 people = 1 bed, 5-6 people = 2 beds, 7+ people = 3 beds</p>
-          </md-input-container>
-          <!-- NEW beds and frames needed? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block">
-            <p>NEW beds and frames needed? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed" required>
-              <md-radio-button value = "Yes">Yes</md-radio-button>
-              <md-radio-button value = "No">No</md-radio-button>
-            </md-radio-group>
-          </md-input-container>
-          <!-- Who is paying for NEW Beds and Frames? choice list req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes'">
-            <label>Who is paying for NEW Beds and Frames?</label>
-            <md-select ng-model="vm.appointment.selected.clientInfo.who_paying_for_new_beds_and_frames" required>
-              <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
-                {{payer.description}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-          <!-- @TODO CTPNEWItems Boolean Hidden (NEW DEL, DEL) -->
-          <!-- If OTHER who is paying for NEW items? text (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-            ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes' &&
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_SHOPPING">
+                  <p>USED Beds Needed? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.used_beds_needed" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                  <p>GENERAL GUIDELINES:</p>
+                  <p>Household size of 1-4 people = 1 bed, 5-6 people = 2 beds, 7+ people = 3 beds</p>
+                </md-input-container>
+                <!-- NEW beds and frames needed? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block">
+                  <p>NEW beds and frames needed? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.new_beds_and_frames_needed" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <!-- Who is paying for NEW Beds and Frames? choice list req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true">
+                  <label>Who is paying for NEW Beds and Frames?</label>
+                  <md-select ng-model="vm.appointment.selected.clientInfo.who_paying_for_new_beds_and_frames" required>
+                    <md-option ng-repeat="payer in vm.bank" value="{{payer.description}}">
+                      {{payer.description}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+                <!-- @TODO CTPNEWItems Boolean Hidden (NEW DEL, DEL) -->
+                <!-- If OTHER who is paying for NEW items? text (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true &&
             vm.appointment.selected.clientInfo.who_paying_for_new_beds_and_frames === 'Other Paying Bridging'">
-            <label>If OTHER who is paying for NEW items?</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.if_other_who_paying_new_items">
-          </md-input-container>
-          <!-- (Prices included sales tax) If AGENCY is paying, is Agency tax
+                  <label>If OTHER who is paying for NEW items?</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.if_other_who_paying_new_items">
+                </md-input-container>
+                <!-- (Prices included sales tax) If AGENCY is paying, is Agency tax
           exempt? Boolean req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.selected.clientInfo.who_paying_for_appointment === 'Referring Agency' ||
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.who_paying_for_appointment === 'Referring Agency' ||
               vm.appointment.selected.clientInfo.who_paying_for_delivery === 'Referring Agency' ||
               vm.appointment.selected.clientInfo.who_paying_for_new_beds_and_frames === 'Referring Agency'">
-            <p>(Prices included sales tax) If AGENCY is paying, is Agency tax
-            exempt? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.agency_tax_exempt" required>
-              <md-radio-button value = "Yes">Yes</md-radio-button>
-              <md-radio-button value = "No">No</md-radio-button>
-            </md-radio-group>
-          </md-input-container>
-          <!-- NEW Twin Mattress and Box Spring pull-down req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-            ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes'">
-            <label>NEW Twin Mattress and Box Spring</label>
-            <input ng-model="vm.appointment.selected.clientInfo.new_twin_mattress_and_box_spring"
-                    required type = "number" required>
-          </md-input-container>
-          <!-- NEW Full Mattress and Box Spring pull down req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes'">
-            <label>NEW Full Mattress and Box Spring</label>
-            <input ng-model="vm.appointment.selected.clientInfo.new_full_mattress_and_box_spring"
-                    required type = "number" required>
-          </md-input-container>
-          <!-- NEW Queen Mattress and Box Spring pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes'">
-            <label>NEW Queen Mattress and Box Spring</label>
-            <input ng-model="vm.appointment.selected.clientInfo.new_queen_mattress_and_box_spring"
-                    required type = "number" required>
-          </md-input-container>
-          <!-- NEW Twin/Full Bed Frame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes'">
-            <label>NEW Twin/Full Bed Frame</label>
-            <input ng-model="vm.appointment.selected.clientInfo.new_twin_full_bed_frame"
-                    required type = "number" required>
-          </md-input-container>
-          <!-- NEW Queen/King Bed FRame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.selected.clientInfo.new_beds_and_frames_needed === 'Yes'">
-            <label>NEW Queen/King Bed Frame</label>
-            <input ng-model="vm.appointment.selected.clientInfo.new_queen_king_bed_frame"
-                    required type = "number" required>
-          </md-input-container>
-          <!-- Client approves speaking with a staff member about their Bridging
+                  <p>(Prices included sales tax) If AGENCY is paying, is Agency tax exempt? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.agency_tax_exempt" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <!-- NEW Twin Mattress and Box Spring pull-down req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true">
+                  <label>NEW Twin Mattress and Box Spring</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.new_twin_mattress_and_box_spring" required type="number" required>
+                </md-input-container>
+                <!-- NEW Full Mattress and Box Spring pull down req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true">
+                  <label>NEW Full Mattress and Box Spring</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.new_full_mattress_and_box_spring" required type="number" required>
+                </md-input-container>
+                <!-- NEW Queen Mattress and Box Spring pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true">
+                  <label>NEW Queen Mattress and Box Spring</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.new_queen_mattress_and_box_spring" required type="number" required>
+                </md-input-container>
+                <!-- NEW Twin/Full Bed Frame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true">
+                  <label>NEW Twin/Full Bed Frame</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.new_twin_full_bed_frame" required type="number" required>
+                </md-input-container>
+                <!-- NEW Queen/King Bed FRame pulldown req (NEW DEL, NEW PU, PU, DEL) -->
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.clientInfo.new_beds_and_frames_needed === true">
+                  <label>NEW Queen/King Bed Frame</label>
+                  <input ng-model="vm.appointment.selected.clientInfo.new_queen_king_bed_frame" required type="number" required>
+                </md-input-container>
+                <!-- Client approves speaking with a staff member about their Bridging
           experience? Boolean req (NEW DEL, NEW PU) -->
-          <md-input-container class="md-block"
-            ng-if="vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED">
-            <p>Client approves speaking with a staff member about their Bridging
-            experience? *</p>
-            <md-radio-group ng-model = "vm.appointment.selected.clientInfo.client_approves_speaking_with_staff" required>
-              <md-radio-button value = "Yes">Yes</md-radio-button>
-              <md-radio-button value = "No">No</md-radio-button>
-            </md-radio-group>
-          </md-input-container>
-          <!-- If yes, client's email or phone number. text (NEW DEL, NEW PU) -->
-          <md-input-container class="md-block"
-              ng-if = "vm.appointment.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED &&
-                vm.appointment.selected.clientInfo.client_approves_speaking_with_staff === 'Yes'">
-            <label>If yes, client's email or phone number</label>
-            <input type="text" ng-model="vm.appointment.selected.clientInfo.if_yes_client_email_or_phone">
-          </md-input-container>
-              <md-card-actions layout="row" layout-align="end center">
-                <md-button type="submit" class="md-raised md-primary" ng-disabled="clientform.$invalid">
-                  Save Changes</md-button>
-                <a href="#admin-appointments-all">
-                  <md-button type="button">
-                    Cancel Changes</md-button>
-                </a>
-                <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">Please fill out all required questions. Required questions are marked with an asterisk (*).</p>
-              </md-card-actions>
-            </form>
+                <md-input-container class="md-block" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED">
+                  <p>Client approves speaking with a staff member about their Bridging experience? *</p>
+                  <md-radio-group ng-model="vm.appointment.selected.clientInfo.client_approves_speaking_with_staff" required>
+                    <md-radio-button ng-value="true">Yes</md-radio-button>
+                    <md-radio-button ng-value="false">No</md-radio-button>
+                  </md-radio-group>
+                </md-input-container>
+                <!-- If yes, client's email or phone number. text (NEW DEL, NEW PU) -->
+                <md-input-container class="md-Pblock" ng-if="vm.appointment.selected.info.appointment_type == vm.CONSTANTS.APPOINTMENT_TYPE_BED &&
+                vm.appointment.selected.clientInfo.client_approves_speaking_with_staff === true">
+                  <label>If yes, client's email or phone number</label>
+                  <input type="text" ng-model="vm.appointment.selected.clientInfo.if_yes_client_email_or_phone">
+                </md-input-container>
+                <md-card-actions layout="row" layout-align="end center">
+                  <md-button type="submit" class="md-raised md-primary" ng-disabled="clientform.$invalid">
+                    Save Changes</md-button>
+                  <a href="#admin-appointments-all">
+                    <md-button type="button">
+                      Cancel Changes</md-button>
+                  </a>
+                </md-card-actions>
+                <div layout="row" layout-align="end center">
+                  <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">
+                    Please fill out all required questions. Required questions are marked with an asterisk (*).
+                  </p>
+                </div>
+              </form>
 
-          </md-content>
-        </md-card-content>
-      </md-card>
-    </div>
-  </md-content>
-</div>
+            </md-content>
+          </md-card-content>
+        </md-card>
+      </div>
+    </md-content>
+  </div>
 </div>
