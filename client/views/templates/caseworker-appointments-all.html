@@ -62,7 +62,7 @@
             <i class="fa fa-truck" aria-hidden="true"></i>
           </div>
           <div flex="75">
-            <span ng-if="appointment.info.delivery_date != undefined">Delivered {{appointment.info.delivery_date | date: 'shortDate'}}</span>
+            <span ng-if="appointment.info.delivery_date != undefined">Will be delivered {{appointment.info.delivery_date | date: 'shortDate'}}</span>
             <span ng-if="appointment.info.delivery_date == undefined">Delivery date TBD</span>
           </div>
         </div>

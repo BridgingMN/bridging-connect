@@ -7,6 +7,7 @@ angular.module('myApp')
     APPOINTMENT_TYPE_BED: 'new bed',
     DELIVERYMETHOD_PICKUP: 'pickup',
     DELIVERYMETHOD_DELIVERY: 'delivery',
+    DAYS_APPOINTMENTS_REMAIN_CURRENT: 1,
     LOCATION_BLOOMINGTON: {
       location_id: 1,
       location_name: 'Bloomington',
@@ -25,5 +26,4 @@ angular.module('myApp')
     },
     USER_TYPE_ADMIN: 1,
     USER_TYPE_CASEWORKER: 2
-
 });

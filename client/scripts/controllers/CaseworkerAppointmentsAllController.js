@@ -192,12 +192,17 @@ angular
   }
 
   function showAppointment(appointment) {
-    var showAppointment;
-    if (appointment.info.status == 'confirmed' || appointment.info.status == 'pending') {
-      showAppointment = true;
-    } else {
-      showAppointment = false;
-    }
-    return showAppointment;
+    return isStillScheduled(appointment) && isNotExpired(appointment);
+  }
+
+  function isStillScheduled(appointment) {
+    return appointment.info.status == constants.APPOINTMENT_STATUS_CONFIRMED || appointment.info.status == constants.APPOINTMENT_STATUS_PENDING;
+  }
+
+  function isNotExpired(appointment) {
+    var today = new Date();
+    var appointmentOrDeliveryDate = appointment.info.delivery_date || appointment.info.date;
+    var dateAppointmentsExpire = today.setDate(today.getDate() - constants.DAYS_APPOINTMENTS_REMAIN_CURRENT);
+    return new Date(appointmentOrDeliveryDate) >= dateAppointmentsExpire;
   }
 }]);
