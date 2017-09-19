@@ -74,7 +74,8 @@ vm.bank = ['Referring Agency', 'Client or Other Paying Referring Agency',
 
   function editClient(client) {
     console.log('Updating client: ', client);
-    $http.put('/clients', client).then(function() {
+    $http.put('/clients', client).then(function(response) {
+      console.log('response to client put request', response);
       $location.path('/admin-appointments-all');
       appointmentAlertDialog('Client Updated','Your edits to ' + client.first + ' ' + client.last + ' have been saved.');
     });

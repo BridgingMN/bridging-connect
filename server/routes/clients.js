@@ -236,13 +236,14 @@ router.put('/', function(req, res) {
         client.who_paying_for_new_beds_and_frames, client.if_other_who_paying_new_items, client.agency_tax_exempt,
         client.new_twin_mattress_and_box_spring, client.new_full_mattress_and_box_spring,
         client.new_queen_mattress_and_box_spring, client.new_twin_full_bed_frame, client.new_queen_king_bed_frame,
-        client.client_approves_speaking_with_staff, client.if_yes_client_email_or_phone, client.id],
+        client.client_approves_speaking_with_staff, client.if_yes_client_email_or_phone, client.client_id],
       function(queryError, result){
         done();
         if (queryError) {
           console.log(queryError, 'ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
+          console.log('result:', result);
           res.sendStatus(200);
         }
       });
