@@ -129,9 +129,17 @@ md-input-container.admin-search {
   background-color: #54C0C9;
   color: white;
   height: 121px;
-  font-size: 36px;
+  font-size: 32px;
 }
 
 .odd {
   background-color: #F5F5F5 !important;
+}
+
+.formAsCard {
+  background-color: #FFFFFF !important;
+}
+
+.appointment-type-info-admin {
+  font-size: 32px;
 }

@@ -117,8 +117,8 @@ angular
   function compareDates(appointmentDate, date) {
     //Convert date string from appointment object to a Javascript Date
     appointmentDate = new Date (appointmentDate);
-    date = new Date(date);
     //Return a comparison of the two dates.
-    return appointmentDate.getTime() == date.getTime();
+    var match = appointmentDate.toISOString().substr(0,10) === date.toISOString().substr(0,10);
+    return (match);
   }
 }]);

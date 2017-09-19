@@ -431,57 +431,53 @@ router.get('/:appointment_id', function(req, res) {
   if (req.isAuthenticated()) { // user is authenticated
     var appointment_id = req.params.appointment_id;
     console.log('getting appointment details for ', appointment_id);
-    pool.connect(function(err, database, done) {
-      if (err) { // connection error
-        console.log('error connecting to the database:', err);
-      } else { // we connected
-        database.query('SELECT "appointments"."id" AS "appointment_id", "appointments"."confirmation_id",' +
-        '"appointments"."created_date", "appointments"."appointment_date",' +
-        '"appointments"."delivery_date", "statuses"."status",' +
-        '"appointments"."appointment_slot_id", "appointment_types"."appointment_type",' +
-        '"days"."name" AS "day", "delivery_methods"."delivery_method",' +
-        '"locations"."location" AS "location_name", "appointment_slots"."start_time",' +
-        '"appointment_slots"."end_time", "appointments"."user_id",' +
-        '"users"."email" AS "user_email", "users"."first" AS "user_first",' +
-        '"users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone",' +
-        '"users"."ext" AS "user_day_phone_ext", "users"."agency_id",' +
-        '"agencies"."name" AS "agency_name", "agencies"."bridging_agency_id",' +
-        '"agencies"."primary_first", "agencies"."primary_last",' +
-        '"agencies"."primary_job_title", "agencies"."primary_business_phone",' +
-        '"agencies"."primary_business_phone_ext", "agencies"."primary_email",' +
-        '"appointments"."client_id", "clients"."first" AS "client_first",' +
-        '"clients"."last" AS "client_last", "clients"."dob" AS "client_dob",' +
-        '"clients"."street", "clients"."city", "clients"."state",' +
-        '"clients"."zip_code", "race_ethnicity"."race_ethnicity" ' +
-                        'FROM "appointments" ' +
-                        'JOIN "statuses" ON "statuses"."id" = "appointments"."status_id" ' +
-                        'JOIN "appointment_slots" ON "appointment_slots"."id" = "appointments"."appointment_slot_id" ' +
-                        'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
-                        'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
-                        'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
-                        'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
-                        'JOIN "users" ON "users"."id" = "appointments"."user_id" ' +
-                        'JOIN "agencies" ON "agencies"."id" = "users"."agency_id" ' +
-                        'JOIN "clients" ON "clients"."id" = "appointments"."client_id" ' +
-                        'LEFT JOIN "race_ethnicity" ON "race_ethnicity"."id" = "clients"."race_ethnicity_id" ' +
-                        'WHERE "appointments"."id" = $1;', [appointment_id],
-          function(queryErr, result) { // query callback
-            done();
-            if (queryErr) {
-              console.log('error making query:', queryErr);
-              res.sendStatus(500);
-            } else {
-              console.log('sucessful GET from /appointments/:appointment_id', result);
-              console.log('result.rows =', result.rows);
-              console.log('result.rows[0] =', result.rows[0]);
-              var apptInfo = formatSingleAppointment(result.rows[0]);
-              res.send(apptInfo);
-            }
-        }); // end query callback
-      } // end DB connection if-else
-    }); // end pool.connect
-  } else { // user not authenticated
-    res.sendStatus(401);
+    var appointment = {};
+    pool.connect().then(function(db) {
+      return db.query(
+      'SELECT "appointments"."id" AS "appointment_id", "appointments"."confirmation_id",' +
+      '"appointments"."created_date", "appointments"."appointment_date",' +
+      '"appointments"."delivery_date", "statuses"."status",' +
+      '"appointments"."appointment_slot_id", "appointment_types"."appointment_type",' +
+      '"days"."name" AS "day", "delivery_methods"."delivery_method",' +
+      '"locations"."location" AS "location_name", "appointment_slots"."start_time",' +
+      '"appointment_slots"."end_time", "appointments"."user_id",' +
+      '"users"."email" AS "user_email", "users"."first" AS "user_first",' +
+      '"users"."last" AS "user_last", "users"."day_phone" AS "user_day_phone",' +
+      '"users"."ext" AS "user_day_phone_ext", "users"."agency_id",' +
+      '"agencies"."name" AS "agency_name", "agencies"."bridging_agency_id",' +
+      '"agencies"."primary_first", "agencies"."primary_last",' +
+      '"agencies"."primary_job_title", "agencies"."primary_business_phone",' +
+      '"agencies"."primary_business_phone_ext", "agencies"."primary_email",' +
+      '"appointments"."client_id"' +
+                      'FROM "appointments" ' +
+                      'JOIN "statuses" ON "statuses"."id" = "appointments"."status_id" ' +
+                      'JOIN "appointment_slots" ON "appointment_slots"."id" = "appointments"."appointment_slot_id" ' +
+                      'JOIN "appointment_types" ON "appointment_types"."id" = "appointment_slots"."appointment_type_id" ' +
+                      'JOIN "days" ON "days"."id" = "appointment_slots"."day_id" ' +
+                      'JOIN "delivery_methods" ON "delivery_methods"."id" = "appointment_slots"."delivery_method_id" ' +
+                      'JOIN "locations" ON "locations"."id" = "appointment_slots"."location_id" ' +
+                      'JOIN "users" ON "users"."id" = "appointments"."user_id" ' +
+                      'JOIN "agencies" ON "agencies"."id" = "users"."agency_id" ' +
+                      'WHERE "appointments"."id" = $1;', [appointment_id])
+      .then(function(result){
+        appointment.info = result.rows[0];
+          return db.query('SELECT * FROM "clients"' +
+          'JOIN "appointments" ON "clients"."id" = "appointments"."client_id"' +
+          'LEFT JOIN "race_ethnicity" ON "race_ethnicity"."id" = "clients"."race_ethnicity_id"' +
+          'WHERE "appointments"."id" = $1;', [appointment_id]);
+          })
+      .then(function(result){
+        db.release();
+        appointment.clientInfo = result.rows[0];
+        appointment = formatSingleAppointment(appointment);
+        res.send(appointment);
+      })
+      .catch(function(error){
+        db.release();
+        console.error('query error', error.message, error.stack);
+        res.sendStatus(500);
+      });
+    });
   }
 });
 

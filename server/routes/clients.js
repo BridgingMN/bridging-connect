@@ -159,33 +159,91 @@ router.get('/:client_id', function(req, res) {
   *    HTTP/1.1 404 Not found
 */
 router.put('/', function(req, res) {
+
   var client = req.body;
-  var client_id = client.client_id;
-  var first = client.first;
-  var last = client.last;
-  var dob = formatDateForPostgres(client.dob);
-  var race_ethnicity = client.race_ethnicity;
-  var street = client.street;
-  var city = client.city;
-  var state = client.state;
-  var zip_code = client.zip_code;
+  cleanClient(client);
   pool.connect(function(connectionError, db, done) {
     if (connectionError) {
       console.log(connectionError, 'ERROR CONNECTING TO DATABASE');
       res.sendStatus(500);
     } else {
-      db.query('UPDATE "clients"' +
-      'SET "first" = $1, "last" = $2, "dob" = $3,' +
-      '"race_ethnicity_id" = (SELECT "id" FROM "race_ethnicity" WHERE "race_ethnicity" = $4),' +
-      '"street" = $5, "city" = $6, "state" = $7, "zip_code" = $8' +
-      'WHERE "id" = $9',
-      [first, last, dob, race_ethnicity, street, city, state, zip_code, client_id],
+      db.query(
+      `UPDATE "clients" 
+      SET "first" = $1, 
+        "last" = $2, 
+        "dob" = $3, 
+        "race_ethnicity_id" = $4, 
+        "street" = $5, 
+        "city" = $6, 
+        "state" = $7, 
+        "zip_code" = $8, 
+        "county" = $9, 
+        "building_access_code" = $10, 
+        "primary_phone" = $11, 
+        "alternate_phone" = $12, 
+        "email" = $13, 
+        "used_bridging_services_previously" = $14, 
+        "marital_status" = $15, 
+        "sex" = $16, 
+        "age" = $17, 
+        "household_size" = $18, 
+        "age_of_others_in_household" = $19, 
+        "num_children_17_and_under" = $20, 
+        "num_bedrooms" = $21, 
+        "home_visit_completed" = $22, 
+        "completed_client_checklist" = $23, 
+        "yearly_income" = $24, 
+        "was_client_homeless" = $25, 
+        "how_long_homeless" = $26, 
+        "what_brought_client_to_bridging" = $27, 
+        "will_bring_interpreter" = $28, 
+        "will_bring_assistant_due_to_mental_health_or_physical_limits" = $29, 
+        "client_understands_furniture_is_used" = $30, 
+        "client_understands_furniture_must_be_moved_within_48hrs" = $31, 
+        "agency_billing_id" = $32, 
+        "who_paying_for_appointment" = $33, 
+        "if_other_who_paying_appointment" = $34, 
+        "who_paying_for_delivery" = $35, 
+        "if_other_who_paying_delivery" = $36, 
+        "what_floor_does_client_live_on" = $37, 
+        "elevator_in_building" = $38, 
+        "additional_notes" = $39, 
+        "used_beds_needed" = $40, 
+        "new_beds_and_frames_needed" = $41, 
+        "who_paying_for_new_beds_and_frames" = $42, 
+        "if_other_who_paying_new_items" = $43, 
+        "agency_tax_exempt" = $44, 
+        "new_twin_mattress_and_box_spring" = $45, 
+        "new_full_mattress_and_box_spring" = $46, 
+        "new_queen_mattress_and_box_spring" = $47, 
+        "new_twin_full_bed_frame" = $48, 
+        "new_queen_king_bed_frame" = $49, 
+        "client_approves_speaking_with_staff" = $50, 
+        "if_yes_client_email_or_phone" = $51
+      WHERE "id" = $52
+      RETURNING "id"`,
+      [client.first, client.last, client.dob, client.race_ethnicity_id, client.street, client.city, client.state,
+        client.zip_code, client.county, client.building_access_code, client.primary_phone, client.alternate_phone,
+        client.email, client.used_bridging_services_previously, client.marital_status, client.sex, client.age,
+        client.household_size, client.age_of_others_in_household, client.num_children_17_and_under, client.num_bedrooms,
+        client.home_visit_completed, client.completed_client_checklist, client.yearly_income, client.was_client_homeless,
+        client.how_long_homeless, client.what_brought_client_to_bridging, client.will_bring_interpreter,
+        client.will_bring_assistant_due_to_mental_health_or_physical_limits, client.client_understands_furniture_is_used,
+        client.client_understands_furniture_must_be_moved_within_48hrs, client.agency_billing_id,
+        client.who_paying_for_appointment, client.if_other_who_paying_appointment, client.who_paying_for_delivery,
+        client.if_other_who_paying_delivery, client.what_floor_does_client_live_on, client.elevator_in_building,
+        client.additional_notes, client.used_beds_needed, client.new_beds_and_frames_needed,
+        client.who_paying_for_new_beds_and_frames, client.if_other_who_paying_new_items, client.agency_tax_exempt,
+        client.new_twin_mattress_and_box_spring, client.new_full_mattress_and_box_spring,
+        client.new_queen_mattress_and_box_spring, client.new_twin_full_bed_frame, client.new_queen_king_bed_frame,
+        client.client_approves_speaking_with_staff, client.if_yes_client_email_or_phone, client.client_id],
       function(queryError, result){
         done();
         if (queryError) {
           console.log(queryError, 'ERROR MAKING QUERY');
           res.sendStatus(500);
         } else {
+          console.log('result:', result);
           res.sendStatus(200);
         }
       });
@@ -197,3 +255,6 @@ module.exports = {
   router: router,
   postClient: postClient
 };
+
+
+
