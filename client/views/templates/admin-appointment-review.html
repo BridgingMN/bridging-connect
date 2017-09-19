@@ -409,16 +409,17 @@
                   <input type="text" ng-model="vm.appointment.selected.clientInfo.if_yes_client_email_or_phone">
                 </md-input-container>
                 <md-card-actions layout="row" layout-align="end center">
-                  <md-button type="submit" class="md-raised md-primary" ng-disabled="clientform.$invalid">
+                  <md-button type="submit" class="md-raised md-primary" >
                     Save Changes</md-button>
                   <a href="#admin-appointments-all">
                     <md-button type="button">
                       Cancel Changes</md-button>
                   </a>
                 </md-card-actions>
-                <div layout="row" layout-align="end center">
+                <div layout="column" layout-align="center end">
                   <p md-colors="{color:'warn'}" ng-if="clientform.$invalid">
-                    Please fill out all required questions. Required questions are marked with an asterisk (*).
+                    <span><b>WARNING:</b> Some required questions are not answered.</span><br>
+                    <span>Required questions are marked with an asterisk (*).</span>
                   </p>
                 </div>
               </form>
