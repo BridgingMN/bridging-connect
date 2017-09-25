@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var pool = require('../modules/database.js');
 var json2csv = require('json2csv');
+var formatDateForCsv = require('../modules/formatters.js').formatDateForCsv;
 
 
 router.get('/:start/:end', function(req, res) {
@@ -38,8 +39,9 @@ router.get('/:start/:end', function(req, res) {
               res.send('No appointments for the selected dates.');
             } else {
               // convert query result to JSON
-              var appointmentsJsonString = JSON.stringify(result.rows)
+              var appointmentsJsonString = JSON.stringify(result.rows);
               var appointmentsJson = JSON.parse(appointmentsJsonString);
+              appointmentsJson = formatAppointmentsForExport(appointmentsJson);
               // convert JSON to CSV
               var appointmentsCsv = json2csv({data: appointmentsJson});
               // send CSV to client
@@ -51,5 +53,21 @@ router.get('/:start/:end', function(req, res) {
     }
   });
 });
+
+function formatAppointmentsForExport(appointmentsJson) {
+  return appointmentsJson.map(function(appointment) {
+    var appointmentCopy = Object.assign({}, appointment);
+    appointmentCopy['Created'] = formatDateForCsv(appointmentCopy['Created']);
+    appointmentCopy['Date'] = formatDateForCsv(appointmentCopy['Date']);
+    appointmentCopy['Client Date of Birth'] = formatDateForCsv(appointmentCopy['Client Date of Birth']);
+    if (appointmentCopy['Home Visit Completed']) {
+      appointmentCopy['Home Visit Completed'] = formatDateForCsv(appointmentCopy['Home Visit Completed']);
+    }
+    if (appointmentCopy['DELIVERY DATE (given by Bridging)']) {
+      appointmentCopy['DELIVERY DATE (given by Bridging)'] = formatDateForCsv(appointmentCopy['Created']);
+    }
+    return appointmentCopy;
+  });
+}
 
 module.exports = router;

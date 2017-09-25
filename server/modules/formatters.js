@@ -73,6 +73,11 @@ function formatSingleAppointment(appointment) {
   return appointment;
 }
 
+function formatDateForCsv(date) {
+  var formattedDate = moment(date).format('MM/DD/YYYY');
+  return formattedDate;
+}
+
 module.exports = {
   formatTime: formatTime,
   formatDate: formatDate,
@@ -81,5 +86,6 @@ module.exports = {
   formatAppts: formatAppts,
   formatSingleAppointment: formatSingleAppointment,
   formatClient: formatClient,
-  formatTimeForClient: formatTimeForClient
+  formatTimeForClient: formatTimeForClient,
+  formatDateForCsv: formatDateForCsv
 };
