@@ -142,7 +142,7 @@ router.post('/', usernameToLowerCase, function(req, res) {
     var email = req.body.email;
     var access_disabled = req.body.access_disabled || false;
     var notes = req.body.notes || null;
-    var user_type = 'caseworker';
+    var user_type = req.body.user_type || 'caseworker';
     var token = tokens.generateToken();
     var token_expiration = tokens.generateExpirationDate(15);
     pool.connect(function(err, database, done) {
