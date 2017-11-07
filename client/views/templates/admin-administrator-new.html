@@ -4,7 +4,7 @@
 
 <md-content layout-padding>
 <div flex>
-<form name = "newAdministratorForm">
+<form name = "newAdministratorForm" ng-submit="vm.createAdministrator()">
   <div layout-gt-xs = "row">
     <md-input-container class = "md-block" flex-gt-xs>
       <label>Agency</label>
@@ -60,8 +60,14 @@
       </md-input-container>
     </div>
 
+    <md-input-container class="md-block">
+        <md-checkbox name = "disabled" ng-model="confirmCreation" required>
+          I understand that I am creating a new administrator with full access to all admin privileges of this application
+        </md-checkbox>
+      </md-input-container>
+
     <div>
-      <md-button type="submit" class="md-raised md-primary" ng-click = "vm.createAdministrator()">
+      <md-button type="submit" class="md-raised md-primary" ng-disabled="newAdministratorForm.$invalid && !confirmCreation">
         Create Administrator</md-button>
       <a href="#admin-caseworker-overview"><md-button type="button">Cancel</md-button></a>
     </div>
