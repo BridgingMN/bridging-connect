@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
 var mail = require('../modules/mail.js');
 
 //our modules
@@ -16,13 +15,9 @@ var pool = require('../modules/database.js');
 //Create a password reset token and set a new expiration date
 //Then send a password reset link to the user's email
 router.post('/forgotpassword', function (req, res) {
-  console.log('forgotpassword route', req.body);
-
   var token = tokens.generateToken();
   var token_expiration = tokens.generateExpirationDate(4);
   var email = req.body.email;
-
-  console.log('token, exp, email', token, token_expiration, email);
 
   pool.connect(function(err, database, done) {
     if (err) { // connection error

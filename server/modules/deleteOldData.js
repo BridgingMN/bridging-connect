@@ -7,14 +7,14 @@
     which data should not be kept (e.g., when INTERVAL_LENGTH = 6 and
     INTERVAL_TYPE = 'months', data from more than 6 months ago will be deleted)
 **/
-const INTERVAL_LENGTH = 6;
-const INTERVAL_TYPE = 'months';
+var INTERVAL_LENGTH = 6;
+var INTERVAL_TYPE = 'months';
 
 /*  The hour & minute upon which daily deletion should happen, e.g. if DELETION_HOUR
     is 0 & DELETION_MINUTE is 0, the deletion function will run at midnight
 **/
-const DELETION_HOUR = 0;
-const DELETION_MINUTE = 0;
+var DELETION_HOUR = 0;
+var DELETION_MINUTE = 0;
 
 var schedule = require('node-schedule');
 var moment = require('moment');
@@ -36,18 +36,16 @@ schedule.scheduleJob(rule, deleteOldData);
 // intervalLength is an integer
 // intervalUnit is a string ('years', 'quarters', 'months', 'weeks', or 'days')
 function deleteOldData() {
-  console.log('deleting old data...');
-  console.log('time:', new Date());
+  console.log('Deleting client and appointment data older than', INTERVAL_LENGTH, INTERVAL_TYPE);
   var cutoffDate = moment().subtract(INTERVAL_LENGTH, INTERVAL_TYPE);
   cutoffDate = formatDateForPostgres(cutoffDate);
-  console.log('cut off date:', cutoffDate);
   deleteApptsBefore(cutoffDate)
   .then(function(rows) {
     var clientIds = getClientIds(rows);
     deleteClients(clientIds);
   })
   .catch(function(error) {
-    console.log(error);
+    console.log('Error deleting old data', error);
   });
 }
 
