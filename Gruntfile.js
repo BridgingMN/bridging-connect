@@ -88,6 +88,10 @@ module.exports = function(grunt) {
                 files: ['client/**/*.*'],
                 tasks: ['uglify', 'copy']
             },
+            updateAPI: {
+                files: ['server/routes/**.*'],
+                tasks: ['apidoc']
+            },
             refresh: {
                 files: ['server/public/scripts/*.js', 'server/public/stylesheets/*.css', 'server/public/views/*.html', 'server/public/vendors/*.*'],
                 options: {

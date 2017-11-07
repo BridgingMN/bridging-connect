@@ -13,7 +13,14 @@ var pool = require('../modules/database.js');
   * @apiSuccess {String} name Name of the agency.
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database.
   * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
-  *
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      [{
+        "id": 5,
+        "name": "American Indian Family Center",
+        "bridging_agency_id": 1505,
+        "access_disabled": false
+      }]
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -66,10 +73,29 @@ router.get('/', function(req, res) {
   * @apiSuccess {String} beds_allowed_option String corresponding to the "beds_allowed_option_id" row from the "beds_allowed_options" table.
   * @apiSuccess {Boolean} access_disabled Current agency status. True = access disabled.
   * @apiSuccess {String} notes Any notes the administrator leaves regarding an agency.
-  *
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      {
+        "access_disabled": false,
+        "beds_allowed_option": "yes",
+        "beds_allowed_option_id": 1,
+        "bridging_agency_id": 1504,
+        "id": 4,
+        "name": "Ain Dah Yung Center",
+        "notes": null,
+        "primary_business_phone": "(651) 227-4184",
+        "primary_business_phone_ext": "12",
+        "primary_department": "Children and Families Program",
+        "primary_email": "Angela.Gauthier@adycenter.org",
+        "primary_first": "Angela",
+        "primary_job_title": "Director",
+        "primary_last": "Gauthier",
+        "primary_mobile_phone": ""
+      }
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
+
 router.get('/:agency_id', function(req, res) {
   console.log('in get one agency by id: ', req.params.agency_id);
   if (req.isAuthenticated()) { // user is authenticated

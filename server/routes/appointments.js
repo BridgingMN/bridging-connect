@@ -41,7 +41,7 @@ var formatSingleAppointment = formatters.formatSingleAppointment;
   * @apiSuccess {String} appointments.info.city   City of location address
   * @apiSuccess {String} appointments.info.state   State of location address
   * @apiSuccess {Date} appointments.info.date  Date of appointment
-  * @apiSuccess {Date} appointments.info.delivery_date  Date of delivery (if applicable)
+  * @apiSuccess {String} appointments.info.delivery_date  Date of delivery (if applicable)
   * @apiSuccess {String} appointments.info.status   Status of appointment
       ("confirmed" or "pending")
   * @apiSuccess {String} appointments.info.delivery_method  Delivery method ("pickup" or "delivery")
@@ -68,8 +68,8 @@ var formatSingleAppointment = formatters.formatSingleAppointment;
           "location_address": "201 W 87th St",
           "city": "Bloomington",
           "state": "MN",
-          "appointment_date": "April 21, 2017",
-          "delivery_date": "April 22, 2017"
+          "date": Wed Nov 08 2017 00:00:00 GMT-0600 (CST),
+          "delivery_date": "2017-11-09T00:00:00-06:00",
           "status": "confirmed",
         },
       }]
@@ -185,7 +185,7 @@ router.get('/existing', function(req, res) {
         "appointment_type": "shopping",
         "city": "Bloomington",
         "day": "Monday",
-        "date": "June 9, 2017",
+        "date": "2017-11-13T00:00:00-06:00",
         "delivery_method": "pickup",
         "end_time": "10:15 am",
         "location_name": "Bloomington",
@@ -193,6 +193,7 @@ router.get('/existing', function(req, res) {
         "street": "201 W 87th St",
         "state": "MN"
       }]
+      
   * @apiErrorExample {json} List error
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -288,21 +289,47 @@ function postAppointment(appointment_date, user_id, client_id,
   * @apiSuccess {Number} id Unique ID of each appointment.
   * @apiSuccess {Date} appointment_date Date for which the appointment is scheduled.
   * @apiSuccess {Date} delivery_date Tentative delivery date, if any, for the appointment.
+  * @apiSuccess {String} delivery_method Method by which client will receive order - "delivery" or "pickup".
   * @apiSuccess {Number} confirmation_id Appointment confirmation number from the "appointments" table.
   * @apiSuccess {Number} appointment_slot_id Unique ID corresponding to an entry in the "appointment_slots" table.
   * @apiSuccess {String} appointment_type Appointment type - corresponds to an entry in the "appointment_types" table.
-  * @apiSuccess {String} start_time Appointment start time - corresponds to the "appointment_slot_id" row in the "appointment_slots" table.
+  * @apiSuccess {String} start_time Appointment start time - corresponds to the appointment slot
+  * @apiSuccess {String} end_time Appointment end time - corresponds to the appointment slot
+  * @apiSuccess {String} location_name Name of location ("Bloomington" or ) - corresponds to the appointment slot
   * @apiSuccess {Number} agency_id Unique ID of the agency associated with each appointment.
   * @apiSuccess {String} name Name of the agency associated with each appointment.
   * @apiSuccess {Number} user_id Unique ID of the user associated with each appointment.
-  * @apiSuccess {String} user_fist First name of the user associated with each appointment.
+  * @apiSuccess {String} user_first First name of the user associated with each appointment.
   * @apiSuccess {String} user_last Last name of the user associated with each appointment.
   * @apiSuccess {Number} client_id Unique ID of the client associated with each appointment.
-  * @apiSuccess {String} client_fist First name of the client associated with each appointment.
+  * @apiSuccess {String} client_first First name of the client associated with each appointment.
   * @apiSuccess {String} client_last Last name of the client associated with each appointment.
   * @apiSuccess {Number} status_id Unique ID corresponding to an entry in the "statuses" table.
   * @apiSuccess {String} status Appointment status - corresponds to the "status_id" row in the "statuses" table.
-  *
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      [{
+        "agency_id": 61,
+        "appointment_date": "2017-09-04T05:00:00.000Z",
+        "appointment_slot_id": 88,
+        "appointment_type": "new bed",
+        "client_first": "Zachery",
+        "client_id": 26,
+        "client_last": "Augustin",
+        "confirmation_id": 45031,
+        "delivery_date": null,
+        "delivery_method": "delivery",
+        "end_time": "6:00 PM",
+        "id": 31,
+        "location_name": "Roseville",
+        "name": "LSS Refugee Services",
+        "start_time": "8:00 AM",
+        "status": "confirmed",
+        "status_id": 1,
+        "user_first": "Harmony",
+        "user_id": 119,
+        "user_last": "Toquet"
+      }]
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -353,21 +380,47 @@ router.get('/all', function(req, res) {
   * @apiSuccess {Number} id Unique ID of each appointment.
   * @apiSuccess {Date} appointment_date Date for which the appointment is scheduled.
   * @apiSuccess {Date} delivery_date Tentative delivery date, if any, for the appointment.
+  * @apiSuccess {String} delivery_method Method by which client will receive order - "delivery" or "pickup".
   * @apiSuccess {Number} confirmation_id Appointment confirmation number from the "appointments" table.
   * @apiSuccess {Number} appointment_slot_id Unique ID corresponding to an entry in the "appointment_slots" table.
   * @apiSuccess {String} appointment_type Appointment type - corresponds to an entry in the "appointment_types" table.
-  * @apiSuccess {String} start_time Appointment start time - corresponds to the "appointment_slot_id" row in the "appointment_slots" table.
+  * @apiSuccess {String} start_time Appointment start time - corresponds to the appointment slot
+  * @apiSuccess {String} end_time Appointment end time - corresponds to the appointment slot
+  * @apiSuccess {String} location_name Name of location ("Bloomington" or ) - corresponds to the appointment slot
   * @apiSuccess {Number} agency_id Unique ID of the agency associated with each appointment.
   * @apiSuccess {String} name Name of the agency associated with each appointment.
   * @apiSuccess {Number} user_id Unique ID of the user associated with each appointment.
-  * @apiSuccess {String} user_fist First name of the user associated with each appointment.
+  * @apiSuccess {String} user_first First name of the user associated with each appointment.
   * @apiSuccess {String} user_last Last name of the user associated with each appointment.
   * @apiSuccess {Number} client_id Unique ID of the client associated with each appointment.
-  * @apiSuccess {String} client_fist First name of the client associated with each appointment.
+  * @apiSuccess {String} client_first First name of the client associated with each appointment.
   * @apiSuccess {String} client_last Last name of the client associated with each appointment.
   * @apiSuccess {Number} status_id Unique ID corresponding to an entry in the "statuses" table.
   * @apiSuccess {String} status Appointment status - corresponds to the "status_id" row in the "statuses" table.
-  *
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      [{
+        "agency_id": 61,
+        "appointment_date": "2017-09-04T05:00:00.000Z",
+        "appointment_slot_id": 88,
+        "appointment_type": "new bed",
+        "client_first": "Zachery",
+        "client_id": 26,
+        "client_last": "Augustin",
+        "confirmation_id": 45031,
+        "delivery_date": null,
+        "delivery_method": "delivery",
+        "end_time": "6:00 PM",
+        "id": 31,
+        "location_name": "Roseville",
+        "name": "LSS Refugee Services",
+        "start_time": "8:00 AM",
+        "status": "confirmed",
+        "status_id": 1,
+        "user_first": "Harmony",
+        "user_id": 119,
+        "user_last": "Toquet"
+      }]
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -423,8 +476,107 @@ router.get('/pending', function(req, res) {
   * @apiParam {Number} appointment_id Unique ID of the appointment in the "appointments" table.
   *
   * @apiSuccessExample Success-Response:
-  *     HTTP/1.1 200 OK
-  * @apiErrorExample Delete Error:
+  *   HTTP/1.1 200 OK
+      {
+        "info": {
+          "appointment_id": 22,
+          "confirmation_id": 45022,
+          "created_date": "2017-08-22T05:00:00.000Z",
+          "appointment_date": "2017-10-31T05:00:00.000Z",
+          "delivery_date": null,
+          "status": "canceled",
+          "appointment_slot_id": 66,
+          "appointment_type": "shopping",
+          "day": "Tuesday",
+          "delivery_method": "delivery",
+          "location_name": "Bloomington",
+          "start_time": "9:15 AM",
+          "end_time": "10:30 AM",
+          "user_id": 17,
+          "user_email": "llauderdaled@blog.com",
+          "user_first": "Leshia",
+          "user_last": "Lauderdale",
+          "user_day_phone": "1-(614)641-2692",
+          "user_day_phone_ext": null,
+          "agency_id": 148,
+          "agency_name": "The Phoenix Centre",
+          "bridging_agency_id": 1674,
+          "primary_first": "Mahogany",
+          "primary_last": "James",
+          "primary_job_title": "Program Director",
+          "primary_business_phone": "",
+          "primary_business_phone_ext": "",
+          "primary_email": "mahoganyjms@gmail.com",
+          "client_id": 22
+        },
+        "clientInfo": {
+          "id": 2,
+          "first": "Francene",
+          "last": "Hanks",
+          "dob": "1978-11-05T06:00:00.000Z",
+          "race_ethnicity_id": 2,
+          "street": "1909 Carioca Crossing",
+          "city": "Marine on St. Croix",
+          "state": "MN",
+          "zip_code": "55047",
+          "county": "Washington",
+          "building_access_code": null,
+          "primary_phone": "676972512",
+          "alternate_phone": null,
+          "email": "fhanks@roomtemperaturemail.com",
+          "used_bridging_services_previously": false,
+          "marital_status": "Married",
+          "sex": "Female",
+          "age": 38,
+          "household_size": 7,
+          "age_of_others_in_household": null,
+          "num_children_17_and_under": 6,
+          "num_bedrooms": 4,
+          "home_visit_completed": "2017-08-15T05:00:00.000Z",
+          "completed_client_checklist": true,
+          "yearly_income": "Over $20,000",
+          "was_client_homeless": false,
+          "how_long_homeless": null,
+          "what_brought_client_to_bridging": "Medical Bills",
+          "will_bring_interpreter": true,
+          "will_bring_assistant_due_to_mental_health_or_physical_limits": false,
+          "client_understands_furniture_is_used": true,
+          "client_understands_furniture_must_be_moved_within_48hrs": true,
+          "agency_billing_id": null,
+          "who_paying_for_appointment": "Other Paying Bridging",
+          "if_other_who_paying_appointment": "Still need to figure this out",
+          "ctpappointment": null,
+          "who_paying_for_delivery": null,
+          "ctpdelivery": null,
+          "if_other_who_paying_delivery": null,
+          "what_floor_does_client_live_on": null,
+          "elevator_in_building": false,
+          "additional_notes": "This is dummy data for testing purposes",
+          "used_beds_needed": false,
+          "new_beds_and_frames_needed": false,
+          "who_paying_for_new_beds_and_frames": null,
+          "ctpnewitems": null,
+          "if_other_who_paying_new_items": null,
+          "agency_tax_exempt": null,
+          "new_twin_mattress_and_box_spring": null,
+          "new_full_mattress_and_box_spring": null,
+          "new_queen_mattress_and_box_spring": null,
+          "new_twin_full_bed_frame": null,
+          "new_queen_king_bed_frame": null,
+          "client_approves_speaking_with_staff": null,
+          "if_yes_client_email_or_phone": null,
+          "user_id": 17,
+          "created_date": "2017-08-22T05:00:00.000Z",
+          "client_id": 22,
+          "status_id": 3,
+          "appointment_slot_id": 66,
+          "appointment_date": "2017-10-31T05:00:00.000Z",
+          "delivery_date": null,
+          "confirmation_id": 45022,
+          "race_ethnicity": "American Indian or Alaska Native"
+        }
+      }
+  * @apiErrorExample Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/:appointment_id', function(req, res) {
