@@ -139,24 +139,24 @@ Steps to get the development environment running.
     ```
 4. Set up local Postgres database.
 
-    * Use Postico or a similar PostgreSQL client to create a new database.
-    * Copy all code from the database.sql file in the root directory of this project.
-    * Paste code into SQL query interface in Postico. Run code.
+* Use Postico or a similar PostgreSQL client to create a new database.
+* Copy all code from the database.sql file in the root directory of this project.
+* Paste code into SQL query interface in Postico. Run code.
 
 5. Set up account with Mailgun (or another email automation service; if you use a different service, you will need to change the configuration of the Nodemailer transport in server/modules/mail.js). You will need the Mailgun address and password for the next step.
 
 6. Create .env file for storing local versions of environmental variables.
 
-    * In the root directory, create a file with the name `.env`
-    * Add .env to .gitignore
-    * Add the Mailgun address and password, a secret (used by the Passport authentication service, can be any string), and the name of your Postgres database using the format below:
+* In the root directory, create a file with the name `.env`
+* Add .env to .gitignore
+* Add the Mailgun address and password, a secret (used by the Passport authentication service, can be any string), and the name of your Postgres database using the format below:
 
-        ```
-        NODEMAILER_ADDRESS=postmaster@sandbox6687772a7dd61dc9b819ecb3f9.mailgun.org
-        NODEMAILER_PW=5ac5a760ffdd90347222ff2eb36ef989
-        SECRET=6105ab0b6039d9aecf7a72fede2f33ac
-        DATABASE_NAME=bridgingConnect
-        ```
+    ```
+    NODEMAILER_ADDRESS=postmaster@sandbox6687772a7dd61dc9b819ecb3f9.mailgun.org
+    NODEMAILER_PW=5ac5a760ffdd90347222ff2eb36ef989
+    SECRET=6105ab0b6039d9aecf7a72fede2f33ac
+    DATABASE_NAME=bridgingConnect
+    ```
 
 7. Start Grunt.
 
@@ -178,28 +178,28 @@ Steps to get the development environment running.
 
 10. Create initial admin user.
 
-    * Replace `YOUR_FIRST_NAME`, `YOUR_LAST_NAME`, and `YOUR_EMAIL` in the SQL code below with your information, then run the code in your database.
+* Replace `YOUR_FIRST_NAME`, `YOUR_LAST_NAME`, and `YOUR_EMAIL` in the SQL code below with your information, then run the code in your database.
 
-        ```
-        INSERT INTO "users" ("agency_id", "first", "last", "email", "user_type_id") VALUES (1, 'YOUR_FIRST_NAME', 'YOUR_LAST_NAME', 'YOUR_EMAIL', 1);
-        ```
+    ```
+    INSERT INTO "users" ("agency_id", "first", "last", "email", "user_type_id") VALUES (1, 'YOUR_FIRST_NAME', 'YOUR_LAST_NAME', 'YOUR_EMAIL', 1);
+    ```
 
-    * Open the site in the browser at `localhost:5000`. Click "Forgot Password". 
-    * Enter the email address you entered into the database and click "Send Reset Code". You should receive an automated email link to follow that will enable you to create a password to use along with your email address to log into the site.
+* Open the site in the browser at `localhost:5000`. Click "Forgot Password". 
+* Enter the email address you entered into the database and click "Send Reset Code". You should receive an automated email link to follow that will enable you to create a password to use along with your email address to log into the site.
 
-    * NOTE: For initial setup/demo purposes only, if the automated email isn't working, you can use the following workaround to manually create your own password reset link. After completing the above steps (which will generate a temporary password reset token associated with your user info), retrieve the token by running the following code in your database (replacing `YOUR_EMAIL` with the email address you provided earlier):
+* NOTE: For initial setup/demo purposes only, if the automated email isn't working, you can use the following workaround to manually create your own password reset link. After completing the above steps (which will generate a temporary password reset token associated with your user info), retrieve the token by running the following code in your database (replacing `YOUR_EMAIL` with the email address you provided earlier):
 
-        ```
-        SELECT "token" FROM "users" WHERE "email" = 'YOUR_EMAIL';
-        ```
+    ```
+    SELECT "token" FROM "users" WHERE "email" = 'YOUR_EMAIL';
+    ```
 
-    * Copy the returned token and paste it into the following link (replacing `TOKEN` with your token and `YOUR_EMAIL` with your email address):
+* Copy the returned token and paste it into the following link (replacing `TOKEN` with your token and `YOUR_EMAIL` with your email address):
 
-        ```
-        localhost:5000/#/updatepassword/TOKEN/YOUR_EMAIL/updatedPassword
-        ```
+    ```
+    localhost:5000/#/updatepassword/TOKEN/YOUR_EMAIL/updatedPassword
+    ```
 
-    * Enter a password and click "Update Password". If you return to the main login page, you should now be able to log in using your email address and the password you created.
+* Enter a password and click "Update Password". If you return to the main login page, you should now be able to log in using your email address and the password you created.
 
 11. [Optional] The REST API used in this app has been documented using an inline documentation tool called apiDoc. Automatically generated files to produce easily readable & navigable API documentation are stored in a directory called `apidoc`. To view the documentation, find the `index.html` file in the `apidoc` folder and open it in your browser.
 
