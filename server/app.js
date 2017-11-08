@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 
 // AUTHENTICATION MODULES
+var dotenv = require('dotenv').config();
 var passport = require('./strategies/user_sql.js');
 var session = require('express-session');
 var isLoggedIn = require('./modules/authentication.js').isLoggedIn;
@@ -23,7 +24,7 @@ var rules = require('./routes/rules.js');
 var schedule = require('./routes/schedule.js');
 var overrides = require('./routes/overrides.js');
 var dataExport = require('./routes/dataExport.js');
-var install = require('./routes/installDummies.js');
+var installDummies = require('./routes/installDummies.js');
 
 // TEST MODULES
 var inserts = require('./modules/insertTestData.js').inserts;
@@ -41,7 +42,7 @@ app.use(express.static(path.join(__dirname, './public')));
 
 // PASSPORT SESSION CONFIGURATION
 app.use(session({
-   secret: process.env.SECRET || 'secret',
+   secret: process.env.SECRET,
    key: 'user',
    resave: 'true',
    saveUninitialized: false,
@@ -63,7 +64,7 @@ app.use('/clients', isLoggedIn, clients);
 app.use('/rules', isLoggedIn, rules);
 app.use('/schedule', isAdmin, schedule);
 app.use('/overrides', isAdmin, overrides);
-app.use('/install', isAdmin, install);
+app.use('/installDummies', isAdmin, installDummies);
 app.use('/dataExport', isAdmin, dataExport);
 app.use('/*', index);
 

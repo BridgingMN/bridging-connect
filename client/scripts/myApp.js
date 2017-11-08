@@ -140,6 +140,16 @@ function config($locationProvider, $mdThemingProvider, $routeProvider) {
         }]
       }
     })
+    .when('/admin-administrator-new', {
+      templateUrl: '/views/templates/admin-administrator-new.html',
+      controller: 'AdminAdministratorNewController',
+      controllerAs: 'vm',
+      resolve: { // get user from factory
+        getuser: ['UserService', function(UserService) {
+          return UserService.getUser();
+        }]
+      }
+    })
     .when('/admin-caseworker-edit', {
       templateUrl: '/views/templates/admin-caseworker-edit.html',
       controller: 'AdminCaseworkerEditController',

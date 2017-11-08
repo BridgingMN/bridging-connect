@@ -12,8 +12,6 @@ var transporter = nodemailer.createTransport({
 var fromBridgingGmail = '"Bridging" bridgingschedulingapplication@gmail.com';
 
 function invite(caseworkerObject, token, token_expiration) {
-  console.log('caseworkerObject', caseworkerObject);
-  console.log('token_expiration', token_expiration);
   var toEmail = caseworkerObject.email;
   var subject = 'Bridging Account Created';
   var activateLink = process.env.HOSTING_URL + '/#/updatepassword/' + token + '/' + toEmail + '/activate';

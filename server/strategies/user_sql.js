@@ -72,8 +72,6 @@ passport.use('local', new localStrategy({
           function(err, result) {
             var user = {};
 
-            console.log('here');
-
             // Handle Errors
             if (err) {
               console.log('connection err ', err);
@@ -85,14 +83,11 @@ passport.use('local', new localStrategy({
 
             if(result.rows[0] !== undefined) {
               user = result.rows[0];
-              console.log(user.password);
               // Hash and compare
               if(encryptLib.comparePassword(password, user.password)) {
                 // all good!
-                console.log('passwords match');
                 done(null, user);
               } else {
-                console.log('password does not match');
                 done(null, false, {message: 'Incorrect credentials.'});
               }
             } else {

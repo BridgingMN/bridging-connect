@@ -211,7 +211,6 @@ CREATE TABLE IF NOT EXISTS "clients" (
   if_yes_client_email_or_phone VARCHAR(50)
 );
 
-
 --------INSERT STATIC DATA INTO TABLES-------------
 
 -- add data to "User_types" table

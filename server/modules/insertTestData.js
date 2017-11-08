@@ -188,7 +188,8 @@ function Client(pulledData, stockData) {
   this.elevator_in_building = setBoolean(.15);
   this.used_beds_needed = convertBoolToYesNo(setBoolean(.20));
   this.additional_notes = 'This is dummy data for testing purposes';
-
+  this.new_beds_and_frames_needed = 'No';
+  
   if (this.used_beds_needed === 'No') {
     if (Math.random() < 0.25) {
       this.new_beds_and_frames_needed = 'Yes';
@@ -198,8 +199,6 @@ function Client(pulledData, stockData) {
       this.new_queen_mattress_and_box_spring = Math.round(Math.random());
       this.new_twin_full_bed_frame = Math.round(Math.random());
       this.new_queen_king_bed_frame = Math.round(Math.random());
-    } else {
-      this.new_beds_and_frames_needed = 'No';
     }
   }
 }

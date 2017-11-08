@@ -12,7 +12,7 @@ var pool = require('../modules/database.js');
   * @apiVersion 0.1.1
   * @apiName PostClient
   * @apiGroup Clients
-  * @apiDescription Saves a client's information to database
+  * @apiDescription Saves a client's information to database. Note - some of parameters are optional
 
   * @apiParam {String} first   First name of client
   * @apiParam {String} last   Last name of client
@@ -25,6 +25,49 @@ var pool = require('../modules/database.js');
   * @apiParam {String} city   City of client address
   * @apiParam {String} state  State of client address (2-letter abbreviation)
   * @apiParam {String} zip_code   Client zip code
+  * @apiParam {String} county 
+  * @apiParam {String} building_access_code 
+  * @apiParam {String} primary_phone 
+  * @apiParam {String} alternate_phone
+  * @apiParam {String} email 
+  * @apiParam {String} used_bridging_services_previously 'Yes' or 'No'
+  * @apiParam {String} marital_status 
+  * @apiParam {String} sex 
+  * @apiParam {Number} age
+  * @apiParam {Number} household_size 
+  * @apiParam {String} age_of_others_in_household 
+  * @apiParam {Number} num_children_17_and_under 
+  * @apiParam {Number} num_bedrooms
+  * @apiParam {String} home_visit_completed Date
+  * @apiParam {Boolean} completed_client_checklist 
+  * @apiParam {String} yearly_income 
+  * @apiParam {String} was_client_homeless 'Yes' or 'No'
+  * @apiParam {String} how_long_homeless 
+  * @apiParam {String} what_brought_client_to_bridging 
+  * @apiParam {String} will_bring_interpreter 'Yes' or 'No'
+  * @apiParam {String} will_bring_assistant_due_to_mental_health_or_physical_limits 'Yes' or 'No'
+  * @apiParam {Boolean} client_understands_furniture_is_used
+  * @apiParam {Boolean} client_understands_furniture_must_be_moved_within_48hrs 
+  * @apiParam {String} agency_billing_id Optional identification number for use by agency--does not refer to ID in database
+  * @apiParam {String} who_paying_for_appointment 
+  * @apiParam {String} if_other_who_paying_appointment 
+  * @apiParam {String} who_paying_for_delivery
+  * @apiParam {String} if_other_who_paying_delivery 
+  * @apiParam {String} what_floor_does_client_live_on 
+  * @apiParam {String} elevator_in_building 'Yes' or 'No'
+  * @apiParam {String} additional_notes 
+  * @apiParam {String} used_beds_needed 'Yes' or 'No'
+  * @apiParam {String} new_beds_and_frames_needed 'Yes' or 'No'
+  * @apiParam {String} who_paying_for_new_beds_and_frames 
+  * @apiParam {String} if_other_who_paying_new_items 
+  * @apiParam {Number} new_twin_mattress_and_box_spring 
+  * @apiParam {Number} new_full_mattress_and_box_spring
+  * @apiParam {Number} new_queen_mattress_and_box_spring 
+  * @apiParam {Number} new_twin_full_bed_frame 
+  * @apiParam {Number} new_queen_king_bed_frame
+  * @apiParam {String} client_approves_speaking_with_staff 'Yes' or 'No'
+  * @apiParam {String} if_yes_client_email_or_phone
+  * @apiParam {String} agency_tax_exempt 'Yes' or 'No'
 
   * @apiSuccess {Number} id Unique ID of client that has been added
   * @apiErrorExample {json} Post error
@@ -32,6 +75,7 @@ var pool = require('../modules/database.js');
 */
 router.post('/', function(req, res) {
   var client = req.body;
+  console.log(client);
   postClient(client)
   .then(function(result, error) {
     if (error) {
@@ -49,8 +93,12 @@ function postClient(client) {
 }
 
 function cleanClient(client) {
-  client.dob = formatDateForPostgres(client.dob);
-  client.home_visit_completed = formatDateForPostgres(client.home_visit_completed);
+  if (client.dob) {
+    client.dob = formatDateForPostgres(client.dob);
+  }
+  if (client.home_visit_completed) {
+    client.home_visit_completed = formatDateForPostgres(client.home_visit_completed);
+  }
 }
 
 function saveClient(client) {
@@ -87,11 +135,11 @@ function saveClient(client) {
 }
 
 /**
-  * @api {post} /clients/:client_id Get All Info for a Client
+  * @api {get} /clients/:client_id Get All Info for a Client
   * @apiVersion 0.1.1
   * @apiName GetClient
   * @apiGroup Clients
-  * @apiDescription Returns all info from client referral form for a particular client
+  * @apiDescription Returns all info from client referral form for a particular client. Note--see example response for all fields returned.
 
   * @apiSuccess {Number} id   Unique ID of client
   * @apiSuccess {String} first   First name of client
@@ -105,8 +153,66 @@ function saveClient(client) {
   * @apiSuccess {String} city   City of client address
   * @apiSuccess {String} state  State of client address (2-letter abbreviation)
   * @apiSuccess {String} zip_code   Client zip code
-
-  * @apiErrorExample {json} Post error
+  * @apiSuccessExample {json}
+    HTTP/1.1 200 OK
+    {
+      "first": "Poppy",
+      "last": "Hall",
+      "dob": "1994-03-05T00:00:00-06:00",
+      "race_ethnicity_id": 5,
+      "street": "23 4th Point",
+      "city": "Minneapolis",
+      "state": "MN",
+      "zip_code": "55417",
+      "county": "Hennepin",
+      "building_access_code": null,
+      "primary_phone": "101534843",
+      "alternate_phone": null,
+      "email": "phall@sizzlingmail.com",
+      "used_bridging_services_previously": false,
+      "marital_status": "Married",
+      "sex": "Female",
+      "age": 23,
+      "household_size": 3,
+      "age_of_others_in_household": null,
+      "num_children_17_and_under": 0,
+      "num_bedrooms": 2,
+      "home_visit_completed": "2017-08-21T05:00:00.000Z",
+      "completed_client_checklist": true,
+      "yearly_income": "Under $5,000",
+      "was_client_homeless": false,
+      "how_long_homeless": null,
+      "what_brought_client_to_bridging": "Disability",
+      "will_bring_interpreter": false,
+      "will_bring_assistant_due_to_mental_health_or_physical_limits": false,
+      "client_understands_furniture_is_used": true,
+      "client_understands_furniture_must_be_moved_within_48hrs": true,
+      "agency_billing_id": null,
+      "who_paying_for_appointment": "Other Paying Bridging",
+      "if_other_who_paying_appointment": "The client's family",
+      "ctpappointment": null,
+      "who_paying_for_delivery": null,
+      "ctpdelivery": null,
+      "if_other_who_paying_delivery": null,
+      "what_floor_does_client_live_on": null,
+      "elevator_in_building": false,
+      "additional_notes": "This is dummy data for testing purposes",
+      "used_beds_needed": false,
+      "new_beds_and_frames_needed": false,
+      "who_paying_for_new_beds_and_frames": null,
+      "ctpnewitems": null,
+      "if_other_who_paying_new_items": null,
+      "agency_tax_exempt": null,
+      "new_twin_mattress_and_box_spring": null,
+      "new_full_mattress_and_box_spring": null,
+      "new_queen_mattress_and_box_spring": null,
+      "new_twin_full_bed_frame": null,
+      "new_queen_king_bed_frame": null,
+      "client_approves_speaking_with_staff": null,
+      "if_yes_client_email_or_phone": null,
+      "client_id": 481
+    }
+  * @apiErrorExample {json} Get error
   *    HTTP/1.1 500 Internal Server Error
 */
 router.get('/:client_id', function(req, res) {
@@ -140,7 +246,7 @@ router.get('/:client_id', function(req, res) {
   * @apiGroup Clients
   * @apiDescription Changes specified properties for a client and changes them to new values
 
-  * @apiParam {Number} client_id  Unique ID of client
+  * @apiParam {Number} client_id   Unique ID of client
   * @apiParam {String} first   First name of client
   * @apiParam {String} last   Last name of client
   * @apiParam {Date} dob  Client date of birth
@@ -152,6 +258,49 @@ router.get('/:client_id', function(req, res) {
   * @apiParam {String} city   City of client address
   * @apiParam {String} state  State of client address (2-letter abbreviation)
   * @apiParam {String} zip_code   Client zip code
+  * @apiParam {String} county 
+  * @apiParam {String} building_access_code 
+  * @apiParam {String} primary_phone 
+  * @apiParam {String} alternate_phone
+  * @apiParam {String} email 
+  * @apiParam {String} used_bridging_services_previously 'Yes' or 'No'
+  * @apiParam {String} marital_status 
+  * @apiParam {String} sex 
+  * @apiParam {Number} age
+  * @apiParam {Number} household_size 
+  * @apiParam {String} age_of_others_in_household 
+  * @apiParam {Number} num_children_17_and_under 
+  * @apiParam {Number} num_bedrooms
+  * @apiParam {String} home_visit_completed Date
+  * @apiParam {Boolean} completed_client_checklist 
+  * @apiParam {String} yearly_income 
+  * @apiParam {String} was_client_homeless 'Yes' or 'No'
+  * @apiParam {String} how_long_homeless 
+  * @apiParam {String} what_brought_client_to_bridging 
+  * @apiParam {String} will_bring_interpreter 'Yes' or 'No'
+  * @apiParam {String} will_bring_assistant_due_to_mental_health_or_physical_limits 'Yes' or 'No'
+  * @apiParam {Boolean} client_understands_furniture_is_used
+  * @apiParam {Boolean} client_understands_furniture_must_be_moved_within_48hrs 
+  * @apiParam {String} agency_billing_id Optional identification number for use by agency--does not refer to ID in database
+  * @apiParam {String} who_paying_for_appointment 
+  * @apiParam {String} if_other_who_paying_appointment 
+  * @apiParam {String} who_paying_for_delivery
+  * @apiParam {String} if_other_who_paying_delivery 
+  * @apiParam {String} what_floor_does_client_live_on 
+  * @apiParam {String} elevator_in_building 'Yes' or 'No'
+  * @apiParam {String} additional_notes 
+  * @apiParam {String} used_beds_needed 'Yes' or 'No'
+  * @apiParam {String} new_beds_and_frames_needed 'Yes' or 'No'
+  * @apiParam {String} who_paying_for_new_beds_and_frames 
+  * @apiParam {String} if_other_who_paying_new_items 
+  * @apiParam {Number} new_twin_mattress_and_box_spring 
+  * @apiParam {Number} new_full_mattress_and_box_spring
+  * @apiParam {Number} new_queen_mattress_and_box_spring 
+  * @apiParam {Number} new_twin_full_bed_frame 
+  * @apiParam {Number} new_queen_king_bed_frame
+  * @apiParam {String} client_approves_speaking_with_staff 'Yes' or 'No'
+  * @apiParam {String} if_yes_client_email_or_phone
+  * @apiParam {String} agency_tax_exempt 'Yes' or 'No'
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
