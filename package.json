@@ -53,6 +53,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "json2csv": "^3.7.3",
     "moment": "^2.18.1",
+    "node": "^9.0.0",
     "node-schedule": "^1.2.3",
     "nodemailer": "^4.0.1",
     "pag": "^1.0.1",
