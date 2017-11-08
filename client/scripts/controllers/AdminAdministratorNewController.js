@@ -40,6 +40,4 @@ function caseworkerAlertDialog(title, text) {
  );
 }
 
-function 
-
 }]);
