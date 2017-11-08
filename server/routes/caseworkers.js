@@ -18,10 +18,24 @@ var usernameToLowerCase = require('../modules/authentication').usernameToLowerCa
   * @apiSuccess {String} last Last name of the caseworker from the "users" table.
   * @apiSuccess {String} name Name of the agency from the "agencies" table.
   * @apiSuccess {Number} agency_id Unique ID of the agency a caseworker is associated with.
+  * @apiSuccess {Number} user_id Unique ID of the caseworker
   * @apiSuccess {Number} bridging_agency_id Agency ID from the Bridging Access Database - stored in the "agencies" table.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
-  * @apiSuccess {Boolean} caseworker_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
-  *
+  * @apiSuccess {Boolean} user_access_disabled Current caseworker status. True = access disabled. - from the "caseworkers" table.
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      [
+        {
+          "user_id": 1235,
+          "first": "Angil",
+          "last": "McCaughen",
+          "agency_id": 10,
+          "name": "Anoka Hennepin District 11 - HOPE Office",
+          "bridging_agency_id": 1510,
+          "agency_access_disabled": false,
+          "user_access_disabled": false
+          }
+      ]
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -62,8 +76,10 @@ router.get('/', function(req, res) {
   *
   * @apiParam {Number} caseworker_id Caseworker's unique ID that is stored in the database.
   *
+  * @apiSuccess {Number} user_id Unique ID of the caseworker
   * @apiSuccess {String} first First name of the caseworker from the "users" table.
   * @apiSuccess {String} last Last name of the caseworker from the "users" table.
+  * @apiSuccess {String} department Department of caseworker within agency.
   * @apiSuccess {String} day_phone Daytime phone number of the caseworker from the "users" table.
   * @apiSuccess {String} ext Phone number extension of caseworker from the "users" table.
   * @apiSuccess {String} email Email address of caseworker from the "users" table.
@@ -79,7 +95,29 @@ router.get('/', function(req, res) {
   * @apiSuccess {String} notes Any notes the administrator leaves regarding a caseworker.
   * @apiSuccess {Boolean} agency_access_disabled Current agency status. True = access disabled. - from the "agencies" table.
   * @apiSuccess {Boolean} user_access_disabled Current caseworker status. True = access disabled. - from the "users" table.
-  *
+  * @apiSuccessExample {json} Success-Response:
+      HTTP/1.1 200 OK
+      {
+        "user_id": 120,
+        "department": null,
+        "first": "Maison",
+        "last": "Diver",
+        "day_phone": "1-(347)477-7769",
+        "ext": null,
+        "email": "mdiver38@alibaba.com",
+        "notes": null,
+        "agency_id": 70,
+        "name": "Minnesota Council of Churches Refugee Services",
+        "bridging_agency_id": 1580,
+        "primary_first": "Ben",
+        "primary_last": "Walen",
+        "primary_business_phone": "(612) 230-3215",
+        "primary_business_phone_ext": "",
+        "primary_mobile_phone": "",
+        "primary_email": "ben.walen@mnchurches.org",
+        "agency_access_disabled": false,
+        "user_access_disabled": false
+      }
   * @apiErrorExample {json} Get Error:
   *    HTTP/1.1 500 Internal Server Error
 */
@@ -189,7 +227,7 @@ router.post('/', usernameToLowerCase, function(req, res) {
   * @apiParam {String} email Email address of caseworker from the "users" table.
   * @apiParam {Boolean} access_disabled Current caseworker status. True = access disabled.
   * @apiParam {String} notes Any notes the administrator leaves regarding a caseworker.
-  * @apiParam {String} user_type Mandatory Indicator for the type of user being created. Corresponds to an entry in the "user_types" table.
+  * @apiParam {String} user_type Optional indicator for the type of user being created. Corresponds to an entry in the "user_types" table. Will default to "caseworker".
   *
   * @apiSuccessExample Success-Response:
   *     HTTP/1.1 200 OK
@@ -208,7 +246,7 @@ router.put('/', usernameToLowerCase, function(req, res) {
     var email = req.body.email;
     var user_access_disabled = req.body.user_access_disabled || false;
     var notes = req.body.notes || null;
-    var user_type = 'caseworker';
+    var user_type = req.body.user_type || 'caseworker';
     pool.connect(function(err, database, done) {
       if (err) { // connection error
         console.log('error connecting to the database:', err);
