@@ -45,7 +45,7 @@ router.post('/forgotpassword', function (req, res) {
 });
 
 router.put('/resetpassword', function (req, res) {
-  console.log('updatePassword route', req.body);
+  console.log('attempting password reset');
   var email = req.body.email;
   var password = encryptLib.encryptPassword(req.body.password);
   var emailType = req.body.type;
